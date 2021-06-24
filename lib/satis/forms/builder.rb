@@ -1,0 +1,232 @@
+# frozen_string_literal: true
+
+module Satis
+  module Forms
+    class Builder < ActionView::Helpers::FormBuilder
+      delegate :tag, :safe_join, to: :@template
+      def input(method, options = {})
+        @form_options = options
+        object_type = object_type_for_method(method)
+        input_type = case object_type
+                     when :date then :string
+                     when :integer then :string
+                     else object_type
+                     end
+        override_input_type = if options[:as]
+                                options[:as]
+                              elsif options[:collection]
+                                :select
+                              end
+        send("#{override_input_type || input_type}_input", method, options)
+      end
+
+      private
+
+      def form_group(method, options = {}, &block)
+        tag.div class: "form-group #{method}" do
+          safe_join [
+            block.call,
+            hint_text(options[:hint]),
+            error_text(method)
+          ].compact
+        end
+      end
+
+      def hint_text(text)
+        return if text.nil?
+
+        tag.small text, class: 'form-text text-muted'
+      end
+
+      def error_text(method)
+        return unless has_error?(method)
+
+        tag.div(@object.errors[method].join('<br />').html_safe, class: 'invalid-feedback')
+      end
+
+      def object_type_for_method(method)
+        result = if @object.respond_to?(:type_for_attribute) && @object.has_attribute?(method)
+                   @object.type_for_attribute(method.to_s).try(:type)
+                 elsif @object.respond_to?(:column_for_attribute) && @object.has_attribute?(method)
+                   @object.column_for_attribute(method).try(:type)
+                 end
+        result || :string
+      end
+
+      def has_error?(method)
+        return false unless @object.respond_to?(:errors)
+
+        @object.errors.key?(method)
+      end
+
+      def custom_label(method, title, options = {})
+        all_classes = "#{options[:class]} block text-xs text-gray-400 uppercase"
+        label(method, title, class: all_classes)
+      end
+
+      # Inputs and helpers
+      def string_input(method, options = {})
+        form_group(method, options) do
+          safe_join [
+            (custom_label(method, options[:label]) unless options[:label] == false),
+            string_field(method,
+                         merge_input_options({ class: "appearance-none border rounded w-full py-2 px-3 h-12 text-gray-800 leading-tight focus:outline-none focus:shadow-outline  form-control #{if has_error?(method)
+                                                                                                                                                                                                  'is-invalid'
+                                                                                                                                                                                                end}" }, options[:input_html]))
+          ]
+        end
+      end
+
+      def text_input(method, options = {})
+        form_group(method, options) do
+          safe_join [
+            (label(method, options[:label]) unless options[:label] == false),
+            text_area(method,
+                      merge_input_options({ class: "form-control #{if has_error?(method)
+                                                                     'is-invalid'
+                                                                   end}" }, options[:input_html]))
+          ]
+        end
+      end
+
+      def boolean_input(method, options = {})
+        form_group(method, options) do
+          tag.div(class: 'custom-control custom-checkbox') do
+            safe_join [
+              check_box(method, merge_input_options({ class: 'custom-control-input' }, options[:input_html])),
+              label(method, options[:label], class: 'custom-control-label')
+            ]
+          end
+        end
+      end
+
+      def collection_input(method, options, &block)
+        form_group(method, options) do
+          safe_join [
+            label(method, options[:label]),
+            block.call
+          ]
+        end
+      end
+
+      def select_input(method, options = {})
+        value_method = options[:value_method] || :to_s
+        text_method = options[:text_method] || :to_s
+        input_options = options[:input_html] || {}
+        multiple = input_options[:multiple]
+        collection_input(method, options) do
+          collection_select(method, options[:collection], value_method, text_method, options,
+                            merge_input_options({ class: "#{unless multiple
+                                                              'custom-select'
+                                                            end} form-control #{if has_error?(method)
+                                                                                  'is-invalid'
+                                                                                end}" }, options[:input_html]))
+        end
+      end
+
+      def grouped_select_input(method, options = {})
+        # We probably need to go back later and adjust this for more customization
+        collection_input(method, options) do
+          grouped_collection_select(method, options[:collection], :last, :first, :to_s, :to_s, options,
+                                    merge_input_options({ class: "custom-select form-control #{if has_error?(method)
+                                                                                                 'is-invalid'
+                                                                                               end}" }, options[:input_html]))
+        end
+      end
+
+      def file_input(method, options = {})
+        form_group(method, options) do
+          safe_join [
+            (label(method, options[:label]) unless options[:label] == false),
+            custom_file_field(method, options)
+          ]
+        end
+      end
+
+      def collection_of(input_type, method, options = {})
+        form_builder_method, custom_class, input_builder_method = case input_type
+                                                                  when :radio_buttons then [:collection_radio_buttons,
+                                                                                            'custom-radio', :radio_button]
+                                                                  when :check_boxes then [:collection_check_boxes,
+                                                                                          'custom-checkbox', :check_box]
+                                                                  else raise 'Invalid input_type for collection_of, valid input_types are ":radio_buttons", ":check_boxes"'
+                                                                  end
+        form_group(method, options) do
+          safe_join [
+            label(method, options[:label]),
+            tag.br,
+            (send(form_builder_method, method, options[:collection], options[:value_method],
+                  options[:text_method]) do |b|
+               tag.div(class: "custom-control #{custom_class}") do
+                 safe_join [
+                   b.send(input_builder_method, class: 'custom-control-input'),
+                   b.label(class: 'custom-control-label')
+                 ]
+               end
+             end)
+          ]
+        end
+      end
+
+      def radio_buttons_input(method, options = {})
+        collection_of(:radio_buttons, method, options)
+      end
+
+      def check_boxes_input(method, options = {})
+        collection_of(:check_boxes, method, options)
+      end
+
+      def string_field(method, options = {})
+        case object_type_for_method(method)
+        when :date
+          birthday = method.to_s =~ /birth/
+          safe_join [
+            date_field(method, merge_input_options(options, { data: { datepicker: true } })),
+            tag.div do
+              date_select(method, {
+                            order: %i[month day year],
+                            start_year: birthday ? 1900 : Date.today.year - 5,
+                            end_year: birthday ? Date.today.year : Date.today.year + 5
+                          }, { data: { date_select: true } })
+            end
+          ]
+        when :integer then number_field(method, options)
+        when :string
+          case method.to_s
+          when /password/ then password_field(method, options)
+          # when /time_zone/ then :time_zone
+          # when /country/   then :country
+          when /email/ then email_field(method, options)
+          when /phone/ then telephone_field(method, options)
+          when /url/ then url_field(method, options)
+          else
+            text_field(method, options)
+          end
+        end
+      end
+
+      def custom_file_field(method, options = {})
+        tag.div(class: 'input-group') do
+          safe_join [
+            tag.div(class: 'input-group-prepend') do
+              tag.span('Upload', class: 'input-group-text')
+            end,
+            tag.div(class: 'custom-file') do
+              safe_join [
+                file_field(method, options.merge(class: 'custom-file-input', data: { controller: 'file-input' })),
+                label(method, 'Choose file...', class: 'custom-file-label')
+              ]
+            end
+          ]
+        end
+      end
+
+      def merge_input_options(options, user_options)
+        return options if user_options.nil?
+
+        # TODO: handle class merging here
+        options.merge(user_options)
+      end
+    end
+  end
+end
