@@ -1,7 +1,7 @@
 module Satis
   module Tab
     class Component < Satis::ApplicationComponent
-      attr_reader :name, :options
+      attr_reader :options, :name
 
       def initialize(name, *args, &block)
         super
@@ -17,6 +17,15 @@ module Satis
 
       def selected?
         options[:selected] == true
+      end
+
+      def content
+        # FIXME: This is not actual api
+        @_content_block.call if @_content_block
+      end
+
+      def render
+        nil
       end
     end
   end
