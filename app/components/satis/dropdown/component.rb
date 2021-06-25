@@ -1,7 +1,9 @@
-module Dropdown
-  class Component < ViewComponent::Base
-    def initialize(url:)
-      @url = url
+module Satis
+  module Dropdown
+    class Component < ViewComponent::Base
+      def initialize(url:)
+        @url = url
+      end
     end
   end
 end
