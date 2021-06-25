@@ -1,0 +1,3 @@
+- move tailwindcss into satis
+- move fontawesome into satis
+-

@@ -15,5 +15,6 @@ div data-controller="tabs--component"
 
   div.tabcontent
     - for tab in tabs
-      = tab
+      div class="tab-#{tab.name}"
+        = tab
 
