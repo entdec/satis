@@ -19,13 +19,8 @@ module Satis
         options[:selected] == true
       end
 
-      def content
-        # FIXME: This is not actual api
-        @_content_block.call if @_content_block
-      end
-
-      def render
-        nil
+      def call
+        content
       end
     end
   end

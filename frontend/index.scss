@@ -1,0 +1,29 @@
+.attachments {
+  margin-bottom: 25px;
+
+  .attachment-upload {
+    border-style: dashed;
+    padding: 10px;
+    .icon {
+      color: #666;
+      text-align: center;
+    }
+
+    .icon.uploading {
+      display: none;
+    }
+
+    &.dragging {
+      border-style: dotted;
+    }
+
+    &.uploading {
+      .icon.upload {
+        display: none;
+      }
+      .icon.uploading {
+        display: block;
+      }
+    }
+  }
+}

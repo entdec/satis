@@ -4,6 +4,7 @@ export default class extends Controller {
   static targets = ["tab", "content"]
 
   connect() {
+    console.log("hi tabs")
     this.keyBase = "tabs_" + this.context.scope.element.id
     this.state = this.data.get("state") == "true"
 

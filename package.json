@@ -1,0 +1,15 @@
+{
+  "name": "@components/satis",
+  "version": "0.1.0",
+  "repository": "git@code.entropydecelerator.com:components/satis.git",
+  "author": "Tom de Grunt <tom@degrunt.nl>",
+  "license": "MIT",
+  "files": [
+    "./frontend/**/*"
+  ],
+  "dependencies": {
+    "element-closest": "^3.0.1",
+    "semver": "^7.3.4",
+    "stimulus": "^2"
+  }
+}
