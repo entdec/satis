@@ -1,0 +1,16 @@
+div
+  .sm:hidden
+    label.sr-only for="tabs" Select a tab
+    select#tabs.block.w-full.pl-3.pr-10.py-2.text-base.border-gray-300.focus:outline-none.focus:ring-indigo-500.focus:border-indigo-500.sm:text-sm.rounded-md name="tabs"
+      - for tab in tabs
+        = tab
+  .hidden.sm:block
+    .border-b.border-gray-200
+      nav.-mb-px.flex.space-x-8 aria-label="Tabs"
+        - for tab in tabs
+          = tab
+
+/div.tabcontent
+  - for tab in tabs
+    = tab.content
+

@@ -5,6 +5,7 @@ module Satis
 
       def initialize(action_view)
         @action_view = action_view
+        extend Satis::Tabs::Helpers
       end
 
       def form_for(name, *args, &block)
