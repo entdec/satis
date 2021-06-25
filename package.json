@@ -9,7 +9,9 @@
   ],
   "dependencies": {
     "element-closest": "^3.0.1",
-    "semver": "^7.3.4",
+    "semver": "^7.3.4"
+  },
+  "peerDependencies": {
     "stimulus": "^2"
   }
 }
