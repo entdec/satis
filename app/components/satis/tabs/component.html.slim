@@ -1,4 +1,4 @@
-div data-controller="tabs--component"
+div id="#{group}" class="satis-tabs" data-controller="satis-tabs"
   .sm:hidden
     label.sr-only for="tabs" Select a tab
     select#tabs.block.w-full.pl-3.pr-10.py-2.text-base.border-gray-300.focus:outline-none.focus:ring-indigo-500.focus:border-indigo-500.sm:text-sm.rounded-md name="tabs"
@@ -8,13 +8,10 @@ div data-controller="tabs--component"
     .border-b.border-gray-200
       nav.-mb-px.flex.space-x-8 aria-label="Tabs"
         - for tab in tabs
-          - if tab.selected?
-            a.border-indigo-500.text-indigo-600.whitespace-nowrap.py-4.px-1.border-b-2.font-medium.text-sm href="#" aria-current="page" = t(tab.name)
-          - else
-            a.border-transparent.text-gray-500.hover:text-gray-700.hover:border-gray-300.whitespace-nowrap.py-4.px-1.border-b-2.font-medium.text-sm href="#" = t(tab.name)
+            a.tab id="#{tab.name}" href="#" aria-current="#{tab.selected? ? "page" : ''}" data-satis-tabs-target="tab" data-action="click->satis-tabs#select" = t(tab.name)
 
-  div.tabcontent
+  div
     - for tab in tabs
-      div class="tab-#{tab.name}"
+      div class="tab-content" data-satis-tabs-target="content"
         = tab
 

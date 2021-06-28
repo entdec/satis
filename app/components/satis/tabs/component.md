@@ -12,3 +12,5 @@
   - t.tab :preferences do
     | preferences
 ```
+
+satis.tabs takes an optional "group" parameter and is :main by default.

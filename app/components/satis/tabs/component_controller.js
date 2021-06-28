@@ -1,10 +1,12 @@
 import { Controller } from "stimulus"
 
+/*
+ * Tabs controller
+ */
 export default class extends Controller {
   static targets = ["tab", "content"]
 
   connect() {
-    console.log("hi tabs")
     this.keyBase = "tabs_" + this.context.scope.element.id
     this.state = this.data.get("state") == "true"
 
@@ -12,7 +14,7 @@ export default class extends Controller {
   }
 
   select(event) {
-    let clickedTab = event.srcElement.closest(".ui-tabs-tab")
+    let clickedTab = event.srcElement.closest("a")
     let index = this.tabTargets.findIndex((el) => {
       return el.attributes["id"] === clickedTab.attributes["id"]
     })
@@ -30,13 +32,14 @@ export default class extends Controller {
     }
 
     this.tabTargets.forEach(function (target) {
-      target.classList.remove("open")
+      target.classList.remove("selected")
     })
-    this.tabTargets[index].classList.add("open")
+    this.tabTargets[index].classList.add("selected")
+
     this.contentTargets.forEach(function (target) {
-      target.classList.remove("open")
+      target.classList.remove("selected")
     })
-    this.contentTargets[index].classList.add("open")
+    this.contentTargets[index].classList.add("selected")
   }
 
   storeValue(key, value) {

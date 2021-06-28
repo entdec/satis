@@ -11,9 +11,19 @@ export class Satis {
 
     this.application = application
     const context = require.context("controllers", true, /\.js$/)
-    // this.application.load(definitionsFromContext(context))
+    const contextComponents = require.context("../app/components/", true, /component_controller\.js$/)
 
-    const contextComponents = require.context("../app/components/", true, /_controller\.js$/)
+    contextComponents
+      .keys()
+      .map((key) => {
+        // Take the last part (before component_controller) of the path as the name
+        const [_, name] = /([^/]+)\/component_controller\.js$/.exec(key)
+        return [name, contextComponents(key).default]
+      })
+      .forEach(([name, controller]) => {
+        this.application.register(`satis-${name.replace(/_/g, "-")}`, controller)
+      })
+
     this.application.load(definitionsFromContext(context).concat(definitionsFromContext(contextComponents)))
   }
 }

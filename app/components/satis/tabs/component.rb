@@ -2,8 +2,10 @@ module Satis
   module Tabs
     class Component < Satis::ApplicationComponent
       renders_many :tabs, Tab::Component
+      attr_reader :group
 
-      def intialize(group = :main)
+      def initialize(group = :main)
+        super
         @group = group
       end
     end
