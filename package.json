@@ -9,7 +9,9 @@
     "frontend/**/*"
   ],
   "dependencies": {
-    "element-closest": "^3.0.1",
+    "element-closest": "^3.0.1"
+  },
+  "devDependencies": {
     "semver": "^7.3.4"
   },
   "peerDependencies": {
