@@ -4,12 +4,12 @@
 
 ```slim
 = satis.tabs do |t|
-  - t.tab :about do
+  - t.tab :about
       p About
       = link_to "Hello", root_path
-  - t.tab :printers do
+  - t.tab :printers
     | printers
-  - t.tab :preferences do
+  - t.tab :preferences
     | preferences
 ```
 
