@@ -10,10 +10,10 @@ export class Satis {
     console.log("Satis")
 
     this.application = application
-    const context = require.context("./javascript/controllers", true, /\.js$/)
+    const context = require.context("controllers", true, /\.js$/)
     // this.application.load(definitionsFromContext(context))
 
-    const contextComponents = require.context("../../app/components/", true, /_controller\.js$/)
+    const contextComponents = require.context("../app/components/", true, /_controller\.js$/)
     this.application.load(definitionsFromContext(context).concat(definitionsFromContext(contextComponents)))
   }
 }
