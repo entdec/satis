@@ -1,5 +1,9 @@
 # Tabs
 
+## UI
+
+https://tailwindui.com/components/application-ui/navigation/tabs
+
 ## Usage
 
 ```slim
@@ -13,4 +17,5 @@
     | preferences
 ```
 
-satis.tabs takes an optional "group" parameter and is :main by default.
+satis.tabs takes an optional "group" parameter and is :main by default. So you could do:
+`satis.tabs group: :second`

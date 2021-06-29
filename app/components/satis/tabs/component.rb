@@ -4,7 +4,7 @@ module Satis
       renders_many :tabs, Tab::Component
       attr_reader :group
 
-      def initialize(group = :main)
+      def initialize(group: :main)
         super
         @group = group
       end
