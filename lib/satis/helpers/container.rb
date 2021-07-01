@@ -5,8 +5,10 @@ module Satis
 
       def initialize(action_view)
         @action_view = action_view
-        extend Satis::Tabs::Helpers
+
         extend Satis::Card::Helpers
+        extend Satis::Map::Helpers
+        extend Satis::Tabs::Helpers
       end
 
       def form_for(name, *args, &block)
