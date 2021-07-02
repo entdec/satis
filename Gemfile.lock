@@ -13,7 +13,7 @@ GIT
 PATH
   remote: .
   specs:
-    satis (0.1.5)
+    satis (0.1.6)
       rails (~> 6.1.3, >= 6.1.3.2)
       view_component
 
@@ -206,7 +206,7 @@ GEM
     tzinfo (2.0.4)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.0.0)
-    view_component (2.34.0)
+    view_component (2.25.1)
       activesupport (>= 5.0.0, < 7.0)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)

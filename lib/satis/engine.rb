@@ -5,9 +5,8 @@ module Satis
   class Engine < ::Rails::Engine
     isolate_namespace Satis
 
-    config.autoload_once_paths = %W[
-      #{root}/app/components
-    ]
+    config.autoload_paths << "#{root}/app/components"
+    config.autoload_paths << "#{root}/lib"
 
     initializer 'satis.helper' do
       ActiveSupport.on_load :action_view do

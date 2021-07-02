@@ -60,7 +60,7 @@ module Satis
       end
 
       def custom_label(method, title, options = {})
-        all_classes = "#{options[:class]} block text-xs text-gray-400 uppercase"
+        all_classes = "#{options[:class]} form-label"
         label(method, title, class: all_classes)
       end
 
@@ -70,9 +70,9 @@ module Satis
           safe_join [
             (custom_label(method, options[:label]) unless options[:label] == false),
             string_field(method,
-                         merge_input_options({ class: "appearance-none border rounded w-full py-2 px-3 h-12 text-gray-800 leading-tight focus:outline-none focus:shadow-outline  form-control #{if has_error?(method)
-                                                                                                                                                                                                  'is-invalid'
-                                                                                                                                                                                                end}" }, options[:input_html]))
+                         merge_input_options({ class: "form-control #{if has_error?(method)
+                                                                        'is-invalid'
+                                                                      end}" }, options[:input_html]))
           ]
         end
       end
@@ -103,17 +103,18 @@ module Satis
       def collection_input(method, options, &block)
         form_group(method, options) do
           safe_join [
-            label(method, options[:label]),
+            custom_label(method, options[:label]),
             block.call
           ]
         end
       end
 
       def select_input(method, options = {})
-        value_method = options[:value_method] || :to_s
-        text_method = options[:text_method] || :to_s
+        value_method = options[:value_method] || :id
+        text_method = options[:text_method] || :name
         input_options = options[:input_html] || {}
         multiple = input_options[:multiple]
+
         collection_input(method, options) do
           collection_select(method, options[:collection], value_method, text_method, options,
                             merge_input_options({ class: "#{unless multiple
