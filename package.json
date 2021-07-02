@@ -13,6 +13,7 @@
     "element-closest": "^3.0.1"
   },
   "devDependencies": {
+    "tailwindcss": "^2.2.2",
     "semver": "^7.3.4"
   },
   "peerDependencies": {
