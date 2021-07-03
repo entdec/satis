@@ -1,21 +1,8 @@
 import { Controller } from "stimulus"
 
-const debounce = (func, wait = 500) => {
-  let timeout
-  return function (...args) {
-    clearTimeout(timeout)
-    timeout = setTimeout(() => {
-      func.apply(this, args)
-    }, wait)
-  }
-}
+// FIXME: Is this full path really needed?
+import { debounce } from "../../../../frontend/utils"
 
-// Based on: https://tailwindcomponents.com/component/select-with-custom-list
-//
-// Missing:
-// - allow selection of items
-// - selection should be stored in select or hidden input
-// - ton of other things
 export default class extends Controller {
   static targets = ["itemsContainer", "items", "item", "searchInput", "resetButton", "toggleButton", "hiddenInput"]
   static values = { url: String }
@@ -145,7 +132,16 @@ export default class extends Controller {
     ourUrl.searchParams.append("term", this.searchInputTarget.value)
     fetch(ourUrl.href, {}).then((response) => {
       response.text().then((data) => {
-        this.itemsTarget.innerHTML = data
+        let tmpDiv = document.createElement("div")
+        tmpDiv.innerHTML = data
+
+        Array.from(tmpDiv.children).forEach((item) => {
+          item.setAttribute("data-satis-dropdown-target", "item")
+          item.setAttribute("data-action", "click->satis-dropdown#select")
+        })
+
+        this.itemsTarget.innerHTML = tmpDiv.innerHTML
+
         if (this.hasResults) {
           this.highLightSelected()
           this.itemsContainerTarget.classList.remove("hidden")

@@ -1,12 +1,12 @@
-div data-action="keydown->satis-dropdown#key_press" data-controller="satis-dropdown" data-satis-dropdown-url-value=url
+div.dropdown data-action="keydown->satis-dropdown#key_press" data-controller="satis-dropdown" data-satis-dropdown-url-value=url
   = form.hidden_field(attribute, data: { 'satis-dropdown-target' => "hiddenInput" })
   .w-full.flex.flex-col
-    .w-full
+     .w-full
       .flex.flex-col.items-center.relative
         .w-full
-          .my-2.p-1.bg-white.flex.border.border-gray-300.rounded
+          .p-1.bg-white.flex.border.border-gray-300.rounded
             .flex.flex-auto.flex-wrap
-            input.p-1.px-2.appearance-none.outline-none.w-full.text-gray-800 data-action="keyup->satis-dropdown#search" data-satis-dropdown-target="searchInput" placeholder=placeholder
+              input.p-1.px-2.appearance-none.outline-none.w-full.text-gray-800 data-action="keyup->satis-dropdown#search" data-satis-dropdown-target="searchInput" placeholder=placeholder
             div
               button.cursor-pointer.w-6.h-full.flex.items-center.text-gray-400.outline-none.focus:outline-none data-satis-dropdown-target="resetButton" data-action="click->satis-dropdown#reset"
                 svg.feather.feather-x.w-4.h-4 fill="none" height="100%" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox=("0 0 24 24") width="100%" xmlns="http://www.w3.org/2000/svg"
@@ -19,7 +19,7 @@ div data-action="keydown->satis-dropdown#key_press" data-controller="satis-dropd
                 svg.feather.feather-chevron-down.w-4.h-4 fill="none" height="100%" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox=("0 0 24 24") width="100%" xmlns="http://www.w3.org/2000/svg"
                   polyline points=("18 13 12 20 6 13")
 
-        .hidden.absolute.shadow.bg-white.top-50.z-40.w-full.lef-0.rounded.max-h-select.overflow-y-auto.svelte-5uyqqj data-satis-dropdown-target="itemsContainer"
+        .hidden.absolute.shadow.bg-white.top-45.z-40.w-full.lef-0.rounded.max-h-select.overflow-y-auto data-satis-dropdown-target="itemsContainer"
           .flex.flex-col.w-full data-satis-dropdown-target="items"
             - options[:collection]&.each do |item|
               div data-satis-dropdown-target="item" data-satis-dropdown-item-value=item.send(value_method) data-satis-dropdown-item-text=item.send(text_method) data-action="click->satis-dropdown#select"
