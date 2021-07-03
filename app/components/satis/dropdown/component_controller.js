@@ -17,7 +17,7 @@ const debounce = (func, wait = 500) => {
 // - selection should be stored in select or hidden input
 // - ton of other things
 export default class extends Controller {
-  static targets = ["itemsContainer", "items", "searchInput", "resetButton", "toggleButton"]
+  static targets = ["itemsContainer", "items", "item", "searchInput", "resetButton", "toggleButton"]
   static values = { url: String }
 
   get nrOfItems() {
@@ -115,6 +115,9 @@ export default class extends Controller {
     fetch(ourUrl.href, {}).then((response) => {
       response.text().then((data) => {
         this.itemsTarget.innerHTML = data
+
+        console.log("this.itemTargets", this.itemTargets)
+
         if (this.hasResults) {
           this.highLightSelected()
           this.itemsContainerTarget.classList.remove("hidden")

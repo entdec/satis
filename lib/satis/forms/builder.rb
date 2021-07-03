@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'satis/forms/concerns/select'
+require 'satis/forms/concerns/file'
+
 module Satis
   module Forms
     class Builder < ActionView::Helpers::FormBuilder
@@ -17,7 +20,8 @@ module Satis
                               elsif options[:collection]
                                 :select
                               end
-        send("#{override_input_type || input_type}_input", method, options)
+
+        send("#{override_input_type || input_type}_input", method, options, &block)
       end
 
       private
@@ -64,6 +68,10 @@ module Satis
         label(method, title, class: all_classes)
       end
 
+      def hidden_input(method, _options = {})
+        hidden_field(method)
+      end
+
       # Inputs and helpers
       def string_input(method, options = {})
         form_group(method, options) do
@@ -100,49 +108,8 @@ module Satis
         end
       end
 
-      def collection_input(method, options, &block)
-        form_group(method, options) do
-          safe_join [
-            custom_label(method, options[:label]),
-            block.call
-          ]
-        end
-      end
-
-      def select_input(method, options = {})
-        value_method = options[:value_method] || :id
-        text_method = options[:text_method] || :name
-        input_options = options[:input_html] || {}
-        multiple = input_options[:multiple]
-
-        collection_input(method, options) do
-          collection_select(method, options[:collection], value_method, text_method, options,
-                            merge_input_options({ class: "#{unless multiple
-                                                              'custom-select'
-                                                            end} form-control #{if has_error?(method)
-                                                                                  'is-invalid'
-                                                                                end}" }, options[:input_html]))
-        end
-      end
-
-      def grouped_select_input(method, options = {})
-        # We probably need to go back later and adjust this for more customization
-        collection_input(method, options) do
-          grouped_collection_select(method, options[:collection], :last, :first, :to_s, :to_s, options,
-                                    merge_input_options({ class: "custom-select form-control #{if has_error?(method)
-                                                                                                 'is-invalid'
-                                                                                               end}" }, options[:input_html]))
-        end
-      end
-
-      def file_input(method, options = {})
-        form_group(method, options) do
-          safe_join [
-            (label(method, options[:label]) unless options[:label] == false),
-            custom_file_field(method, options)
-          ]
-        end
-      end
+      include Concerns::Select
+      include Concerns::File
 
       def collection_of(input_type, method, options = {})
         form_builder_method, custom_class, input_builder_method = case input_type
@@ -203,22 +170,6 @@ module Satis
           else
             text_field(method, options)
           end
-        end
-      end
-
-      def custom_file_field(method, options = {})
-        tag.div(class: 'input-group') do
-          safe_join [
-            tag.div(class: 'input-group-prepend') do
-              tag.span('Upload', class: 'input-group-text')
-            end,
-            tag.div(class: 'custom-file') do
-              safe_join [
-                file_field(method, options.merge(class: 'custom-file-input', data: { controller: 'file-input' })),
-                label(method, 'Choose file...', class: 'custom-file-label')
-              ]
-            end
-          ]
         end
       end
 

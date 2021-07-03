@@ -1,20 +1,27 @@
-.flex.flex-col data-action="keydown->dropdown--component#key_press" data-controller="dropdown--component" data-dropdown--component-url-value="<%=@url%>"
+.flex.flex-col data-action="keydown->satis-dropdown#key_press" data-controller="satis-dropdown" data-satis-dropdown-url-value=url
+  = form.hidden_field attribute
   .w-full.flex.flex-col.items-center.h-64 class="md:w-1/2"
     .w-full.px-4
       .flex.flex-col.items-center.relative
         .w-full
           .my-2.p-1.bg-white.flex.border.border-gray-200.rounded
             .flex.flex-auto.flex-wrap
-            input.p-1.px-2.appearance-none.outline-none.w-full.text-gray-800 data-action="keyup->dropdown--component#search" data-dropdown--component-target="searchInput" placeholder="Product"
+            input.p-1.px-2.appearance-none.outline-none.w-full.text-gray-800 data-action="keyup->satis-dropdown#search" data-satis-dropdown-target="searchInput" placeholder="Product"
             div
-              button.cursor-pointer.w-6.h-full.flex.items-center.text-gray-400.outline-none.focus:outline-none data-dropdown--component-target="resetButton"
+              button.cursor-pointer.w-6.h-full.flex.items-center.text-gray-400.outline-none.focus:outline-none data-satis-dropdown-target="resetButton"
                 svg.feather.feather-x.w-4.h-4 fill="none" height="100%" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox=("0 0 24 24") width="100%" xmlns="http://www.w3.org/2000/svg"
                   line x1="18" x2="6" y1="6" y2="18"
                   line x1="6" x2="18" y1="6" y2="18"
             .text-gray-300.w-8.py-1.pl-2.pr-1.border-l.flex.items-center.border-gray-200
-              button.cursor-pointer.w-6.h-6.text-gray-600.outline-none.focus:outline-none data-action="click->dropdown--component#toggleMenu" data-dropdown--component-target="toggleButton"
+              button.cursor-pointer.w-6.h-6.text-gray-600.outline-none.focus:outline-none data-action="click->satis-dropdown#toggleMenu" data-satis-dropdown-target="toggleButton"
                 svg.feather.feather-chevron-up.w-4.h-4 fill="none" height="100%" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox=("0 0 24 24") width="100%" xmlns="http://www.w3.org/2000/svg"
                   polyline points=("18 15 12 9 6 15")
-        .hidden.absolute.shadow.bg-white.top-50.z-40.w-full.lef-0.rounded.max-h-select.overflow-y-auto.svelte-5uyqqj data-dropdown--component-target="itemsContainer"
-          .flex.flex-col.w-full data-dropdown--component-target="items"
+
+        / .hidden.absolute.shadow.bg-white.top-50.z-40.w-full.lef-0.rounded.max-h-select.overflow-y-auto.svelte-5uyqqj data-satis-dropdown-target="itemsContainer"
+        .absolute.shadow.bg-white.top-50.z-40.w-full.lef-0.rounded.max-h-select.overflow-y-auto.svelte-5uyqqj data-satis-dropdown-target="itemsContainer"
+          .flex.flex-col.w-full data-satis-dropdown-target="items"
+            - if options[:collection] && block
+              / - binding.pry
+              - options[:collection].each do |item|
+                /= block.call(item)
 
