@@ -36,6 +36,143 @@ export default class extends Controller {
     this.debouncedFetchResults = nil
   }
 
+  // User presses keys
+  dispatch(event) {
+    if (event.target.closest('[data-controller="satis-dropdown"]') != this.element) {
+      return
+    }
+
+    switch (event.key) {
+      case "ArrowDown":
+        if (this.hasResults) {
+          this.showResultsList(event)
+
+          this.moveDown()
+        }
+        break
+      case "ArrowUp":
+        if (this.hasResults) {
+          this.moveUp()
+        }
+        break
+      case "Enter":
+        const dataDiv = this.selectedItem
+
+        this.hideResultsList()
+        this.hiddenInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-value")
+        this.searchInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-text")
+
+        event.preventDefault()
+        return false
+
+        break
+      case "Escape":
+        if (!this.resultsHidden) {
+          this.hideResultsList(event)
+        } else {
+          this.searchInputTarget.value = null
+        }
+
+        break
+      default:
+        break
+    }
+
+    return true
+  }
+
+  // User enters text in the search field
+  search(event) {
+    this.debouncedFetchResults()
+  }
+
+  // User presses reset button
+  reset(event) {
+    this.searchInputTarget.value = null
+    this.hideResultsList()
+
+    event.preventDefault()
+    return false
+  }
+
+  // User selects an item using mouse
+  select(event) {
+    const dataDiv = event.target.closest('[data-satis-dropdown-target="item"]')
+
+    this.hideResultsList()
+    this.hiddenInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-value")
+    this.searchInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-text")
+  }
+
+  // --- Helpers
+
+  toggleResultsList(event) {
+    if (this.itemsContainerTarget.classList.contains("hidden")) {
+      this.showResultsList(event)
+    } else {
+      this.hideResultsList(event)
+    }
+
+    event.preventDefault()
+    return false
+  }
+
+  showResultsList(event) {
+    this.itemsContainerTarget.classList.remove("hidden")
+    this.toggleButtonTarget.querySelector(".feather-chevron-up").classList.remove("hidden")
+    this.toggleButtonTarget.querySelector(".feather-chevron-down").classList.add("hidden")
+  }
+
+  hideResultsList(event) {
+    this.itemsContainerTarget.classList.add("hidden")
+    this.toggleButtonTarget.querySelector(".feather-chevron-up").classList.add("hidden")
+    this.toggleButtonTarget.querySelector(".feather-chevron-down").classList.remove("hidden")
+  }
+
+  fetchResults(event) {
+    if (this.searchInputTarget.value.length < 2 || this.searchInputTarget.value == this.lastSearch) {
+      return
+    }
+    if (!this.hasUrlValue) {
+      return
+    }
+    this.lastSearch = this.searchInputTarget.value
+    const ourUrl = new URL(this.urlValue)
+    ourUrl.searchParams.append("term", this.searchInputTarget.value)
+    this.fetchResultsWith(ourUrl).then(() => {
+      if (this.hasResults) {
+        this.highLightSelected()
+        this.itemsContainerTarget.classList.remove("hidden")
+      }
+    })
+  }
+
+  fetchResultsWith(ourUrl) {
+    const promise = new Promise((resolve, reject) => {
+      fetch(ourUrl.href, {}).then((response) => {
+        response.text().then((data) => {
+          let tmpDiv = document.createElement("div")
+          tmpDiv.innerHTML = data
+
+          // Add needed items
+          Array.from(tmpDiv.children).forEach((item) => {
+            item.setAttribute("data-satis-dropdown-target", "item")
+            item.setAttribute("data-action", "click->satis-dropdown#select")
+          })
+
+          this.itemsTarget.innerHTML = tmpDiv.innerHTML
+
+          resolve()
+        })
+      })
+    })
+    return promise
+  }
+
+  get resultsHidden() {
+    this.itemsContainerTarget.classList.contains("hidden")
+  }
+
   get nrOfItems() {
     return this.itemsTarget.children.length
   }
@@ -67,8 +204,10 @@ export default class extends Controller {
   }
 
   highLightSelected() {
-    this.selectedItem.classList.add("bg-blue-200")
-    this.selectedItem.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })
+    if (this.selectedItem) {
+      this.selectedItem.classList.add("bg-blue-200")
+      this.selectedItem.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })
+    }
   }
 
   moveDown() {
@@ -81,97 +220,5 @@ export default class extends Controller {
     this.lowLightSelected()
     this.decreaseSelectedIndex()
     this.highLightSelected()
-  }
-
-  key_press(event) {
-    console.log("keyDown", event)
-    switch (event.key) {
-      case "ArrowDown":
-        if (this.hasResults) {
-          this.moveDown()
-        }
-        break
-      case "ArrowUp":
-        if (this.hasResults) {
-          this.moveUp()
-        }
-        break
-      case "Enter":
-        // this.searchInputTarget.value = '';
-        break
-      case "Escape":
-        this.itemsContainerTarget.classList.add("hidden")
-
-        break
-      default:
-        break
-    }
-    return true
-  }
-
-  search(event) {
-    this.debouncedFetchResults()
-  }
-
-  reset(event) {
-    this.searchInputTarget.value = null
-    this.itemsContainerTarget.classList.add("hidden")
-
-    event.preventDefault()
-    return false
-  }
-
-  select(event) {
-    const dataDiv = event.target.closest('[data-satis-dropdown-target="item"]')
-
-    this.itemsContainerTarget.classList.add("hidden")
-    this.hiddenInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-value")
-    this.searchInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-text")
-  }
-
-  toggleMenu(event) {
-    this.itemsContainerTarget.classList.toggle("hidden")
-    this.toggleButtonTarget.querySelector(".feather-chevron-up").classList.toggle("hidden")
-    this.toggleButtonTarget.querySelector(".feather-chevron-down").classList.toggle("hidden")
-
-    event.preventDefault()
-    return false
-  }
-
-  fetchResults(event) {
-    if (this.searchInputTarget.value.length < 2 || this.searchInputTarget.value == this.lastSearch) {
-      return
-    }
-    this.lastSearch = this.searchInputTarget.value
-    const ourUrl = new URL(this.urlValue)
-    ourUrl.searchParams.append("term", this.searchInputTarget.value)
-    fetchResultsWith(ourUrl).then(() => {
-      if (this.hasResults) {
-        this.highLightSelected()
-        this.itemsContainerTarget.classList.remove("hidden")
-      }
-    })
-  }
-
-  fetchResultsWith(ourUrl) {
-    const promise = new Promise((resolve, reject) => {
-      fetch(ourUrl.href, {}).then((response) => {
-        response.text().then((data) => {
-          let tmpDiv = document.createElement("div")
-          tmpDiv.innerHTML = data
-
-          // Add needed items
-          Array.from(tmpDiv.children).forEach((item) => {
-            item.setAttribute("data-satis-dropdown-target", "item")
-            item.setAttribute("data-action", "click->satis-dropdown#select")
-          })
-
-          this.itemsTarget.innerHTML = tmpDiv.innerHTML
-
-          resolve()
-        })
-      })
-    })
-    return promise
   }
 }

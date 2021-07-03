@@ -1,4 +1,4 @@
-div.dropdown data-action="keydown->satis-dropdown#key_press" data-controller="satis-dropdown" data-satis-dropdown-url-value=url
+div.dropdown data-action="keydown->satis-dropdown#dispatch" data-controller="satis-dropdown" data-satis-dropdown-url-value=url
   = form.hidden_field(attribute, data: { 'satis-dropdown-target' => "hiddenInput" })
   .w-full.flex.flex-col
      .w-full
@@ -13,7 +13,7 @@ div.dropdown data-action="keydown->satis-dropdown#key_press" data-controller="sa
                   line x1="18" x2="6" y1="6" y2="18"
                   line x1="6" x2="18" y1="6" y2="18"
             .text-gray-300.w-8.py-1.pl-2.pr-1.border-l.flex.items-center.border-gray-200
-              button.cursor-pointer.w-6.h-6.text-gray-600.outline-none.focus:outline-none data-action="click->satis-dropdown#toggleMenu" data-satis-dropdown-target="toggleButton"
+              button.cursor-pointer.w-6.h-6.text-gray-600.outline-none.focus:outline-none data-action="click->satis-dropdown#toggleResultsList" data-satis-dropdown-target="toggleButton"
                 svg.hidden.feather.feather-chevron-up.w-4.h-4 fill="none" height="100%" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox=("0 0 24 24") width="100%" xmlns="http://www.w3.org/2000/svg"
                   polyline points=("18 15 12 9 6 15")
                 svg.feather.feather-chevron-down.w-4.h-4 fill="none" height="100%" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox=("0 0 24 24") width="100%" xmlns="http://www.w3.org/2000/svg"
