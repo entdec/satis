@@ -4,6 +4,8 @@ module Satis
       attr_reader :url, :form, :attribute, :title, :options
 
       def initialize(form:, attribute:, **options, &block)
+        super
+
         @form = form
         @attribute = attribute
         @title = title

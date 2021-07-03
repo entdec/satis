@@ -13,12 +13,27 @@ export default class extends Controller {
     this.lastSearch = null
 
     // Put current selection in search field
-    if (this.hiddenInputTarget.value && this.itemTargets.length > 0) {
-      const currentItem = this.itemTargets.find((item) => {
-        return this.hiddenInputTarget.value == item.getAttribute("data-satis-dropdown-item-value")
-      })
-      this.searchInputTarget.value = currentItem.getAttribute("data-satis-dropdown-item-text")
+    if (this.hiddenInputTarget.value) {
+      if (this.itemTargets.length == 0) {
+        const ourUrl = new URL(this.urlValue)
+        ourUrl.searchParams.append("id", this.hiddenInputTarget.value)
+        this.fetchResultsWith(ourUrl).then(() => {
+          const currentItem = this.itemTargets.find((item) => {
+            return this.hiddenInputTarget.value == item.getAttribute("data-satis-dropdown-item-value")
+          })
+          this.searchInputTarget.value = currentItem.getAttribute("data-satis-dropdown-item-text")
+        })
+      } else {
+        const currentItem = this.itemTargets.find((item) => {
+          return this.hiddenInputTarget.value == item.getAttribute("data-satis-dropdown-item-value")
+        })
+        this.searchInputTarget.value = currentItem.getAttribute("data-satis-dropdown-item-text")
+      }
     }
+  }
+
+  disconnect() {
+    this.debouncedFetchResults = nil
   }
 
   get nrOfItems() {
@@ -130,23 +145,33 @@ export default class extends Controller {
     this.lastSearch = this.searchInputTarget.value
     const ourUrl = new URL(this.urlValue)
     ourUrl.searchParams.append("term", this.searchInputTarget.value)
-    fetch(ourUrl.href, {}).then((response) => {
-      response.text().then((data) => {
-        let tmpDiv = document.createElement("div")
-        tmpDiv.innerHTML = data
+    fetchResultsWith(ourUrl).then(() => {
+      if (this.hasResults) {
+        this.highLightSelected()
+        this.itemsContainerTarget.classList.remove("hidden")
+      }
+    })
+  }
 
-        Array.from(tmpDiv.children).forEach((item) => {
-          item.setAttribute("data-satis-dropdown-target", "item")
-          item.setAttribute("data-action", "click->satis-dropdown#select")
+  fetchResultsWith(ourUrl) {
+    const promise = new Promise((resolve, reject) => {
+      fetch(ourUrl.href, {}).then((response) => {
+        response.text().then((data) => {
+          let tmpDiv = document.createElement("div")
+          tmpDiv.innerHTML = data
+
+          // Add needed items
+          Array.from(tmpDiv.children).forEach((item) => {
+            item.setAttribute("data-satis-dropdown-target", "item")
+            item.setAttribute("data-action", "click->satis-dropdown#select")
+          })
+
+          this.itemsTarget.innerHTML = tmpDiv.innerHTML
+
+          resolve()
         })
-
-        this.itemsTarget.innerHTML = tmpDiv.innerHTML
-
-        if (this.hasResults) {
-          this.highLightSelected()
-          this.itemsContainerTarget.classList.remove("hidden")
-        }
       })
     })
+    return promise
   }
 }
