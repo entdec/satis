@@ -1,6 +1,6 @@
 div data-action="keydown->satis-dropdown#key_press" data-controller="satis-dropdown" data-satis-dropdown-url-value=url
   = form.hidden_field(attribute, data: { 'satis-dropdown-target' => "hiddenInput" })
-  .w-full.flex.flex-col.items-center.h-64
+  .w-full.flex.flex-col
     .w-full
       .flex.flex-col.items-center.relative
         .w-full
@@ -19,11 +19,16 @@ div data-action="keydown->satis-dropdown#key_press" data-controller="satis-dropd
                 svg.feather.feather-chevron-down.w-4.h-4 fill="none" height="100%" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox=("0 0 24 24") width="100%" xmlns="http://www.w3.org/2000/svg"
                   polyline points=("18 13 12 20 6 13")
 
-        / .hidden.absolute.shadow.bg-white.top-50.z-40.w-full.lef-0.rounded.max-h-select.overflow-y-auto.svelte-5uyqqj data-satis-dropdown-target="itemsContainer"
         .hidden.absolute.shadow.bg-white.top-50.z-40.w-full.lef-0.rounded.max-h-select.overflow-y-auto.svelte-5uyqqj data-satis-dropdown-target="itemsContainer"
           .flex.flex-col.w-full data-satis-dropdown-target="items"
-            - if options[:collection] && block
-              - options[:collection].each do |item|
-                div data-satis-dropdown-target="item" data-satis-dropdown-item-value=item.send(value_method) data-satis-dropdown-item-text=item.send(text_method) data-action="click->satis-dropdown#select"
-                  = item_html(item)
+            - options[:collection]&.each do |item|
+              div data-satis-dropdown-target="item" data-satis-dropdown-item-value=item.send(value_method) data-satis-dropdown-item-text=item.send(text_method) data-action="click->satis-dropdown#select"
+                - if custom_item_html?
+                    = item_html(item)
+                - else
+                  .cursor-pointer.w-full.border-gray-100.border-b.hover:bg-blue-200
+                    .flex.w-full.items-center.p-2.pl-2.border-transparent.border-l-2.relative.hover:border-teal-100
+                      .w-full.items-center.flex
+                        .mx-2.-mt-1
+                          span = item.send(text_method)
 

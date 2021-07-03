@@ -1,7 +1,7 @@
 module Satis
   module Dropdown
     class Component < ViewComponent::Base
-      attr_reader :url, :form, :attribute, :title, :options, :block
+      attr_reader :url, :form, :attribute, :title, :options
 
       def initialize(form:, attribute:, **options, &block)
         @form = form
@@ -22,6 +22,10 @@ module Satis
 
       def text_method
         options[:text_method] || :name
+      end
+
+      def custom_item_html?
+        !!@block
       end
 
       def item_html(item)

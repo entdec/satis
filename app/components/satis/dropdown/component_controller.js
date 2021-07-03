@@ -146,9 +146,6 @@ export default class extends Controller {
     fetch(ourUrl.href, {}).then((response) => {
       response.text().then((data) => {
         this.itemsTarget.innerHTML = data
-
-        console.log("this.itemTargets", this.itemTargets)
-
         if (this.hasResults) {
           this.highLightSelected()
           this.itemsContainerTarget.classList.remove("hidden")
