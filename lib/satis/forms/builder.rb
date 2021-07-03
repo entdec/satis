@@ -7,7 +7,10 @@ module Satis
   module Forms
     class Builder < ActionView::Helpers::FormBuilder
       delegate :tag, :safe_join, to: :@template
-      def input(method, options = {})
+
+      attr_reader :template
+
+      def input(method, options = {}, &block)
         @form_options = options
         object_type = object_type_for_method(method)
         input_type = case object_type

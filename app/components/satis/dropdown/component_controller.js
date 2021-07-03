@@ -17,8 +17,22 @@ const debounce = (func, wait = 500) => {
 // - selection should be stored in select or hidden input
 // - ton of other things
 export default class extends Controller {
-  static targets = ["itemsContainer", "items", "item", "searchInput", "resetButton", "toggleButton"]
+  static targets = ["itemsContainer", "items", "item", "searchInput", "resetButton", "toggleButton", "hiddenInput"]
   static values = { url: String }
+
+  connect() {
+    this.debouncedFetchResults = debounce(this.fetchResults.bind(this), 250)
+    this.selectedIndex = 0
+    this.lastSearch = null
+
+    // Put current selection in search field
+    if (this.hiddenInputTarget.value && this.itemTargets.length > 0) {
+      const currentItem = this.itemTargets.find((item) => {
+        return this.hiddenInputTarget.value == item.getAttribute("data-satis-dropdown-item-value")
+      })
+      this.searchInputTarget.value = currentItem.getAttribute("data-satis-dropdown-item-text")
+    }
+  }
 
   get nrOfItems() {
     return this.itemsTarget.children.length
@@ -67,12 +81,6 @@ export default class extends Controller {
     this.highLightSelected()
   }
 
-  connect() {
-    this.debouncedFetchResults = debounce(this.fetchResults.bind(this), 250)
-    this.selectedIndex = 0
-    this.lastSearch = null
-  }
-
   key_press(event) {
     console.log("keyDown", event)
     switch (event.key) {
@@ -89,6 +97,10 @@ export default class extends Controller {
       case "Enter":
         // this.searchInputTarget.value = '';
         break
+      case "Escape":
+        this.itemsContainerTarget.classList.add("hidden")
+
+        break
       default:
         break
     }
@@ -99,10 +111,29 @@ export default class extends Controller {
     this.debouncedFetchResults()
   }
 
-  toggleMenu() {
-    this.toggleButtonTarget.classList.toggle("transform")
-    this.toggleButtonTarget.classList.toggle("rotate-180")
+  reset(event) {
+    this.searchInputTarget.value = null
+    this.itemsContainerTarget.classList.add("hidden")
+
+    event.preventDefault()
+    return false
+  }
+
+  select(event) {
+    const dataDiv = event.target.closest('[data-satis-dropdown-target="item"]')
+
+    this.itemsContainerTarget.classList.add("hidden")
+    this.hiddenInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-value")
+    this.searchInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-text")
+  }
+
+  toggleMenu(event) {
     this.itemsContainerTarget.classList.toggle("hidden")
+    this.toggleButtonTarget.querySelector(".feather-chevron-up").classList.toggle("hidden")
+    this.toggleButtonTarget.querySelector(".feather-chevron-down").classList.toggle("hidden")
+
+    event.preventDefault()
+    return false
   }
 
   fetchResults(event) {

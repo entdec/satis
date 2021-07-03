@@ -45,7 +45,11 @@ module Satis
           end
 
           def dropdown_input(method, options = {}, &block)
-            @template.render(Satis::Dropdown::Component.new(form: self, attribute: method, **options, &block))
+            safe_join [
+              custom_label(method, options[:label]),
+              @template.render(Satis::Dropdown::Component.new(form: self, attribute: method, title: options[:label], **options,
+&block))
+            ]
           end
         end
       end
