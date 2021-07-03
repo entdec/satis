@@ -23,3 +23,21 @@ https://tailwindcomponents.com/component/select-with-custom-list
             span = account.name
             .text-xs.truncate.w-full.normal-case.font-normal.-mt-1.text-gray-500 = account.name
 ```
+
+### Remote select, which always needs custom HTML
+
+```
+  = f.input :location_id, url: select_locations_url(format: :html), as: :dropdown
+```
+
+These select.html.slim should look like this:
+
+```
+- @locations.each do |location|
+  div data-satis-dropdown-target="item" data-satis-dropdown-item-value=location.id data-satis-dropdown-item-text=location.name data-action="click->satis-dropdown#select"
+    .cursor-pointer.w-full.border-gray-100.rounded-t.border-b.hover:bg-blue-200
+      .flex.w-full.items-center.p-2.pl-2.border-transparent.border-l-2.relative.hover:border-teal-100
+        .w-full.items-center.flex
+          .mx-2.-mt-1
+            span = location.name
+```
