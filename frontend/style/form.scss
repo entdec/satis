@@ -1,0 +1,23 @@
+form {
+  .form-label {
+    @apply mt-2 block text-xs text-gray-400 uppercase;
+  }
+  .form-control {
+    @apply border rounded w-full py-2 px-3 h-12 text-gray-800 leading-tight border-gray-300;
+  }
+
+  .custom-select {
+    @apply block pl-3 pr-10;
+  }
+
+  .invalid-feedback {
+    @apply text-sm text-red-600;
+  }
+
+  .field_with_errors {
+    input,
+    select {
+      @apply border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500;
+    }
+  }
+}
