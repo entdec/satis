@@ -23,6 +23,11 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
+"@fortawesome/fontawesome-pro@^6.0.0-beta1":
+  version "6.0.0-beta1"
+  resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-pro/-/6.0.0-beta1/fontawesome-pro-6.0.0-beta1.tgz#84969c946b9b4a1a88d722e5f7e444e79a5eafb0"
+  integrity sha512-qn/HZ4I1xiGiWRUhZtO4TMZBwQ9p9Ku95IcwehqEnqQ3KWtg79gYVl5g4MZL/7JxW4bDmZzORc0Gc9MHRS111w==
+
 "@fullhuman/postcss-purgecss@^4.0.3":
   version "4.0.3"
   resolved "https://registry.yarnpkg.com/@fullhuman/postcss-purgecss/-/postcss-purgecss-4.0.3.tgz#55d71712ec1c7a88e0d1ba5f10ce7fb6aa05beb4"

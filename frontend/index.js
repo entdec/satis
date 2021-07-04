@@ -1,6 +1,8 @@
 import { definitionsFromContext } from "stimulus/webpack-helpers"
 import { Application } from "stimulus"
 
+import "@fortawesome/fontawesome-pro/js/all"
+
 export class Satis {
   static start(application) {
     if (!application) {
