@@ -61,6 +61,7 @@ module Satis
         tag.small text, class: 'form-text text-muted'
       end
 
+      # FIXME: These don't work for relations or location_id, error is on location
       def error_text(method)
         return unless has_error?(method)
 
