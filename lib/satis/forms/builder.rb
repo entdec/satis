@@ -12,6 +12,24 @@ module Satis
 
       def input(method, options = {}, &block)
         @form_options = options
+
+        send(input_type_for(method, options), method, options, &block)
+      end
+
+      # Simple-form like association
+      def association(name, options, &block)
+        @form_options = options
+
+        reflection = @object.class.reflections[name.to_s]
+
+        method = reflection.join_foreign_key
+
+        send(input_type_for(method, options), method, options, &block)
+      end
+
+      private
+
+      def input_type_for(method, options)
         object_type = object_type_for_method(method)
         input_type = case object_type
                      when :date then :string
@@ -24,10 +42,8 @@ module Satis
                                 :select
                               end
 
-        send("#{override_input_type || input_type}_input", method, options, &block)
+        "#{override_input_type || input_type}_input"
       end
-
-      private
 
       def form_group(method, options = {}, &block)
         tag.div class: "form-group #{method}" do
