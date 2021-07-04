@@ -1,9 +1,9 @@
-import { Controller } from "stimulus"
+import ApplicationController from "../../../../frontend/controllers/application_controller"
 
 /*
  * Tabs controller
  */
-export default class extends Controller {
+export default class extends ApplicationController {
   static targets = ["tab", "content"]
 
   connect() {

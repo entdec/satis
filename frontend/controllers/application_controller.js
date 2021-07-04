@@ -1,7 +1,7 @@
 // application_controller.js
 import { Controller } from "stimulus"
 
-export default class extends Controller {
+export default class ApplicationController extends Controller {
   getController(element, identifier) {
     return this.application.getControllerForElementAndIdentifier(element, identifier)
   }
