@@ -32,7 +32,7 @@ export default class extends ApplicationController {
   }
 
   disconnect() {
-    this.debouncedFetchResults = nil
+    this.debouncedFetchResults = null
   }
 
   // User presses keys
