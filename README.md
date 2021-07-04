@@ -1,28 +1,31 @@
 # Satis
+
 Short description and motivation.
 
 ## Usage
-How to use my plugin.
+
+You can use satis helpers in your own helpers:
+
+```ruby
+def mycard(&block)
+  satis.card(icon: 'fad fa-user', title: "Profile", &block)
+end
+```
+
+and then in your template:
+
+```slim
+= smurrefluts do |card|
+```
 
 ## Installation
+
 Add this line to your application's Gemfile:
 
 ```ruby
 gem 'satis'
 ```
 
-And then execute:
-```bash
-$ bundle
-```
-
-Or install it yourself as:
-```bash
-$ gem install satis
-```
-
-## Contributing
-Contribution directions go here.
-
 ## License
+
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
