@@ -3,12 +3,13 @@ module Satis
     class Component < Satis::ApplicationComponent
       renders_many :actions
 
-      attr_reader :title, :description
+      attr_reader :icon, :title, :description, :menu
 
-      def initialize(title: nil, description: nil, menu: nil)
+      def initialize(icon: nil, title: nil, description: nil, menu: nil)
         super
         @title = title
         @description = description
+        @icon = icon
         @menu = menu
       end
     end
