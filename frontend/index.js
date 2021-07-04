@@ -2,6 +2,9 @@ import { definitionsFromContext } from "stimulus/webpack-helpers"
 import { Application } from "stimulus"
 
 import "@fortawesome/fontawesome-pro/js/all"
+import { config, library, dom } from "@fortawesome/fontawesome-svg-core"
+config.mutateApproach = "sync"
+dom.watch()
 
 export class Satis {
   static start(application) {
