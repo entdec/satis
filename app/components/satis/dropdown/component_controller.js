@@ -69,7 +69,7 @@ export default class extends ApplicationController {
         if (!this.resultsHidden) {
           this.hideResultsList(event)
         } else {
-          this.searchInputTarget.value = null
+          this.reset(event)
         }
 
         break
@@ -87,6 +87,7 @@ export default class extends ApplicationController {
 
   // User presses reset button
   reset(event) {
+    this.hiddenInputTarget.value = null
     this.searchInputTarget.value = null
     this.hideResultsList()
 
