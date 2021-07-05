@@ -6,7 +6,7 @@ require 'satis/forms/concerns/file'
 module Satis
   module Forms
     class Builder < ActionView::Helpers::FormBuilder
-      delegate :tag, :safe_join, to: :@template
+      delegate :t, :tag, :safe_join, to: :@template
 
       attr_reader :template
 
@@ -27,7 +27,26 @@ module Satis
         send(input_type_for(method, options), method, options, &block)
       end
 
-      private
+      alias button_button button
+      alias submit_button submit
+
+      def submit(value = nil, options = {})
+        button_button(value, options.reverse_merge(type: :submit, class: 'button primary'))
+      end
+
+      def button(value = nil, options = {}, &block)
+        options = options.reverse_merge(class: 'button')
+        options[:type] ||= :button
+        button_button(value, options, &block)
+      end
+
+      def continue(value = t('.continue', default: 'Save and continue editing'), options = {}, &block)
+        button_button(value, options.reverse_merge(value: 'continue', class: 'button secondary'), &block)
+      end
+
+      def reset(value = nil, options = {}, &block)
+        button_button(value, options.reverse_merge(type: :reset, class: 'button'), &block)
+      end
 
       def input_type_for(method, options)
         object_type = object_type_for_method(method)
