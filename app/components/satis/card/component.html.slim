@@ -1,14 +1,14 @@
-.bg-white.overflow-hidden.sm:rounded-lg.sm:shadow
-  .bg-white.px-4.py-5.border-b.border-gray-200.sm:px-6
+.bg-white.dark:bg-gray-800.overflow-hidden.sm:rounded-lg.sm:shadow
+  .bg-white.dark:bg-gray-800.px-4.py-5.border-b.border-gray-200.sm:px-6
     .-ml-4.-mt-4.flex.justify-between.items-center.flex-wrap.sm:flex-nowrap
       - if icon
-        .ml-4.mt-4.flex-shrink-0.text-gray-900
+        .ml-4.mt-4.flex-shrink-0.text-gray-900.dark:text-gray-300
           i class=icon
       .ml-4.mt-4.flex-1
-        h3.text-lg.leading-6.font-medium.text-gray-900
+        h3.text-lg.leading-6.font-medium.text-gray-900.dark:text-gray-300
           = title
         - if description.present?
-          p.mt-1.text-sm.text-gray-500
+          p.mt-1.text-sm.text-gray-500.dark:text-gray-500
             = description
       .ml-4.mt-4.flex-shrink-0
         - for action in actions
