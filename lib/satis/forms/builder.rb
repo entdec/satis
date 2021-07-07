@@ -127,11 +127,34 @@ module Satis
       def text_input(method, options = {})
         form_group(method, options) do
           safe_join [
-            (label(method, options[:label]) unless options[:label] == false),
+            (custom_label(method, options[:label]) unless options[:label] == false),
             text_area(method,
                       merge_input_options({ class: "form-control #{if has_error?(method)
                                                                      'is-invalid'
                                                                    end}" }, options[:input_html]))
+          ]
+        end
+      end
+
+      def editor_input(method, options = {})
+        form_group(method, options) do
+          safe_join [
+            (custom_label(method, options[:label]) unless options[:label] == false),
+            tag.div(text_area(method,
+                              merge_input_options({
+                                                    class: "form-control #{'is-invalid' if has_error?(method)}",
+                                                    data: {
+                                                      controller: 'satis-editor',
+                                                      target: 'satis-editor.textarea',
+                                                      'satis-editor-read-only-value' => options.delete(:read_only) || false,
+                                                      'satis-editor-mode-value' => options.delete(:mode) || 'text/html',
+                                                      'satis-editor-height-value' => options.delete(:height) || '200px',
+                                                      'satis-editor-color-scheme-value' => options.delete(:color_scheme),
+                                                      'satis-editor-color-scheme-dark-value' => options.delete(:color_scheme_dark)
+                                                    }
+
+                                                  }, options[:input_html])), class: 'editor'),
+            hint_text(options[:hint] || '⌘-F/⌃-f: search; ⌥-g: goto line, ⌃-space: autocomplete')
           ]
         end
       end
