@@ -10,12 +10,14 @@ module Satis
 
       attr_reader :template
 
+      # Regular input
       def input(method, options = {}, &block)
         @form_options = options
 
         send(input_type_for(method, options), method, options, &block)
       end
 
+      # A codemirror editor, backed by a text-area
       def editor(method, options = {}, &block)
         @form_options = options
 
@@ -36,23 +38,54 @@ module Satis
       alias button_button button
       alias submit_button submit
 
+      # A submit button
       def submit(value = nil, options = {})
         button_button(value, options.reverse_merge(type: :submit, class: 'button primary'))
       end
 
+      # A regular button
       def button(value = nil, options = {}, &block)
         options = options.reverse_merge(class: 'button')
         options[:type] ||= :button
         button_button(value, options, &block)
       end
 
+      # A continue button
       def continue(value = t('.continue', default: 'Save and continue editing'), options = {}, &block)
         button_button(value, options.reverse_merge(value: 'continue', class: 'button secondary'), &block)
       end
 
+      # A reset button
       def reset(value = nil, options = {}, &block)
         button_button(value, options.reverse_merge(type: :reset, class: 'button'), &block)
       end
+
+      alias _fields_for fields_for
+
+      # Wrapper around fields_for, using Satis::Forms::Builder
+      # Example:
+      #
+      #   form_for @user do |f|
+      #     f.simple_fields_for :printers do |printers_form|
+      #       # Here you have all satis' form methods available
+      #       printers_form.input :name
+      #     end
+      #   end
+      def fields_for(*args, &block)
+        options = args.extract_options!
+        # options[:wrapper] = self.options[:wrapper] if options[:wrapper].nil?
+        # options[:defaults] ||= self.options[:defaults]
+        # options[:wrapper_mappings] ||= self.options[:wrapper_mappings]
+
+        options[:builder] ||= if self.class < ActionView::Helpers::FormBuilder
+                                self.class
+                              else
+                                Satis::Forms::Builder
+                              end
+        _fields_for(*args, options, &block)
+      end
+
+      # Non public
 
       def input_type_for(method, options)
         object_type = object_type_for_method(method)
@@ -109,8 +142,8 @@ module Satis
       end
 
       def custom_label(method, title, options = {})
-        all_classes = "#{options[:class]} form-label"
-        label(method, title, class: all_classes)
+        all_classes = "#{options[:class]} form-label".strip
+        label(method, title, class: all_classes, data: options[:data])
       end
 
       def hidden_input(method, _options = {})
@@ -173,6 +206,15 @@ module Satis
               label(method, options[:label], class: 'custom-control-label')
             ]
           end
+        end
+      end
+
+      # Switch
+      # Pass icon: false for no icon
+      def switch_input(method, options = {}, &block)
+        form_group(method, options) do
+          @template.render(Satis::Switch::Component.new(form: self, attribute: method, title: options[:label], **options,
+&block))
         end
       end
 
