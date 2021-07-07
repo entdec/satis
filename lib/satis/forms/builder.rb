@@ -16,6 +16,12 @@ module Satis
         send(input_type_for(method, options), method, options, &block)
       end
 
+      def editor(method, options = {}, &block)
+        @form_options = options
+
+        editor_input(method, options, &block)
+      end
+
       # Simple-form like association
       def association(name, options, &block)
         @form_options = options
