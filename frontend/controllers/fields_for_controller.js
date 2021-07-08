@@ -4,9 +4,7 @@ export default class extends ApplicationController {
   static targets = ["insertionPoint", "template"]
 
   connect() {
-    console.log("fields-for")
-
-    let content = this.templateTarget.innerHTML //.replace(/TEMPLATE/g, new Date().valueOf())
+    let content = this.templateTarget.innerHTML
     this.insertionPointTarget.insertAdjacentHTML("beforebegin", content)
   }
 
