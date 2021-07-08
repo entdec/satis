@@ -96,7 +96,6 @@ export default class extends Controller {
       }
     }
 
-    console.log("editor", this.editor)
     this.editor.setSize("100%", this.heightValue)
 
     this.editor.on("change", function (editor, evt) {

@@ -6,7 +6,7 @@ require 'satis/forms/concerns/file'
 module Satis
   module Forms
     class Builder < ActionView::Helpers::FormBuilder
-      delegate :t, :tag, :safe_join, to: :@template
+      delegate :t, :tag, :safe_join, :render, to: :@template
 
       attr_reader :template
 
@@ -51,7 +51,12 @@ module Satis
       end
 
       # A continue button
-      def continue(value = t('.continue', default: 'Save and continue editing'), options = {}, &block)
+      def continue(value = nil, options = {}, &block)
+        value ||= if !@object.persisted?
+                    t('.create_continue', default: 'Create and continue editing')
+                  else
+                    t('.update_continue', default: 'Update and continue editing')
+                  end
         button_button(value, options.reverse_merge(value: 'continue', class: 'button secondary'), &block)
       end
 
@@ -60,7 +65,7 @@ module Satis
         button_button(value, options.reverse_merge(type: :reset, class: 'button'), &block)
       end
 
-      alias _fields_for fields_for
+      alias rails_fields_for fields_for
 
       # Wrapper around fields_for, using Satis::Forms::Builder
       # Example:
@@ -73,16 +78,50 @@ module Satis
       #   end
       def fields_for(*args, &block)
         options = args.extract_options!
-        # options[:wrapper] = self.options[:wrapper] if options[:wrapper].nil?
-        # options[:defaults] ||= self.options[:defaults]
-        # options[:wrapper_mappings] ||= self.options[:wrapper_mappings]
+        name = args.first
+        template_object = args.second
 
+        reflection = @object.class.reflections[name.to_s]
+
+        options[:html] ||= {}
         options[:builder] ||= if self.class < ActionView::Helpers::FormBuilder
                                 self.class
                               else
                                 Satis::Forms::Builder
                               end
-        _fields_for(*args, options, &block)
+
+        # Only do the whole nested-form thing with a collection
+        if reflection.collection? && template_object
+          # tag.div(class: 'fields_for', data: { controller: 'satis-fields_for' }) do
+          #   safe_join [
+          #     tag.template(data: { 'fields-for-target' => 'template' }) do
+          #       rails_fields_for(name, template_object, options.reverse_merge(child_index: 'TEMPLATE')) do |nested_form|
+          #         nested_form.hidden_field :id
+          #         nested_form.hidden_field :_destroy
+          #         yield(nested_form)
+          #       end
+          #     end,
+          #     rails_fields_for(name, options, &block)
+          #   ]
+          # end
+          # render 'shared/fields_for'
+          view_options = {
+            form: self,
+            collection: name,
+            template_object: template_object,
+            options: options
+          }
+
+          tag.div(class: 'fields_for', data: { controller: 'satis-fields-for' }) do
+            render 'shared/fields_for', view_options, &block
+          end
+
+          # render(Satis::FieldsFor::Component.new(
+          #          form: self, name: name, template_object: template_object, **options, &block
+          #        ))
+        else
+          rails_fields_for(*args, options, &block)
+        end
       end
 
       # Non public
@@ -184,7 +223,7 @@ module Satis
                                                     class: "form-control #{'is-invalid' if has_error?(method)}",
                                                     data: {
                                                       controller: 'satis-editor',
-                                                      target: 'satis-editor.textarea',
+                                                      'satis-editor-target' => 'textarea',
                                                       'satis-editor-read-only-value' => options.delete(:read_only) || false,
                                                       'satis-editor-mode-value' => options.delete(:mode) || 'text/html',
                                                       'satis-editor-height-value' => options.delete(:height) || '200px',
@@ -213,7 +252,7 @@ module Satis
       # Pass icon: false for no icon
       def switch_input(method, options = {}, &block)
         form_group(method, options) do
-          @template.render(Satis::Switch::Component.new(form: self, attribute: method, title: options[:label], **options,
+          render(Satis::Switch::Component.new(form: self, attribute: method, title: options[:label], **options,
 &block))
         end
       end
