@@ -8,7 +8,8 @@ export default class extends ApplicationController {
 
   connect() {
     this.debouncedFetchResults = debounce(this.fetchResults.bind(this), 250)
-    this.selectedIndex = 0
+    this.debouncedLocalResults = debounce(this.localResults.bind(this), 250)
+    this.selectedIndex = -1
     this.lastSearch = null
 
     // Put current selection in search field
@@ -33,6 +34,7 @@ export default class extends ApplicationController {
 
   disconnect() {
     this.debouncedFetchResults = null
+    this.debouncedLocalResults = null
   }
 
   // User presses keys
@@ -60,9 +62,10 @@ export default class extends ApplicationController {
         this.hideResultsList()
         this.hiddenInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-value")
         this.searchInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-text")
+        this.lastSearch = this.searchInputTarget.value
 
         event.preventDefault()
-        return false
+        // return false
 
         break
       case "Escape":
@@ -82,14 +85,25 @@ export default class extends ApplicationController {
 
   // User enters text in the search field
   search(event) {
-    this.debouncedFetchResults()
+    if (this.hasUrlValue) {
+      this.debouncedFetchResults()
+    } else {
+      this.debouncedLocalResults()
+    }
   }
 
   // User presses reset button
   reset(event) {
     this.hiddenInputTarget.value = null
     this.searchInputTarget.value = null
+    if (this.selectedItem) {
+      this.selectedItem.classList.remove("bg-blue-200")
+    }
+    this.selectedIndex = -1
     this.hideResultsList()
+    this.itemTargets.forEach((item) => {
+      item.classList.remove("hidden")
+    })
 
     event.preventDefault()
     return false
@@ -129,6 +143,34 @@ export default class extends ApplicationController {
     this.toggleButtonTarget.querySelector(".feather-chevron-down").classList.remove("hidden")
   }
 
+  localResults(event) {
+    if (this.searchInputTarget.value.length < 2 || this.searchInputTarget.value == this.lastSearch) {
+      return
+    }
+
+    this.lastSearch = this.searchInputTarget.value
+
+    this.itemTargets.forEach((item) => {
+      item.classList.remove("hidden")
+    })
+
+    let matches = []
+    this.itemTargets.forEach((item) => {
+      let text = item.getAttribute("data-satis-dropdown-item-text").toLowerCase()
+      let value = item.getAttribute("data-satis-dropdown-item-value").toLowerCase()
+
+      if (text.indexOf(this.searchInputTarget.value.toLowerCase()) >= 0 || text.indexOf(this.searchInputTarget.value.toLowerCase()) >= 0) {
+        matches = matches.concat(item)
+      } else {
+        item.classList.add("hidden")
+      }
+    })
+    if (matches.length > 0) {
+      this.showResultsList(event)
+    }
+  }
+
+  // Remote search
   fetchResults(event) {
     if (this.searchInputTarget.value.length < 2 || this.searchInputTarget.value == this.lastSearch) {
       return
@@ -170,11 +212,13 @@ export default class extends ApplicationController {
   }
 
   get resultsHidden() {
-    this.itemsContainerTarget.classList.contains("hidden")
+    return this.itemsContainerTarget.classList.contains("hidden")
   }
 
   get nrOfItems() {
-    return this.itemsTarget.children.length
+    return this.itemTargets.filter((item) => {
+      return !item.classList.contains("hidden")
+    }).length
   }
 
   get hasResults() {
@@ -196,11 +240,15 @@ export default class extends ApplicationController {
   }
 
   get selectedItem() {
-    return this.itemsTarget.children[this.selectedIndex]
+    return this.itemTargets.filter((item) => {
+      return !item.classList.contains("hidden")
+    })[this.selectedIndex]
   }
 
   lowLightSelected() {
-    this.selectedItem.classList.remove("bg-blue-200")
+    if (this.selectedItem) {
+      this.selectedItem.classList.remove("bg-blue-200")
+    }
   }
 
   highLightSelected() {
