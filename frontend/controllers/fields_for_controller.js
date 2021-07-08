@@ -6,7 +6,7 @@ export default class extends ApplicationController {
   connect() {
     console.log("fields-for")
 
-    let content = this.templateTarget.innerHTML.replace(/TEMPLATE/g, new Date().valueOf())
+    let content = this.templateTarget.innerHTML //.replace(/TEMPLATE/g, new Date().valueOf())
     this.insertionPointTarget.insertAdjacentHTML("beforebegin", content)
   }
 
@@ -21,9 +21,9 @@ export default class extends ApplicationController {
         item.remove()
       }
     })
+    tmpNode.innerHTML = tmpNode.innerHTML.replace(/TEMPLATE/g, new Date().valueOf())
 
-    let content = this.templateTarget.innerHTML.replace(/TEMPLATE/g, new Date().valueOf())
-    this.insertionPointTarget.insertAdjacentHTML("beforebegin", content)
+    this.insertionPointTarget.insertAdjacentHTML("beforebegin", this.templateTarget.innerHTML)
     window.scrollBy(0, this.element.querySelector(".nested-fields").clientHeight)
   }
 

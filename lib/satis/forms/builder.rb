@@ -92,19 +92,6 @@ module Satis
 
         # Only do the whole nested-form thing with a collection
         if reflection.collection? && template_object
-          # tag.div(class: 'fields_for', data: { controller: 'satis-fields_for' }) do
-          #   safe_join [
-          #     tag.template(data: { 'fields-for-target' => 'template' }) do
-          #       rails_fields_for(name, template_object, options.reverse_merge(child_index: 'TEMPLATE')) do |nested_form|
-          #         nested_form.hidden_field :id
-          #         nested_form.hidden_field :_destroy
-          #         yield(nested_form)
-          #       end
-          #     end,
-          #     rails_fields_for(name, options, &block)
-          #   ]
-          # end
-          # render 'shared/fields_for'
           view_options = {
             form: self,
             collection: name,
