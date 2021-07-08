@@ -4,7 +4,7 @@ import ApplicationController from "../../../../frontend/controllers/application_
  * Tabs controller
  */
 export default class extends ApplicationController {
-  static targets = ["tab", "content"]
+  static targets = ["tab", "content", "select"]
 
   connect() {
     this.keyBase = "tabs_" + this.context.scope.element.id
@@ -14,10 +14,15 @@ export default class extends ApplicationController {
   }
 
   select(event) {
-    let clickedTab = event.srcElement.closest("a")
-    let index = this.tabTargets.findIndex((el) => {
-      return el.attributes["id"] === clickedTab.attributes["id"]
-    })
+    let index = null
+    if (event.srcElement.tagName == "SELECT") {
+      index = event.srcElement.selectedIndex
+    } else {
+      let clickedTab = event.srcElement.closest("a")
+      index = this.tabTargets.findIndex((el) => {
+        return el.attributes["id"] === clickedTab.attributes["id"]
+      })
+    }
     this.open(index)
     this.storeValue("openTab", index)
 
@@ -40,6 +45,7 @@ export default class extends ApplicationController {
       target.classList.remove("selected")
     })
     this.contentTargets[index].classList.add("selected")
+    this.selectTarget.selectedIndex = index
   }
 
   storeValue(key, value) {
