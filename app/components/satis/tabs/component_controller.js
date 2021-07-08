@@ -5,11 +5,11 @@ import ApplicationController from "../../../../frontend/controllers/application_
  */
 export default class extends ApplicationController {
   static targets = ["tab", "content", "select"]
+  static values = { persist: Boolean }
 
   connect() {
-    this.keyBase = "tabs_" + this.context.scope.element.id
-    this.state = this.data.get("state") == "true"
-
+    const ourUrl = new URL(window.location.href)
+    this.keyBase = ourUrl.pathname.substring(1, ourUrl.pathname.length).replace(/\//, "_") + "_tabs_" + this.context.scope.element.id
     this.open(this.tabToOpen())
   }
 
@@ -49,7 +49,7 @@ export default class extends ApplicationController {
   }
 
   storeValue(key, value) {
-    if (!this.state) {
+    if (!this.persistValue) {
       return
     }
 
@@ -59,7 +59,7 @@ export default class extends ApplicationController {
   }
 
   getValue(key) {
-    if (!this.state) {
+    if (!this.persistValue) {
       return
     }
 
