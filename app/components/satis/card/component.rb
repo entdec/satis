@@ -2,6 +2,7 @@ module Satis
   module Card
     class Component < Satis::ApplicationComponent
       renders_many :actions
+      renders_one :footer
 
       attr_reader :icon, :title, :description, :menu
 
