@@ -9,6 +9,7 @@ module Satis
         extend Satis::Card::Helpers
         extend Satis::Map::Helpers
         extend Satis::Tabs::Helpers
+        extend Satis::Page::Helpers
       end
 
       def form_for(name, *args, &block)

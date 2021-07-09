@@ -1,6 +1,6 @@
 module Satis
   module Switch
-    class Component < ViewComponent::Base
+    class Component < Satis::ApplicationComponent
       attr_reader :url, :form, :attribute, :icon, :options
 
       def initialize(form:, attribute:, **options, &block)

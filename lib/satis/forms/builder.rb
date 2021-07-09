@@ -111,6 +111,16 @@ module Satis
         end
       end
 
+      def rich_text(*args)
+        options = args.extract_options!
+        form_group(*args, options) do
+          safe_join [
+            (custom_label(*args, options[:label]) unless options[:label] == false),
+            rich_text_area(*args, options)
+          ]
+        end
+      end
+
       # Non public
 
       def input_type_for(method, options)
