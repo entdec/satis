@@ -3,12 +3,14 @@
 module Satis
   module Menus
     class Item
-      attr_reader :name, :link, :icon, :app, :menu
+      attr_reader :id, :label, :link, :icon, :app, :menu
 
-      def initialize(name, link:, icon: nil, app: nil, &block)
-        @name = name
+      def initialize(id, link:, label: nil, icon: nil, app: nil, link_attributes: nil, &block)
+        @id = id
+        @label = label
         @icon = icon
         @link = link
+        @link_attributes = link_attributes
         @app = app
         # @app ||= main_app
         @menu = Menu.new(&block) if block_given?

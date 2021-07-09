@@ -14,6 +14,9 @@
         - for action in actions
           span.ml-1
             = action
+      .ml-4.mt-4.flex-shrink-0
+        - if menu
+          = render(Satis::Menu::Component.new(menu))
   .px-6.py-6
     = content
   / - if footer

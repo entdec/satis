@@ -12,6 +12,7 @@
   "dependencies": {
     "@fortawesome/fontawesome-pro": "^6.0.0-beta1",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
+    "@popperjs/core": "^2.9.2",
     "element-closest": "^3.0.1",
     "leaflet": "^1.7.1"
   },

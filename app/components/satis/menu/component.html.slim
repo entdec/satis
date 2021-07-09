@@ -1,0 +1,36 @@
+div data-controller="satis-menu"
+  .dropdown.relative.inline-flex.cursor-pointer
+    span.dropdown-text.flex.px-4.py-3.rounded.text-gray-800.items-center.hover:text-blue-600.whitespace-no-wrap
+      i.fa-solid.fa-ellipsis-vertical
+    .dropdown-menu.flex.flex-col.hidden.absolute
+      .rounded-md.shadow-lg.flex.flex-col.flex-grow.bg-white.divide-y.divide-gray-200
+        .dropdown-item.flex
+          a.dropdown-link.flex.flex-grow.px-4.py-3.text-gray-800.whitespace-no-wrap.rounded.hover:bg-blue-700.hover:text-white href="#"  Link One
+        .dropdown-item.flex
+          a.dropdown-link.flex.flex-grow.px-4.py-3.text-gray-800.whitespace-no-wrap.rounded.hover:bg-blue-700.hover:text-white href="#"  Link Two
+        .dropdown-item
+          /! ---------------- LEVEL 2 ---------------------
+          .dropdown.relative.flex
+            /! dropdown text
+            span.dropdown-text.flex.px-4.py-3.bg-white.rounded.text-gray-800.items-center.hover:bg-blue-700.hover:text-white.whitespace-no-wrap
+              | Dropdown Level 2
+              i.fa-light.fa-angle-right
+            /! dropdown text
+            /! dropdown menu
+            .dropdown-menu.flex.flex-grow.hidden.absolute
+              .rounded.flex.flex-col.flex-grow.bg-white.divide-y.divide-gray-200
+                .dropdown-item.flex.flex-grow
+                  a.dropdown-link.flex.flex-grow.px-4.py-3.text-gray-800.whitespace-no-wrap.rounded.hover:bg-blue-700.hover:text-white href="#"  Level Two Link
+                .dropdown-item.flex.flex-grow
+                  /! ---------------- LEVEL 3 ---------------------
+                  .dropdown.relative.flex
+                    /! dropdown text
+                    span.dropdown-text.flex.px-4.py-3.bg-white.rounded.text-gray-800.items-center.hover:bg-blue-700.hover:text-white.whitespace-no-wrap
+                      | Dropdown Level 3
+                      i.fa-light.fa-angle-right
+                    /! dropdown text
+                    /! dropdown menu
+                    .dropdown-menu.flex.flex-grow.hidden.absolute
+                      .rounded.flex.flex-col.flex-grow.bg-white.divide-y.divide-gray-200
+                        .dropdown-item.flex.flex-grow
+                          a.dropdown-link.flex.flex-grow.px-4.py-3.text-gray-800.whitespace-no-wrap.rounded.hover:bg-blue-700.hover:text-white href="#"  Level Three Link

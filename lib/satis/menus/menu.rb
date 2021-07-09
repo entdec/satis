@@ -11,8 +11,8 @@ module Satis
         yield self if block_given?
       end
 
-      def item(name, link:, icon: nil, app: nil, &block)
-        @items << Item.new(name, link: link, icon: icon, app: app, &block)
+      def item(*args, &block)
+        @items << Item.new(*args, &block)
       end
     end
   end
