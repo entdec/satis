@@ -57,7 +57,8 @@ module Satis
                   else
                     t('.update_continue', default: 'Update and continue editing')
                   end
-        button_button(value, options.reverse_merge(value: 'continue', class: 'button secondary'), &block)
+        button_button(value, options.reverse_merge(name: 'commit', value: 'continue', class: 'button secondary'),
+                      &block)
       end
 
       # A reset button
@@ -119,6 +120,13 @@ module Satis
             rich_text_area(*args, options)
           ]
         end
+      end
+
+      # A switch backed by a hidden value
+      def switch(method, options = {}, &block)
+        @form_options = options
+
+        switch_input(method, options, &block)
       end
 
       # Non public
