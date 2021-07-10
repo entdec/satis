@@ -10,6 +10,7 @@ export default class extends ApplicationController {
   toggle(event) {
     if (event) {
       this.hiddenInputTarget.value = this.hiddenInputTarget.value == "1" ? "0" : "1"
+      this.hiddenInputTarget.dispatchEvent(new Event("change"))
     }
     if (this.hiddenInputTarget.value == "1") {
       // enabled

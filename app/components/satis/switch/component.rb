@@ -12,6 +12,8 @@ module Satis
         @block = block
         @icon = true
         @icon = options[:icon] if options.key?(:icon)
+        options[:input_html] ||= {}
+        options[:input_html] = { data: { 'satis-switch-target' => 'hiddenInput' } }.deep_merge(options[:input_html])
       end
     end
   end
