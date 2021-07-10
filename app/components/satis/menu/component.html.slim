@@ -1,36 +1,15 @@
-div data-controller="satis-menu"
-  .dropdown.relative.inline-flex.cursor-pointer
-    span.dropdown-text.flex.px-4.py-3.rounded.text-gray-800.items-center.hover:text-blue-600.whitespace-no-wrap
+.group.inline-block
+  a.outline-none.focus:outline-none.px-3.py-1.bg-white.rounded-sm.flex.items-center
+    span.pr-1.font-semibold.flex-1
       i.fa-solid.fa-ellipsis-vertical
-    .dropdown-menu.flex.flex-col.hidden.absolute
-      .rounded-md.shadow-lg.flex.flex-col.flex-grow.bg-white.divide-y.divide-gray-200
-        .dropdown-item.flex
-          a.dropdown-link.flex.flex-grow.px-4.py-3.text-gray-800.whitespace-no-wrap.rounded.hover:bg-blue-700.hover:text-white href="#"  Link One
-        .dropdown-item.flex
-          a.dropdown-link.flex.flex-grow.px-4.py-3.text-gray-800.whitespace-no-wrap.rounded.hover:bg-blue-700.hover:text-white href="#"  Link Two
-        .dropdown-item
-          /! ---------------- LEVEL 2 ---------------------
-          .dropdown.relative.flex
-            /! dropdown text
-            span.dropdown-text.flex.px-4.py-3.bg-white.rounded.text-gray-800.items-center.hover:bg-blue-700.hover:text-white.whitespace-no-wrap
-              | Dropdown Level 2
-              i.fa-light.fa-angle-right
-            /! dropdown text
-            /! dropdown menu
-            .dropdown-menu.flex.flex-grow.hidden.absolute
-              .rounded.flex.flex-col.flex-grow.bg-white.divide-y.divide-gray-200
-                .dropdown-item.flex.flex-grow
-                  a.dropdown-link.flex.flex-grow.px-4.py-3.text-gray-800.whitespace-no-wrap.rounded.hover:bg-blue-700.hover:text-white href="#"  Level Two Link
-                .dropdown-item.flex.flex-grow
-                  /! ---------------- LEVEL 3 ---------------------
-                  .dropdown.relative.flex
-                    /! dropdown text
-                    span.dropdown-text.flex.px-4.py-3.bg-white.rounded.text-gray-800.items-center.hover:bg-blue-700.hover:text-white.whitespace-no-wrap
-                      | Dropdown Level 3
-                      i.fa-light.fa-angle-right
-                    /! dropdown text
-                    /! dropdown menu
-                    .dropdown-menu.flex.flex-grow.hidden.absolute
-                      .rounded.flex.flex-col.flex-grow.bg-white.divide-y.divide-gray-200
-                        .dropdown-item.flex.flex-grow
-                          a.dropdown-link.flex.flex-grow.px-4.py-3.text-gray-800.whitespace-no-wrap.rounded.hover:bg-blue-700.hover:text-white href="#"  Level Three Link
+
+  ul.bg-white.border.rounded-md.shadow-lg.transform.scale-0.group-hover:scale-100.absolute.transition.duration-150.ease-in-out.origin-top.w-56
+    - menu.items.each do |item|
+      li.rounded-sm.px-3.py-1.hover:bg-gray-100.flex.items-center
+        a.py-1.w-full.text-left.flex.items-center.outline-none.focus:outline-none href=item.link
+          span.pr-1.flex-shrink-0.w-6
+            - if item.icon
+              i.fa-light class="fa-#{item.icon}"
+          span.pr-1.flex-1 = item.label || t(item.id)
+
+

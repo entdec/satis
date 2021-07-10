@@ -1,3 +1,39 @@
-.dropdown-menu[data-show] {
-  display: flex;
+/* since nested groupes are not supported we have to use
+     regular css for the nested dropdowns
+  */
+
+.group:hover > ul {
+  transform: translatex(-90%) scale(0);
+}
+
+li > ul {
+  transform: translatex(-98%) scale(0);
+}
+li:hover > ul {
+  transform: translatex(-98%) scale(1);
+}
+li > a .mr-auto svg {
+  transform: rotate(-0deg);
+}
+li:hover > a .mr-auto svg {
+  transform: rotate(-180deg);
+}
+
+/* Below styles fake what can be achieved with the tailwind config
+    you need to add the group-hover variant to scale and define your custom
+    min width style.
+    See https://codesandbox.io/s/tailwindcss-multilevel-dropdown-y91j7?file=/index.html
+    for implementation with config file
+ */
+.group:hover .group-hover\:scale-100 {
+  transform: translatex(-85%) scale(1);
+}
+.group:hover .group-hover\:-rotate-180 {
+  transform: rotate(180deg);
+}
+.scale-0 {
+  transform: scale(0);
+}
+.min-w-32 {
+  min-width: 8rem;
 }

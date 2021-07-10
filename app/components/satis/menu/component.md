@@ -1,1 +1,1 @@
-https://tailwindcomponents.com/component/multi-level-dropdown-menu
+https://tailwindcomponents.com/component/nestable-dropdown-menu
