@@ -4,7 +4,7 @@ div.dropdown data-action="keydown->satis-dropdown#dispatch" data-controller="sat
      .w-full
       .flex.flex-col.items-center.relative
         .w-full
-          .p-1.bg-white.dark:bg-gray-800.flex.border.border-gray-300.rounded
+          .h-12.p-1.bg-white.dark:bg-gray-800.flex.border.border-gray-300.rounded
             .flex.flex-auto.flex-wrap
               input.p-1.px-2.appearance-none.outline-none.w-full.text-gray-800 data-action="keyup->satis-dropdown#search" data-satis-dropdown-target="searchInput" placeholder=placeholder
             div
@@ -19,7 +19,7 @@ div.dropdown data-action="keydown->satis-dropdown#dispatch" data-controller="sat
                 svg.feather.feather-chevron-down.w-4.h-4 fill="none" height="100%" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox=("0 0 24 24") width="100%" xmlns="http://www.w3.org/2000/svg"
                   polyline points=("18 13 12 20 6 13")
 
-        .hidden.absolute.shadow.bg-white.dark:bg-gray-800.top-45.z-40.w-full.lef-0.rounded.max-h-select.overflow-y-auto data-satis-dropdown-target="itemsContainer"
+        .hidden.absolute.shadow.bg-white.dark:bg-gray-800.top-50.z-40.w-full.lef-0.rounded.max-h-select.overflow-y-auto data-satis-dropdown-target="itemsContainer"
           .flex.flex-col.w-full data-satis-dropdown-target="items"
             - options[:collection]&.each do |item|
               div data-satis-dropdown-target="item" data-satis-dropdown-item-value=item.send(value_method) data-satis-dropdown-item-text=item.send(text_method) data-action="click->satis-dropdown#select"

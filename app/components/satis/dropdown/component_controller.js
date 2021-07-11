@@ -15,8 +15,14 @@ export default class extends ApplicationController {
     // Put current selection in search field
     if (this.hiddenInputTarget.value) {
       if (this.itemTargets.length == 0) {
-        const ourUrl = new URL(this.urlValue)
+        let ourUrl
+        try {
+          ourUrl = new URL(this.urlValue)
+        } catch (error) {
+          ourUrl = new URL(this.urlValue, window.location.href)
+        }
         ourUrl.searchParams.append("id", this.hiddenInputTarget.value)
+
         this.fetchResultsWith(ourUrl).then(() => {
           const currentItem = this.itemTargets.find((item) => {
             return this.hiddenInputTarget.value == item.getAttribute("data-satis-dropdown-item-value")
