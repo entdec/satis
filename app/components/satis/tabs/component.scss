@@ -5,6 +5,14 @@
     &.selected {
       @apply border-blue-500 text-blue-600;
     }
+
+    &.is-invalid {
+      @apply text-red-600;
+
+      .fa-triangle-exclamation {
+        display: inline;
+      }
+    }
   }
 
   .tab-content {
