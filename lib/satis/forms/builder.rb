@@ -84,7 +84,14 @@ module Satis
 
         reflection = @object.class.reflections[name.to_s]
 
-        options[:html] ||= {}
+        html_options = options[:html] || {}
+
+        html_options[:data] ||= {}
+        html_options[:data] = flatten_hash(html_options[:data])
+        html_options[:data][:controller] =
+          ['satis-fields-for'].concat(options[:html]&.[](:data)&.[](:controller).to_s.split).join(' ')
+        html_options[:class] = ['fields_for'].concat(options[:html]&.[](:class).to_s.split).join(' ')
+
         options[:builder] ||= if self.class < ActionView::Helpers::FormBuilder
                                 self.class
                               else
@@ -100,7 +107,7 @@ module Satis
             options: options
           }
 
-          tag.div(class: 'fields_for', data: { controller: 'satis-fields-for' }) do
+          tag.div(html_options) do
             render 'shared/fields_for', view_options, &block
           end
 
@@ -142,6 +149,8 @@ module Satis
                                 options[:as]
                               elsif options[:collection]
                                 :select
+                              elsif options[:url]
+                                :dropdown
                               end
 
         "#{override_input_type || input_type}_input"
@@ -332,6 +341,18 @@ module Satis
 
         # TODO: handle class merging here
         options.merge(user_options)
+      end
+
+      def flatten_hash(hash)
+        hash.each_with_object({}) do |(k, v), h|
+          if v.is_a? Hash
+            flatten_hash(v).map do |h_k, h_v|
+              h["#{k}_#{h_k}".to_sym] = h_v
+            end
+          else
+            h[k] = v
+          end
+        end
       end
     end
   end

@@ -12,7 +12,8 @@ export default class extends ApplicationController {
     event.preventDefault()
 
     let tmpNode = event.target.closest(".nested-fields")
-    tmpNode.querySelectorAll(".col-span-1").forEach((item) => {
+    tmpNode.classList.remove("template")
+    tmpNode.querySelectorAll(".association").forEach((item) => {
       if (item.classList.contains("hidden")) {
         item.classList.remove("hidden")
       } else {

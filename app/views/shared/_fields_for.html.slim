@@ -5,16 +5,16 @@
 - if template_object
   template data-satis-fields-for-target='template'
     = form.rails_fields_for collection, template_object, child_index: 'TEMPLATE' do |nested_form|
-      .nested-fields
+      .nested-fields.template
         = nested_form.input :id, as: :hidden
         = nested_form.input :_destroy, as: :hidden
         .grid.grid-cols-12.gap-4
           .col-span-11
             = yield(nested_form)
-          .col-span-1.flex.justify-center.items-center
+          .col-span-1.flex.justify-center.items-center.association
             a href="#" data-action='click->satis-fields-for#addAssociation'
               i.fas.fa-plus
-          .hidden.col-span-1.flex.justify-center.items-center
+          .hidden.col-span-1.flex.justify-center.items-center.association
             a href="#" data-action='click->satis-fields-for#removeAssociation'
               i.fas.fa-trash
 
