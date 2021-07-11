@@ -1,13 +1,14 @@
 module Satis
   module Tab
     class Component < Satis::ApplicationComponent
-      attr_reader :options, :name
+      attr_reader :options, :name, :icon
 
       def initialize(name, *args, &block)
         super
         @name = name
         @options = args.extract_options!
         @args = args
+        @icon = options[:icon]
         @block = block
       end
 

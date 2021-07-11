@@ -8,7 +8,10 @@
     .border-b.border-gray-200
       nav.-mb-px.flex.space-x-8 aria-label="Tabs"
         - for tab in tabs
-            a.tab id="#{tab.name}" href="#" aria-current="#{tab.selected? ? "page" : ''}" data-satis-tabs-target="tab" data-action="click->satis-tabs#select" = t(tab.name)
+            a.tab id="#{tab.name}" href="#" aria-current="#{tab.selected? ? "page" : ''}" data-satis-tabs-target="tab" data-action="click->satis-tabs#select"
+              - if tab.icon
+                i.fal.mr-2 class="fa-#{tab.icon}"
+              = t(tab.name)
 
   div
     - for tab in tabs
