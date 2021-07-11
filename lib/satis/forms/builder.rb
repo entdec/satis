@@ -143,6 +143,7 @@ module Satis
         input_type = case object_type
                      when :date then :string
                      when :integer then :string
+                     when :float then :string
                      else object_type
                      end
         override_input_type = if options[:as]
@@ -322,6 +323,7 @@ module Satis
             end
           ]
         when :integer then number_field(method, options)
+        when :float then text_field(method, options)
         when :string
           case method.to_s
           when /password/ then password_field(method, options)
