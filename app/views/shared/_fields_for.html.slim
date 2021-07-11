@@ -5,7 +5,7 @@
 - if template_object
   template data-satis-fields-for-target='template'
     = form.rails_fields_for collection, template_object, child_index: 'TEMPLATE' do |nested_form|
-      .nested-fields.template
+      .nested-fields.template.py-2
         = nested_form.input :id, as: :hidden
         = nested_form.input :_destroy, as: :hidden
         .grid.grid-cols-12.gap-4
@@ -19,7 +19,7 @@
               i.fas.fa-trash
 
 = form.rails_fields_for collection do |nested_form|
-  .nested-fields
+  .nested-fields.py-2
     = nested_form.input :id, as: :hidden
     = nested_form.input :_destroy, as: :hidden
     .grid.grid-cols-12.gap-4
