@@ -15,12 +15,7 @@ export default class extends ApplicationController {
     // Put current selection in search field
     if (this.hiddenInputTarget.value) {
       if (this.itemTargets.length == 0) {
-        let ourUrl
-        try {
-          ourUrl = new URL(this.urlValue)
-        } catch (error) {
-          ourUrl = new URL(this.urlValue, window.location.href)
-        }
+        let ourUrl = this.normalizedUrl
         ourUrl.searchParams.append("id", this.hiddenInputTarget.value)
 
         this.fetchResultsWith(ourUrl).then(() => {
@@ -185,7 +180,7 @@ export default class extends ApplicationController {
       return
     }
     this.lastSearch = this.searchInputTarget.value
-    const ourUrl = new URL(this.urlValue)
+    let ourUrl = this.normalizedUrl
     ourUrl.searchParams.append("term", this.searchInputTarget.value)
     this.fetchResultsWith(ourUrl).then(() => {
       if (this.hasResults) {
@@ -215,6 +210,16 @@ export default class extends ApplicationController {
       })
     })
     return promise
+  }
+
+  get normalizedUrl() {
+    let ourUrl
+    try {
+      ourUrl = new URL(this.urlValue)
+    } catch (error) {
+      ourUrl = new URL(this.urlValue, window.location.href)
+    }
+    return ourUrl
   }
 
   get resultsHidden() {
