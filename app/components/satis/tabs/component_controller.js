@@ -10,14 +10,19 @@ export default class extends ApplicationController {
   connect() {
     const ourUrl = new URL(window.location.href)
     this.keyBase = ourUrl.pathname.substring(1, ourUrl.pathname.length).replace(/\//, "_") + "_tabs_" + this.context.scope.element.id
-    this.open(this.tabToOpen())
 
+    let firstErrorIndex
     this.tabTargets.forEach((tab, index) => {
       let hasErrors = this.contentTargets[index].querySelectorAll(".is-invalid")
       if (hasErrors.length > 0) {
+        if (!firstErrorIndex) {
+          firstErrorIndex = index
+        }
         tab.classList.add("is-invalid")
       }
     })
+
+    this.open(firstErrorIndex || this.tabToOpen())
   }
 
   select(event) {
