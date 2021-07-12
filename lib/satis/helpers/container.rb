@@ -9,6 +9,7 @@ module Satis
         extend Satis::Card::Helpers
         extend Satis::Map::Helpers
         extend Satis::Tabs::Helpers
+        extend Satis::Table::Helpers
         extend Satis::Page::Helpers
         extend Satis::Menu::Helpers
       end
