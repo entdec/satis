@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
-require 'satis/forms/concerns/select'
+require 'satis/forms/concerns/buttons'
 require 'satis/forms/concerns/file'
+require 'satis/forms/concerns/required'
+require 'satis/forms/concerns/select'
 
 module Satis
   module Forms
@@ -9,6 +11,11 @@ module Satis
       delegate :t, :tag, :safe_join, :render, to: :@template
 
       attr_reader :template
+
+      include Concerns::Select
+      include Concerns::File
+      include Concerns::Required
+      include Concerns::Buttons
 
       # Regular input
       def input(method, options = {}, &block)
@@ -33,37 +40,6 @@ module Satis
         method = reflection.join_foreign_key
 
         send(input_type_for(method, options), method, options, &block)
-      end
-
-      alias button_button button
-      alias submit_button submit
-
-      # A submit button
-      def submit(value = nil, options = {})
-        button_button(value, options.reverse_merge(type: :submit, class: 'button primary'))
-      end
-
-      # A regular button
-      def button(value = nil, options = {}, &block)
-        options = options.reverse_merge(class: 'button')
-        options[:type] ||= :button
-        button_button(value, options, &block)
-      end
-
-      # A continue button
-      def continue(value = nil, options = {}, &block)
-        value ||= if !@object.persisted?
-                    t('.create_continue', default: 'Create and continue editing')
-                  else
-                    t('.update_continue', default: 'Update and continue editing')
-                  end
-        button_button(value, options.reverse_merge(name: 'commit', value: 'continue', class: 'button secondary'),
-                      &block)
-      end
-
-      # A reset button
-      def reset(value = nil, options = {}, &block)
-        button_button(value, options.reverse_merge(type: :reset, class: 'button'), &block)
       end
 
       alias rails_fields_for fields_for
@@ -280,9 +256,6 @@ module Satis
         end
       end
 
-      include Concerns::Select
-      include Concerns::File
-
       def collection_of(input_type, method, options = {})
         form_builder_method, custom_class, input_builder_method = case input_type
                                                                   when :radio_buttons then [:collection_radio_buttons,
@@ -362,56 +335,6 @@ module Satis
           else
             h[k] = v
           end
-        end
-      end
-
-      def required?(method)
-        if !options[:required].nil?
-          options[:required]
-        elsif @object.respond_to?("#{method}_required?".to_sym)
-          @object.send("#{method}_required?".to_sym)
-        elsif has_validators?(method)
-          required_by_validators?(method)
-        end
-      end
-
-      def has_validators?(method)
-        @has_validators ||= method && @object.class.respond_to?(:validators_on)
-      end
-
-      def required_by_validators?(method)
-        (attribute_validators(method) + reflection_validators(method)).any? do |v|
-          v.kind == :presence && valid_validator?(v)
-        end
-      end
-
-      def attribute_validators(method)
-        @object.class.validators_on(method)
-      end
-
-      def reflection_validators(_method)
-        []
-        # reflection ? object.class.validators_on(reflection.name) : []
-      end
-
-      def valid_validator?(validator)
-        !conditional_validators?(validator) && action_validator_match?(validator)
-      end
-
-      def conditional_validators?(validator)
-        validator.options.include?(:if) || validator.options.include?(:unless)
-      end
-
-      def action_validator_match?(validator)
-        return true unless validator.options.include?(:on)
-
-        case validator.options[:on]
-        when :save
-          true
-        when :create
-          !object.persisted?
-        when :update
-          object.persisted?
         end
       end
     end
