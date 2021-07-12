@@ -308,8 +308,12 @@ module Satis
         when :string
           case method.to_s
           when /password/ then password_field(method, options)
-          # when /time_zone/ then :time_zone
-          # when /country/   then :country
+          when /time_zone/
+            # FIXME: Possibly use time_zone_select with dropdown?
+            priority_zones = options.delete(:priority_zones)
+            time_zone_select(method, priority_zones, options, { class: 'custom-select form-control' })
+          # FIXME: Fix country select
+          # when /country/ then country_select(method, options)
           when /email/ then email_field(method, options)
           when /phone/ then telephone_field(method, options)
           when /url/ then url_field(method, options)

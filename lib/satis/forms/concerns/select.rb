@@ -19,8 +19,16 @@ module Satis
           end
 
           def select_input(method, options = {})
-            value_method = options[:value_method] || :id
-            text_method = options[:text_method] || :name
+            value_method = options[:value_method]
+            text_method = options[:text_method]
+            if @object.send(method).is_a?(Array)
+              value_method ||= :first
+              text_method ||= :last
+            else
+              value_method ||= :id
+              text_method ||= :name
+            end
+
             input_options = options[:input_html] || {}
             multiple = input_options[:multiple]
 
