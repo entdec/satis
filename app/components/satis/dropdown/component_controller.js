@@ -117,6 +117,7 @@ export default class extends ApplicationController {
     this.hideResultsList()
     this.hiddenInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-value")
     this.searchInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-text")
+    this.lastSearch = this.searchInputTarget.value
   }
 
   // --- Helpers
