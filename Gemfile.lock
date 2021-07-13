@@ -13,7 +13,7 @@ GIT
 PATH
   remote: .
   specs:
-    satis (0.1.11)
+    satis (0.1.12)
       rails (~> 6.1.3, >= 6.1.3.2)
       view_component
 
