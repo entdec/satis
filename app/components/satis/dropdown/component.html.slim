@@ -1,8 +1,8 @@
-div.dropdown data-action="keydown->satis-dropdown#dispatch" data-controller="satis-dropdown" data-satis-dropdown-url-value=url
+div.dropdown.relative data-action="keydown->satis-dropdown#dispatch" data-controller="satis-dropdown" data-satis-dropdown-url-value=url
   = form.hidden_field(attribute, data: { 'satis-dropdown-target' => "hiddenInput" })
   .w-full.flex.flex-col
      .w-full
-      .flex.flex-col.items-center.relative
+      .flex.flex-col.items-center
         .w-full
           .h-12.p-1.bg-white.dark:bg-gray-800.flex.border.border-gray-300.rounded
             .flex.flex-auto.flex-wrap
@@ -27,7 +27,7 @@ div.dropdown data-action="keydown->satis-dropdown#dispatch" data-controller="sat
                     = item_html(item)
                 - else
                   .cursor-pointer.w-full.border-gray-100.border-b.hover:bg-blue-200
-                    .flex.w-full.items-center.p-2.pl-2.border-transparent.border-l-2.relative.hover:border-teal-100
+                    .flex.w-full.items-center.p-2.pl-2.border-transparent.border-l-2.hover:border-teal-100
                       .w-full.items-center.flex
                         .mx-2.-mt-1
                           span = item.send(text_method)
