@@ -21,9 +21,13 @@ module Satis
           def select_input(method, options = {})
             value_method = options[:value_method]
             text_method = options[:text_method]
-            if @object.send(method).is_a?(Array)
-              value_method ||= :first
-              text_method ||= :last
+
+            if options[:collection].is_a?(Array) && options[:collection].first.size == 2
+              value_method ||= :last
+              text_method ||= :first
+            elsif options[:collection].is_a?(Array) && options[:collection].first.size == 1
+              value_method ||= :to_s
+              text_method ||= :to_s
             else
               value_method ||= :id
               text_method ||= :name
