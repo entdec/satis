@@ -1,7 +1,7 @@
 module Satis
   module ApplicationHelper
     def satis
-      @container ||= Satis::Helpers::Container.new(self)
+      @_satis_helpers_container ||= Satis::Helpers::Container.new(self)
     end
   end
 end
