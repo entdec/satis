@@ -3,7 +3,7 @@
 module Satis
   module Menus
     class Item
-      attr_reader :id, :label, :link, :icon, :app, :menu
+      attr_reader :id, :label, :link, :icon, :app, :menu, :link_attributes
 
       def initialize(id, link:, label: nil, icon: nil, app: nil, link_attributes: nil, &block)
         @id = id
