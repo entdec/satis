@@ -1,1 +1,1 @@
-turbo-frame id="#{table_name}" src=view_context._satis.table_path(id: table_name) target="_top"
+turbo-frame id="#{table_name}" src=view_context._satis.table_path({id: table_name, title: title}.reverse_merge(parameters)) target="_top"
