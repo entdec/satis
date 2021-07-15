@@ -27,7 +27,8 @@ https://tailwindcomponents.com/component/select-with-custom-list
 ### Remote select, which always needs custom HTML
 
 ```
-  = f.input :location_id, url: select_locations_url(format: :html), as: :dropdown
+  = f.input :location_id, url: select_locations_url(format: :html), url_params: { account_id: "[order][account_id]" }, as: :dropdown
+  = f.association :location, url: select_locations_url(format: :html), url_params: { account_id: "[order][account_id]" }
 ```
 
 The url will be called with format :html, and either a params[:term] or a params[:id], both searches need to be supported.
