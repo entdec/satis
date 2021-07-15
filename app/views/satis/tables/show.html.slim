@@ -1,37 +1,80 @@
 turbo-frame id="#{params[:id]}"
-  /! This example requires Tailwind CSS v2.0+
-  .flex.flex-col
-    .-my-2.overflow-x-auto.sm:-mx-6.lg:-mx-8
-      .py-2.align-middle.inline-block.min-w-full.sm:px-6.lg:px-8
-        .shadow.overflow-hidden.border-b.border-gray-200.sm:rounded-lg
-          table.min-w-full.divide-y.divide-gray-200
-            thead.bg-gray-50.sticky.top-0
-              tr
-                - @table.columns.each.with_index do |column, index|
-                  th.relative.align-bottom.px-6.py-3.text-left.text-xs.font-medium.text-gray-500.uppercase.tracking-wider scope="col"
-                    - if column.sortable
-                      a.title href=_satis.table_path(id: params[:id], order_field: index, order_direction: @table.sorted_column_direction == 'ASC' ? 'desc' : 'asc') data-turbo-frame="#{params[:id]}"
-                        = column.title
-                        .icon.absolute.bottom-4.left-3
-                          - if @table.sorted_column.attribute == column.attribute
-                            - if @table.sorted_column_direction == 'ASC'
-                              i.fal.fa-sort-down
+  .bg-white.overflow-hidden.sm:rounded-lg.sm:shadow
+    .bg-white.px-4.py-5.border-b.border-gray-200.sm:px-6
+      h3.text-lg.leading-6.font-medium.text-gray-900
+        | #{@table.title}
+
+    .flex.flex-col
+      .-my-2.overflow-x-auto.sm:-mx-6.lg:-mx-8
+        .py-2.align-middle.inline-block.min-w-full.sm:px-6.lg:px-8
+          .overflow-hidden.border-gray-200
+            table.min-w-full.divide-y.divide-gray-200 data-controller="satis-table"
+              thead.bg-gray-50.sticky.top-0
+                tr.cursor-move data-satis-table-target="header"
+                  - @table.ordered_columns.each.with_index do |column, index|
+                    th.relative.align-bottom.px-6.py-3.text-left.text-xs.font-medium.text-gray-500.uppercase.tracking-wider scope="col" data-satis-table-target="column" data-column="#{column.attribute}"
+                      - if column.sortable
+                        .title.w-full.cursor-pointer
+                          a.w-full href=_satis.table_path(id: params[:id], column_order: params[:column_order], order_field: index, order_direction: @table.sorted_column_direction == 'ASC' ? 'desc' : 'asc') data-turbo-frame="#{params[:id]}"
+                          = column.title
+                          .icon.absolute.bottom-4.left-3
+                            - if @table.sorted_column.attribute == column.attribute
+                              - if @table.sorted_column_direction == 'ASC'
+                                i.fal.fa-sort-down
+                              - else
+                                i.fal.fa-sort-up
                             - else
-                              i.fal.fa-sort-up
-                          - else
-                            i.fal.fa-sort
-                    - else
-                      .title = column.title
+                              i.fal.fa-sort
+                      - else
+                        .title.w-full = column.title
 
-                /th.relative.px-6.py-3 scope="col"
-                  span.sr-only Edit
-            tbody
-              - @table.rows(self).each_with_index do |row, index|
-                  tr class="#{index % 2 == 0 ? 'bg-white' : 'bg-gray-50'}" href="#{row.find{|c| c.first == :link}[1]}" data-controller="satis-link" data-action="click->satis-link#select tap->satis-link#select"
-                    - row.each do |column, value|
-                      - if %i[link context_menu].exclude?(column)
-                        td.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500
-                          = value
+                  /th.relative.px-6.py-3 scope="col"
+                    span.sr-only Edit
+              tbody
+                - @table.rows(self).each_with_index do |row, index|
+                    tr.cursor-pointer class="#{index % 2 == 0 ? 'bg-white' : 'bg-gray-50'}" href="#{row.find{|c| c.first == :link}[1]}" data-controller="satis-link" data-action="click->satis-link#select tap->satis-link#select"
+                      - row.each do |column, value|
+                        - if %i[link context_menu].exclude?(column)
+                          td.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500
+                            = value
 
-              /td.px-6.py-4.whitespace-nowrap.text-right.text-sm.font-medium
-                a.text-indigo-600.hover:text-indigo-900 href="#"  Edit
+    /! This example requires Tailwind CSS v2.0+
+    .bg-white.px-4.py-3.flex.items-center.justify-between.border-t.border-gray-200.sm:px-6
+      .flex-1.flex.justify-between.sm:hidden
+        a.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.text-sm.font-medium.rounded-md.text-gray-700.bg-white.hover:bg-gray-50 href="#"
+          | Previous
+        a.ml-3.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.text-sm.font-medium.rounded-md.text-gray-700.bg-white.hover:bg-gray-50 href="#"
+          | Next
+      .hidden.sm:flex-1.sm:flex.sm:items-center.sm:justify-between
+        div
+          p.text-sm.text-gray-700
+            = page_entries_info @table.send(:paged_scope)
+        div
+          = paginate @table.send(:paged_scope), 'data-turbo-frame'=>"#{params[:id]}"
+          /nav.relative.z-0.inline-flex.rounded-md.shadow-sm.-space-x-px aria-label="Pagination"
+            a.relative.inline-flex.items-center.px-2.py-2.rounded-l-md.border.border-gray-300.bg-white.text-sm.font-medium.text-gray-500.hover:bg-gray-50 href="#"
+              span.sr-only Previous
+              /! Heroicon name: solid/chevron-left
+              svg.h-5.w-5 aria-hidden="true" fill="currentColor" viewbox=("0 0 20 20") xmlns="http://www.w3.org/2000/svg"
+                path clip-rule="evenodd" d=("M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z") fill-rule="evenodd" /
+            /! Current: "z-10 bg-indigo-50 border-indigo-500 text-indigo-600", Default: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50"
+            a.z-10.bg-indigo-50.border-indigo-500.text-indigo-600.relative.inline-flex.items-center.px-4.py-2.border.text-sm.font-medium aria-current="page" href="#"
+              | 1
+            a.bg-white.border-gray-300.text-gray-500.hover:bg-gray-50.relative.inline-flex.items-center.px-4.py-2.border.text-sm.font-medium href="#"
+              | 2
+            a.bg-white.border-gray-300.text-gray-500.hover:bg-gray-50.hidden.md:inline-flex.relative.items-center.px-4.py-2.border.text-sm.font-medium href="#"
+              | 3
+            span.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.bg-white.text-sm.font-medium.text-gray-700
+              | ...
+            a.bg-white.border-gray-300.text-gray-500.hover:bg-gray-50.hidden.md:inline-flex.relative.items-center.px-4.py-2.border.text-sm.font-medium href="#"
+              | 8
+            a.bg-white.border-gray-300.text-gray-500.hover:bg-gray-50.relative.inline-flex.items-center.px-4.py-2.border.text-sm.font-medium href="#"
+              | 9
+            a.bg-white.border-gray-300.text-gray-500.hover:bg-gray-50.relative.inline-flex.items-center.px-4.py-2.border.text-sm.font-medium href="#"
+              | 10
+            a.relative.inline-flex.items-center.px-2.py-2.rounded-r-md.border.border-gray-300.bg-white.text-sm.font-medium.text-gray-500.hover:bg-gray-50 href="#"
+              span.sr-only Next
+              /! Heroicon name: solid/chevron-right
+              svg.h-5.w-5 aria-hidden="true" fill="currentColor" viewbox=("0 0 20 20") xmlns="http://www.w3.org/2000/svg"
+                path clip-rule="evenodd" d=("M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z") fill-rule="evenodd" /
+

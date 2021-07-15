@@ -11,20 +11,6 @@ module Satis
         @title = title
         @parameters = parameters
       end
-
-      def table_url
-        "/action_table/#{table_name.to_s.gsub('/', '%2F')}"
-      end
-
-      def icon
-      end
-
-      def exportable
-      end
-
-      def filters
-        {}
-      end
     end
   end
 end

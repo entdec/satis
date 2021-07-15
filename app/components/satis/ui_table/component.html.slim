@@ -1,0 +1,69 @@
+.satis-table id="#{group}" data-controller="satis-table" data-satis-table-persist-value="#{persist}" data-satis-table-url-value=table_url data-satis-table-target="wrapper" data-action="table-column.orderChanged->table#reorder" data-satis-table-parameters-value=parameters.to_json
+  = satis.card title: t('.title', default: title), icon: icon do |c|
+    - c.action
+      .ui-card-header-search
+        .clear.hidden data-satis-table-target="queryClear" data-action="click->table#clearSearch"
+          i.far.fa-times
+        input type="text" data-satis-table-target="queryInput" data-action="keypress->table#search"
+    - c.action
+      .ui-card-header-right
+        a href="#" data-action="click->table#export" class="#{'hidden' unless exportable}"
+          i.far.fa-file-export
+          | &nbsp;
+        a href="#" data-action="click->table#toggleFilters" data-satis-table-target="filterToggle" class="#{'hidden' if filters.blank?}"
+          i.far.fa-filter
+
+    .ui-table-filters.hidden data-satis-table-target='filters'
+      .ui-row.ui-form
+        .ui-col-11
+          = simple_fields_for(:filters, OpenStruct.new(filters)) do |f|
+            - filters.each_slice(3) do |filters_row|
+              .ui-row
+                - filters_row.each do |column, filter|
+                  - if filter_definitions[column][:collection]
+                    .ui-col-4= f.input column, as: :select, required: false, collection: filter_definitions[column][:collection], input_html: { 'data-controller' => 'fancy-select', multiple: filter_definitions[column][:array].present?, 'data-satis-table-target': "filter", 'data-parameter': column }
+                  - elsif filter_definitions[column][:collection_proc]
+                    .ui-col-4= f.input column, as: :select, required: false, collection: filter_definitions[column][:collection_proc].call, input_html: { 'data-controller' => 'fancy-select', multiple: filter_definitions[column][:array].present?, 'data-satis-table-target': "filter", 'data-parameter': column }
+                  - elsif filter_definitions[column][:as] == :date_range
+                    .ui-col-4= f.input column, required: false, input_html: { 'data-controller' => 'date-range', 'data-satis-table-target': "filter", 'data-parameter': column }
+                  - else
+                    .ui-col-4= f.input column, required: false, input_html: { 'data-satis-table-target': "filter", 'data-parameter': column }
+        .ui-col-1
+          .ui-actions
+            = button_tag class: 'ui-button primary', 'data-action': "click->table#updateFilters"
+              i.far.fa-fw.fa-filter
+            = button_tag class: 'ui-button', 'data-action': "click->table#resetFilters", 'data-satis-table-target': 'filterReset'
+              i.far.fa-fw.fa-times
+    .ui-card-body
+      table.satis-table
+        thead data-satis-table-target="head"
+        tbody data-satis-table-target="body"
+
+    - c.footer
+      .ui-card-footer
+        .record-count.hidden data-satis-table-target="recordCount"
+          | #{t('.showing', default: 'Showing')}&nbsp;
+          span.current
+            span.start
+            | &nbsp;#{t('.to', default: 'to')}&nbsp;
+            span.end
+          | &nbsp;#{t('.of', default: 'of')}&nbsp;
+          span.total-filtered
+          | &nbsp;#{t('.entries', default: 'entries')}
+          span.filter
+            | &nbsp;(#{t('.filtered_from', default: 'filtered from')}&nbsp;
+            span.total-total
+            | &nbsp;#{t('.total_entries', default: 'total entries')})
+        .pagination data-satis-table-target="pagination"
+          span.page
+            | #{t('.page', default: 'Page')}&nbsp;
+            a.selector.previous data-action="table#previous"
+              i.fas.fa-angle-left
+              | &nbsp;
+            span.current-page
+            select.current-page-selector data-satis-table-target="pageSelector" data-action="change->table#selectPage"
+            |&nbsp;#{t('.of', default: 'of')}&nbsp;
+            span.total-pages
+            a.selector.next data-action="table#next"
+              | &nbsp;
+              i.fas.fa-angle-right

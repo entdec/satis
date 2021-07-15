@@ -1,5 +1,5 @@
 module Satis
-  module TurboTable
+  module UiTable
     class Component < Satis::ApplicationComponent
       attr_reader :table_name, :group, :persist, :parameters, :title
 

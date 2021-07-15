@@ -1,8 +1,8 @@
 module Satis
-  module Table
+  module TurboTable
     module Helpers
-      def table(*args, &block)
-        action_view.render(Satis::Table::Component.new(*args), &block)
+      def turbo_table(*args, &block)
+        action_view.render(Satis::TurboTable::Component.new(*args), &block)
       end
     end
   end
