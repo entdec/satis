@@ -1,5 +1,5 @@
 div.dropdown.relative data-action="keydown->satis-dropdown#dispatch" data-controller="satis-dropdown" data-satis-dropdown-url-value=url
-  = form.hidden_field(attribute, options[:input_html].merge('data-satis-dropdown-target' => "hiddenInput"))
+  = form.hidden_field(attribute, (options[:input_html]||{}).merge('data-satis-dropdown-target' => "hiddenInput"))
   .w-full.flex.flex-col
      .w-full
       .flex.flex-col.items-center
