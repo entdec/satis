@@ -16,5 +16,5 @@
 
   div
     - for tab in tabs
-      div class="tab-content" data-satis-tabs-target="content"
+      div id="#{tab.name}-content" class="tab-content" data-satis-tabs-target="content"
         = tab.to_s
