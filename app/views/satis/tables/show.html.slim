@@ -10,9 +10,9 @@ turbo-frame id="#{params[:id]}"
                 - @table.columns.each.with_index do |column, index|
                   th.relative.align-bottom.px-6.py-3.text-left.text-xs.font-medium.text-gray-500.uppercase.tracking-wider scope="col"
                     - if column.sortable
-                      a.title href=_satis.table_path(id: params[:id], order_field: index, order_direction: @table.sorted_column_direction == 'ASC' ? 'desc' : 'asc')
+                      a.title href=_satis.table_path(id: params[:id], order_field: index, order_direction: @table.sorted_column_direction == 'ASC' ? 'desc' : 'asc') data-turbo-frame="#{params[:id]}"
                         = column.title
-                        .icon.absolute.bottom-4.left-2
+                        .icon.absolute.bottom-4.left-3
                           - if @table.sorted_column.attribute == column.attribute
                             - if @table.sorted_column_direction == 'ASC'
                               i.fal.fa-sort-down
@@ -21,7 +21,7 @@ turbo-frame id="#{params[:id]}"
                           - else
                             i.fal.fa-sort
                     - else
-                      a.title = column.title
+                      .title = column.title
 
                 /th.relative.px-6.py-3 scope="col"
                   span.sr-only Edit
