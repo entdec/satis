@@ -58,15 +58,7 @@ export default class extends ApplicationController {
         }
         break
       case "Enter":
-        const dataDiv = this.selectedItem
-
-        this.hideResultsList()
-        this.hiddenInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-value")
-        this.searchInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-text")
-        this.lastSearch = this.searchInputTarget.value
-
-        event.preventDefault()
-        // return false
+        this.select(event)
 
         break
       case "Escape":
@@ -112,12 +104,23 @@ export default class extends ApplicationController {
 
   // User selects an item using mouse
   select(event) {
-    const dataDiv = event.target.closest('[data-satis-dropdown-target="item"]')
+    let dataDiv = event.target.closest('[data-satis-dropdown-target="item"]')
+    if (dataDiv == null) {
+      dataDiv = this.selectedItem
+    }
 
     this.hideResultsList()
     this.hiddenInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-value")
     this.searchInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-text")
+
+    Array.prototype.slice.call(dataDiv.attributes).forEach((attr) => {
+      if (attr.name.startsWith("data") && !attr.name.startsWith("data-satis") && !attr.name.startsWith("data-action")) {
+        this.hiddenInputTarget.setAttribute(attr.name, attr.value)
+      }
+    })
+
     this.lastSearch = this.searchInputTarget.value
+    event.preventDefault()
   }
 
   // --- Helpers
