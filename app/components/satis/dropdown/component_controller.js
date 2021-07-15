@@ -4,7 +4,7 @@ import { debounce } from "../../../../frontend/utils"
 
 export default class extends ApplicationController {
   static targets = ["itemsContainer", "items", "item", "searchInput", "resetButton", "toggleButton", "hiddenInput"]
-  static values = { url: String }
+  static values = { url: String, urlParams: Object }
 
   connect() {
     this.debouncedFetchResults = debounce(this.fetchResults.bind(this), 250)
@@ -189,6 +189,16 @@ export default class extends ApplicationController {
     this.lastSearch = this.searchInputTarget.value
     let ourUrl = this.normalizedUrl
     ourUrl.searchParams.append("term", this.searchInputTarget.value)
+
+    // Add searchParams based on url_params
+    const form = this.element.closest("form")
+    Object.entries(this.urlParamsValue).forEach((item) => {
+      let elm = form.querySelector(`[name='${item[1]}']`)
+      if (elm) {
+        ourUrl.searchParams.append(item[0], elm.value)
+      }
+    })
+
     this.fetchResultsWith(ourUrl).then(() => {
       if (this.hasResults) {
         this.highLightSelected()
