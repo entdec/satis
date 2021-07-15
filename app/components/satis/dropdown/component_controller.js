@@ -110,8 +110,6 @@ export default class extends ApplicationController {
     }
 
     this.hideResultsList()
-    this.hiddenInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-value")
-    this.searchInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-text")
 
     Array.prototype.slice.call(dataDiv.attributes).forEach((attr) => {
       if (attr.name.startsWith("data") && !attr.name.startsWith("data-satis") && !attr.name.startsWith("data-action")) {
@@ -119,7 +117,12 @@ export default class extends ApplicationController {
       }
     })
 
+    this.searchInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-text")
+    this.hiddenInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-value")
     this.lastSearch = this.searchInputTarget.value
+
+    this.hiddenInputTarget.dispatchEvent(new Event("change"))
+
     event.preventDefault()
   }
 
