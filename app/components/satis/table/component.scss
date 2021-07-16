@@ -1,0 +1,10 @@
+.satis-table {
+  &.dragging {
+    .trash {
+      display: block;
+    }
+    .hidden-header {
+      display: block;
+    }
+  }
+}
