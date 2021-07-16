@@ -44,7 +44,14 @@ turbo-frame id="#{params[:id]}"
                       ruby:
                         filter = @table.filter_by_attribute(column.attribute)
                       - if filter&.collection
-                        = select_tag column.attribute, options_from_collection_for_select(filter.collection.call, 'id', 'name')
+                        ruby:
+                          collection = filter.collection.call
+                        - if collection.class < ActiveRecord::Relation
+                          = select_tag column.attribute, options_from_collection_for_select(filter.collection.call, 'id', 'name')
+                        - elsif collection.first.size == 2
+                          = select_tag column.attribute, options_from_collection_for_select(filter.collection.call, 'first', 'last')
+                        - else
+                          = select_tag column.attribute, options_from_collection_for_select(filter.collection.call, 'to_s', 'to_s')
                       - elsif filter
                         input type="text"
                 - @table.rows(self).each_with_index do |row, index|
