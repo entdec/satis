@@ -7,12 +7,20 @@ export default class ApplicationController extends Controller {
   }
 
   triggerEvent(el, name, data) {
+    let event
     if (typeof window.CustomEvent === "function") {
-      let event = new CustomEvent(name, { detail: data })
+      event = new CustomEvent(name, { detail: data })
     } else {
-      let event = document.createEvent("CustomEvent")
+      event = document.createEvent("CustomEvent")
       event.initCustomEvent(name, true, true, data)
     }
     el.dispatchEvent(event)
+  }
+
+  elementScrolled(element) {
+    if (element.offsetHeight + element.scrollTop === element.scrollHeight) {
+      return true
+    }
+    return false
   }
 }
