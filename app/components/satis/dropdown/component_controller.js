@@ -3,13 +3,19 @@ import ApplicationController from "../../../../frontend/controllers/application_
 import { debounce } from "../../../../frontend/utils"
 
 export default class extends ApplicationController {
-  static targets = ["itemsContainer", "items", "item", "searchInput", "resetButton", "toggleButton", "hiddenInput"]
-  static values = { url: String, urlParams: Object }
+  static targets = ["results", "items", "item", "searchInput", "resetButton", "toggleButton", "hiddenInput"]
+  static values = { url: String, urlParams: Object, pageSize: Number }
 
   connect() {
     this.debouncedFetchResults = debounce(this.fetchResults.bind(this), 250)
     this.debouncedLocalResults = debounce(this.localResults.bind(this), 250)
     this.selectedIndex = -1
+
+    // To remember what the current page and last page were, we queried
+    this.currentPage = 0
+    this.lastPage = null
+
+    // To remember what the last search was we did
     this.lastSearch = null
 
     this.display()
@@ -20,6 +26,7 @@ export default class extends ApplicationController {
     this.debouncedLocalResults = null
   }
 
+  // Called on connect
   display(event) {
     // Put current selection in search field
     if (this.hiddenInputTarget.value) {
@@ -39,6 +46,15 @@ export default class extends ApplicationController {
         })
         this.searchInputTarget.value = currentItem.getAttribute("data-satis-dropdown-item-text")
       }
+    }
+  }
+
+  // Called when scrolling in the resultsTarget
+  scroll(event) {
+    if (this.elementScrolled(this.resultsTarget)) {
+      // FIXME: One problem with this is that you could possibly go beyond the max nr of pages
+      this.currentPage += 1
+      this.fetchResults(event)
     }
   }
 
@@ -133,8 +149,12 @@ export default class extends ApplicationController {
   // --- Helpers
 
   toggleResultsList(event) {
-    if (this.itemsContainerTarget.classList.contains("hidden")) {
-      this.showResultsList(event)
+    if (this.resultsTarget.classList.contains("hidden")) {
+      if (this.hasResults) {
+        this.showResultsList(event)
+      } else {
+        this.fetchResults(event)
+      }
     } else {
       this.hideResultsList(event)
     }
@@ -144,19 +164,19 @@ export default class extends ApplicationController {
   }
 
   showResultsList(event) {
-    this.itemsContainerTarget.classList.remove("hidden")
-    this.toggleButtonTarget.querySelector(".feather-chevron-up").classList.remove("hidden")
-    this.toggleButtonTarget.querySelector(".feather-chevron-down").classList.add("hidden")
+    this.resultsTarget.classList.remove("hidden")
+    this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.remove("hidden")
+    this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.add("hidden")
   }
 
   hideResultsList(event) {
-    this.itemsContainerTarget.classList.add("hidden")
-    this.toggleButtonTarget.querySelector(".feather-chevron-up").classList.add("hidden")
-    this.toggleButtonTarget.querySelector(".feather-chevron-down").classList.remove("hidden")
+    this.resultsTarget.classList.add("hidden")
+    this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.add("hidden")
+    this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.remove("hidden")
   }
 
   localResults(event) {
-    if (this.searchInputTarget.value.length < 2 || this.searchInputTarget.value == this.lastSearch) {
+    if (this.searchInputTarget.value == this.lastSearch) {
       return
     }
 
@@ -184,31 +204,46 @@ export default class extends ApplicationController {
 
   // Remote search
   fetchResults(event) {
-    if (this.searchInputTarget.value.length < 2 || this.searchInputTarget.value == this.lastSearch) {
-      return
-    }
-    if (!this.hasUrlValue) {
-      return
-    }
-    this.lastSearch = this.searchInputTarget.value
-    let ourUrl = this.normalizedUrl
-    ourUrl.searchParams.append("term", this.searchInputTarget.value)
-
-    // Add searchParams based on url_params
-    const form = this.element.closest("form")
-    Object.entries(this.urlParamsValue).forEach((item) => {
-      let elm = form.querySelector(`[name='${item[1]}']`)
-      if (elm) {
-        ourUrl.searchParams.append(item[0], elm.value)
+    const promise = new Promise((resolve, reject) => {
+      if (this.searchInputTarget.value == this.lastSearch && this.currentPage == this.lastPage) {
+        //if (this.searchInputTarget.value.length < 2 || this.searchInputTarget.value == this.lastSearch) {
+        return
       }
-    })
-
-    this.fetchResultsWith(ourUrl).then(() => {
-      if (this.hasResults) {
-        this.highLightSelected()
-        this.itemsContainerTarget.classList.remove("hidden")
+      if (this.searchInputTarget.value != this.lastSearch) {
+        this.currentPage = 0
       }
+      if (!this.hasUrlValue) {
+        return
+      }
+
+      this.lastSearch = this.searchInputTarget.value
+      this.lastPage = this.currentPage
+
+      let ourUrl = this.normalizedUrl
+      if (this.searchInputTarget.value.length >= 2) {
+        ourUrl.searchParams.append("term", this.searchInputTarget.value)
+      }
+      ourUrl.searchParams.append("page", this.currentPage)
+      ourUrl.searchParams.append("page_size", this.pageSizeValue)
+
+      // Add searchParams based on url_params
+      const form = this.element.closest("form")
+      Object.entries(this.urlParamsValue).forEach((item) => {
+        let elm = form.querySelector(`[name='${item[1]}']`)
+        if (elm) {
+          ourUrl.searchParams.append(item[0], elm.value)
+        }
+      })
+
+      this.fetchResultsWith(ourUrl).then(() => {
+        if (this.hasResults) {
+          this.highLightSelected()
+          this.resultsTarget.classList.remove("hidden")
+          resolve()
+        }
+      })
     })
+    return promise
   }
 
   fetchResultsWith(ourUrl) {
@@ -224,7 +259,13 @@ export default class extends ApplicationController {
             item.setAttribute("data-action", "click->satis-dropdown#select")
           })
 
-          this.itemsTarget.innerHTML = tmpDiv.innerHTML
+          if (this.currentPage == 0) {
+            this.itemsTarget.innerHTML = tmpDiv.innerHTML
+          } else {
+            if (tmpDiv.innerHTML.length > 0) {
+              this.itemsTarget.insertAdjacentHTML("beforeend", tmpDiv.innerHTML)
+            }
+          }
 
           resolve()
         })
@@ -244,7 +285,7 @@ export default class extends ApplicationController {
   }
 
   get resultsHidden() {
-    return this.itemsContainerTarget.classList.contains("hidden")
+    return this.resultsTarget.classList.contains("hidden")
   }
 
   get nrOfItems() {
