@@ -10,7 +10,7 @@ module Satis
     class Builder < ActionView::Helpers::FormBuilder
       delegate :t, :tag, :safe_join, :render, to: :@template
 
-      attr_reader :template
+      attr_reader :template, :assocation
 
       include Concerns::Select
       include Concerns::File
@@ -35,6 +35,7 @@ module Satis
       def association(name, options, &block)
         @form_options = options
 
+        @association = name
         reflection = @object.class.reflections[name.to_s]
 
         method = reflection.join_foreign_key
@@ -58,6 +59,10 @@ module Satis
         name = args.first
         template_object = args.second
 
+        # FIXME: Yuk - is it possible to detect when this should not be allowed?
+        # Like checking for whether destroy is allowed on assocations?
+        allow_actions = options.key?(:allow_actions) ? options[:allow_actions] : true
+
         reflection = @object.class.reflections[name.to_s]
 
         html_options = options[:html] || {}
@@ -75,7 +80,7 @@ module Satis
                               end
 
         # Only do the whole nested-form thing with a collection
-        if reflection.collection? && template_object
+        if reflection&.collection? && template_object && allow_actions == true
           view_options = {
             form: self,
             collection: name,
@@ -91,7 +96,10 @@ module Satis
           #          form: self, name: name, template_object: template_object, **options, &block
           #        ))
         else
-          rails_fields_for(*args, options, &block)
+          safe_join [
+            tag.div(@object.errors.messages[name].join(', '), class: 'invalid-feedback'),
+            rails_fields_for(*args, options, &block)
+          ]
         end
       end
 
@@ -150,10 +158,16 @@ module Satis
       end
 
       # FIXME: These don't work for relations or location_id, error is on location
+      # When using the association helper, we need to set a @assocation variable
+      # any other input should clear it
       def error_text(method)
-        return unless has_error?(method)
+        return if !has_error?(method) && !has_error?(method.to_s.gsub(/_id$/, ''))
 
-        tag.div(@object.errors[method].join('<br />').html_safe, class: 'invalid-feedback')
+        all_errors = @object.errors[method].dup
+        all_errors += @object.errors[method.to_s.gsub(/_id$/, '')] if method.to_s.ends_with?('_id')
+
+        tag.div(all_errors.uniq.join('<br />').html_safe,
+                class: 'invalid-feedback')
       end
 
       def object_type_for_method(method)
