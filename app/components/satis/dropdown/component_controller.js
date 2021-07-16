@@ -4,7 +4,11 @@ import { debounce } from "../../../../frontend/utils"
 
 export default class extends ApplicationController {
   static targets = ["results", "items", "item", "searchInput", "resetButton", "toggleButton", "hiddenInput"]
-  static values = { url: String, urlParams: Object, pageSize: Number }
+  static values = {
+    url: String,
+    urlParams: Object,
+    pageSize: Number,
+  }
 
   connect() {
     this.debouncedFetchResults = debounce(this.fetchResults.bind(this), 250)
@@ -109,6 +113,8 @@ export default class extends ApplicationController {
   reset(event) {
     this.hiddenInputTarget.value = null
     this.searchInputTarget.value = null
+    this.lastSearch = null
+    this.lastPage = null
     if (this.selectedItem) {
       this.selectedItem.classList.remove("bg-blue-200")
     }
@@ -131,6 +137,7 @@ export default class extends ApplicationController {
 
     this.hideResultsList()
 
+    // Copy over data attributes on the item div to the hidden input
     Array.prototype.slice.call(dataDiv.attributes).forEach((attr) => {
       if (attr.name.startsWith("data") && !attr.name.startsWith("data-satis") && !attr.name.startsWith("data-action")) {
         this.hiddenInputTarget.setAttribute(attr.name, attr.value)
