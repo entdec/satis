@@ -234,7 +234,6 @@ export default class extends ApplicationController {
   fetchResults(event) {
     const promise = new Promise((resolve, reject) => {
       if (this.searchInputTarget.value == this.lastSearch && this.currentPage == this.lastPage) {
-        //if (this.searchInputTarget.value.length < 2 || this.searchInputTarget.value == this.lastSearch) {
         return
       }
       if (this.searchInputTarget.value != this.lastSearch) {
