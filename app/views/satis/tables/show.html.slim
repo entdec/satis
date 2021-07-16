@@ -58,7 +58,7 @@ turbo-frame id="#{params[:id]}"
           p.text-sm.text-gray-700
             = page_entries_info @table.send(:paged_scope)
         div
-          = paginate @table.send(:paged_scope), 'data-turbo-frame'=>"#{params[:id]}"
+          = paginate @table.send(:paged_scope)
           /nav.relative.z-0.inline-flex.rounded-md.shadow-sm.-space-x-px aria-label="Pagination"
             a.relative.inline-flex.items-center.px-2.py-2.rounded-l-md.border.border-gray-300.bg-white.text-sm.font-medium.text-gray-500.hover:bg-gray-50 href="#"
               span.sr-only Previous
