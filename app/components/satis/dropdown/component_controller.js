@@ -1,6 +1,7 @@
 import ApplicationController from "../../../../frontend/controllers/application_controller"
 // FIXME: Is this full path really needed?
 import { debounce } from "../../../../frontend/utils"
+import { createPopper } from "@popperjs/core"
 
 export default class extends ApplicationController {
   static targets = ["results", "items", "item", "searchInput", "resetButton", "toggleButton", "hiddenInput"]
@@ -21,6 +22,23 @@ export default class extends ApplicationController {
 
     // To remember what the last search was we did
     this.lastSearch = null
+
+    this.popperInstance = createPopper(this.element, this.resultsTarget, {
+      offset: [-20, 2],
+      placement: "bottom",
+      modifiers: [
+        {
+          name: "flip",
+          enabled: true,
+          options: {
+            boundary: this.element.closest(".satis-card"),
+          },
+        },
+        {
+          name: "preventOverflow",
+        },
+      ],
+    })
 
     this.display()
   }
@@ -156,7 +174,7 @@ export default class extends ApplicationController {
   // --- Helpers
 
   toggleResultsList(event) {
-    if (this.resultsTarget.classList.contains("hidden")) {
+    if (this.resultsHidden) {
       if (this.hasResults) {
         this.showResultsList(event)
       } else {
@@ -172,12 +190,15 @@ export default class extends ApplicationController {
 
   showResultsList(event) {
     this.resultsTarget.classList.remove("hidden")
+    this.resultsTarget.setAttribute("data-show", "")
+    this.popperInstance.update()
     this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.remove("hidden")
     this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.add("hidden")
   }
 
   hideResultsList(event) {
     this.resultsTarget.classList.add("hidden")
+    this.resultsTarget.removeAttribute("data-show")
     this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.add("hidden")
     this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.remove("hidden")
   }
@@ -245,7 +266,7 @@ export default class extends ApplicationController {
       this.fetchResultsWith(ourUrl).then(() => {
         if (this.hasResults) {
           this.highLightSelected()
-          this.resultsTarget.classList.remove("hidden")
+          this.showResultsList()
           resolve()
         }
       })
@@ -292,7 +313,7 @@ export default class extends ApplicationController {
   }
 
   get resultsHidden() {
-    return this.resultsTarget.classList.contains("hidden")
+    return !this.resultsTarget.hasAttribute("data-show")
   }
 
   get nrOfItems() {

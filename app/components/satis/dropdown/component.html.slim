@@ -20,7 +20,8 @@ div.dropdown.relative data-action="keydown->satis-dropdown#dispatch" data-contro
                 i.fas.fa-chevron-down
 
         / Container for results
-        .hidden.absolute.shadow.bg-white.dark:bg-gray-800.top-50.z-40.w-full.lef-0.rounded.max-h-select.overflow-y-auto data-satis-dropdown-target="results" data-action="scroll->satis-dropdown#scroll"
+        / .hidden.absolute.shadow.bg-white.dark:bg-gray-800.top-50.z-40.w-full.lef-0.rounded.max-h-select.overflow-y-auto data-satis-dropdown-target="results" data-action="scroll->satis-dropdown#scroll"
+        .hidden.shadow.bg-white.dark:bg-gray-800.z-10.w-full.lef-0.rounded.max-h-select.overflow-y-auto data-satis-dropdown-target="results" data-action="scroll->satis-dropdown#scroll"
           .flex.flex-col.w-full data-satis-dropdown-target="items"
             - options[:collection]&.each do |item|
               div data-satis-dropdown-target="item" data-satis-dropdown-item-value=item.send(value_method) data-satis-dropdown-item-text=item.send(text_method) data-action="click->satis-dropdown#select"
