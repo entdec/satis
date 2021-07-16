@@ -12,6 +12,15 @@ export default class extends ApplicationController {
     this.selectedIndex = -1
     this.lastSearch = null
 
+    this.display()
+  }
+
+  disconnect() {
+    this.debouncedFetchResults = null
+    this.debouncedLocalResults = null
+  }
+
+  display(event) {
     // Put current selection in search field
     if (this.hiddenInputTarget.value) {
       if (this.itemTargets.length == 0) {
@@ -31,11 +40,6 @@ export default class extends ApplicationController {
         this.searchInputTarget.value = currentItem.getAttribute("data-satis-dropdown-item-text")
       }
     }
-  }
-
-  disconnect() {
-    this.debouncedFetchResults = null
-    this.debouncedLocalResults = null
   }
 
   // User presses keys

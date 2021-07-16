@@ -19,25 +19,12 @@ module Satis
           end
 
           def select_input(method, options = {})
-            value_method = options[:value_method]
-            text_method = options[:text_method]
-
-            if options[:collection].is_a?(Array) && options[:collection].first.size == 2
-              value_method ||= :last
-              text_method ||= :first
-            elsif options[:collection].is_a?(Array) && options[:collection].first.size == 1
-              value_method ||= :to_s
-              text_method ||= :to_s
-            else
-              value_method ||= :id
-              text_method ||= :name
-            end
-
             input_options = options[:input_html] || {}
             multiple = input_options[:multiple]
+            options = value_text_method_options(options)
 
             collection_input(method, options) do
-              collection_select(method, options[:collection], value_method, text_method, options,
+              collection_select(method, options[:collection], options[:value_method], options[:text_method], options,
                                 merge_input_options({ class: "#{unless multiple
                                                                   'custom-select'
                                                                 end} form-control #{if has_error?(method)
@@ -61,10 +48,31 @@ module Satis
               safe_join [
 
                 custom_label(method, options[:label]),
-                @template.render(Satis::Dropdown::Component.new(form: self, attribute: method, title: options[:label], **options,
+                @template.render(Satis::Dropdown::Component.new(form: self, attribute: method, title: options[:label], **value_text_method_options(options),
   &block))
               ]
             end
+          end
+
+          def value_text_method_options(options)
+            value_method = options[:value_method]
+            text_method = options[:text_method]
+
+            if options[:collection].is_a?(Array) && options[:collection].first.size == 2
+              value_method ||= :last
+              text_method ||= :first
+            elsif options[:collection].is_a?(Array) && options[:collection].first.size == 1
+              value_method ||= :to_s
+              text_method ||= :to_s
+            elsif options[:collection].class < ActiveRecord::Relation
+              value_method ||= :id
+              text_method ||= :name
+            else
+              value_method ||= :last
+              text_method ||= :first
+            end
+
+            options.reverse_merge(value_method: value_method, text_method: text_method)
           end
         end
       end
