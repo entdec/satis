@@ -130,6 +130,7 @@ export default class extends ApplicationController {
   // User presses reset button
   reset(event) {
     this.hiddenInputTarget.value = null
+    this.hiddenInputTarget.dispatchEvent(new Event("change"))
     this.searchInputTarget.value = null
     this.lastSearch = null
     this.lastPage = null
