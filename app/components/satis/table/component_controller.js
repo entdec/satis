@@ -46,18 +46,17 @@ export default class extends ApplicationController {
 
   //
   filter(event) {
-    console.log("filter")
     let turboFrame = this.element.closest("turbo-frame")
     let ourUrl = new URL(turboFrame.src, window.location.href)
 
     this.filterTargets.forEach((element) => {
+      let paramName = element.name.match(/\[(.*)\]/)[1]
       if (element.value.length > 0) {
-        let paramName = element.name.match(/\[(.*)\]/)[1]
         ourUrl.searchParams.set(paramName, element.value)
+      } else {
+        ourUrl.searchParams.delete(paramName)
       }
     })
-
-    console.log("ourUrl", ourUrl)
 
     turboFrame.src = ourUrl
     return true
