@@ -11,6 +11,14 @@ module Satis
         @title = title
         @options = options
         @url = options[:url]
+
+        options[:input_html] ||= {}
+
+        actions = [options[:input_html]['data-action'], 'change->satis-dropdown#display'].join(' ')
+
+        options[:input_html].merge!('data-satis-dropdown-target' => 'hiddenInput',
+                                    'data-action' => actions)
+
         @block = block
       end
 

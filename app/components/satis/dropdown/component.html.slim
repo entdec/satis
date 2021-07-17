@@ -1,6 +1,6 @@
 div.dropdown.relative data-action="keydown->satis-dropdown#dispatch" data-controller="satis-dropdown" data-satis-dropdown-page-size-value=10 data-satis-dropdown-url-value=url data-satis-dropdown-url-params-value=(options[:url_params]||{}).to_json
   / Hidden form field containing results
-  = form.hidden_field(attribute, (options[:input_html]||{}).merge('data-satis-dropdown-target' => "hiddenInput", 'data-action' => 'change->satis-dropdown#display'))
+  = form.hidden_field(attribute, options[:input_html])
   .w-full.flex.flex-col
      .w-full
       .flex.flex-col.items-center
