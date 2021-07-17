@@ -5,7 +5,7 @@ import { debounce } from "../../../../frontend/utils"
 import Sortable from "sortablejs"
 
 export default class extends ApplicationController {
-  static targets = ["header", "hiddenHeader", "column"]
+  static targets = ["header", "hiddenHeader", "column", "filterRow", "filter"]
 
   connect() {
     new Sortable(this.hiddenHeaderTarget, {
@@ -23,6 +23,44 @@ export default class extends ApplicationController {
         this.columnDragged(event)
       },
     })
+
+    this.debouncedShowHideFilters = debounce(() => {
+      if (this.mouseIn) {
+        this.filterRowTarget.classList.remove("hidden")
+      } else {
+        this.filterRowTarget.classList.add("hidden")
+      }
+    }, 500)
+  }
+
+  // Show and hide the filters header when you enter or leave the columns header
+  showFilters(event) {
+    this.mouseIn = true
+    this.debouncedShowHideFilters()
+  }
+
+  hideFilters(event) {
+    this.mouseIn = false
+    this.debouncedShowHideFilters()
+  }
+
+  //
+  filter(event) {
+    console.log("filter")
+    let turboFrame = this.element.closest("turbo-frame")
+    let ourUrl = new URL(turboFrame.src, window.location.href)
+
+    this.filterTargets.forEach((element) => {
+      if (element.value.length > 0) {
+        let paramName = element.name.match(/\[(.*)\]/)[1]
+        ourUrl.searchParams.set(paramName, element.value)
+      }
+    })
+
+    console.log("ourUrl", ourUrl)
+
+    turboFrame.src = ourUrl
+    return true
   }
 
   sort(event) {
@@ -44,17 +82,9 @@ export default class extends ApplicationController {
   }
 
   columnDragged(event) {
-    console.log(event)
-
-    console.log(event.to, this.headerTarget)
-    // if (event.to != this.headerTarget) {
-    //   return
-    // }
     let order = Array.prototype.slice.call(this.headerTarget.querySelectorAll("th")).map((element) => {
       return element.getAttribute("data-column")
     })
-
-    console.log("order", order)
 
     // FIXME: Make this a target, by moving up the controller, outside the frame?
     let turboFrame = this.element.closest("turbo-frame")
@@ -65,4 +95,6 @@ export default class extends ApplicationController {
     }
     return true
   }
+
+  refreshTable() {}
 }
