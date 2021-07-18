@@ -6,6 +6,6 @@
     per_page:      number of items to fetch per page
     remote:        data-remote
 -%>
-<span class="last">
-  <%= link_to_unless current_page.last?, t('views.pagination.last').html_safe, url, remote: remote, 'data-turbo-frame'=> "#{params[:id]}"  %>
-</span>
+<%unless current_page.last?%>
+  <%= link_to url, remote: remote, 'data-turbo-frame'=> "#{params[:id]}", class: "relative inline-flex items-center px-3 py-3 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50" do%><i class="fal fa-chevrons-right"></i><%end%>
+<%end%>
