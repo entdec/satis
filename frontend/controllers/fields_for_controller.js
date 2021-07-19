@@ -20,7 +20,14 @@ export default class extends ApplicationController {
         item.remove()
       }
     })
-    tmpNode.innerHTML = tmpNode.innerHTML.replace(/TEMPLATE/g, new Date().valueOf())
+
+    // Simply replace every child node's attributes value, replacing TEMPLATE
+    let id = new Date().valueOf()
+    tmpNode.querySelectorAll("*").forEach((node) => {
+      for (let attribute of node.attributes) {
+        attribute.value = attribute.value.replace(/TEMPLATE/g, id)
+      }
+    })
 
     this.insertionPointTarget.insertAdjacentHTML("beforebegin", this.templateTarget.innerHTML)
     window.scrollBy(0, this.element.querySelector(".nested-fields").clientHeight)
