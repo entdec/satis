@@ -73,7 +73,7 @@ turbo-frame id="#{params[:id]}"
       .hidden.sm:flex-1.sm:flex.sm:items-center.sm:justify-between
         div
           p.text-sm.text-gray-700
-            = page_entries_info @table.send(:paged_scope)
+            = page_entries_info @table.send(:paged_scope), entry_name: 'row'
         div
           = paginate @table.send(:paged_scope), views_prefix: 'satis', theme: 'tables'
           /nav.relative.z-0.inline-flex.rounded-md.shadow-sm.-space-x-px aria-label="Pagination"
