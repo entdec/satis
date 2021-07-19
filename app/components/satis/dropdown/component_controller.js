@@ -16,6 +16,8 @@ export default class extends ApplicationController {
     this.debouncedLocalResults = debounce(this.localResults.bind(this), 250)
     this.selectedIndex = -1
 
+    this.boundClickedOutside = this.clickedOutside.bind(this)
+
     // To remember what the current page and last page were, we queried
     this.currentPage = 0
     this.lastPage = null
@@ -41,11 +43,13 @@ export default class extends ApplicationController {
     })
 
     this.display()
+    window.addEventListener("click", this.boundClickedOutside)
   }
 
   disconnect() {
     this.debouncedFetchResults = null
     this.debouncedLocalResults = null
+    window.removeEventListener("click", this.boundClickedOutside)
   }
 
   // Called on connect
@@ -369,5 +373,12 @@ export default class extends ApplicationController {
     this.lowLightSelected()
     this.decreaseSelectedIndex()
     this.highLightSelected()
+  }
+
+  clickedOutside(event) {
+    // FIXME: This doesn't work for the SVG caret down in the dropdown
+    if (!this.element.contains(event.target)) {
+      this.hideResultsList()
+    }
   }
 }
