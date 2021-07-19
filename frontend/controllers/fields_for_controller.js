@@ -4,12 +4,18 @@ export default class extends ApplicationController {
   static targets = ["insertionPoint", "template"]
 
   connect() {
-    let content = this.templateTarget.innerHTML
-    this.insertionPointTarget.insertAdjacentHTML("beforebegin", content)
+    this.boundMonitorChanges = this.monitorChanges.bind(this)
+    this.addNewLine()
   }
 
   addAssociation(event) {
     event.preventDefault()
+
+    // Find template and remove event listeners
+    let templateElement = this.insertionPointTarget.querySelector(".template")
+    templateElement.querySelectorAll("input").forEach((input) => {
+      input.removeEventListener("change", this.boundMonitorChanges)
+    })
 
     let tmpNode = event.target.closest(".nested-fields")
     tmpNode.classList.remove("template")
@@ -29,8 +35,24 @@ export default class extends ApplicationController {
       }
     })
 
-    this.insertionPointTarget.insertAdjacentHTML("beforebegin", this.templateTarget.innerHTML)
+    this.addNewLine()
+
     window.scrollBy(0, this.element.querySelector(".nested-fields").clientHeight)
+  }
+
+  addNewLine() {
+    this.insertionPointTarget.insertAdjacentHTML("beforeend", this.templateTarget.innerHTML)
+
+    // Find template and add event listeners
+    let templateElement = this.insertionPointTarget.querySelector(".template")
+    templateElement.querySelectorAll("input").forEach((input) => {
+      input.addEventListener("change", this.boundMonitorChanges)
+    })
+  }
+
+  monitorChanges(event) {
+    console.log("CHANGE!!!!")
+    this.addAssociation(event)
   }
 
   removeAssociation(event) {
