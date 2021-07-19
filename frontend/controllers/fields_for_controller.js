@@ -13,7 +13,7 @@ export default class extends ApplicationController {
 
     // Find template and remove event listeners
     let templateElement = this.insertionPointTarget.querySelector(".template")
-    templateElement.querySelectorAll("input").forEach((input) => {
+    templateElement.querySelectorAll("input,select").forEach((input) => {
       input.removeEventListener("change", this.boundMonitorChanges)
     })
 
@@ -45,13 +45,12 @@ export default class extends ApplicationController {
 
     // Find template and add event listeners
     let templateElement = this.insertionPointTarget.querySelector(".template")
-    templateElement.querySelectorAll("input").forEach((input) => {
+    templateElement.querySelectorAll("input,select").forEach((input) => {
       input.addEventListener("change", this.boundMonitorChanges)
     })
   }
 
   monitorChanges(event) {
-    console.log("CHANGE!!!!")
     this.addAssociation(event)
   }
 
