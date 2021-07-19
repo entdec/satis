@@ -108,7 +108,7 @@ export default class extends ApplicationController {
 
         break
       case "Escape":
-        if (!this.resultsHidden) {
+        if (this.resultsShown) {
           this.hideResultsList(event)
         } else {
           this.reset(event)
@@ -179,14 +179,14 @@ export default class extends ApplicationController {
   // --- Helpers
 
   toggleResultsList(event) {
-    if (this.resultsHidden) {
+    if (this.resultsShown) {
+      this.hideResultsList(event)
+    } else {
       if (this.hasResults) {
         this.showResultsList(event)
       } else {
         this.fetchResults(event)
       }
-    } else {
-      this.hideResultsList(event)
     }
 
     event.preventDefault()
@@ -316,8 +316,8 @@ export default class extends ApplicationController {
     return ourUrl
   }
 
-  get resultsHidden() {
-    return !this.resultsTarget.hasAttribute("data-show")
+  get resultsShown() {
+    return this.resultsTarget.hasAttribute("data-show")
   }
 
   get nrOfItems() {
@@ -376,9 +376,13 @@ export default class extends ApplicationController {
   }
 
   clickedOutside(event) {
-    // FIXME: This doesn't work for the SVG caret down in the dropdown
+    if (event.target.tagName == "svg" || event.target.tagName == "path") {
+      return
+    }
     if (!this.element.contains(event.target)) {
-      this.hideResultsList()
+      if (this.resultsShown) {
+        this.hideResultsList()
+      }
     }
   }
 }
