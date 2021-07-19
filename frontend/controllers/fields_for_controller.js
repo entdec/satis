@@ -4,6 +4,8 @@ export default class extends ApplicationController {
   static targets = ["insertionPoint", "template"]
 
   connect() {
+    super.connect()
+
     this.boundMonitorChanges = this.monitorChanges.bind(this)
     this.addNewLine()
   }

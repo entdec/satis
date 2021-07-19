@@ -5,6 +5,8 @@ import { createPopper } from "@popperjs/core"
 
 export default class extends ApplicationController {
   connect() {
+    super.connect()
+
     this.element.querySelectorAll(".dropdown").forEach((dropdown, index) => {
       const dropdownMenu = dropdown.querySelector(".dropdown-menu")
       let popperInstance = null

@@ -7,7 +7,9 @@ import ApplicationController from "./application_controller"
  *
  */
 export default class extends ApplicationController {
-  connect() {}
+  connect() {
+    super.connect()
+  }
 
   select() {
     Turbo.visit(this.element.getAttribute("href"))

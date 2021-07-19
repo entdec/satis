@@ -7,6 +7,8 @@ export default class extends ApplicationController {
   static values = { urls: String, latitude: Number, longitude: Number, zoomLevel: Number, geoJsonUrl: String }
 
   connect() {
+    super.connect()
+
     // Example https://leafletjs.com/examples/choropleth/
     // Data https://public.opendatasoft.com/explore/?sort=modified&q=netherlands
 

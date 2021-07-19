@@ -1,4 +1,5 @@
-import { Controller } from "stimulus"
+import ApplicationController from "../controllers/application_controller"
+
 import CodeMirror from "codemirror"
 
 import "codemirror/addon/edit/closebrackets"
@@ -48,7 +49,7 @@ const themes = themesContext.keys().map((fileName) => fileName.slice(2, -4))
  *
  * Control codemirror
  */
-export default class extends Controller {
+export default class extends ApplicationController {
   static targets = ["textarea"]
   static values = { readOnly: Boolean, mode: String, height: String, colorScheme: String, colorSchemeDark: String }
 
@@ -64,6 +65,8 @@ export default class extends Controller {
   }
 
   connect() {
+    super.connect()
+
     const self = this
 
     let mode = { name: "liquid", base: CodeMirror.mimeModes[this.modeValue] }

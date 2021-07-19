@@ -12,6 +12,8 @@ export default class extends ApplicationController {
   }
 
   connect() {
+    super.connect()
+
     this.debouncedFetchResults = debounce(this.fetchResults.bind(this), 250)
     this.debouncedLocalResults = debounce(this.localResults.bind(this), 250)
     this.selectedIndex = -1

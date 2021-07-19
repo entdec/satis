@@ -1,4 +1,5 @@
 import ApplicationController from "../../../../frontend/controllers/application_controller"
+import Mousetrap from "mousetrap"
 
 /*
  * Tabs controller
@@ -8,6 +9,8 @@ export default class extends ApplicationController {
   static values = { persist: Boolean }
 
   connect() {
+    super.connect()
+
     const ourUrl = new URL(window.location.href)
     this.keyBase = ourUrl.pathname.substring(1, ourUrl.pathname.length).replace(/\//, "_") + "_tabs_" + this.context.scope.element.id
 
@@ -20,6 +23,10 @@ export default class extends ApplicationController {
         }
         tab.classList.add("is-invalid")
       }
+    })
+
+    Mousetrap.bind(["ctrl+1", "ctrl+2", "ctrl+3", "ctrl+4", "ctrl+5"], (event, combo) => {
+      this.open(-1 + +combo.split("+")[1])
     })
 
     this.open(firstErrorIndex || this.tabToOpen())

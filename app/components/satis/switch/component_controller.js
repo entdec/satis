@@ -5,7 +5,9 @@ import { debounce } from "../../../../frontend/utils"
 export default class extends ApplicationController {
   static targets = ["hiddenInput", "switch", "button", "cross", "check"]
 
-  connect() {}
+  connect() {
+    super.connect()
+  }
 
   toggle(event) {
     if (event) {

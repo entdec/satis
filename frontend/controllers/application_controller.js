@@ -2,6 +2,10 @@
 import { Controller } from "stimulus"
 
 export default class ApplicationController extends Controller {
+  connect() {
+    this.element[this.identifier] = this
+  }
+
   getController(element, identifier) {
     return this.application.getControllerForElementAndIdentifier(element, identifier)
   }

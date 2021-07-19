@@ -8,6 +8,8 @@ export default class extends ApplicationController {
   static targets = ["header", "hiddenHeader", "column", "filterRow", "filter"]
 
   connect() {
+    super.connect()
+
     new Sortable(this.hiddenHeaderTarget, {
       group: "columns",
     })

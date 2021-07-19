@@ -11,6 +11,8 @@ import { getInitialTheme } from "../utils"
  */
 export default class extends ApplicationController {
   connect() {
+    super.connect()
+
     const theme = getInitialTheme()
     this.rawSetTheme(theme)
   }
