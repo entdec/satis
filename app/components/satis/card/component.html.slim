@@ -17,7 +17,7 @@
       .ml-4.mt-4.flex-shrink-0
         - if menu
           = render(Satis::Menu::Component.new(menu))
-  .px-6.py-6
+  div *body_html
     = content
   - if footer
     .px-4.py-3.bg-gray-50.text-right.sm:px-6

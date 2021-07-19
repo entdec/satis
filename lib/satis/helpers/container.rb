@@ -7,12 +7,13 @@ module Satis
         @action_view = action_view
 
         extend Satis::Card::Helpers
+        extend Satis::Info::Helpers
         extend Satis::Map::Helpers
+        extend Satis::Menu::Helpers
+        extend Satis::Page::Helpers
         extend Satis::Tabs::Helpers
         extend Satis::UiTable::Helpers
         extend Satis::Table::Helpers
-        extend Satis::Page::Helpers
-        extend Satis::Menu::Helpers
       end
 
       def form_for(name, *args, &block)

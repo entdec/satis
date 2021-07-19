@@ -25,11 +25,13 @@ module Satis
 
             collection_input(method, options) do
               collection_select(method, options[:collection], options[:value_method], options[:text_method], options,
-                                merge_input_options({ class: "#{unless multiple
-                                                                  'custom-select'
-                                                                end} form-control #{if has_error?(method)
-                                                                                      'is-invalid'
-                                                                                    end}" }, options[:input_html]))
+                                merge_input_options({ class: "#{if multiple
+                                                                  'form-multiselect'
+                                                                else
+                                                                  'form-select'
+                                                                end} #{if has_error?(method)
+                                                                         'is-invalid'
+                                                                       end}" }, options[:input_html]))
             end
           end
 
