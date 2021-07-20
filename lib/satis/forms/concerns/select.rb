@@ -60,7 +60,10 @@ module Satis
             value_method = options[:value_method]
             text_method = options[:text_method]
 
-            if options[:collection].is_a?(Array) && options[:collection].first.size == 2
+            if options[:collection].is_a?(Array) && options[:collection].first.class < ActiveRecord::Base
+              value_method ||= :id
+              text_method ||= :name
+            elsif options[:collection].is_a?(Array) && options[:collection].first.size == 2
               value_method ||= :last
               text_method ||= :first
             elsif options[:collection].is_a?(Array) && options[:collection].first.size == 1
