@@ -25,10 +25,6 @@ export default class extends ApplicationController {
       }
     })
 
-    Mousetrap.bind(["ctrl+1", "ctrl+2", "ctrl+3", "ctrl+4", "ctrl+5"], (event, combo) => {
-      this.open(-1 + +combo.split("+")[1])
-    })
-
     this.open(firstErrorIndex || this.tabToOpen())
   }
 
