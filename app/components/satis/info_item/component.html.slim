@@ -1,7 +1,7 @@
-- if content || options[:content]
+- if content.present? || options[:content].present?
   div class=options[:class]
-    dt.text-sm.font-medium.text-gray-500 = I18n.t(name, default: name.to_s.humanize)
-    dd.mt-1.text-sm.text-gray-900
+    dt.text-xs.uppercase.text-gray-400 = I18n.t(name, default: name.to_s.humanize)
+    dd.text-sm.text-gray-900
       - if options[:icon]
         i.mr-1 class="#{options[:icon]}"
       = content || options[:content]
