@@ -1,6 +1,8 @@
 import { definitionsFromContext } from "stimulus/webpack-helpers"
 import { Application } from "stimulus"
 
+import Mousetrap from "mousetrap"
+
 import "@fortawesome/fontawesome-pro/js/all"
 import { config, library, dom } from "@fortawesome/fontawesome-svg-core"
 config.mutateApproach = "sync"
@@ -28,7 +30,8 @@ export class Satis {
         return name != "application"
       })
       .forEach(([name, controller]) => {
-        this.application.register(`satis-${name.replace(/_/g, "-")}`, controller)
+        let identifier = `satis-${name.replace(/_/g, "-")}`
+        this.application.register(identifier, controller)
       })
 
     componentContext
@@ -39,19 +42,24 @@ export class Satis {
         return [name, componentContext(key).default]
       })
       .forEach(([name, controller]) => {
-        this.application.register(`satis-${name.replace(/_/g, "-")}`, controller)
+        let identifier = `satis-${name.replace(/_/g, "-")}`
+        this.application.register(identifier, controller)
       })
 
     this.application.load(definitionsFromContext(context).concat(definitionsFromContext(componentContext)))
 
+    this.application.satis = {
+      mouseElement: null,
+    }
+
     // Start of keyboard shortcuts
     document.addEventListener("mousemove", (event) => {
-      this.mouseElement = event.target
+      this.application.satis.mouseElement = event.target
     })
 
     Mousetrap.bind(["ctrl+1", "ctrl+2", "ctrl+3", "ctrl+4", "ctrl+5", "ctrl+6", "ctrl+7", "ctrl+8", "ctrl+9", "ctrl+0"], (event, combo) => {
-      if (this.mouseElement) {
-        let elm = this.mouseElement.closest('[data-controller="satis-tabs"]')
+      if (this.application.satis.mouseElement) {
+        let elm = this.application.satis.mouseElement.closest('[data-controller="satis-tabs"]')
         if (elm) {
           let controller = elm["satis-tabs"]
           let index = -1 + +combo.split("+")[1]

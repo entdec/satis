@@ -1,0 +1,116 @@
+.container.mx-auto.px-4.py-2.md:py-10
+  .mb-5.w-64
+    label.font-bold.mb-1.text-gray-700.block for="datepicker"  Select Date
+    .relative
+      input name="date" type="hidden" x-ref="date" /
+      | <input type="text" readonly="" x-model="datepickerValue" @click="showDatepicker = !showDatepicker" @keydown.escape="showDatepicker = false" class="w-full pl-4 pr-10 py-3 leading-none rounded-lg shadow-sm focus:outline-none focus:shadow-outline text-gray-600 font-medium" placeholder="Select date"
+      .absolute.top-0.right-0.px-3.py-2
+        svg.h-6.w-6.text-gray-400 fill="none" stroke="currentColor" viewbox=("0 0 24 24")
+          path d=("M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z") stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+      /!
+        | <div x-text="no_of_days.length"></div
+        | <div x-text="32 - new Date(year, month, 32).getDate()"></div
+        | <div x-text="new Date(year, month).getDay()"></div
+      | <div class="bg-white mt-12 rounded-lg shadow p-4 absolute top-0 left-0" style="width: 17rem;" x-show.transition="showDatepicker" @click.away="showDatepicker = false"
+      .flex.justify-between.items-center.mb-2
+        div
+          span.text-lg.font-bold.text-gray-800 x-text="MONTH_NAMES[month]"  July
+          span.ml-1.text-lg.text-gray-600.font-normal x-text="year"  2021
+        div
+          | <button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 rounded-full" :class="{'cursor-not-allowed opacity-25': month == 0 }" :disabled="month == 0 ? true : false" @click="month--; getNoOfDays()"
+          svg.h-6.w-6.text-gray-500.inline-flex fill="none" stroke="currentColor" viewbox=("0 0 24 24")
+            path d=("M15 19l-7-7 7-7") stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          | <button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 rounded-full" :class="{'cursor-not-allowed opacity-25': month == 11 }" :disabled="month == 11 ? true : false" @click="month++; getNoOfDays()"
+          svg.h-6.w-6.text-gray-500.inline-flex fill="none" stroke="currentColor" viewbox=("0 0 24 24")
+            path d=("M9 5l7 7-7 7") stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+      .flex.flex-wrap.mb-3.-mx-1
+        template :key="index" x-for="(day, index) in DAYS"
+          .px-1 style=("width: 14.26%")
+            .text-gray-800.font-medium.text-center.text-xs x-text="day"
+        .px-1 style=("width: 14.26%")
+          .text-gray-800.font-medium.text-center.text-xs x-text="day"  Sun
+        .px-1 style=("width: 14.26%")
+          .text-gray-800.font-medium.text-center.text-xs x-text="day"  Mon
+        .px-1 style=("width: 14.26%")
+          .text-gray-800.font-medium.text-center.text-xs x-text="day"  Tue
+        .px-1 style=("width: 14.26%")
+          .text-gray-800.font-medium.text-center.text-xs x-text="day"  Wed
+        .px-1 style=("width: 14.26%")
+          .text-gray-800.font-medium.text-center.text-xs x-text="day"  Thu
+        .px-1 style=("width: 14.26%")
+          .text-gray-800.font-medium.text-center.text-xs x-text="day"  Fri
+        .px-1 style=("width: 14.26%")
+          .text-gray-800.font-medium.text-center.text-xs x-text="day"  Sat
+      .flex.flex-wrap.-mx-1
+        template x-for=("blankday in blankdays")
+          .text-center.border.p-1.border-transparent.text-sm style=("width: 14.28%")
+        .text-center.border.p-1.border-transparent.text-sm style=("width: 14.28%")
+        .text-center.border.p-1.border-transparent.text-sm style=("width: 14.28%")
+        .text-center.border.p-1.border-transparent.text-sm style=("width: 14.28%")
+        .text-center.border.p-1.border-transparent.text-sm style=("width: 14.28%")
+        template :key="dateIndex" x-for="(date, dateIndex) in no_of_days"
+          .px-1.mb-1 style=("width: 14.28%")
+            | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }"
+      .px-1.mb-1 style=("width: 14.28%")
+        | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">1
+    .px-1.mb-1 style=("width: 14.28%")
+      | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">2
+  .px-1.mb-1 style=("width: 14.28%")
+    | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">3
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">4
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">5
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">6
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">7
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">8
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">9
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">10
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">11
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">12
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">13
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">14
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">15
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">16
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">17
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">18
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">19
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 bg-blue-500 text-white" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">20
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">21
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">22
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">23
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">24
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">25
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">26
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">27
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">28
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">29
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">30
+.px-1.mb-1 style=("width: 14.28%")
+  | <div @click="getDateValue(date)" x-text="date" class="cursor-pointer text-center text-sm leading-none rounded-full leading-loose transition ease-in-out duration-100 text-gray-700 hover:bg-blue-200" :class="{'bg-blue-500 text-white': isToday(date) == true, 'text-gray-700 hover:bg-blue-200': isToday(date) == false }">31
+

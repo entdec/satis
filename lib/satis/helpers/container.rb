@@ -7,6 +7,7 @@ module Satis
         @action_view = action_view
 
         extend Satis::Card::Helpers
+        extend Satis::DateTimePicker::Helpers
         extend Satis::Info::Helpers
         extend Satis::Map::Helpers
         extend Satis::Menu::Helpers
