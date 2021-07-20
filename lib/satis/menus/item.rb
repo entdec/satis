@@ -5,7 +5,7 @@ module Satis
     class Item
       attr_reader :id, :label, :link, :icon, :app, :menu, :link_attributes
 
-      def initialize(id, link:, label: nil, icon: nil, app: nil, link_attributes: nil, &block)
+      def initialize(id, link:, label: nil, icon: nil, app: nil, link_attributes: {}, &block)
         @id = id
         @label = label
         @icon = icon
