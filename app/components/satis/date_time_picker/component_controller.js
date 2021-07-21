@@ -1,11 +1,21 @@
 import ApplicationController from "../../../../frontend/controllers/application_controller"
+import { createPopper } from "@popperjs/core"
+import { debounce } from "../../../../frontend/utils"
 
 export default class extends ApplicationController {
-  static targets = ["hours", "minutes", "month", "year", "days", "emtpyTemplate", "dayTemplate"]
+  static targets = ["hours", "minutes", "month", "year", "days", "weekDays", "calendarView", "weekDayTemplate", "emtpyTemplate", "dayTemplate"]
+  static values = {
+    visibleMonths: Number,
+    weekStart: String,
+    format: String,
+    clearable: Boolean,
+    inline: Boolean,
+    range: Boolean,
+    multiple: Boolean,
+    timePicker: Boolean,
+  }
 
   connect() {
-    this.days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-
     let today = new Date()
 
     this.currentDate = today
@@ -13,6 +23,45 @@ export default class extends ApplicationController {
     this.datepickerValue = new Date(this.year, this.month, today.getDate()).toDateString()
 
     this.display()
+
+    this.popperInstance = createPopper(this.element, this.calendarViewTarget, {
+      offset: [-20, 2],
+      placement: "bottom-start",
+      modifiers: [
+        {
+          name: "flip",
+          enabled: true,
+          options: {
+            boundary: this.element.closest(".satis-card"),
+          },
+        },
+        {
+          name: "preventOverflow",
+        },
+      ],
+    })
+
+    this.boundClickedOutside = this.clickedOutside.bind(this)
+    if (!this.inlineValue) {
+      window.addEventListener("click", this.boundClickedOutside)
+    }
+  }
+
+  disconnect() {
+    window.removeEventListener("click", this.boundClickedOutside)
+  }
+
+  clear(event) {}
+
+  showCalendar(event) {
+    this.calendarViewTarget.classList.remove("hidden")
+    this.calendarViewTarget.setAttribute("data-show", "")
+    this.popperInstance.update()
+  }
+
+  hideCalendar(event) {
+    this.calendarViewTarget.classList.add("hidden")
+    this.calendarViewTarget.removeAttribute("data-show")
   }
 
   previousMonth() {
@@ -28,6 +77,11 @@ export default class extends ApplicationController {
   display() {
     this.monthTarget.innerHTML = this.monthName
     this.yearTarget.innerHTML = this.currentDate.getFullYear()
+
+    this.weekDaysTarget.innerHTML = ""
+    this.getWeekDays("en-US").forEach((dayName) => {
+      this.weekDaysTarget.insertAdjacentHTML("beforeend", this.weekDayTemplateTarget.innerHTML.replace(/\${name}/g, dayName))
+    })
 
     // Deal with AM/PM
     // new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })
@@ -63,11 +117,24 @@ export default class extends ApplicationController {
     return new Date(this.currentDate).toLocaleString("default", { month: "long" })
   }
 
+  getWeekDays(locale) {
+    const baseDate = this.weekStartValue == "sun" ? new Date(Date.UTC(2021, 1, 0)) : new Date(Date.UTC(2021, 1, 1))
+    let weekDays = []
+    for (let i = 0; i < 7; i++) {
+      weekDays.push(baseDate.toLocaleDateString(locale, { weekday: "short" }))
+      baseDate.setDate(baseDate.getDate() + 1)
+    }
+    return weekDays
+  }
+
   // Gets the list of days
   get monthDays() {
     let results = []
 
     let monthStart = this.currentDate.getDay()
+    if (this.weekStartValue == "sun") {
+      monthStart = monthStart + 1
+    }
     let monthEnd = new Date(new Date(new Date(this.currentDate).setMonth(this.currentDate.getMonth() + 1)).setDate(0)).getDate()
 
     for (let index = 0; index < monthStart; index++) {
@@ -79,5 +146,14 @@ export default class extends ApplicationController {
     }
 
     return results
+  }
+
+  clickedOutside(event) {
+    if (event.target.tagName == "svg" || event.target.tagName == "path") {
+      return
+    }
+    if (!this.element.contains(event.target)) {
+      this.hideCalendar()
+    }
   }
 }

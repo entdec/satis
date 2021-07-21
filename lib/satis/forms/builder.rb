@@ -120,6 +120,13 @@ module Satis
         switch_input(method, options, &block)
       end
 
+      # Date time pickr
+      def date_time_picker(method, options = {}, &block)
+        @form_options = options
+
+        date_time_input(method, options, &block)
+      end
+
       # Non public
 
       def input_type_for(method, options)
@@ -187,7 +194,6 @@ module Satis
 
       def custom_label(method, title, options = {})
         all_classes = "#{options[:class]} form-label".strip
-        # binding.pry
         # title += '*' if required?(method)
         label(method, title, class: all_classes, data: options[:data]) do |translation|
           safe_join [
@@ -270,6 +276,16 @@ module Satis
         end
       end
 
+      def date_time_input(method, options = {}, &block)
+        form_group(method, options) do
+          safe_join [
+            (custom_label(method, options[:label]) unless options[:label] == false),
+            render(Satis::DateTimePicker::Component.new(form: self, attribute: method, title: options[:label], **options,
+    &block))
+          ]
+        end
+      end
+
       def collection_of(input_type, method, options = {})
         form_builder_method, custom_class, input_builder_method = case input_type
                                                                   when :radio_buttons then [:collection_radio_buttons,
@@ -305,18 +321,8 @@ module Satis
 
       def string_field(method, options = {})
         case object_type_for_method(method)
-        when :date
-          birthday = method.to_s =~ /birth/
-          safe_join [
-            date_field(method, merge_input_options(options, { data: { datepicker: true } })),
-            tag.div do
-              date_select(method, {
-                            order: %i[month day year],
-                            start_year: birthday ? 1900 : Date.today.year - 5,
-                            end_year: birthday ? Date.today.year : Date.today.year + 5
-                          }, { data: { date_select: true } })
-            end
-          ]
+        when :date then text_field(method, options)
+        when :datetime then text_field(method, options)
         when :integer then number_field(method, options)
         when :float then text_field(method, options)
         when :string
