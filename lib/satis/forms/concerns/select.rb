@@ -60,18 +60,23 @@ module Satis
             value_method = options[:value_method]
             text_method = options[:text_method]
 
+            # An array of models
             if options[:collection].is_a?(Array) && options[:collection].first.class < ActiveRecord::Base
               value_method ||= :id
               text_method ||= :name
+            # An array of arrays, whereby the inner array is size 2: [[text,value],[text,value]]
             elsif options[:collection].is_a?(Array) && options[:collection].first.is_a?(Array) && options[:collection].first.size == 2
               value_method ||= :last
               text_method ||= :first
+            # An array:["textvalue","textvalue"]
             elsif options[:collection].is_a?(Array) && !options[:collection].first.is_a?(Array)
               value_method ||= :to_s
               text_method ||= :to_s
+            # An activerecord relation
             elsif options[:collection].class < ActiveRecord::Relation
               value_method ||= :id
               text_method ||= :name
+            # Whatever else
             else
               value_method ||= :last
               text_method ||= :first
