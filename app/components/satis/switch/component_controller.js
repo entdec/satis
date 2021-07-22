@@ -10,14 +10,12 @@ export default class extends ApplicationController {
   }
 
   toggle(event) {
-    if (event && event.detail && event.detail.src != this) {
-      this.hiddenInputTarget.dispatchEvent(new CustomEvent("change", { detail: { src: this } }))
-      this.hiddenInputTarget.value = this.hiddenInputTarget.value == "1" ? "0" : "1"
-    }
-    this._update()
+    this.hiddenInputTarget.value = this.hiddenInputTarget.value == "1" ? "0" : "1"
+    this.hiddenInputTarget.dispatchEvent(new Event("change"))
+    this.update()
   }
 
-  _update() {
+  update(event) {
     if (this.hiddenInputTarget.value == "1") {
       // enabled
       this.buttonTarget.classList.add("bg-blue-600")

@@ -206,7 +206,7 @@ module Satis
       end
 
       def hidden_input(method, options = {})
-        hidden_field(method, options[:input_html])
+        hidden_field(method, options[:input_html] || {})
       end
 
       # Inputs and helpers
