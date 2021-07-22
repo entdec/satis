@@ -3,22 +3,26 @@ import { createPopper } from "@popperjs/core"
 import { debounce } from "../../../../frontend/utils"
 
 export default class extends ApplicationController {
-  static targets = ["input", "hiddenInput", "hours", "minutes", "month", "year", "days", "weekDays", "calendarView", "weekDayTemplate", "emtpyTemplate", "dayTemplate"]
+  static targets = ["input", "hiddenInput", "clearButton", "hours", "minutes", "month", "year", "days", "weekDays", "calendarView", "weekDayTemplate", "emtpyTemplate", "dayTemplate"]
   static values = {
-    locale: String,
-    visibleMonths: Number,
-    weekStart: String,
-    format: Object,
-    clearable: Boolean,
-    inline: Boolean,
-    range: Boolean,
-    multiple: Boolean,
-    timePicker: Boolean,
+    locale: String, // Which locale should be used, if nothing entered, browser locale is used
+    // visibleMonths: Number,
+    weekStart: String, // On which day do we start the week. Only sun and mon are supported atm.
+    format: Object, // JSON date-format - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
+    clearable: Boolean, // Whether it is allowed to clear the value
+    inline: Boolean, // Whether the calendar should be shown inline
+    // range: Boolean,
+    // multiple: Boolean,
+    timePicker: Boolean, // Whether to show the timePicker
   }
 
   connect() {
     if (!this.localeValue) {
       this.localeValue = navigator.language
+    }
+
+    if (!this.clearableValue) {
+      this.clearButtonTarget.classList.add("hidden")
     }
 
     let today = new Date()
@@ -28,22 +32,24 @@ export default class extends ApplicationController {
       this.currentValue = new Date(today.getFullYear(), today.getMonth(), today.getDate(), today.getHours(), today.getMinutes(), 0)
     }
 
-    this.popperInstance = createPopper(this.element, this.calendarViewTarget, {
-      offset: [-20, 2],
-      placement: "bottom-start",
-      modifiers: [
-        {
-          name: "flip",
-          enabled: true,
-          options: {
-            boundary: this.element.closest(".satis-card"),
+    if (!this.inlineValue) {
+      this.popperInstance = createPopper(this.element, this.calendarViewTarget, {
+        offset: [-20, 2],
+        placement: "bottom-start",
+        modifiers: [
+          {
+            name: "flip",
+            enabled: true,
+            options: {
+              boundary: this.element.closest(".satis-card"),
+            },
           },
-        },
-        {
-          name: "preventOverflow",
-        },
-      ],
-    })
+          {
+            name: "preventOverflow",
+          },
+        ],
+      })
+    }
 
     this.boundClickedOutside = this.clickedOutside.bind(this)
     if (!this.inlineValue) {
@@ -62,13 +68,21 @@ export default class extends ApplicationController {
    **************/
 
   clear(event) {
+    if (this.clearableValue) {
+      this.currentValue = new Date()
+      this.hiddenInputTarget.value = ""
+      this.refreshCalendar()
+      this.inputTarget.value = ""
+    }
     event.preventDefault()
   }
 
   showCalendar(event) {
     this.calendarViewTarget.classList.remove("hidden")
     this.calendarViewTarget.setAttribute("data-show", "")
-    this.popperInstance.update()
+    if (!this.inlineValue) {
+      this.popperInstance.update()
+    }
   }
 
   hideCalendar(event) {
@@ -126,7 +140,12 @@ export default class extends ApplicationController {
 
   refreshInput() {
     this.hiddenInputTarget.value = this.currentValue.toISOString()
-    this.inputTarget.value = Intl.DateTimeFormat(this.localeValue, this.formatValue).format(this.currentValue)
+    let format = this.formatValue
+    if (!this.timePickerValue) {
+      delete format["hour"]
+      delete format["minute"]
+    }
+    this.inputTarget.value = Intl.DateTimeFormat(this.localeValue, format).format(this.currentValue)
   }
 
   refreshCalendar() {
@@ -141,8 +160,12 @@ export default class extends ApplicationController {
     // Deal with AM/PM
     // new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })
 
-    this.hoursTarget.value = ("" + this.currentValue.getHours()).padStart(2, "0")
-    this.minutesTarget.value = ("" + this.currentValue.getMinutes()).padStart(2, "0")
+    if (this.hasHoursTarget) {
+      this.hoursTarget.value = ("" + this.currentValue.getHours()).padStart(2, "0")
+    }
+    if (this.hasMinutesTarget) {
+      this.minutesTarget.value = ("" + this.currentValue.getMinutes()).padStart(2, "0")
+    }
     this.daysTarget.innerHTML = ""
     this.monthDays.forEach((day) => {
       if (day == " ") {
@@ -175,7 +198,12 @@ export default class extends ApplicationController {
   }
 
   isCurrent(date) {
-    return date.getDate() === this.currentValue.getDate() && date.getMonth() === this.currentValue.getMonth() && date.getFullYear() === this.currentValue.getFullYear()
+    return (
+      this.hiddenInputTarget.value.length > 0 &&
+      date.getDate() === this.currentValue.getDate() &&
+      date.getMonth() === this.currentValue.getMonth() &&
+      date.getFullYear() === this.currentValue.getFullYear()
+    )
   }
 
   get monthName() {

@@ -1,12 +1,12 @@
-div data-controller="satis-date-time-picker" data-satis-date-time-picker-time-picker-value=options[:time_picker] data-satis-date-time-picker-week-start-value="mon" data-satis-date-time-picker-inline-value=inline data-satis-date-time-picker-format-value='{ "weekday": "long", "month": "short", "day": "numeric", "hour": "numeric", "minute": "numeric", "hour12": false }'
+div data-controller="satis-date-time-picker" data-satis-date-time-picker-time-picker-value=time_picker data-satis-date-time-picker-clearable-value=clearable data-satis-date-time-picker-week-start-value="mon" data-satis-date-time-picker-inline-value=inline data-satis-date-time-picker-format-value=JSON.dump(format)
   .relative.flex.items-center
     = form.hidden attribute, input_html: { "data-satis-date-time-picker-target" => "hiddenInput", value: (form.object.send(attribute)||Time.now).iso8601 }
     input.form-control data-action="focus->satis-date-time-picker#showCalendar" data-satis-date-time-picker-target="input"
     .absolute.inset-y-0.right-0.flex.py-1.5.pr-1.5
-      button.cursor-pointer.w-6.h-full.flex.items-center.text-gray-400.outline-none.focus:outline-none data-satis-date-time-picker-time-target="clearButton" data-action="click->satis-date-time-picker#clear"
+      button.cursor-pointer.w-6.h-full.flex.items-center.text-gray-400.outline-none.focus:outline-none data-satis-date-time-picker-target="clearButton" data-action="click->satis-date-time-picker#clear"
         i.fas.fa-xmark
 
-  .container.shadow.bg-white.border.border-gray-300.dark:bg-gray-800.dark:border-gray-700.rounded.p-4.w-72 class="#{inline ? '' : 'hidden'}" data-satis-date-time-picker-target="calendarView"
+  .container.shadow.bg-white.border.border-gray-300.dark:bg-gray-800.dark:border-gray-700.rounded.p-4.w-72 class="#{inline ? 'inline-block' : 'hidden'}" data-satis-date-time-picker-target="calendarView"
     .flex.justify-between.items-center.mb-2
       div
         span.text-lg.font-bold.text-gray-800 data-satis-date-time-picker-target="month"
@@ -25,20 +25,21 @@ div data-controller="satis-date-time-picker" data-satis-date-time-picker-time-pi
 
     .grid.grid-cols-7 data-satis-date-time-picker-target="days"
 
-    .flex.items-center.py-2.space-x-2
-      label.flex-grow.text-sm.text-gray-500 Time
-      .flex.items-center.space-x-2
-        .bg-gray-100.rounded-md.w-full.text-right.flex.items-center.border.border-gray-100.focus:border-blue-500.focus:ring-2.focus:ring-blue-500.focus:outline-none.focus:ring-opacity-50 style=("caret-color: transparent;")
-          input.text-center.w-8.border-transparent.bg-transparent.p-0.h-6.text-sm.transition.duration-100.ease-in-out.border.border-transparent.focus:border-blue-500.focus:ring-2.focus:ring-blue-500.focus:outline-none.focus:ring-opacity-50.rounded inputmode="numeric" type="text" data-satis-date-time-picker-target="hours" data-action="satis-date-time-picker#changeHours keypress->satis-date-time-picker#keyPress"
-          span contenteditable="false"
-            | :
-          input.text-center.w-8.border-transparent.bg-transparent.p-0.h-6.text-sm.transition.duration-100.ease-in-out.border.border-transparent.focus:border-blue-500.focus:ring-2.focus:ring-blue-500.focus:outline-none.focus:ring-opacity-50.rounded inputmode="numeric" type="text" data-satis-date-time-picker-target="minutes" data-action="satis-date-time-picker#changeMinutes keypress->satis-date-time-picker#keyPress"
-        /span.relative.inline-flex.flex-shrink-0.transition.duration-200.ease-in-out.bg-gray-100.border.border-transparent.rounded.cursor-pointer.focus:border-blue-500.focus:ring-2.focus:ring-blue-500.focus:outline-none.focus:ring-opacity-50 aria-checked="false" role="checkbox" tabindex="0"
-          input type="hidden" value="AM" /
-          span.flex.items-center.justify-center.w-6.h-6.text-xs.text-gray-500.rounded-sm aria-hidden="true"  AM
-          span.flex.items-center.justify-center.w-6.h-6.text-xs.text-gray-500.rounded-sm aria-hidden="true"  PM
-          span.absolute.flex.items-center.justify-center.w-6.h-6.text-xs.text-gray-800.transition.duration-200.ease-in-out.transform.translate-x-0.bg-white.rounded.shadow aria-hidden="true"  AM
-        /a.text-blue-600.text-sm.uppercase.font-semibold.transition.duration-100.ease-in-out.border.border-transparent.focus:border-blue-500.focus:ring-2.focus:ring-blue-500.focus:outline-none.focus:ring-opacity-50.rounded.cursor-pointer href="#"  Ok
+    - if time_picker
+      .flex.items-center.py-2.space-x-2
+        label.flex-grow.text-sm.text-gray-500 Time
+        .flex.items-center.space-x-2
+          .bg-gray-100.rounded-md.w-full.text-right.flex.items-center.border.border-gray-100.focus:border-blue-500.focus:ring-2.focus:ring-blue-500.focus:outline-none.focus:ring-opacity-50 style=("caret-color: transparent;")
+            input.text-center.w-8.border-transparent.bg-transparent.p-0.h-6.text-sm.transition.duration-100.ease-in-out.border.border-transparent.focus:border-blue-500.focus:ring-2.focus:ring-blue-500.focus:outline-none.focus:ring-opacity-50.rounded inputmode="numeric" type="text" data-satis-date-time-picker-target="hours" data-action="satis-date-time-picker#changeHours keypress->satis-date-time-picker#keyPress"
+            span contenteditable="false"
+              | :
+            input.text-center.w-8.border-transparent.bg-transparent.p-0.h-6.text-sm.transition.duration-100.ease-in-out.border.border-transparent.focus:border-blue-500.focus:ring-2.focus:ring-blue-500.focus:outline-none.focus:ring-opacity-50.rounded inputmode="numeric" type="text" data-satis-date-time-picker-target="minutes" data-action="satis-date-time-picker#changeMinutes keypress->satis-date-time-picker#keyPress"
+          /span.relative.inline-flex.flex-shrink-0.transition.duration-200.ease-in-out.bg-gray-100.border.border-transparent.rounded.cursor-pointer.focus:border-blue-500.focus:ring-2.focus:ring-blue-500.focus:outline-none.focus:ring-opacity-50 aria-checked="false" role="checkbox" tabindex="0"
+            input type="hidden" value="AM" /
+            span.flex.items-center.justify-center.w-6.h-6.text-xs.text-gray-500.rounded-sm aria-hidden="true"  AM
+            span.flex.items-center.justify-center.w-6.h-6.text-xs.text-gray-500.rounded-sm aria-hidden="true"  PM
+            span.absolute.flex.items-center.justify-center.w-6.h-6.text-xs.text-gray-800.transition.duration-200.ease-in-out.transform.translate-x-0.bg-white.rounded.shadow aria-hidden="true"  AM
+          /a.text-blue-600.text-sm.uppercase.font-semibold.transition.duration-100.ease-in-out.border.border-transparent.focus:border-blue-500.focus:ring-2.focus:ring-blue-500.focus:outline-none.focus:ring-opacity-50.rounded.cursor-pointer href="#"  Ok
 
     template data-satis-date-time-picker-target="emtpyTemplate"
       .text-center.border.p-1.border-transparent.text-sm
