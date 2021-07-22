@@ -120,11 +120,11 @@ module Satis
         switch_input(method, options, &block)
       end
 
-      # Date time pickr
-      def date_time_picker(method, options = {}, &block)
+      # A hidden input
+      def hidden(method, options = {}, &block)
         @form_options = options
 
-        date_time_input(method, options, &block)
+        hidden_input(method, options, &block)
       end
 
       # Non public
@@ -132,7 +132,8 @@ module Satis
       def input_type_for(method, options)
         object_type = object_type_for_method(method)
         input_type = case object_type
-                     when :date then :string
+                     when :date then :date_time
+                     when :datetime then :date_time
                      when :integer then :string
                      when :float then :string
                      else object_type
@@ -204,8 +205,8 @@ module Satis
         end
       end
 
-      def hidden_input(method, _options = {})
-        hidden_field(method)
+      def hidden_input(method, options = {})
+        hidden_field(method, options[:input_html])
       end
 
       # Inputs and helpers
@@ -276,7 +277,14 @@ module Satis
         end
       end
 
+      # wrapper_html: { data: { 'date-time-picker-time-picker': 'true', controller: 'date-time-picker', 'date-time-picker-start-date' => (@holiday.start_at || params[:holiday]&.[](:start_at) && Time.parse(params[:holiday][:start_at]) || Time.current)&.iso8601 } }
       def date_time_input(method, options = {}, &block)
+        case object_type_for_method(method)
+        when :date
+          options[:time_picker] = options.key?(:time_picker) ? options[:time_picker] : false
+        when :datetime
+          options[:time_picker] = options.key?(:time_picker) ? options[:time_picker] : true
+        end
         form_group(method, options) do
           safe_join [
             (custom_label(method, options[:label]) unless options[:label] == false),

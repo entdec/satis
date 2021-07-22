@@ -3,11 +3,12 @@ import { createPopper } from "@popperjs/core"
 import { debounce } from "../../../../frontend/utils"
 
 export default class extends ApplicationController {
-  static targets = ["hours", "minutes", "month", "year", "days", "weekDays", "calendarView", "weekDayTemplate", "emtpyTemplate", "dayTemplate"]
+  static targets = ["input", "hiddenInput", "hours", "minutes", "month", "year", "days", "weekDays", "calendarView", "weekDayTemplate", "emtpyTemplate", "dayTemplate"]
   static values = {
+    locale: String,
     visibleMonths: Number,
     weekStart: String,
-    format: String,
+    format: Object,
     clearable: Boolean,
     inline: Boolean,
     range: Boolean,
@@ -16,13 +17,16 @@ export default class extends ApplicationController {
   }
 
   connect() {
+    if (!this.localeValue) {
+      this.localeValue = navigator.language
+    }
+
     let today = new Date()
-
-    this.currentDate = today
-
-    this.datepickerValue = new Date(this.year, this.month, today.getDate()).toDateString()
-
-    this.display()
+    if (this.hiddenInputTarget.value) {
+      this.currentValue = new Date(Date.parse(this.hiddenInputTarget.value))
+    } else {
+      this.currentValue = new Date(today.getFullYear(), today.getMonth(), today.getDate(), today.getHours(), today.getMinutes(), 0)
+    }
 
     this.popperInstance = createPopper(this.element, this.calendarViewTarget, {
       offset: [-20, 2],
@@ -45,13 +49,21 @@ export default class extends ApplicationController {
     if (!this.inlineValue) {
       window.addEventListener("click", this.boundClickedOutside)
     }
+
+    this.refreshCalendar()
   }
 
   disconnect() {
     window.removeEventListener("click", this.boundClickedOutside)
   }
 
-  clear(event) {}
+  /**************
+   *   ACTIONS  *
+   **************/
+
+  clear(event) {
+    event.preventDefault()
+  }
 
   showCalendar(event) {
     this.calendarViewTarget.classList.remove("hidden")
@@ -64,48 +76,97 @@ export default class extends ApplicationController {
     this.calendarViewTarget.removeAttribute("data-show")
   }
 
-  previousMonth() {
-    this.currentDate = new Date(new Date(this.currentDate).setMonth(this.currentDate.getMonth() - 1))
-    this.display()
+  previousMonth(event) {
+    this.currentValue = new Date(new Date(this.currentValue).setMonth(this.currentValue.getMonth() - 1))
+    this.refreshCalendar()
   }
 
-  nextMonth() {
-    this.currentDate = new Date(new Date(this.currentDate).setMonth(this.currentDate.getMonth() + 1))
-    this.display()
+  nextMonth(event) {
+    this.currentValue = new Date(new Date(this.currentValue).setMonth(this.currentValue.getMonth() + 1))
+    this.refreshCalendar()
   }
 
-  display() {
+  clickedOutside(event) {
+    if (event.target.tagName == "svg" || event.target.tagName == "path") {
+      return
+    }
+    if (!this.element.contains(event.target)) {
+      this.hideCalendar(event)
+    }
+  }
+
+  changeHours(event) {
+    this.currentValue = new Date(new Date(this.currentValue).setHours(+event.target.value))
+    this.refreshInput()
+    event.preventDefault()
+  }
+
+  changeMinutes(event) {
+    this.currentValue = new Date(new Date(this.currentValue).setMinutes(+event.target.value))
+    this.refreshInput()
+    event.preventDefault()
+  }
+
+  keyPress(event) {
+    var code = event.keyCode || event.which
+    if (code == 13) {
+      event.preventDefault()
+      event.cancelBubble = true
+    }
+  }
+
+  selectDay(event) {
+    this.currentValue = new Date(new Date(this.currentValue).setDate(+event.target.innerText))
+    this.refreshCalendar()
+  }
+
+  /***********
+   * HELPERS *
+   ***********/
+
+  refreshInput() {
+    this.hiddenInputTarget.value = this.currentValue.toISOString()
+    this.inputTarget.value = Intl.DateTimeFormat(this.localeValue, this.formatValue).format(this.currentValue)
+  }
+
+  refreshCalendar() {
     this.monthTarget.innerHTML = this.monthName
-    this.yearTarget.innerHTML = this.currentDate.getFullYear()
+    this.yearTarget.innerHTML = this.currentValue.getFullYear()
 
     this.weekDaysTarget.innerHTML = ""
-    this.getWeekDays("en-US").forEach((dayName) => {
+    this.getWeekDays(this.localeValue).forEach((dayName) => {
       this.weekDaysTarget.insertAdjacentHTML("beforeend", this.weekDayTemplateTarget.innerHTML.replace(/\${name}/g, dayName))
     })
 
     // Deal with AM/PM
     // new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })
 
-    this.hoursTarget.value = ("" + this.currentDate.getHours()).padStart(2, "0")
-    this.minutesTarget.value = ("" + this.currentDate.getMinutes()).padStart(2, "0")
+    this.hoursTarget.value = ("" + this.currentValue.getHours()).padStart(2, "0")
+    this.minutesTarget.value = ("" + this.currentValue.getMinutes()).padStart(2, "0")
     this.daysTarget.innerHTML = ""
     this.monthDays.forEach((day) => {
       if (day == " ") {
         this.daysTarget.insertAdjacentHTML("beforeend", this.emtpyTemplateTarget.innerHTML)
       } else {
-        let date = new Date(new Date(this.currentDate).setDate(day))
+        let date = new Date(new Date(this.currentValue).setDate(day))
+
+        let tmpDiv = document.createElement("div")
+        tmpDiv.innerHTML = this.dayTemplateTarget.innerHTML.replace(/\${day}/g, day)
+
         if (this.isToday(date)) {
-          let tmpDiv = document.createElement("div")
-          tmpDiv.innerHTML = this.dayTemplateTarget.innerHTML.replace(/\${day}/g, day)
           let div = tmpDiv.querySelector(".text-center")
           div.classList.add("border-red-500", "border")
-
-          this.daysTarget.insertAdjacentHTML("beforeend", tmpDiv.innerHTML)
-        } else {
-          this.daysTarget.insertAdjacentHTML("beforeend", this.dayTemplateTarget.innerHTML.replace(/\${day}/g, day))
         }
+        if (this.isCurrent(date)) {
+          let div = tmpDiv.querySelector(".text-center")
+          div.classList.add("bg-blue-500", "text-white")
+        }
+
+        this.daysTarget.insertAdjacentHTML("beforeend", tmpDiv.innerHTML)
       }
     })
+
+    this.refreshInput()
   }
 
   isToday(date) {
@@ -113,8 +174,12 @@ export default class extends ApplicationController {
     return date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear()
   }
 
+  isCurrent(date) {
+    return date.getDate() === this.currentValue.getDate() && date.getMonth() === this.currentValue.getMonth() && date.getFullYear() === this.currentValue.getFullYear()
+  }
+
   get monthName() {
-    return new Date(this.currentDate).toLocaleString("default", { month: "long" })
+    return new Date(this.currentValue).toLocaleString("default", { month: "long" })
   }
 
   getWeekDays(locale) {
@@ -131,11 +196,11 @@ export default class extends ApplicationController {
   get monthDays() {
     let results = []
 
-    let monthStart = this.currentDate.getDay()
+    let monthStart = this.currentValue.getDay()
     if (this.weekStartValue == "sun") {
       monthStart = monthStart + 1
     }
-    let monthEnd = new Date(new Date(new Date(this.currentDate).setMonth(this.currentDate.getMonth() + 1)).setDate(0)).getDate()
+    let monthEnd = new Date(new Date(new Date(this.currentValue).setMonth(this.currentValue.getMonth() + 1)).setDate(0)).getDate()
 
     for (let index = 0; index < monthStart; index++) {
       results.push(" ")
@@ -146,14 +211,5 @@ export default class extends ApplicationController {
     }
 
     return results
-  }
-
-  clickedOutside(event) {
-    if (event.target.tagName == "svg" || event.target.tagName == "path") {
-      return
-    }
-    if (!this.element.contains(event.target)) {
-      this.hideCalendar()
-    }
   }
 }
