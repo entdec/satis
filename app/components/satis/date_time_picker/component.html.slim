@@ -1,4 +1,4 @@
-div data-controller="satis-date-time-picker" data-satis-date-time-picker-time-picker-value=time_picker data-satis-date-time-picker-clearable-value=clearable data-satis-date-time-picker-week-start-value="mon" data-satis-date-time-picker-inline-value=inline data-satis-date-time-picker-format-value=JSON.dump(format)
+div data-controller="satis-date-time-picker" data-satis-date-time-picker-time-picker-value=time_picker data-satis-date-time-picker-clearable-value=clearable data-satis-date-time-picker-week-start-value="1" data-satis-date-time-picker-inline-value=inline data-satis-date-time-picker-format-value=JSON.dump(format)
   .relative.flex.items-center
     = form.hidden attribute, input_html: { "data-satis-date-time-picker-target" => "hiddenInput", value: (form.object.send(attribute)||Time.now).iso8601 }
     input.form-control data-action="focus->satis-date-time-picker#showCalendar" data-satis-date-time-picker-target="input"

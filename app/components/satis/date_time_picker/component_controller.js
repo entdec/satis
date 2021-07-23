@@ -7,7 +7,7 @@ export default class extends ApplicationController {
   static values = {
     locale: String, // Which locale should be used, if nothing entered, browser locale is used
     // visibleMonths: Number,
-    weekStart: String, // On which day do we start the week. Only sun and mon are supported atm.
+    weekStart: Number, // On which day do we start the week. Only sun and mon are supported atm. // Sunday - Saturday : 0 - 6
     format: Object, // JSON date-format - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
     clearable: Boolean, // Whether it is allowed to clear the value
     inline: Boolean, // Whether the calendar should be shown inline
@@ -215,8 +215,10 @@ export default class extends ApplicationController {
     return new Date(this.currentValue).toLocaleString("default", { month: "long" })
   }
 
+  // Gets the names of week days
   getWeekDays(locale) {
-    const baseDate = this.weekStartValue == "sun" ? new Date(Date.UTC(2021, 1, 0)) : new Date(Date.UTC(2021, 1, 1))
+    // new Date(Date.UTC(2021, 1, 1)) is a monday (1 Feb 2021)
+    const baseDate = new Date(Date.UTC(2021, 1, this.weekStartValue))
     let weekDays = []
     for (let i = 0; i < 7; i++) {
       weekDays.push(baseDate.toLocaleDateString(locale, { weekday: "short" }))
@@ -229,10 +231,13 @@ export default class extends ApplicationController {
   get monthDays() {
     let results = []
 
-    let monthStart = this.currentValue.getDay()
-    if (this.weekStartValue == "sun") {
-      monthStart = monthStart + 1
+    // Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6
+    let dayOfFirstOfMonth = new Date(new Date(this.currentValue).setDate(0)).getDay() + 1 - this.weekStartValue
+    let monthStart = dayOfFirstOfMonth
+    if (dayOfFirstOfMonth < 0) {
+      monthStart += 7
     }
+
     let monthEnd = new Date(new Date(new Date(this.currentValue).setMonth(this.currentValue.getMonth() + 1)).setDate(0)).getDate()
 
     for (let index = 0; index < monthStart; index++) {
