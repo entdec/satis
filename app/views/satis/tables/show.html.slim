@@ -1,4 +1,4 @@
-turbo-frame id="#{params[:id]}"
+turbo-frame id="#{params[:table_name]}"
   .satis-table.relative data-controller="satis-table" data-satis-table-current-page-value=@table.paged_scope.current_page data-satis-table-total-pages-value=@table.paged_scope.total_pages
 
     .hidden.absolute.inset-0.pt-20.flex.justify-center.items-start.z-10.bg-gray-500.bg-opacity-70.opacity-0 data-satis-table-target="overlay"
@@ -17,7 +17,7 @@ turbo-frame id="#{params[:id]}"
             .trash.flex.absolute.top-19.w-full.hidden
               .flex-grow.bg-gray-50.text-center.h-16
                 i.fa.fa-trash.mt-5
-            = satis.form_with model: @filters, url: _satis.table_path(params[:id]) do |f|
+            = satis.form_with model: @filters, url: _satis.table_path(params[:table_name]) do |f|
               table.min-w-full.divide-y.divide-gray-200
                 thead.bg-gray-50.sticky.top-0
 
@@ -65,7 +65,7 @@ turbo-frame id="#{params[:id]}"
                       td.px-3.py-4.whitespace-nowrap.text-sm.text-gray-500 style="min-width: 200px;"
                         - filter = @table.filter_by_attribute(column.attribute)
                         - if filter&.collection
-                          = f.input filter.parameter, url: filter_collection_tables_path(table: params[:id], filter: column.attribute), as: :dropdown, label: false, input_html: { "data-action" => "change->satis-table#filter", "data-satis-table-target" => "filter" }
+                          = f.input filter.parameter, url: filter_collection_tables_path(table: params[:table_name], filter: column.attribute), as: :dropdown, label: false, input_html: { "data-action" => "change->satis-table#filter", "data-satis-table-target" => "filter" }
                         - elsif filter
                           = f.input filter.parameter, input_html: { "class" => 'form-control', "data-action" => "change->satis-table#filter", "data-satis-table-target" => "filter" }, value: params[filter.parameter], label: false
 
@@ -81,11 +81,11 @@ turbo-frame id="#{params[:id]}"
     .bg-white.px-4.py-3.flex.items-center.justify-between.border-t.border-gray-200.sm:px-6
       .flex-1.flex.justify-between.sm:hidden
         - if prev_page_url @table.send(:paged_scope)
-          = link_to_prev_page @table.send(:paged_scope), 'Previous', class: 'relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50', 'data-turbo-frame'=> "#{params[:id]}"
+          = link_to_prev_page @table.send(:paged_scope), 'Previous', class: 'relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50', 'data-turbo-frame'=> "#{params[:table_name]}"
         - else
           div.inline-flex
         - if next_page_url @table.send(:paged_scope)
-          = link_to_next_page @table.send(:paged_scope), 'Next', class: 'ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50', 'data-turbo-frame'=> "#{params[:id]}"
+          = link_to_next_page @table.send(:paged_scope), 'Next', class: 'ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50', 'data-turbo-frame'=> "#{params[:table_name]}"
         - else
           div.inline-flex
         /a.ml-3.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.text-sm.font-medium.rounded-md.text-gray-700.bg-white.hover:bg-gray-50 href="#"
@@ -93,6 +93,6 @@ turbo-frame id="#{params[:id]}"
       .hidden.sm:flex-1.sm:flex.sm:items-center.sm:justify-between
         div
           p.text-sm.text-gray-700
-            = page_entries_info @table.send(:paged_scope), entry_name: 'row'
+            = page_entries_info @table.paged_scope, entry_name: 'row'
         div
           = paginate @table.send(:paged_scope), views_prefix: 'satis', theme: 'tables'

@@ -18,9 +18,7 @@ module Satis
     end
 
     def show
-      @table ||= ActionTable::ActionTable.for_name(params[:id], params.reject do |p|
-                                                                  %w[controller action id].include? p
-                                                                end.permit!)
+      @table ||= ActionTable::ActionTable.for_name(params[:table_name], params.permit!)
 
       Filters.define_method :attributes do
         @table.filters.map(&:parameter)
@@ -34,7 +32,7 @@ module Satis
     end
 
     def filter_collection
-      @table ||= ActionTable::ActionTable.for_name(params[:table])
+      @table ||= ActionTable::ActionTable.for_name(params[:table_name], params.permit!)
       @filter = @table.filter_by_attribute(params[:filter])
 
       @items = @filter.collection.call
