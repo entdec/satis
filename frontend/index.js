@@ -53,7 +53,7 @@ export class Satis {
     }
 
     // Start of keyboard shortcuts
-    document.addEventListener("mousemove", (event) => {
+    document.addEventListener("mouseover", (event) => {
       this.application.satis.mouseElement = event.target
     })
 
@@ -67,6 +67,56 @@ export class Satis {
             index = 10
           }
           controller.open(index)
+        }
+      }
+    })
+
+    Mousetrap.bind(["h", "left", "pageup"], (event, combo) => {
+      if (this.application.satis.mouseElement) {
+        let elm = this.application.satis.mouseElement.closest('[data-controller="satis-table"]')
+        if (elm) {
+          let controller = elm["satis-table"]
+          controller.prevPage(event)
+        }
+      }
+    })
+
+    Mousetrap.bind(["l", "right", "pagedown"], (event, combo) => {
+      if (this.application.satis.mouseElement) {
+        let elm = this.application.satis.mouseElement.closest('[data-controller="satis-table"]')
+        if (elm) {
+          let controller = elm["satis-table"]
+          controller.nextPage(event)
+        }
+      }
+    })
+
+    Mousetrap.bind(["e"], (event, combo) => {
+      if (this.application.satis.mouseElement) {
+        let elm = this.application.satis.mouseElement.closest('[data-controller="satis-table"]')
+        if (elm) {
+          let controller = elm["satis-table"]
+          controller.export(event)
+        }
+      }
+    })
+
+    Mousetrap.bind(["meta+k"], (event, combo) => {
+      if (this.application.satis.mouseElement) {
+        let elm = this.application.satis.mouseElement.closest('[data-controller="satis-table"]')
+        if (elm) {
+          let controller = elm["satis-table"]
+          controller.openSearch(event)
+        }
+      }
+    })
+
+    Mousetrap.bind(["esc"], (event, combo) => {
+      if (this.application.satis.mouseElement) {
+        let elm = this.application.satis.mouseElement.closest('[data-controller="satis-table"]')
+        if (elm) {
+          let controller = elm["satis-table"]
+          controller.reset(event)
         }
       }
     })

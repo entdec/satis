@@ -5,10 +5,17 @@ import { debounce } from "../../../../frontend/utils"
 import Sortable from "sortablejs"
 
 export default class extends ApplicationController {
-  static targets = ["header", "hiddenHeader", "column", "filterRow", "filter"]
+  static targets = ["header", "hiddenHeader", "column", "filterRow", "filter", "filterIndicator", "overlay", "modal"]
+  static values = {
+    currentPage: Number,
+    totalPages: Number,
+  }
 
   connect() {
     super.connect()
+
+    this.searchOpen = false
+    this.boundSearchKeydown = this.searchKeydown.bind(this)
 
     new Sortable(this.hiddenHeaderTarget, {
       group: "columns",
@@ -25,25 +32,25 @@ export default class extends ApplicationController {
         this.columnDragged(event)
       },
     })
-
-    this.debouncedShowHideFilters = debounce(() => {
-      if (this.mouseIn) {
-        this.filterRowTarget.classList.remove("hidden")
-      } else {
-        this.filterRowTarget.classList.add("hidden")
-      }
-    }, 500)
   }
 
   // Show and hide the filters header when you enter or leave the columns header
-  showFilters(event) {
-    this.mouseIn = true
-    this.debouncedShowHideFilters()
-  }
+  toggleFilters(event) {
+    if (this.filterRowTarget.classList.contains("hidden")) {
+      this.filterRowTarget.classList.remove("hidden")
+    } else {
+      this.filterRowTarget.classList.add("hidden")
+    }
 
-  hideFilters(event) {
-    this.mouseIn = false
-    this.debouncedShowHideFilters()
+    let indicator = event.target.closest('[data-satis-table-target="filterIndicator"]')
+    let filter = indicator.getAttribute("data-filter")
+
+    let input = this.filterRowTarget.querySelector(`[name="tables_controller_filters[${filter}]"]`)
+    if (input) {
+      input.dispatchEvent(new Event("focus"))
+    }
+
+    event.cancelBubble = true
   }
 
   //
@@ -57,6 +64,16 @@ export default class extends ApplicationController {
         ourUrl.searchParams.set(paramName, element.value)
       } else {
         ourUrl.searchParams.delete(paramName)
+      }
+    })
+
+    this.filterIndicatorTargets.forEach((element) => {
+      let paramName = element.getAttribute("data-column")
+      if (ourUrl.searchParams.get(paramName)) {
+        element.classList.add("text-blue-600")
+        let icon = element.querySelector(".fa-filter")
+        icon.classList.remove("fa-light")
+        icon.classList.add("fa-solid")
       }
     })
 
@@ -98,4 +115,81 @@ export default class extends ApplicationController {
   }
 
   refreshTable() {}
+
+  prevPage() {
+    if (this.currentPageValue > 1) {
+      let turboFrame = this.element.closest("turbo-frame")
+      if (turboFrame) {
+        let ourUrl = new URL(turboFrame.src, window.location.href)
+        ourUrl.searchParams.set("page", this.currentPageValue - 1)
+        turboFrame.src = ourUrl
+      }
+    }
+  }
+
+  nextPage() {
+    if (this.currentPageValue < this.totalPagesValue) {
+      let turboFrame = this.element.closest("turbo-frame")
+      if (turboFrame) {
+        let ourUrl = new URL(turboFrame.src, window.location.href)
+        ourUrl.searchParams.set("page", this.currentPageValue + 1)
+        turboFrame.src = ourUrl
+      }
+    }
+  }
+
+  export(event) {
+    let turboFrame = this.element.closest("turbo-frame")
+
+    window.location.replace(`/action_table/${turboFrame.id}/export.xlsx`)
+  }
+
+  openSearch(event) {
+    this.searchOpen = true
+    this.overlayTarget.classList.remove("hidden")
+    this.overlayTarget.classList.remove("ease-in", "duration-200", "opacity-0")
+    this.overlayTarget.classList.add("ease-out", "duration-300", "opacity-100")
+    let input = this.modalTarget.querySelector("input")
+    input.focus()
+    input.addEventListener("keydown", this.boundSearchKeydown)
+  }
+
+  closeSearch(event) {
+    let input = this.modalTarget.querySelector("input")
+    input.blur()
+    input.removeEventListener("keydown", this.boundSearchKeydown)
+    this.searchOpen = false
+    this.overlayTarget.classList.remove("ease-out", "duration-300", "opacity-100")
+    this.overlayTarget.classList.add("ease-in", "duration-200", "opacity-0")
+    this.overlayTarget.classList.add("hidden")
+  }
+
+  reset(event) {
+    if (this.searchOpen) {
+      this.closeSearch(event)
+    } else {
+      let turboFrame = this.element.closest("turbo-frame")
+      if (turboFrame) {
+        let ourUrl = new URL(turboFrame.src, window.location.href)
+        ourUrl.searchParams.forEach((value, key) => {
+          ourUrl.searchParams.delete(key)
+        })
+        turboFrame.src = ourUrl
+      }
+    }
+  }
+
+  searchKeydown(event) {
+    if (event.key == "Escape") {
+      this.closeSearch(event)
+    } else if (event.key == "Enter") {
+      let turboFrame = this.element.closest("turbo-frame")
+      if (turboFrame) {
+        let ourUrl = new URL(turboFrame.src, window.location.href)
+        ourUrl.searchParams.set("query", event.target.value)
+        turboFrame.src = ourUrl
+      }
+      this.closeSearch()
+    }
+  }
 }
