@@ -80,12 +80,12 @@ turbo-frame id="#{params[:table_name]}"
     / Footer
     .bg-white.px-4.py-3.flex.items-center.justify-between.border-t.border-gray-200.sm:px-6
       .flex-1.flex.justify-between.sm:hidden
-        - if prev_page_url @table.send(:paged_scope)
-          = link_to_prev_page @table.send(:paged_scope), 'Previous', class: 'relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50', 'data-turbo-frame'=> "#{params[:table_name]}"
+        - if prev_page_url @table.paged_scope
+          = link_to_prev_page @table.paged_scope, 'Previous', class: 'relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50', 'data-turbo-frame'=> "#{params[:table_name]}"
         - else
           div.inline-flex
-        - if next_page_url @table.send(:paged_scope)
-          = link_to_next_page @table.send(:paged_scope), 'Next', class: 'ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50', 'data-turbo-frame'=> "#{params[:table_name]}"
+        - if next_page_url @table.paged_scope
+          = link_to_next_page @table.paged_scope, 'Next', class: 'ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50', 'data-turbo-frame'=> "#{params[:table_name]}"
         - else
           div.inline-flex
         /a.ml-3.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.text-sm.font-medium.rounded-md.text-gray-700.bg-white.hover:bg-gray-50 href="#"
@@ -95,4 +95,4 @@ turbo-frame id="#{params[:table_name]}"
           p.text-sm.text-gray-700
             = page_entries_info @table.paged_scope, entry_name: 'row'
         div
-          = paginate @table.send(:paged_scope), views_prefix: 'satis', theme: 'tables'
+          = paginate @table.paged_scope, views_prefix: 'satis', theme: 'tables'
