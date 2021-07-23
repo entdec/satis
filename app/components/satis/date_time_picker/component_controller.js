@@ -147,10 +147,12 @@ export default class extends ApplicationController {
 
   selectDay(event) {
     let oldCurrentValue = this.selectedValue[0]
-    if (this.timePickerValue && !this.rangeValue && !this.multipleValue) {
+    if (!this.rangeValue && !this.multipleValue) {
       this.selectedValue[0] = new Date(new Date(this.displayValue).setDate(+event.target.innerText))
-      this.selectedValue[0].setHours(oldCurrentValue.getHours())
-      this.selectedValue[0].setMinutes(oldCurrentValue.getMinutes())
+      if (this.timePickerValue) {
+        this.selectedValue[0].setHours(oldCurrentValue.getHours())
+        this.selectedValue[0].setMinutes(oldCurrentValue.getMinutes())
+      }
       this.currentSelectNr = 1
     } else if (this.rangeValue) {
       if (this.currentSelectNr == 1) {
