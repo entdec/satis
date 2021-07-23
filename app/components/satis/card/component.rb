@@ -4,16 +4,15 @@ module Satis
       renders_many :actions
       renders_one :footer
 
-      attr_reader :icon, :title, :description, :menu, :body_html
+      attr_reader :icon, :title, :description, :menu, :content_padding
 
-      def initialize(icon: nil, title: nil, description: nil, menu: nil, body_html: {})
+      def initialize(icon: nil, title: nil, description: nil, menu: nil, content_padding: true)
         super
         @title = title
         @description = description
         @icon = icon
         @menu = menu
-        @body_html = body_html
-        body_html[:class] = 'px-6 py-6' unless @body_html.key? :class
+        @content_padding = content_padding
       end
     end
   end
