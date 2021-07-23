@@ -54,6 +54,10 @@ export default class extends ApplicationController {
     window.removeEventListener("click", this.boundClickedOutside)
   }
 
+  focus(event) {
+    this.searchInputTarget.focus()
+  }
+
   // Called on connect
   display(event) {
     // Put current selection in search field
