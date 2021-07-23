@@ -6,14 +6,14 @@ export default class extends ApplicationController {
   static targets = ["input", "hiddenInput", "clearButton", "hours", "minutes", "month", "year", "days", "weekDays", "calendarView", "weekDayTemplate", "emtpyTemplate", "dayTemplate"]
   static values = {
     locale: String, // Which locale should be used, if nothing entered, browser locale is used
-    // visibleMonths: Number,
-    weekStart: Number, // On which day do we start the week. Only sun and mon are supported atm. // Sunday - Saturday : 0 - 6
+    weekStart: Number, // On which day do we start the week, sunday - saturday : 0 - 6
     format: Object, // JSON date-format - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat
     clearable: Boolean, // Whether it is allowed to clear the value
     inline: Boolean, // Whether the calendar should be shown inline
-    // range: Boolean,
-    // multiple: Boolean,
     timePicker: Boolean, // Whether to show the timePicker
+    range: Boolean, // whether we allow to select a range of dates
+    multiple: Boolean, // whether we allow to select multiple dates
+    // visibleMonths: Number, // TODO: whether we show more than one calendar view
   }
 
   connect() {
@@ -25,13 +25,25 @@ export default class extends ApplicationController {
       this.clearButtonTarget.classList.add("hidden")
     }
 
-    let startDate = new Date()
-    if (this.hiddenInputTarget.value) {
-      startDate = new Date(Date.parse(this.hiddenInputTarget.value))
+    if (this.timePickerValue) {
+      this.rangeValue = false
+      this.multipleValue = false
     }
 
-    this.currentValue = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), startDate.getHours(), startDate.getMinutes(), 0)
-    this.displayValue = new Date(startDate.getFullYear(), startDate.getMonth(), 1)
+    this.selectedValue = []
+    let startDate = new Date()
+    if (this.hiddenInputTarget.value) {
+      this.hiddenInputTarget.value.split(";").forEach((value) => {
+        this.selectedValue.push(new Date(Date.parse(this.hiddenInputTarget.value)))
+      })
+    }
+
+    if (this.selectedValue.length == 0) {
+      this.selectedValue.push(new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), startDate.getHours(), startDate.getMinutes(), 0))
+    }
+
+    this.displayValue = new Date(this.selectedValue[0].getFullYear(), this.selectedValue[0].getMonth(), 1)
+    this.currentSelectNr = this.selectedValue.length
 
     if (!this.inlineValue) {
       this.popperInstance = createPopper(this.element, this.calendarViewTarget, {
@@ -70,8 +82,10 @@ export default class extends ApplicationController {
 
   clear(event) {
     if (this.clearableValue) {
-      this.currentValue = new Date()
-      this.displayValue = this.currentValue
+      this.selectedValue = []
+
+      let today = new Date()
+      this.displayValue = new Date(today.getFullYear(), today.getMonth(), 1)
       this.hiddenInputTarget.value = ""
       this.refreshCalendar()
       this.inputTarget.value = ""
@@ -112,13 +126,13 @@ export default class extends ApplicationController {
   }
 
   changeHours(event) {
-    this.currentValue = new Date(new Date(this.currentValue).setHours(+event.target.value))
+    this.selectedValue[0] = new Date(new Date(this.selectedValue[0]).setHours(+event.target.value))
     this.refreshInputs()
     event.preventDefault()
   }
 
   changeMinutes(event) {
-    this.currentValue = new Date(new Date(this.currentValue).setMinutes(+event.target.value))
+    this.selectedValue[0] = new Date(new Date(this.selectedValue[0]).setMinutes(+event.target.value))
     this.refreshInputs()
     event.preventDefault()
   }
@@ -132,10 +146,25 @@ export default class extends ApplicationController {
   }
 
   selectDay(event) {
-    let oldCurrentValue = this.currentValue
-    this.currentValue = new Date(new Date(this.displayValue).setDate(+event.target.innerText))
-    this.currentValue.setHours(oldCurrentValue.getHours())
-    this.currentValue.setMinutes(oldCurrentValue.getMinutes())
+    let oldCurrentValue = this.selectedValue[0]
+    if (this.timePickerValue && !this.rangeValue && !this.multipleValue) {
+      this.selectedValue[0] = new Date(new Date(this.displayValue).setDate(+event.target.innerText))
+      this.selectedValue[0].setHours(oldCurrentValue.getHours())
+      this.selectedValue[0].setMinutes(oldCurrentValue.getMinutes())
+      this.currentSelectNr = 1
+    } else if (this.rangeValue) {
+      if (this.currentSelectNr == 1) {
+        this.selectedValue = []
+      }
+      this.selectedValue[this.currentSelectNr - 1] = new Date(new Date(this.displayValue).setDate(+event.target.innerText))
+      this.currentSelectNr += 1
+      if (this.currentSelectNr > 2) {
+        this.currentSelectNr = 1
+      }
+    } else if (this.multipleValue) {
+      this.selectedValue[this.currentSelectNr - 1] = new Date(new Date(this.displayValue).setDate(+event.target.innerText))
+      this.currentSelectNr += 1
+    }
 
     this.refreshCalendar()
   }
@@ -144,15 +173,42 @@ export default class extends ApplicationController {
    * HELPERS *
    ***********/
 
+  get maxSelectNr() {
+    let result = 1
+    if (this.rangeValue) {
+      result = 2
+    } else if (this.multipleValue) {
+      result = 0
+    }
+    return result
+  }
+
   // Refreshes the hidden and visible input values
   refreshInputs() {
-    this.hiddenInputTarget.value = this.currentValue.toISOString()
+    let joinChar = ";"
+    if (this.rangeValue) {
+      joinChar = " - "
+    } else if (this.multipleValue) {
+      joinChar = ";"
+    }
+
+    this.hiddenInputTarget.value = this.selectedValue
+      .map((val) => {
+        return val.toISOString()
+      })
+      .join(joinChar)
+
     let format = this.formatValue
     if (!this.timePickerValue) {
       delete format["hour"]
       delete format["minute"]
     }
-    this.inputTarget.value = Intl.DateTimeFormat(this.localeValue, format).format(this.currentValue)
+
+    this.inputTarget.value = this.selectedValue
+      .map((val) => {
+        return Intl.DateTimeFormat(this.localeValue, format).format(val)
+      })
+      .join(joinChar)
   }
 
   // Refreshes the calendar
@@ -169,10 +225,18 @@ export default class extends ApplicationController {
     // new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })
 
     if (this.hasHoursTarget) {
-      this.hoursTarget.value = ("" + this.currentValue.getHours()).padStart(2, "0")
+      if (this.selectedValue[0]) {
+        this.hoursTarget.value = ("" + this.selectedValue[0].getHours()).padStart(2, "0")
+      } else {
+        this.hoursTarget.value = "0" // FIXME: Should be 0:00 in locale
+      }
     }
     if (this.hasMinutesTarget) {
-      this.minutesTarget.value = ("" + this.currentValue.getMinutes()).padStart(2, "0")
+      if (this.selectedValue[0]) {
+        this.minutesTarget.value = ("" + this.selectedValue[0].getMinutes()).padStart(2, "0")
+      } else {
+        this.minutesTarget.value = "00" // FIXME: Should be 0:00 in locale
+      }
     }
     this.daysTarget.innerHTML = ""
     this.monthDays.forEach((day) => {
@@ -188,9 +252,26 @@ export default class extends ApplicationController {
           let div = tmpDiv.querySelector(".text-center")
           div.classList.add("border-red-500", "border")
         }
-        if (this.isCurrent(date)) {
-          let div = tmpDiv.querySelector(".text-center")
-          div.classList.add("bg-blue-500", "text-white")
+        let div = tmpDiv.querySelector(".text-center")
+
+        if (this.isSelected(date)) {
+          if (this.rangeValue && this.selectedValue.length == 2) {
+            if (this.isDate(this.selectedValue[0], date)) {
+              div.classList.add("bg-blue-500", "text-white")
+              div.classList.remove("rounded-r-full")
+            } else if (this.isDate(this.selectedValue[1], date)) {
+              div.classList.add("bg-blue-500", "text-white")
+              div.classList.remove("rounded-l-full")
+            } else if (this.isSelected(date)) {
+              div.classList.remove("rounded-r-full")
+              div.classList.remove("rounded-l-full")
+              div.classList.add("bg-blue-200", "text-white")
+            }
+          } else {
+            div.classList.add("bg-blue-500", "text-white")
+          }
+        } else {
+          div.classList.add("text-gray-700")
         }
 
         this.daysTarget.insertAdjacentHTML("beforeend", tmpDiv.innerHTML)
@@ -206,19 +287,26 @@ export default class extends ApplicationController {
     return date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear()
   }
 
+  isDate(today, date) {
+    return date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear()
+  }
+
   // Is date the currently selected value
-  isCurrent(date) {
-    return (
-      this.hiddenInputTarget.value.length > 0 &&
-      date.getDate() === this.currentValue.getDate() &&
-      date.getMonth() === this.currentValue.getMonth() &&
-      date.getFullYear() === this.currentValue.getFullYear()
-    )
+  isSelected(date) {
+    if (this.rangeValue && this.selectedValue.length == 2) {
+      return date >= this.selectedValue[0] && date <= this.selectedValue[1]
+    } else {
+      return this.selectedValue.some((selDate) => {
+        return date.getDate() === selDate.getDate() && date.getMonth() === selDate.getMonth() && date.getFullYear() === selDate.getFullYear()
+      })
+    }
   }
 
   // Get name of month for current value
   get monthName() {
-    return new Date(this.displayValue).toLocaleString("default", { month: "long" })
+    let result = new Date(this.displayValue).toLocaleString(this.localeValue, { month: "long" })
+    result = result[0].toUpperCase() + result.substring(1)
+    return result
   }
 
   // Gets the names of week days

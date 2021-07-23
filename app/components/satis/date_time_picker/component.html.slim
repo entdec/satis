@@ -1,4 +1,4 @@
-div data-controller="satis-date-time-picker" data-satis-date-time-picker-time-picker-value=time_picker data-satis-date-time-picker-clearable-value=clearable data-satis-date-time-picker-week-start-value="1" data-satis-date-time-picker-inline-value=inline data-satis-date-time-picker-format-value=JSON.dump(format)
+div.satis-date-time-picker data-controller="satis-date-time-picker" data-satis-date-time-picker-time-picker-value=time_picker data-satis-date-time-picker-clearable-value=clearable data-satis-date-time-picker-locale-value="" data-satis-date-time-picker-range-value=range data-satis-date-time-picker-multiple-value=multiple data-satis-date-time-picker-week-start-value="1" data-satis-date-time-picker-inline-value=inline data-satis-date-time-picker-format-value=JSON.dump(format)
   .relative.flex.items-center
     = form.hidden attribute, input_html: { "data-satis-date-time-picker-target" => "hiddenInput", value: (form.object.send(attribute)||Time.now).iso8601 }
     input.form-control data-action="focus->satis-date-time-picker#showCalendar" data-satis-date-time-picker-target="input"
@@ -44,5 +44,5 @@ div data-controller="satis-date-time-picker" data-satis-date-time-picker-time-pi
     template data-satis-date-time-picker-target="emtpyTemplate"
       .text-center.border.p-1.border-transparent.text-sm
     template data-satis-date-time-picker-target="dayTemplate"
-      .px-1
-        a.block.border.border-white.w-8.h-8.cursor-pointer.text-center.text-sm.leading-none.rounded-full.leading-loose.transition.ease-in-out.duration-100.text-gray-700.hover:bg-blue-200 data-action="satis-date-time-picker#selectDay" ${day}
+      div
+        a.block.w-full.h-9.cursor-pointer.text-center.pt-2px.text-sm.rounded-l-full.rounded-r-full.leading-loose.transition.ease-in-out.duration-100.hover:bg-blue-200 data-action="satis-date-time-picker#selectDay" ${day}
