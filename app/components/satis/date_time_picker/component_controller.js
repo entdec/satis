@@ -25,12 +25,13 @@ export default class extends ApplicationController {
       this.clearButtonTarget.classList.add("hidden")
     }
 
-    let today = new Date()
+    let startDate = new Date()
     if (this.hiddenInputTarget.value) {
-      this.currentValue = new Date(Date.parse(this.hiddenInputTarget.value))
-    } else {
-      this.currentValue = new Date(today.getFullYear(), today.getMonth(), today.getDate(), today.getHours(), today.getMinutes(), 0)
+      startDate = new Date(Date.parse(this.hiddenInputTarget.value))
     }
+
+    this.currentValue = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), startDate.getHours(), startDate.getMinutes(), 0)
+    this.displayValue = new Date(startDate.getFullYear(), startDate.getMonth(), 1)
 
     if (!this.inlineValue) {
       this.popperInstance = createPopper(this.element, this.calendarViewTarget, {
@@ -70,6 +71,7 @@ export default class extends ApplicationController {
   clear(event) {
     if (this.clearableValue) {
       this.currentValue = new Date()
+      this.displayValue = this.currentValue
       this.hiddenInputTarget.value = ""
       this.refreshCalendar()
       this.inputTarget.value = ""
@@ -91,12 +93,12 @@ export default class extends ApplicationController {
   }
 
   previousMonth(event) {
-    this.currentValue = new Date(new Date(this.currentValue).setMonth(this.currentValue.getMonth() - 1))
+    this.displayValue = new Date(new Date(this.displayValue).setMonth(this.displayValue.getMonth() - 1))
     this.refreshCalendar()
   }
 
   nextMonth(event) {
-    this.currentValue = new Date(new Date(this.currentValue).setMonth(this.currentValue.getMonth() + 1))
+    this.displayValue = new Date(new Date(this.displayValue).setMonth(this.displayValue.getMonth() + 1))
     this.refreshCalendar()
   }
 
@@ -130,7 +132,11 @@ export default class extends ApplicationController {
   }
 
   selectDay(event) {
-    this.currentValue = new Date(new Date(this.currentValue).setDate(+event.target.innerText))
+    let oldCurrentValue = this.currentValue
+    this.currentValue = new Date(new Date(this.displayValue).setDate(+event.target.innerText))
+    this.currentValue.setHours(oldCurrentValue.getHours())
+    this.currentValue.setMinutes(oldCurrentValue.getMinutes())
+
     this.refreshCalendar()
   }
 
@@ -152,7 +158,7 @@ export default class extends ApplicationController {
   // Refreshes the calendar
   refreshCalendar() {
     this.monthTarget.innerHTML = this.monthName
-    this.yearTarget.innerHTML = this.currentValue.getFullYear()
+    this.yearTarget.innerHTML = this.displayValue.getFullYear()
 
     this.weekDaysTarget.innerHTML = ""
     this.getWeekDays(this.localeValue).forEach((dayName) => {
@@ -173,7 +179,7 @@ export default class extends ApplicationController {
       if (day == " ") {
         this.daysTarget.insertAdjacentHTML("beforeend", this.emtpyTemplateTarget.innerHTML)
       } else {
-        let date = new Date(new Date(this.currentValue).setDate(day))
+        let date = new Date(new Date(this.displayValue).setDate(day))
 
         let tmpDiv = document.createElement("div")
         tmpDiv.innerHTML = this.dayTemplateTarget.innerHTML.replace(/\${day}/g, day)
@@ -212,7 +218,7 @@ export default class extends ApplicationController {
 
   // Get name of month for current value
   get monthName() {
-    return new Date(this.currentValue).toLocaleString("default", { month: "long" })
+    return new Date(this.displayValue).toLocaleString("default", { month: "long" })
   }
 
   // Gets the names of week days
@@ -232,13 +238,13 @@ export default class extends ApplicationController {
     let results = []
 
     // Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6
-    let dayOfFirstOfMonth = new Date(new Date(this.currentValue).setDate(0)).getDay() + 1 - this.weekStartValue
+    let dayOfFirstOfMonth = new Date(new Date(this.displayValue).setDate(0)).getDay() + 1 - this.weekStartValue
     let monthStart = dayOfFirstOfMonth
     if (dayOfFirstOfMonth < 0) {
       monthStart += 7
     }
 
-    let monthEnd = new Date(new Date(new Date(this.currentValue).setMonth(this.currentValue.getMonth() + 1)).setDate(0)).getDate()
+    let monthEnd = new Date(new Date(new Date(this.displayValue).setMonth(this.displayValue.getMonth() + 1)).setDate(0)).getDate()
 
     for (let index = 0; index < monthStart; index++) {
       results.push(" ")
