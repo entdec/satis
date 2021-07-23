@@ -111,13 +111,13 @@ export default class extends ApplicationController {
 
   changeHours(event) {
     this.currentValue = new Date(new Date(this.currentValue).setHours(+event.target.value))
-    this.refreshInput()
+    this.refreshInputs()
     event.preventDefault()
   }
 
   changeMinutes(event) {
     this.currentValue = new Date(new Date(this.currentValue).setMinutes(+event.target.value))
-    this.refreshInput()
+    this.refreshInputs()
     event.preventDefault()
   }
 
@@ -138,7 +138,8 @@ export default class extends ApplicationController {
    * HELPERS *
    ***********/
 
-  refreshInput() {
+  // Refreshes the hidden and visible input values
+  refreshInputs() {
     this.hiddenInputTarget.value = this.currentValue.toISOString()
     let format = this.formatValue
     if (!this.timePickerValue) {
@@ -148,6 +149,7 @@ export default class extends ApplicationController {
     this.inputTarget.value = Intl.DateTimeFormat(this.localeValue, format).format(this.currentValue)
   }
 
+  // Refreshes the calendar
   refreshCalendar() {
     this.monthTarget.innerHTML = this.monthName
     this.yearTarget.innerHTML = this.currentValue.getFullYear()
@@ -189,14 +191,16 @@ export default class extends ApplicationController {
       }
     })
 
-    this.refreshInput()
+    this.refreshInputs()
   }
 
+  // Is date today?
   isToday(date) {
     const today = new Date()
     return date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear()
   }
 
+  // Is date the currently selected value
   isCurrent(date) {
     return (
       this.hiddenInputTarget.value.length > 0 &&
@@ -206,6 +210,7 @@ export default class extends ApplicationController {
     )
   }
 
+  // Get name of month for current value
   get monthName() {
     return new Date(this.currentValue).toLocaleString("default", { month: "long" })
   }
@@ -220,7 +225,7 @@ export default class extends ApplicationController {
     return weekDays
   }
 
-  // Gets the list of days
+  // Gets the list of days to display
   get monthDays() {
     let results = []
 
