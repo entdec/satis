@@ -13,7 +13,6 @@ module Satis
         extend Satis::Menu::Helpers
         extend Satis::Page::Helpers
         extend Satis::Tabs::Helpers
-        extend Satis::UiTable::Helpers
         extend Satis::Table::Helpers
       end
 
