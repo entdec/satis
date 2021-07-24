@@ -1,0 +1,13 @@
+li.rounded-sm.px-3.py-1.hover:bg-gray-100.flex.items-center
+  a.py-1.w-full.text-left.flex.items-center.outline-none.focus:outline-none href=item.link *item.link_attributes
+    span.pr-1.flex-shrink-0.w-6
+      - if item.icon
+        i.fa-light class="fa-#{item.icon}"
+    span.pr-1.flex-1 = item.label
+
+  - if item.menu
+    ul.bg-white.border.rounded-md.shadow-lg.absolute.top-0.right-0.transition.duration-150.ease-in-out.origin-top-left.w-56
+      - item.menu.items.each do |sub_item|
+        = render(Satis::MenuItem::Component.new(item: sub_item))
+
+
