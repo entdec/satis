@@ -98,19 +98,15 @@ html lang="en"
                 div.absolute.top-7.left-0 data-satis-theme-target="dark"
                   i.fa-solid.fa-moon-stars.text-indigo-600.absolute.top-2.left-1 style="width: 24px;"
 
-              button.ml-3.bg-white.p-1.rounded-full.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-blue-500.dark:bg-gray-900.dark:border-gray-700
-                span.sr-only View notifications
-                i.fal.fa-bell style="width: 24px;"
+              = render(Satis::Menu::Component.new(@notifications_menu)) do
+                button.ml-3.bg-white.p-1.rounded-full.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-blue-500.dark:bg-gray-900.dark:border-gray-700
+                  span.sr-only View notifications
+                  i.fal.fa-bell style="width: 24px;"
 
               /! Profile dropdown
               .ml-3.relative
                 = render(Satis::Menu::Component.new(@profile_menu)) do
                   = satis.avatar name: Current.user.name, photo: Current.user.avatar
-                  /button#user-menu-button.max-w-xs.bg-white.flex.items-center.text-sm.rounded-full.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-blue-500 aria-expanded="false" aria-haspopup="true" type="button"
-                    span.sr-only Open user menu
-                    img.h-8.w-8.rounded-full alt="" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" /
-
-
 
         main.flex-1.relative.overflow-y-auto.focus:outline-none
           .py-4
