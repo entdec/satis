@@ -10,7 +10,7 @@ turbo-frame id="#{params[:table_name]}"
               kbd.inline-flex.items-center.border.border-gray-200.rounded.px-2.text-sm.font-sans.font-medium.text-gray-400
                 | ⌘K
 
-    .bg-white.flex.items-center.overflow-x-auto
+    .bg-white.flex.items-center.overflow-x-auto.dark:bg-gray-900.dark:border-gray-700
       .flex.flex-col.flex-grow
         .align-middle.inline-block.min-w-full
           .relative.overflow-hidden.border-gray-200
@@ -19,7 +19,7 @@ turbo-frame id="#{params[:table_name]}"
                 i.fa.fa-trash.mt-5
             = satis.form_with model: @filters, url: _satis.table_path(params[:table_name]) do |f|
               table.min-w-full.divide-y.divide-gray-200
-                thead.bg-gray-50.sticky.top-0
+                thead.bg-gray-50.sticky.top-0.dark:bg-gray-900.dark:border-gray-700
 
                   / Hidden columns
                   tr.hidden-header.opacity-20.h-16.w-full.hidden data-satis-table-target="hiddenHeader"
@@ -60,25 +60,25 @@ turbo-frame id="#{params[:table_name]}"
                       span.sr-only Edit
                 tbody
                   / Filters
-                  tr.bg-gray-100.border-b.border-gray-200.hidden data-satis-table-target="filterRow"
+                  tr.bg-gray-100.border-b.border-gray-200.hidden.dark:bg-gray-900 data-satis-table-target="filterRow"
                     - @table.ordered_columns.each.with_index do |column, index|
                       td.px-3.py-4.whitespace-nowrap.text-sm.text-gray-500 style="min-width: 200px;"
                         - filter = @table.filter_by_attribute(column.attribute)
                         - if filter&.collection
-                          = f.input filter.parameter, url: filter_collection_tables_path(table: params[:table_name], filter: column.attribute), as: :dropdown, label: false, input_html: { "data-action" => "change->satis-table#filter", "data-satis-table-target" => "filter" }
+                          = f.input filter.parameter, url: filter_collection_tables_path(table_name: params[:table_name], filter: column.attribute), as: :dropdown, label: false, input_html: { "data-action" => "change->satis-table#filter", "data-satis-table-target" => "filter" }
                         - elsif filter
                           = f.input filter.parameter, input_html: { "class" => 'form-control', "data-action" => "change->satis-table#filter", "data-satis-table-target" => "filter" }, value: params[filter.parameter], label: false
 
                   / Columns and rows
                   - @table.rows(self).each_with_index do |row, index|
-                      tr.cursor-pointer class="#{index % 2 == 0 ? 'bg-white' : 'bg-gray-50'}" href="#{row.find{|c| c.first == :link}&.[](1)}" data-controller="satis-link" data-action="click->satis-link#select tap->satis-link#select"
+                      tr.cursor-pointer class="#{index % 2 == 0 ? 'bg-white dark:bg-gray-900' : 'bg-gray-50 dark:bg-gray-700'}" href="#{row.find{|c| c.first == :link}&.[](1)}" data-controller="satis-link" data-action="click->satis-link#select tap->satis-link#select"
                         - row.each do |column, value|
                           - if %i[link context_menu].exclude?(column)
                             td.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500
                               = value
 
     / Footer
-    .bg-white.px-4.py-3.flex.items-center.justify-between.border-t.border-gray-200.sm:px-6
+    .bg-white.px-4.py-3.flex.items-center.justify-between.border-t.border-gray-200.sm:px-6.dark:bg-gray-800
       .flex-1.flex.justify-between.sm:hidden
         - if prev_page_url @table.paged_scope
           = link_to_prev_page @table.paged_scope, 'Previous', class: 'relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50', 'data-turbo-frame'=> "#{params[:table_name]}"

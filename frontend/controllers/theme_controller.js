@@ -10,6 +10,7 @@ import { getInitialTheme } from "../utils"
  *
  */
 export default class extends ApplicationController {
+  static targets = ["light", "dark"]
   connect() {
     super.connect()
 
@@ -32,6 +33,14 @@ export default class extends ApplicationController {
 
     root.classList.remove(isDark ? "light" : "dark")
     root.classList.add(rawTheme)
+
+    if (isDark) {
+      this.darkTarget.classList.remove("hidden")
+      this.lightTarget.classList.add("hidden")
+    } else {
+      this.darkTarget.classList.add("hidden")
+      this.lightTarget.classList.remove("hidden")
+    }
 
     localStorage.setItem("color-theme", rawTheme)
   }
