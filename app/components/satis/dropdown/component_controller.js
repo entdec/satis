@@ -70,7 +70,9 @@ export default class extends ApplicationController {
           const currentItem = this.itemTargets.find((item) => {
             return this.hiddenInputTarget.value == item.getAttribute("data-satis-dropdown-item-value")
           })
-          this.searchInputTarget.value = currentItem.getAttribute("data-satis-dropdown-item-text")
+          if (currentItem) {
+            this.searchInputTarget.value = currentItem.getAttribute("data-satis-dropdown-item-text")
+          }
         })
       } else {
         const currentItem = this.itemTargets.find((item) => {
