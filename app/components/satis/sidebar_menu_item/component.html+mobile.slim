@@ -1,0 +1,17 @@
+.space-y-1 class="#{item.level >= 1 ? 'pl-4' : ''}"
+  a.text-gray-600.hover:bg-gray-50.hover:text-gray-900.group.flex.items-center.px-2.py-2.text-base.font-medium.rounded-md href="#"
+    - if item.icon
+        i.fal.fa-lg.text-gray-400.group-hover:text-gray-500.mr-4.flex-shrink-0.h-6.w-6 class="fa-#{item.icon}" style="width: 20px;"
+    - else
+      i.mr-3.flex-shrink-0.h-6 style="width: 20px;"
+    span.flex-1
+      = item.label
+
+    /! Expanded: "text-gray-400 rotate-90", Collapsed: "text-gray-300"
+    - if item.menu
+      i.fal.fa-angle-right.text-gray-300.ml-3.flex-shrink-0.h-5.w-5.transform.group-hover:text-gray-400.transition-colors.ease-in-out.duration-150 style="width: 20px;"
+
+  - if item.menu
+    #sub-menu-1.space-y-1
+      - item.menu.items.each do |item|
+        = render(Satis::SidebarMenuItem::Component.new(item: item).with_variant(:mobile))

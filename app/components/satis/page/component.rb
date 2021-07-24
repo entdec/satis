@@ -7,7 +7,9 @@ module Satis
       renders_one :sidebar
       renders_one :body
 
-      def initialize(**options, &block); end
+      def initialize(**options)
+        @menu = options[:menu]
+      end
     end
   end
 end
