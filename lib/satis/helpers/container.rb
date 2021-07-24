@@ -6,6 +6,7 @@ module Satis
       def initialize(action_view)
         @action_view = action_view
 
+        extend Satis::Avatar::Helpers
         extend Satis::Card::Helpers
         extend Satis::DateTimePicker::Helpers
         extend Satis::Info::Helpers
