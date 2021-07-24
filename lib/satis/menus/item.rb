@@ -3,17 +3,24 @@
 module Satis
   module Menus
     class Item
-      attr_reader :id, :label, :link, :icon, :app, :menu, :link_attributes
+      attr_reader :id, :link, :icon, :app, :menu, :link_attributes, :level
 
-      def initialize(id, link:, label: nil, icon: nil, app: nil, link_attributes: {}, &block)
+      attr_writer :scope
+
+      def initialize(id, link: nil, label: nil, icon: nil, app: nil, link_attributes: {}, scope: [], level: nil, &block)
         @id = id
         @label = label
         @icon = icon
         @link = link
         @link_attributes = link_attributes
         @app = app
-        # @app ||= main_app
-        @menu = Menu.new(&block) if block_given?
+        @scope = scope
+        @level = level
+        @menu = Menu.new(scope + ["#{id}_menu".to_sym], level: level + 1, &block) if block_given?
+      end
+
+      def label
+        @label || I18n.t(id, scope: [:menu] + @scope, default: id.to_s.humanize)
       end
     end
   end
