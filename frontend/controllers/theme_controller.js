@@ -35,11 +35,11 @@ export default class extends ApplicationController {
     root.classList.add(rawTheme)
 
     if (isDark) {
-      this.darkTarget.classList.remove("hidden")
-      this.lightTarget.classList.add("hidden")
+      this.lightTarget.classList.add("transition", "ease-in-out", "duration-1000", "transform", "translate-y-7")
+      this.darkTarget.classList.add("transition", "ease-in-out", "duration-1000", "transform", "-translate-y-7")
     } else {
-      this.darkTarget.classList.add("hidden")
-      this.lightTarget.classList.remove("hidden")
+      this.lightTarget.classList.remove("transform", "translate-y-7")
+      this.darkTarget.classList.remove("transform", "-translate-y-7")
     }
 
     localStorage.setItem("color-theme", rawTheme)
