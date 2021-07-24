@@ -9,6 +9,7 @@ module Satis
 
       def initialize(**options)
         @menu = options[:menu]
+        @profile_menu = options[:profile_menu]
       end
     end
   end
