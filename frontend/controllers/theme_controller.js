@@ -31,9 +31,6 @@ export default class extends ApplicationController {
     const root = window.document.documentElement
     const isDark = rawTheme === "dark"
 
-    root.classList.remove(isDark ? "light" : "dark")
-    root.classList.add(rawTheme)
-
     if (isDark) {
       this.lightTarget.classList.add("transition", "ease-in-out", "duration-1000", "transform", "translate-y-7")
       this.darkTarget.classList.add("transition", "ease-in-out", "duration-1000", "transform", "-translate-y-7")
@@ -43,5 +40,9 @@ export default class extends ApplicationController {
     }
 
     localStorage.setItem("color-theme", rawTheme)
+    setTimeout(() => {
+      root.classList.remove(isDark ? "light" : "dark")
+      root.classList.add(rawTheme)
+    }, 1000)
   }
 }
