@@ -8,3 +8,9 @@
 @import "./style/form";
 
 @import "~flag-icon-css/css/flag-icon";
+
+// Every link without a class or empty class should be underlined
+a:not([class]),
+a[class=""] {
+  @apply text-primary-600 underline;
+}
