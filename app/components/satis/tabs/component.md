@@ -7,7 +7,7 @@ https://tailwindui.com/components/application-ui/navigation/tabs
 ## Usage
 
 ```slim
-= satis.tabs do |t|
+= sts.tabs do |t|
   - t.tab :about
       p About
       = link_to "Hello", root_path

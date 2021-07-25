@@ -2,7 +2,7 @@ require_relative 'lib/satis/version'
 
 Gem::Specification.new do |spec|
   spec.name        = 'satis'
-  spec.version     = Satis::VERSION
+  spec.version     = sts::VERSION
   spec.authors     = ['Tom de Grunt']
   spec.email       = ['tom@degrunt.nl']
   spec.homepage    = 'https://code.entropydecelerator.com/components/satis'

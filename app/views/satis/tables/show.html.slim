@@ -17,7 +17,7 @@ turbo-frame id="#{params[:table_name]}"
             .trash.flex.absolute.top-19.w-full.hidden
               .flex-grow.bg-gray-50.text-center.h-16
                 i.fa.fa-trash.mt-5
-            = satis.form_with model: @filters, url: _satis.table_path(params[:table_name]) do |f|
+            = sts.form_with model: @filters, url: _satis.table_path(params[:table_name]) do |f|
               table.min-w-full.divide-y.divide-gray-200
                 thead.bg-gray-50.sticky.top-0.dark:bg-gray-900.dark:border-gray-700
 

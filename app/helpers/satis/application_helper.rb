@@ -1,8 +1,7 @@
 module Satis
   module ApplicationHelper
-    # alias satis_engine satis
-    def satis
-      @_satis_helpers_container ||= Satis::Helpers::Container.new(self)
+    def sts
+      @_satis_helpers_container ||= sts::Helpers::Container.new(self)
     end
 
     def method_missing(method, *args, &block)

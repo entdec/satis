@@ -25,7 +25,7 @@ Each component has it's own documentation in the component folder
 ### Forms
 
 ```slim
-  = satis.form_with model: @user, url: profile_url, class: 'mt-2' do |f|
+  = sts.form_with model: @user, url: profile_url, class: 'mt-2' do |f|
     = f.input :id, as: :hidden
     = f.input :first_name
     = f.input :last_name

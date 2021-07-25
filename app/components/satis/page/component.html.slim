@@ -106,7 +106,7 @@ html lang="en"
               /! Profile dropdown
               .ml-3.relative
                 = render(Satis::Menu::Component.new(@profile_menu)) do
-                  = satis.avatar name: Current.user.name, photo: Current.user.avatar
+                  = sts.avatar name: Current.user.name, photo: Current.user.avatar
 
         main.flex-1.relative.overflow-y-auto.focus:outline-none
           .py-4
