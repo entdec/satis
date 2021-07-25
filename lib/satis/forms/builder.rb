@@ -222,6 +222,18 @@ module Satis
         end
       end
 
+      def number_input(method, options = {})
+        form_group(method, options) do
+          safe_join [
+            (custom_label(method, options[:label]) unless options[:label] == false),
+            number_field(method,
+                         merge_input_options({ class: "form-control #{if has_error?(method)
+                                                                        'is-invalid'
+                                                                      end}" }, options[:input_html]))
+          ]
+        end
+      end
+
       def text_input(method, options = {})
         form_group(method, options) do
           safe_join [
