@@ -29,20 +29,20 @@ div.satis-date-time-picker data-controller="satis-date-time-picker" data-satis-d
       .flex.items-center.py-2.space-x-2
         label.flex-grow.text-sm.text-gray-500 Time
         .flex.items-center.space-x-2
-          .bg-gray-100.rounded-md.w-full.text-right.flex.items-center.border.border-gray-100.focus:border-blue-500.focus:ring-2.focus:ring-blue-500.focus:outline-none.focus:ring-opacity-50 style=("caret-color: transparent;")
-            input.text-center.w-8.border-transparent.bg-transparent.p-0.h-6.text-sm.transition.duration-100.ease-in-out.border.border-transparent.focus:border-blue-500.focus:ring-2.focus:ring-blue-500.focus:outline-none.focus:ring-opacity-50.rounded inputmode="numeric" type="text" data-satis-date-time-picker-target="hours" data-action="satis-date-time-picker#changeHours keypress->satis-date-time-picker#keyPress"
+          .bg-gray-100.rounded-md.w-full.text-right.flex.items-center.border.border-gray-100.focus:border-primary-500.focus:ring-2.focus:ring-primary-500.focus:outline-none.focus:ring-opacity-50 style=("caret-color: transparent;")
+            input.text-center.w-8.border-transparent.bg-transparent.p-0.h-6.text-sm.transition.duration-100.ease-in-out.border.border-transparent.focus:border-primary-500.focus:ring-2.focus:ring-primary-500.focus:outline-none.focus:ring-opacity-50.rounded inputmode="numeric" type="text" data-satis-date-time-picker-target="hours" data-action="satis-date-time-picker#changeHours keypress->satis-date-time-picker#keyPress"
             span contenteditable="false"
               | :
-            input.text-center.w-8.border-transparent.bg-transparent.p-0.h-6.text-sm.transition.duration-100.ease-in-out.border.border-transparent.focus:border-blue-500.focus:ring-2.focus:ring-blue-500.focus:outline-none.focus:ring-opacity-50.rounded inputmode="numeric" type="text" data-satis-date-time-picker-target="minutes" data-action="satis-date-time-picker#changeMinutes keypress->satis-date-time-picker#keyPress"
-          /span.relative.inline-flex.flex-shrink-0.transition.duration-200.ease-in-out.bg-gray-100.border.border-transparent.rounded.cursor-pointer.focus:border-blue-500.focus:ring-2.focus:ring-blue-500.focus:outline-none.focus:ring-opacity-50 aria-checked="false" role="checkbox" tabindex="0"
+            input.text-center.w-8.border-transparent.bg-transparent.p-0.h-6.text-sm.transition.duration-100.ease-in-out.border.border-transparent.focus:border-primary-500.focus:ring-2.focus:ring-primary-500.focus:outline-none.focus:ring-opacity-50.rounded inputmode="numeric" type="text" data-satis-date-time-picker-target="minutes" data-action="satis-date-time-picker#changeMinutes keypress->satis-date-time-picker#keyPress"
+          /span.relative.inline-flex.flex-shrink-0.transition.duration-200.ease-in-out.bg-gray-100.border.border-transparent.rounded.cursor-pointer.focus:border-primary-500.focus:ring-2.focus:ring-primary-500.focus:outline-none.focus:ring-opacity-50 aria-checked="false" role="checkbox" tabindex="0"
             input type="hidden" value="AM" /
             span.flex.items-center.justify-center.w-6.h-6.text-xs.text-gray-500.rounded-sm aria-hidden="true"  AM
             span.flex.items-center.justify-center.w-6.h-6.text-xs.text-gray-500.rounded-sm aria-hidden="true"  PM
             span.absolute.flex.items-center.justify-center.w-6.h-6.text-xs.text-gray-800.transition.duration-200.ease-in-out.transform.translate-x-0.bg-white.rounded.shadow aria-hidden="true"  AM
-          /a.text-blue-600.text-sm.uppercase.font-semibold.transition.duration-100.ease-in-out.border.border-transparent.focus:border-blue-500.focus:ring-2.focus:ring-blue-500.focus:outline-none.focus:ring-opacity-50.rounded.cursor-pointer href="#"  Ok
+          /a.text-primary-600.text-sm.uppercase.font-semibold.transition.duration-100.ease-in-out.border.border-transparent.focus:border-primary-500.focus:ring-2.focus:ring-primary-500.focus:outline-none.focus:ring-opacity-50.rounded.cursor-pointer href="#"  Ok
 
     template data-satis-date-time-picker-target="emtpyTemplate"
       .text-center.border.p-1.border-transparent.text-sm
     template data-satis-date-time-picker-target="dayTemplate"
       div
-        a.block.w-full.h-9.cursor-pointer.text-center.pt-2px.text-sm.rounded-l-full.rounded-r-full.leading-loose.transition.ease-in-out.duration-100.hover:bg-blue-200 data-action="satis-date-time-picker#selectDay" ${day}
+        a.block.w-full.h-9.cursor-pointer.text-center.pt-2px.text-sm.rounded-l-full.rounded-r-full.leading-loose.transition.ease-in-out.duration-100.hover:bg-primary-200 data-action="satis-date-time-picker#selectDay" ${day}

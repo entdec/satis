@@ -16,7 +16,7 @@ https://tailwindcomponents.com/component/select-with-custom-list
 
 ```slim
 = f.input :account_id, collection: policy_scope(Account).with(@user.account_id), as: :dropdown do |account|
-    .cursor-pointer.w-full.border-gray-100.border-b.hover:bg-blue-200
+    .cursor-pointer.w-full.border-gray-100.border-b.hover:bg-primary-200
       .flex.w-full.items-center.p-2.pl-2.border-transparent.border-l-2.hover:border-teal-100
         .w-full.items-center.flex
           .mx-2.-mt-1
@@ -38,7 +38,7 @@ This `select.html.slim` should look like this, note the extra div with id/name i
 ```
 - @locations.each do |location|
   div data-satis-dropdown-item-value=location.id data-satis-dropdown-item-text=location.name
-    .cursor-pointer.w-full.border-gray-100.rounded-t.border-b.hover:bg-blue-200
+    .cursor-pointer.w-full.border-gray-100.rounded-t.border-b.hover:bg-primary-200
       .flex.w-full.items-center.p-2.pl-2.border-transparent.border-l-2.hover:border-teal-100
         .w-full.items-center.flex
           .mx-2.-mt-1

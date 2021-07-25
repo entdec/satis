@@ -70,7 +70,7 @@ html lang="en"
       /**********/
       .flex.flex-col.w-0.flex-1.overflow-hidden
         .relative.z-10.flex-shrink-0.flex.h-16.bg-white.shadow.dark:bg-gray-900.dark:border-gray-700
-          button.px-4.border-r.border-gray-200.text-gray-500.focus:outline-none.focus:ring-2.focus:ring-inset.focus:ring-blue-500.md:hidden
+          button.px-4.border-r.border-gray-200.text-gray-500.focus:outline-none.focus:ring-2.focus:ring-inset.focus:ring-primary-500.md:hidden
             span.sr-only Open sidebar
             /! Heroicon name: outline/menu-alt-2
             svg.h-6.w-6 aria-hidden="true" fill="none" stroke="currentColor" viewbox=("0 0 24 24") xmlns="http://www.w3.org/2000/svg"
@@ -87,11 +87,11 @@ html lang="en"
                   input#search-field.block.w-full.h-full.pl-8.pr-3.py-2.border-transparent.text-gray-900.placeholder-gray-500.focus:outline-none.focus:placeholder-gray-400.focus:ring-0.focus:border-transparent.sm:text-sm.dark:bg-gray-900 name="search" placeholder="Search" type="search" /
             .ml-4.flex.items-center.md:ml-6
 
-              button.bg-white.p-1.rounded-full.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-blue-500.dark:bg-gray-900.dark:border-gray-700
+              button.bg-white.p-1.rounded-full.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-primary-500.dark:bg-gray-900.dark:border-gray-700
                 span Boxture
                 i.fal.fa-book style="width: 24px;"
 
-              button.ml-3.w-8.h-8.bg-white.p-1.rounded-full.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-blue-500.dark:bg-gray-900.dark:border-gray-700.overflow-hidden.relative data-controller="satis-theme" data-action='click->satis-theme#switch'
+              button.ml-3.w-8.h-8.bg-white.p-1.rounded-full.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-primary-500.dark:bg-gray-900.dark:border-gray-700.overflow-hidden.relative data-controller="satis-theme" data-action='click->satis-theme#switch'
                 /span.sr-only View notifications
                 div.absolute.top-1.left-1 data-satis-theme-target="light"
                   i.fa-solid.fa-sun.text-yellow-500 style="width: 24px;"
@@ -99,7 +99,7 @@ html lang="en"
                   i.fa-solid.fa-moon-stars.text-indigo-600.absolute.top-2.left-1 style="width: 24px;"
 
               = render(Satis::Menu::Component.new(@notifications_menu)) do
-                button.ml-3.bg-white.p-1.rounded-full.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-blue-500.dark:bg-gray-900.dark:border-gray-700
+                button.ml-3.bg-white.p-1.rounded-full.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-primary-500.dark:bg-gray-900.dark:border-gray-700
                   span.sr-only View notifications
                   i.fal.fa-bell style="width: 24px;"
 

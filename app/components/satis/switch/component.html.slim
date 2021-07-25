@@ -2,7 +2,7 @@ div.switch data-controller='satis-switch'
   - if options[:label] != false
     = form.custom_label(attribute, options[:label], data: { action: "click->satis-switch#toggle" })
   = form.hidden_field(attribute, options[:input_html].reverse_merge(value: form.object.send(attribute) ? "1" : "0", 'data-action' => 'change->satis-switch#update'))
-  button.mt-3.mb-3.relative.inline-flex.flex-shrink-0.h-6.w-11.border-2.border-transparent.rounded-full.cursor-pointer.transition-colors.ease-in-out.duration-200.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-blue-500 aria-checked="false" role="switch" type="button" data-action="click->satis-switch#toggle" data-satis-switch-target="button" class="#{form.object.send(attribute) ? 'bg-blue-600' : 'bg-gray-200'}"
+  button.mt-3.mb-3.relative.inline-flex.flex-shrink-0.h-6.w-11.border-2.border-transparent.rounded-full.cursor-pointer.transition-colors.ease-in-out.duration-200.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-primary-500 aria-checked="false" role="switch" type="button" data-action="click->satis-switch#toggle" data-satis-switch-target="button" class="#{form.object.send(attribute) ? 'bg-primary-600' : 'bg-gray-200'}"
     span.pointer-events-none.inline-block.h-5.w-5.rounded-full.bg-white.shadow.transform.ring-0.transition.ease-in-out.duration-200 aria-hidden="true" data-satis-switch-target="switch"  class="#{form.object.send(attribute) ? 'translate-x-5' : 'translate-x-0' }"
       - if icon
         span.absolute.inset-0.h-full.w-full.flex.items-center.justify-center.transition-opacity aria-hidden="true" data-satis-switch-target="cross" class="#{form.object.send(attribute) ? 'opacity-0 ease-out duration-100' : 'opacity-100 ease-in duration-200' }"

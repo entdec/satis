@@ -70,7 +70,7 @@ export default class extends ApplicationController {
     this.filterIndicatorTargets.forEach((element) => {
       let paramName = element.getAttribute("data-column")
       if (ourUrl.searchParams.get(paramName)) {
-        element.classList.add("text-blue-600")
+        element.classList.add("text-primary-600")
         let icon = element.querySelector(".fa-filter")
         if (icon) {
           icon.classList.remove("fa-light")

@@ -18,7 +18,7 @@ export default class extends ApplicationController {
   update(event) {
     if (this.hiddenInputTarget.value == "1") {
       // enabled
-      this.buttonTarget.classList.add("bg-blue-600")
+      this.buttonTarget.classList.add("bg-primary-600")
       this.buttonTarget.classList.remove("bg-gray-200")
       this.switchTarget.classList.add("translate-x-5")
       this.switchTarget.classList.remove("translate-x-0")
@@ -32,7 +32,7 @@ export default class extends ApplicationController {
       }
     } else {
       // disabled
-      this.buttonTarget.classList.remove("bg-blue-600")
+      this.buttonTarget.classList.remove("bg-primary-600")
       this.buttonTarget.classList.add("bg-gray-200")
       this.switchTarget.classList.remove("translate-x-5")
       this.switchTarget.classList.add("translate-x-0")

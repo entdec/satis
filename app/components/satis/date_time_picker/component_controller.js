@@ -270,18 +270,18 @@ export default class extends ApplicationController {
         if (this.isSelected(date)) {
           if (this.rangeValue && this.selectedValue.length == 2) {
             if (this.isDate(this.selectedValue[0], date)) {
-              div.classList.add("bg-blue-500", "text-white")
+              div.classList.add("bg-primary-500", "text-white")
               div.classList.remove("rounded-r-full")
             } else if (this.isDate(this.selectedValue[1], date)) {
-              div.classList.add("bg-blue-500", "text-white")
+              div.classList.add("bg-primary-500", "text-white")
               div.classList.remove("rounded-l-full")
             } else if (this.isSelected(date)) {
               div.classList.remove("rounded-r-full")
               div.classList.remove("rounded-l-full")
-              div.classList.add("bg-blue-200", "text-white")
+              div.classList.add("bg-primary-200", "text-white")
             }
           } else {
-            div.classList.add("bg-blue-500", "text-white")
+            div.classList.add("bg-primary-500", "text-white")
           }
         } else {
           div.classList.add("text-gray-700")

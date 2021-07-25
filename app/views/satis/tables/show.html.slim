@@ -48,7 +48,7 @@ turbo-frame id="#{params[:table_name]}"
 
                         - filter = @table.filter_by_attribute(column.attribute)
                         - if filter
-                          a.cursor-pointer data-action="click->satis-table#toggleFilters" data-satis-table-target="filterIndicator" data-column="#{column.attribute}" data-filter="#{filter.parameter}" class="#{params[filter.parameter] ? 'text-blue-600' : ''}"
+                          a.cursor-pointer data-action="click->satis-table#toggleFilters" data-satis-table-target="filterIndicator" data-column="#{column.attribute}" data-filter="#{filter.parameter}" class="#{params[filter.parameter] ? 'text-primary-600' : ''}"
                             .icon.absolute.-bottom-2.left-6
                               - if params[filter.parameter]
                                 i.fa-solid.fa-filter-slash

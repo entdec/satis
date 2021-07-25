@@ -147,7 +147,7 @@ export default class extends ApplicationController {
     this.lastSearch = null
     this.lastPage = null
     if (this.selectedItem) {
-      this.selectedItem.classList.remove("bg-blue-200")
+      this.selectedItem.classList.remove("bg-primary-200")
     }
     this.selectedIndex = -1
     this.hideResultsList()
@@ -360,13 +360,13 @@ export default class extends ApplicationController {
 
   lowLightSelected() {
     if (this.selectedItem) {
-      this.selectedItem.classList.remove("bg-blue-200")
+      this.selectedItem.classList.remove("bg-primary-200")
     }
   }
 
   highLightSelected() {
     if (this.selectedItem) {
-      this.selectedItem.classList.add("bg-blue-200")
+      this.selectedItem.classList.add("bg-primary-200")
       this.selectedItem.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })
     }
   }
