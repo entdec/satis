@@ -45,11 +45,16 @@ Each component has it's own documentation in the component folder
 - page :x:
 - sidebar :x:
 - topbar :x:
-- actiontable :x:
+- actiontable :heavy_check_mark:
+
+## Dark
+
+bg-gray-800 - hoofd achtergrond card/sidebar
+bg-gray-700 - highlight card/sidebar / hover
+text-gray-300 - tekst kleur
+bg-gray-600 - body achtergrond kleur
 
 ## Known issues
-
-- Card component's header corners are straight, due to overflow-visible, see component.
 
 ## Installation
 

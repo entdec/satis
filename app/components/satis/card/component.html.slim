@@ -1,5 +1,6 @@
-.satis-card.bg-white.overflow-hidden.sm:rounded-lg.sm:shadow.dark:bg-gray-800
-  .bg-white.px-4.py-5.border-b.border-gray-200.sm:px-6.dark:bg-gray-800.dark:border-gray-700
+.satis-card.satis-tabs.bg-white.overflow-hidden.sm:rounded-lg.sm:shadow.dark:bg-gray-800 data-controller="satis-tabs" data-satis-tabs-persist-value="false"
+  .bg-white.px-4.py-5.sm:px-6.dark:bg-gray-800.dark:border-gray-700 class="#{tabs? ? '' : 'border-b border-gray-200'}"
+
     .-ml-4.-mt-4.flex.justify-between.items-center.flex-wrap.sm:flex-nowrap
       - if icon
         .ml-4.mt-4.flex-shrink-0.text-primary-600.dark:text-gray-300
@@ -17,8 +18,34 @@
       .ml-4.mt-4.flex-shrink-0
         - if menu
           = render(Satis::Menu::Component.new(menu))
-  div class="#{content_padding ? 'px-6 py-6' : ''}"
-    = content
+
+  - if tabs?
+    .bg-white.px-4.border-b.border-gray-200.sm:px-5.dark:bg-gray-800.dark:border-gray-700
+
+      .sm:hidden
+        label.sr-only for="tabs" Select a tab
+        select#tabs.block.w-full.pl-3.pr-10.py-2.text-base.border-gray-300.focus:outline-none.focus:ring-primary-500.focus:border-primary-500.sm:text-sm.rounded-md name="tabs" data-action="change->satis-tabs#select" data-satis-tabs-target="select"
+          - tabs.each do |tab|
+            option selected=tab.selected? = t(tab.name, scope: [:tabs])
+      .hidden.sm:block
+        nav.-mb-px.flex.space-x-8 aria-label="Tabs"
+          - tabs.each do |tab|
+              a.tab id="#{tab.name}" href="#" aria-current="#{tab.selected? ? "page" : ''}" data-satis-tabs-target="tab" data-action="click->satis-tabs#select"
+                - if tab.icon
+                  i.fal.mr-2 class="fa-#{tab.icon}"
+                = t(tab.name, scope: [:tabs])
+                i.fal.fa-triangle-exclamation.ml-2.hidden
+                - if tab.badge
+                  span.badge
+                    = tab.badge
+
+    - tabs.each do |tab|
+      div id="#{tab.name}-content" class="tab-content" data-satis-tabs-target="content"
+        = tab.to_s
+  - else
+    div class="#{content_padding ? 'px-6 py-6' : ''}"
+      = content
+
   - if footer
     .px-4.py-3.bg-gray-50.text-right.sm:px-6
       = footer

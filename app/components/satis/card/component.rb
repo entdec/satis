@@ -2,6 +2,7 @@ module Satis
   module Card
     class Component < Satis::ApplicationComponent
       renders_many :actions
+      renders_many :tabs, Tab::Component
       renders_one :footer
 
       attr_reader :icon, :title, :description, :menu, :content_padding
@@ -13,6 +14,10 @@ module Satis
         @icon = icon
         @menu = menu
         @content_padding = content_padding
+      end
+
+      def tabs?
+        tabs.present?
       end
     end
   end

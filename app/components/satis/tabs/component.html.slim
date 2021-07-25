@@ -2,12 +2,12 @@
   .sm:hidden
     label.sr-only for="tabs" Select a tab
     select#tabs.block.w-full.pl-3.pr-10.py-2.text-base.border-gray-300.focus:outline-none.focus:ring-primary-500.focus:border-primary-500.sm:text-sm.rounded-md name="tabs" data-action="change->satis-tabs#select" data-satis-tabs-target="select"
-      - for tab in tabs
+      - tabs.each do |tab|
         option selected=tab.selected? = t(tab.name, scope: [:tabs])
   .hidden.sm:block
     .border-b.border-gray-200
       nav.-mb-px.flex.space-x-8 aria-label="Tabs"
-        - for tab in tabs
+        - tabs.each do |tab|
             a.tab id="#{tab.name}" href="#" aria-current="#{tab.selected? ? "page" : ''}" data-satis-tabs-target="tab" data-action="click->satis-tabs#select"
               - if tab.icon
                 i.fal.mr-2 class="fa-#{tab.icon}"
@@ -18,6 +18,6 @@
                   = tab.badge
 
   div
-    - for tab in tabs
-      div id="#{tab.name}-content" class="tab-content" data-satis-tabs-target="content"
+    - tabs.each do |tab|
+      div id="#{tab.name}-content" class="tab-content #{tab.options[:padding] == false ? '' : 'mt-4'}" data-satis-tabs-target="content"
         = tab.to_s
