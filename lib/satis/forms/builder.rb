@@ -198,7 +198,7 @@ module Satis
         # title += '*' if required?(method)
         label(method, title, class: all_classes, data: options[:data]) do |translation|
           safe_join [
-            tag.span(translation, class: required?(method) ? 'required' : ''),
+            tag.span(title || translation, class: required?(method) ? 'required' : ''),
             ' ',
             tag.i(class: (required?(method) ? 'fal fa-circle-exclamation' : ''))
           ]
