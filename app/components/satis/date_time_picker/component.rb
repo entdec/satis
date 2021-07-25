@@ -24,8 +24,7 @@ module Satis
                       "hour": 'numeric', "minute": 'numeric', "hour12": false }
                   end
 
-        options[:input_html].merge!('data-satis-date-time-picker-target' => 'hiddenInput',
-                                    value: form.object.send(attribute))
+        options[:input_html].merge!('data-satis-date-time-picker-target' => 'hiddenInput')
       end
     end
   end
