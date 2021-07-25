@@ -1,4 +1,4 @@
-div.switch data-controller='satis-switch'
+div.satis-switch data-controller='satis-switch'
   - if options[:label] != false
     = form.custom_label(attribute, options[:label], data: { action: "click->satis-switch#toggle" })
   = form.hidden_field(attribute, options[:input_html].reverse_merge(value: form.object.send(attribute) ? "1" : "0", 'data-action' => 'change->satis-switch#update'))
