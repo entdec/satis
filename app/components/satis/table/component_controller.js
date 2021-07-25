@@ -72,8 +72,10 @@ export default class extends ApplicationController {
       if (ourUrl.searchParams.get(paramName)) {
         element.classList.add("text-blue-600")
         let icon = element.querySelector(".fa-filter")
-        icon.classList.remove("fa-light")
-        icon.classList.add("fa-solid")
+        if (icon) {
+          icon.classList.remove("fa-light")
+          icon.classList.add("fa-solid")
+        }
       }
     })
 

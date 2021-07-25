@@ -33,8 +33,8 @@ export default class extends ApplicationController {
     this.selectedValue = []
     let startDate = new Date()
     if (this.hiddenInputTarget.value) {
-      this.hiddenInputTarget.value.split(";").forEach((value) => {
-        this.selectedValue.push(new Date(Date.parse(this.hiddenInputTarget.value)))
+      this.hiddenInputTarget.value.split(/;| - /).forEach((value) => {
+        this.selectedValue.push(new Date(Date.parse(value)))
       })
     }
 
@@ -87,6 +87,7 @@ export default class extends ApplicationController {
       let today = new Date()
       this.displayValue = new Date(today.getFullYear(), today.getMonth(), 1)
       this.hiddenInputTarget.value = ""
+      this.hiddenInputTarget.dispatchEvent(new Event("change"))
       this.refreshCalendar()
       this.inputTarget.value = ""
     }
@@ -120,7 +121,12 @@ export default class extends ApplicationController {
     if (event.target.tagName == "svg" || event.target.tagName == "path") {
       return
     }
-    if (!this.element.contains(event.target)) {
+
+    const isInside = event.path.some((el) => {
+      return el && el.getAttribute && el.getAttribute("data-controller") == "satis-date-time-picker"
+    })
+
+    if (!isInside) {
       this.hideCalendar(event)
     }
   }
@@ -194,11 +200,16 @@ export default class extends ApplicationController {
       joinChar = ";"
     }
 
-    this.hiddenInputTarget.value = this.selectedValue
+    let inputValue = this.selectedValue
       .map((val) => {
         return val.toISOString()
       })
       .join(joinChar)
+
+    if (inputValue.split(joinChar).length >= this.maxSelectNr) {
+      this.hiddenInputTarget.value = inputValue
+      this.hiddenInputTarget.dispatchEvent(new Event("change"))
+    }
 
     let format = this.formatValue
     if (!this.timePickerValue) {
@@ -277,6 +288,7 @@ export default class extends ApplicationController {
         }
 
         this.daysTarget.insertAdjacentHTML("beforeend", tmpDiv.innerHTML)
+        tmpDiv.remove()
       }
     })
 

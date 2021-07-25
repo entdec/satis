@@ -1,7 +1,7 @@
 module Satis
   module DateTimePicker
     class Component < Satis::ApplicationComponent
-      attr_reader :url, :form, :attribute, :inline, :options, :clearable, :format, :time_picker, :multiple, :range
+      attr_reader :form, :attribute, :inline, :options, :clearable, :format, :time_picker, :multiple, :range
 
       def initialize(form:, attribute:, **options, &block)
         super
@@ -16,12 +16,16 @@ module Satis
         @clearable = options.key?(:clearable) ? options[:clearable] : true
         @multiple = options.key?(:multiple) ? options[:multiple] : false
         @range = options.key?(:range) ? options[:range] : false
+
         @format = if options.key?(:format)
                     options[:format]
                   else
                     { "weekday": 'long', "month": 'short', "day": 'numeric',
                       "hour": 'numeric', "minute": 'numeric', "hour12": false }
                   end
+
+        options[:input_html].merge!('data-satis-date-time-picker-target' => 'hiddenInput',
+                                    value: form.object.send(attribute))
       end
     end
   end
