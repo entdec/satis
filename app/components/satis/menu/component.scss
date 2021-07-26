@@ -2,8 +2,12 @@
      regular css for the nested dropdowns
   */
 
+.group > ul {
+  display: none;
+}
+
 .group:hover > ul {
-  transform: translatex(-90%) scale(0);
+  display: block;
 }
 
 li > ul {
