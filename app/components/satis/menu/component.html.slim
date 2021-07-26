@@ -3,10 +3,11 @@
     = content
   - else
     button.inline-flex.items-center.justify-center.h-8.w-8.rounded-full.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-primary-500 aria-expanded="false" aria-haspopup="true" type="button"
-      span.font-semibold.flex-1
+      span.font-semibold.flex-1 class="#{menu.items.present? ? '' : 'text-gray-200'}"
         i.fa-solid.fa-ellipsis-vertical
 
-  ul.z-10.bg-white.border.rounded-md.shadow-lg.transform.scale-0.group-hover:scale-100.absolute.transition.duration-150.ease-in-out.origin-top.w-56
-    - menu.items.each do |item|
-      = render(Satis::MenuItem::Component.new(item: item))
+  - if menu.items.present?
+    ul.z-10.bg-white.border.rounded-md.shadow-lg.transform.scale-0.group-hover:scale-100.absolute.transition.duration-150.ease-in-out.origin-top.w-56
+      - menu.items.each do |item|
+        = render(Satis::MenuItem::Component.new(item: item))
 
