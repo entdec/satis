@@ -14,11 +14,14 @@ export class Satis {
       application = Application.start()
     }
 
-    application.satisConfiguration = configuration
+    this.application = application
+    this.application.satis = {
+      mouseElement: null,
+      configuration: configuration,
+    }
 
     console.log("Satis")
 
-    this.application = application
     const utilityContext = require.context("./utility_controllers", true, /\.js$/)
     const context = require.context("./controllers", true, /\.js$/)
     const componentContext = require.context("../app/components/", true, /component_controller\.js$/)
@@ -46,6 +49,11 @@ export class Satis {
       })
       .forEach(([name, controller]) => {
         let identifier = `satis-${name.replace(/_/g, "-")}`
+        if (controller.keyBindings) {
+          controller.keyBindings.forEach((keyBinding) => {
+            Satis.registerKeybinding(identifier, keyBinding.keys, keyBinding.handler)
+          })
+        }
         this.application.register(identifier, controller)
       })
 
@@ -65,80 +73,27 @@ export class Satis {
       console.log("Not loading Utility controllers")
     }
 
-    this.application.satis = {
-      mouseElement: null,
-    }
-
     // Start of keyboard shortcuts
     document.addEventListener("mouseover", (event) => {
       this.application.satis.mouseElement = event.target
     })
 
-    Mousetrap.bind(["ctrl+1", "ctrl+2", "ctrl+3", "ctrl+4", "ctrl+5", "ctrl+6", "ctrl+7", "ctrl+8", "ctrl+9", "ctrl+0"], (event, combo) => {
-      if (this.application.satis.mouseElement) {
-        let elm = this.application.satis.mouseElement.closest('[data-controller="satis-tabs"]')
-        if (elm) {
-          let controller = elm["satis-tabs"]
-          let index = -1 + +combo.split("+")[1]
-          if (index == -1) {
-            index = 10
-          }
-          controller.open(index)
-        }
-      }
-    })
-
-    Mousetrap.bind(["h", "left", "pageup"], (event, combo) => {
-      if (this.application.satis.mouseElement) {
-        let elm = this.application.satis.mouseElement.closest('[data-controller="satis-table"]')
-        if (elm) {
-          let controller = elm["satis-table"]
-          controller.prevPage(event)
-        }
-      }
-    })
-
-    Mousetrap.bind(["l", "right", "pagedown"], (event, combo) => {
-      if (this.application.satis.mouseElement) {
-        let elm = this.application.satis.mouseElement.closest('[data-controller="satis-table"]')
-        if (elm) {
-          let controller = elm["satis-table"]
-          controller.nextPage(event)
-        }
-      }
-    })
-
-    Mousetrap.bind(["e"], (event, combo) => {
-      if (this.application.satis.mouseElement) {
-        let elm = this.application.satis.mouseElement.closest('[data-controller="satis-table"]')
-        if (elm) {
-          let controller = elm["satis-table"]
-          controller.export(event)
-        }
-      }
-    })
-
-    Mousetrap.bind(["meta+k"], (event, combo) => {
-      if (this.application.satis.mouseElement) {
-        let elm = this.application.satis.mouseElement.closest('[data-controller="satis-table"]')
-        if (elm) {
-          let controller = elm["satis-table"]
-          controller.openSearch(event)
-        }
-      }
-    })
-
-    Mousetrap.bind(["esc"], (event, combo) => {
-      if (this.application.satis.mouseElement) {
-        let elm = this.application.satis.mouseElement.closest('[data-controller="satis-table"]')
-        if (elm) {
-          let controller = elm["satis-table"]
-          controller.reset(event)
-        }
-      }
-    })
-
     // Load custom elements
+    Satis.loadCustomElements()
+  }
+
+  static registerKeybinding(identifier, keys, handler) {
+    Mousetrap.bind(keys, (event, combo) => {
+      if (this.application.satis.mouseElement) {
+        let elm = this.application.satis.mouseElement.closest(`[data-controller="${identifier}"]`)
+        if (elm) {
+          handler(event, combo, elm[identifier])
+        }
+      }
+    })
+  }
+
+  static loadCustomElements() {
     const elementsContext = require.context("./elements", true, /\.js$/)
     elementsContext
       .keys()

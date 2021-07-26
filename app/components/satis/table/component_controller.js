@@ -11,6 +11,39 @@ export default class extends ApplicationController {
     totalPages: Number,
   }
 
+  static keyBindings = [
+    {
+      keys: ["h", "left", "pageup"],
+      handler: (event, combo, controller) => {
+        controller.prevPage(event)
+      },
+    },
+    {
+      keys: ["l", "right", "pagedown"],
+      handler: (event, combo, controller) => {
+        controller.nextPage(event)
+      },
+    },
+    {
+      keys: ["e"],
+      handler: (event, combo, controller) => {
+        controller.export(event)
+      },
+    },
+    {
+      keys: ["meta+k"],
+      handler: (event, combo, controller) => {
+        controller.openSearch(event)
+      },
+    },
+    {
+      keys: ["esc"],
+      handler: (event, combo, controller) => {
+        controller.reset(event)
+      },
+    },
+  ]
+
   connect() {
     super.connect()
 
