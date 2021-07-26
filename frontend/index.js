@@ -137,5 +137,18 @@ export class Satis {
         }
       }
     })
+
+    // Load custom elements
+    const elementsContext = require.context("./elements", true, /\.js$/)
+    elementsContext
+      .keys()
+      .map((key) => {
+        const [_, name] = /([a-z\_]+)_element\.js$/.exec(key)
+        return [name, elementsContext(key).default]
+      })
+      .forEach(([name, element]) => {
+        let identifier = `satis-${name.replace(/_/g, "-")}`
+        customElements.define(identifier, element)
+      })
   }
 }

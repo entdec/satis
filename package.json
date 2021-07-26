@@ -17,7 +17,8 @@
     "flag-icon-css": "^3.5.0",
     "leaflet": "^1.7.1",
     "mousetrap": "^1.6.5",
-    "sortablejs": "^1.14.0"
+    "sortablejs": "^1.14.0",
+    "tippy.js": "^6.3.1"
   },
   "devDependencies": {
     "semver": "^7.3.4",
