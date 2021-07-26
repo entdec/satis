@@ -50,8 +50,7 @@ module Satis
               safe_join [
 
                 (custom_label(method, options[:label]) unless options[:label] == false),
-                @template.render(Satis::Dropdown::Component.new(form: self, attribute: method, title: options[:label], **value_text_method_options(options),
-  &block))
+                @template.render(Satis::Dropdown::Component.new(form: self, attribute: method, title: options[:label], **value_text_method_options(options), &block))
               ]
             end
           end

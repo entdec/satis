@@ -214,10 +214,9 @@ module Satis
         form_group(method, options) do
           safe_join [
             (custom_label(method, options[:label]) unless options[:label] == false),
-            string_field(method,
-                         merge_input_options({ class: "form-control #{if has_error?(method)
-                                                                        'is-invalid'
-                                                                      end}" }, options[:input_html]))
+            tag.div(class: 'form-contol') do
+              string_field(method, merge_input_options({ class: "#{'is-invalid' if has_error?(method)}" }, options[:input_html]))
+            end
           ]
         end
       end
