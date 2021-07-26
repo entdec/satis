@@ -19,6 +19,10 @@ module Satis
       def tabs?
         tabs.present?
       end
+
+      def header?
+        icon.present? || title.present? || description.present? || menu
+      end
     end
   end
 end

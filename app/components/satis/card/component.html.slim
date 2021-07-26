@@ -1,23 +1,25 @@
 .satis-card.satis-tabs.bg-white.overflow-hidden.sm:rounded-lg.sm:shadow.dark:bg-gray-800 data-controller="satis-tabs" data-satis-tabs-persist-value="false"
-  .bg-white.px-4.py-5.sm:px-6.dark:bg-gray-800.dark:border-gray-700 class="#{tabs? ? '' : 'border-b border-gray-200'}"
+  - if header?
+    .bg-white.px-4.py-5.sm:px-6.dark:bg-gray-800.dark:border-gray-700 class="#{tabs? ? '' : 'border-b border-gray-200'}"
 
-    .-ml-4.-mt-4.flex.justify-between.items-center.flex-wrap.sm:flex-nowrap
-      - if icon
-        .ml-4.mt-4.flex-shrink-0.text-primary-600.dark:text-gray-300
-          i class=icon
-      .ml-4.mt-4.flex-1
-        h3.text-lg.leading-6.font-medium.text-gray-900.dark:text-gray-300
-          == title
-        - if description.present?
-          p.mt-1.text-sm.text-gray-500.dark:text-gray-500
-            == description
-      .ml-4.mt-4.flex-shrink-0
-        - for action in actions
-          span.ml-1
-            = action
-      .ml-4.mt-4.flex-shrink-0
-        - if menu
-          = render(Satis::Menu::Component.new(menu))
+      - if header?
+        .-ml-4.-mt-4.flex.justify-between.items-center.flex-wrap.sm:flex-nowrap
+          - if icon
+            .ml-4.mt-4.flex-shrink-0.text-primary-600.dark:text-gray-300
+              i class=icon
+          .ml-4.mt-4.flex-1
+            h3.text-lg.leading-6.font-medium.text-gray-900.dark:text-gray-300
+              == title
+            - if description.present?
+              p.mt-1.text-sm.text-gray-500.dark:text-gray-500
+                == description
+          .ml-4.mt-4.flex-shrink-0
+            - for action in actions
+              span.ml-1
+                = action
+          .ml-4.mt-4.flex-shrink-0
+            - if menu
+              = render(Satis::Menu::Component.new(menu))
 
   - if tabs?
     .bg-white.px-4.border-b.border-gray-200.sm:px-5.dark:bg-gray-800.dark:border-gray-700
