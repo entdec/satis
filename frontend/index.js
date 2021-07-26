@@ -9,14 +9,17 @@ config.mutateApproach = "sync"
 dom.watch()
 
 export class Satis {
-  static start(application) {
+  static start(application, configuration = {}) {
     if (!application) {
       application = Application.start()
     }
 
+    application.satisConfiguration = configuration
+
     console.log("Satis")
 
     this.application = application
+    const utilityContext = require.context("./utility_controllers", true, /\.js$/)
     const context = require.context("./controllers", true, /\.js$/)
     const componentContext = require.context("../app/components/", true, /component_controller\.js$/)
 
@@ -47,6 +50,20 @@ export class Satis {
       })
 
     this.application.load(definitionsFromContext(context).concat(definitionsFromContext(componentContext)))
+
+    if (configuration.utilityControllers != false) {
+      utilityContext
+        .keys()
+        .map((key) => {
+          const [_, name] = /([a-z\_]+)_controller\.js$/.exec(key)
+          return [name, utilityContext(key).default]
+        })
+        .forEach(([name, controller]) => {
+          this.application.register(name.replace(/_/g, "-"), controller)
+        })
+    } else {
+      console.log("Not loading Utility controllers")
+    }
 
     this.application.satis = {
       mouseElement: null,
