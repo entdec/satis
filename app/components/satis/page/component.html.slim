@@ -3,9 +3,9 @@ html lang="en"
   head
     = head
   body
-    .h-screen.flex.overflow-hidden.bg-gray-100.dark:bg-gray-600
+    .h-screen.flex.overflow-hidden.bg-gray-100.dark:bg-gray-600 data-controller="satis-sidebar"
       /! Off-canvas menu for mobile, show/hide based on off-canvas menu state.
-      .fixed.inset-0.flex.z-40.md:hidden aria-modal="true" role="dialog"
+      .fixed.inset-0.flex.z-40.md:hidden.hidden aria-modal="true" role="dialog" data-satis-sidebar-target="dialog"
         /!
           | Off-canvas menu overlay, show/hide based on off-canvas menu state.
 
@@ -15,7 +15,7 @@ html lang="en"
           | Leaving: "transition-opacity ease-linear duration-300"
           | From: "opacity-100"
           | To: "opacity-0"
-        .fixed.inset-0.bg-gray-600.bg-opacity-75 aria-hidden="true"
+        .fixed.inset-0.bg-gray-600.bg-opacity-75.hidden aria-hidden="true" data-satis-sidebar-target="overlay"
         /!
           | Off-canvas menu, show/hide based on off-canvas menu state.
 
@@ -25,7 +25,7 @@ html lang="en"
           | Leaving: "transition ease-in-out duration-300 transform"
           | From: "translate-x-0"
           | To: "-translate-x-full"
-        .relative.flex-1.flex.flex-col.max-w-xs.w-full.pt-5.pb-4.bg-white
+        .relative.flex-1.flex.flex-col.max-w-xs.w-full.pt-5.pb-4.bg-white.transform.hidden data-satis-sidebar-target="offCanvasMenu"
           /!
             | Close button, show/hide based on off-canvas menu state.
 
@@ -35,14 +35,13 @@ html lang="en"
             | Leaving: "ease-in-out duration-300"
             | From: "opacity-100"
             | To: "opacity-0"
-          .absolute.top-0.right-0.-mr-12.pt-2
-            button.ml-1.flex.items-center.justify-center.h-10.w-10.rounded-full.focus:outline-none.focus:ring-2.focus:ring-inset.focus:ring-white
+          .absolute.top-0.right-0.-mr-12.pt-2.hidden data-satis-sidebar-target="closeButton"
+            button.ml-1.flex.items-center.justify-center.h-10.w-10.rounded-full.focus:outline-none.focus:ring-2.focus:ring-inset.focus:ring-white data-action="satis-sidebar#close"
               span.sr-only Close sidebar
-              /! Heroicon name: outline/x
-              svg.h-6.w-6.text-white aria-hidden="true" fill="none" stroke="currentColor" viewbox=("0 0 24 24") xmlns="http://www.w3.org/2000/svg"
-                path d=("M6 18L18 6M6 6l12 12") stroke-linecap="round" stroke-linejoin="round" stroke-width="2" /
+              i.fal.fa-2x.fa-xmark.text-white aria-hidden="true"
           .flex-shrink-0.flex.items-center.px-4
-            img.h-8.w-auto alt="Workflow" src="" /
+            - if Current.account.logo.attached?
+              = image_tag @view_context.main_app.url_for(Current.account.logo.variant(resize_to_limit: [nil, 50]).processed)
           .mt-5.flex-1.h-0.overflow-y-auto
             = render(Satis::SidebarMenu::Component.new(menu: @menu).with_variant(:mobile))
 
@@ -70,7 +69,7 @@ html lang="en"
       /**********/
       .flex.flex-col.w-0.flex-1.overflow-hidden
         .relative.z-10.flex-shrink-0.flex.h-16.bg-white.shadow.dark:bg-gray-900.dark:border-gray-700
-          button.px-4.border-r.border-gray-200.text-gray-500.focus:outline-none.focus:ring-2.focus:ring-inset.focus:ring-primary-500.md:hidden
+          button.px-4.border-r.border-gray-200.text-gray-500.focus:outline-none.focus:ring-2.focus:ring-inset.focus:ring-primary-500.md:hidden data-action="satis-sidebar#open"
             span.sr-only Open sidebar
             /! Heroicon name: outline/menu-alt-2
             svg.h-6.w-6 aria-hidden="true" fill="none" stroke="currentColor" viewbox=("0 0 24 24") xmlns="http://www.w3.org/2000/svg"
