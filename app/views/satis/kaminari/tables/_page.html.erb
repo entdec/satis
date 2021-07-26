@@ -8,7 +8,7 @@
     remote:        data-remote
 -%>
 <%if page.current?%>
-  <span href="#" aria-current="page" class="<%=current_page.first? ? "rounded-l-md" : ""%> <%=current_page.last? ? "rounded-r-md" : ""%> z-10 bg-indigo-50 border-indigo-500 text-indigo-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium"><%=page%></span>
+  <span href="#" aria-current="page" class="<%=current_page.first? ? "rounded-l-md" : ""%> <%=current_page.last? ? "rounded-r-md" : ""%> z-10 bg-primary-50 border-primary-500 text-primary-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium"><%=page%></span>
 <%else%>
   <%= link_to page, url, {remote: remote, rel: page.rel, 'data-turbo-frame'=> "#{params[:table_name]}", class: "bg-white border-gray-300 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"}  %>
 <%end%>
