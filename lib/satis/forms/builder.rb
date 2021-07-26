@@ -63,7 +63,7 @@ module Satis
         # Like checking for whether destroy is allowed on assocations?
         allow_actions = options.key?(:allow_actions) ? options[:allow_actions] : true
 
-        reflection = @object.class.reflections[name.to_s]
+        reflection = @object.class.reflections[name.to_s] if @object.class.respond_to?(:reflections)
 
         html_options = options[:html] || {}
 
