@@ -12,11 +12,13 @@
           .col-span-11
             = yield(nested_form)
           .col-span-1.flex.justify-center.items-center.association
-            a href="#" data-action='click->satis-fields-for#addAssociation'
-              i.fas.fa-plus
+            .h-full.w-1.border-r.border-dashed
+            a href="#" data-action='click->satis-fields-for#addAssociation' style="margin-left: -7px;"
+              i.fal.fa-plus
           .hidden.col-span-1.flex.justify-center.items-center.association
-            a href="#" data-action='click->satis-fields-for#removeAssociation'
-              i.fas.fa-trash
+            .h-full.w-1.border-r.border-dashed
+            a href="#" data-action='click->satis-fields-for#removeAssociation'  style="margin-left: -7px;"
+              i.fal.fa-trash
 
 = form.rails_fields_for collection do |nested_form|
   .nested-fields.py-2
@@ -26,7 +28,8 @@
       .col-span-11
         = yield(nested_form)
       .col-span-1.flex.justify-center.items-center
-        a href="#" data-action='click->satis-fields-for#removeAssociation'
-          i.fas.fa-trash
+        .h-full.w-1.border-r.border-dashed
+        a href="#" data-action='click->satis-fields-for#removeAssociation' style="margin-left: -7px;"
+          i.fal.fa-trash
 
 span data-satis-fields-for-target='insertionPoint'
