@@ -150,7 +150,7 @@ module Satis
       end
 
       def form_group(method, options = {}, &block)
-        tag.div class: "form-group #{method}" do
+        tag.div class: "form-group form-group-#{method}" do
           safe_join [
             block.call,
             hint_text(options[:hint]),
