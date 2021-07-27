@@ -1,4 +1,4 @@
-import ApplicationController from "./application_controller"
+import ApplicationController from "../../../../frontend/controllers/application_controller"
 
 export default class extends ApplicationController {
   static targets = ["closeButton", "openButton", "offCanvasMenu", "overlay", "dialog"]
@@ -47,8 +47,6 @@ export default class extends ApplicationController {
   }
 
   open(event) {
-    console.log("open")
-
     this.dialogTarget.classList.remove("hidden")
     this.overlayTarget.classList.remove("hidden")
     this.offCanvasMenuTarget.classList.remove("hidden")

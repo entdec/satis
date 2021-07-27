@@ -5,8 +5,9 @@ module Satis
 
       renders_many :items
 
-      def initialize(**options)
-        @menu = options[:menu]
+      def initialize(menu, **_options)
+        super
+        @menu = menu
       end
     end
   end
