@@ -27,6 +27,8 @@ export default class extends ApplicationController {
     // To remember what the last search was we did
     this.lastSearch = null
 
+    this.display()
+
     this.popperInstance = createPopper(this.element, this.resultsTarget, {
       offset: [-20, 2],
       placement: "bottom-start",
@@ -45,7 +47,6 @@ export default class extends ApplicationController {
       ],
     })
 
-    this.display()
     window.addEventListener("click", this.boundClickedOutside)
   }
 
@@ -60,7 +61,12 @@ export default class extends ApplicationController {
   }
 
   // Called on connect
+  // FIXME: Has code duplication with select
   display(event) {
+    // Ignore if we triggered this change event
+    if (event?.detail?.src == this) {
+      return
+    }
     // Put current selection in search field
     if (this.hiddenInputTarget.value) {
       if (this.itemTargets.length == 0) {
@@ -68,18 +74,10 @@ export default class extends ApplicationController {
         ourUrl.searchParams.append("id", this.hiddenInputTarget.value)
 
         this.fetchResultsWith(ourUrl).then(() => {
-          const currentItem = this.itemTargets.find((item) => {
-            return this.hiddenInputTarget.value == item.getAttribute("data-satis-dropdown-item-value")
-          })
-          if (currentItem) {
-            this.searchInputTarget.value = currentItem.getAttribute("data-satis-dropdown-item-text")
-          }
+          this.setHiddenInput()
         })
       } else {
-        const currentItem = this.itemTargets.find((item) => {
-          return this.hiddenInputTarget.value == item.getAttribute("data-satis-dropdown-item-value")
-        })
-        this.searchInputTarget.value = currentItem.getAttribute("data-satis-dropdown-item-text")
+        this.setHiddenInput()
       }
     }
   }
@@ -186,6 +184,22 @@ export default class extends ApplicationController {
   }
 
   // --- Helpers
+
+  setHiddenInput() {
+    const currentItem = this.itemTargets.find((item) => {
+      return this.hiddenInputTarget.value == item.getAttribute("data-satis-dropdown-item-value")
+    })
+    if (currentItem) {
+      this.searchInputTarget.value = currentItem.getAttribute("data-satis-dropdown-item-text")
+
+      Array.prototype.slice.call(currentItem.attributes).forEach((attr) => {
+        if (attr.name.startsWith("data") && !attr.name.startsWith("data-satis") && !attr.name.startsWith("data-action")) {
+          this.hiddenInputTarget.setAttribute(attr.name, attr.value)
+        }
+      })
+      this.hiddenInputTarget.dispatchEvent(new CustomEvent("change", { detail: { src: this } }))
+    }
+  }
 
   toggleResultsList(event) {
     if (this.resultsShown) {

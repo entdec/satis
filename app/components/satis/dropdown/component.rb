@@ -23,6 +23,12 @@ module Satis
         @block = block
       end
 
+      # Deal with context 
+      def hidden_value
+        value = form.object.send(attribute)
+        value = value.id if value.respond_to? :id
+      end
+
       def placeholder
         title || attribute.to_s.humanize
       end
