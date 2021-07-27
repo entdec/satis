@@ -1,4 +1,4 @@
-.group.inline-block
+div data-controller="satis-menu" data-action="mouseover->satis-menu#show mouseleave->satis-menu#hide"
   - if content
     = content
   - else
@@ -7,7 +7,7 @@
         i.fa-solid.fa-ellipsis-vertical
 
   - if menu.items.present?
-    ul.z-10.bg-white.border.rounded-md.shadow-lg.transform.scale-0.group-hover:scale-100.absolute.transition.duration-150.ease-in-out.origin-top.w-56
+    ul.hidden.z-10.bg-white.border.rounded-md.shadow-lg.min-w-max data-satis-menu-target="submenu" data-satis-menu-submenu-placement="bottom"
       - menu.items.each do |item|
         = render(Satis::MenuItem::Component.new(item: item))
 
