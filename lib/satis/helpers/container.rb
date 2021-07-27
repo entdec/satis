@@ -19,6 +19,8 @@ module Satis
       end
 
       def copyable(name)
+        return if name.blank?
+
         "<satis-copyable>#{name}</satis-copyable>"
       end
 
