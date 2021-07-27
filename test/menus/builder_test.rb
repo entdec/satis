@@ -3,7 +3,7 @@ require 'test_helper'
 module Menus
   class BuilderTest < ActiveSupport::TestCase
     test 'it builds menus' do
-      menu = sts::Menus::Builder.build do |m|
+      menu = Satis::Menus::Builder.build do |m|
         m.item :home, icon: 'house', link: 'http://127.0.0.1'
       end
 
@@ -13,7 +13,7 @@ module Menus
     end
 
     test 'it builds sub-menus' do
-      menu = sts::Menus::Builder.build do |m|
+      menu = Satis::Menus::Builder.build do |m|
         m.item :customer, icon: 'address-book', link: 'http://127.0.0.1/customers' do |cm|
           cm.item :create, icon: 'plus', link: 'http://127.0.0.1/customers/new'
         end
