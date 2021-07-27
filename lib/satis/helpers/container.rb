@@ -18,6 +18,10 @@ module Satis
         extend Satis::Table::Helpers
       end
 
+      def copyable(name)
+        "<satis-copyable>#{name}</satis-copyable>"
+      end
+
       def form_for(name, *args, &block)
         options = args.extract_options!
         args << options.merge(builder: Satis::Forms::Builder)

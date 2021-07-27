@@ -8,6 +8,9 @@ import { config, library, dom } from "@fortawesome/fontawesome-svg-core"
 config.mutateApproach = "sync"
 dom.watch()
 
+import tippy from "tippy.js"
+import "tippy.js/dist/tippy.css" // optional for styling
+
 export class Satis {
   static start(application, configuration = {}) {
     if (!application) {
@@ -32,6 +35,8 @@ export class Satis {
 
     // Load custom elements
     Satis.setupCustomElements()
+
+    tippy("[data-tooltip-content]")
   }
 
   // Register a keybinding found a controller
