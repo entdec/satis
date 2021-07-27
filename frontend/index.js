@@ -36,7 +36,22 @@ export class Satis {
     // Load custom elements
     Satis.setupCustomElements()
 
-    tippy("[data-tooltip-content]")
+    // Show tooltips
+    tippy("[data-tooltip-content]", {
+      content: (reference) => reference.getAttribute("data-tooltip-content"),
+    })
+
+    document.documentElement.addEventListener("turbo:load", () => {
+      tippy("[data-tooltip-content]", {
+        content: (reference) => reference.getAttribute("data-tooltip-content"),
+      })
+    })
+
+    document.addEventListener("DOMContentLoaded", () => {
+      tippy("[data-tooltip-content]", {
+        content: (reference) => reference.getAttribute("data-tooltip-content"),
+      })
+    })
   }
 
   // Register a keybinding found a controller
