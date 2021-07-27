@@ -1,12 +1,13 @@
 module Satis
   module Avatar
     class Component < Satis::ApplicationComponent
-      attr_reader :name, :photo
+      attr_reader :name, :photo, :size_class
 
-      def initialize(name: nil, photo: nil)
+      def initialize(name: nil, photo: nil, size_class: 'h-8 w-8')
         super
         @name = name
         @photo = photo
+        @size_class = size_class
       end
 
       def initials
