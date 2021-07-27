@@ -1,6 +1,6 @@
 .satis-card.satis-tabs.bg-white.overflow-hidden.sm:rounded-lg.sm:shadow.dark:bg-gray-800 data-controller="satis-tabs" data-satis-tabs-persist-value="false"
   - if header?
-    .bg-white.px-4.py-5.sm:px-6.dark:bg-gray-800.dark:border-gray-700 class="#{tabs? ? '' : 'border-b border-gray-200'}"
+    .px-4.py-5.sm:px-6.dark:border-gray-700 class="#{tabs? ? '' : 'border-b border-gray-200'} #{header_background_color[:light]} dark:#{header_background_color[:dark]}"
 
       - if header?
         .-ml-4.-mt-4.flex.justify-between.items-center.flex-wrap.sm:flex-nowrap
