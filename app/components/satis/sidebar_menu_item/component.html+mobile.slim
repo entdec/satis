@@ -1,7 +1,7 @@
 .space-y-1 class="#{item.level >= 1 ? 'pl-4' : ''}"
   a.text-gray-600.hover:bg-gray-50.hover:text-gray-900.group.flex.items-center.px-2.py-2.text-base.font-medium.rounded-md href=item.link *item.link_attributes
     - if item.icon
-        i.fal.fa-lg.text-gray-400.group-hover:text-gray-500.mr-4.flex-shrink-0.h-6.w-6 class="fa-#{item.icon}" style="width: 20px;"
+        i.fa-lg.text-gray-400.group-hover:text-gray-500.mr-4.flex-shrink-0.h-6.w-6 class=item.icon style="width: 20px;"
     - else
       i.mr-3.flex-shrink-0.h-6 style="width: 20px;"
     span.flex-1

@@ -3,7 +3,7 @@ div.pt-1 class="#{item.level >= 1 ? 'pl-4' : ''}" data-controller="satis-sidebar
   a.bg-white.dark:bg-gray-900.text-gray-600.dark:text-gray-300.hover:bg-gray-50.dark:hover:bg-gray-700.hover:text-gray-900.group.w-full.flex.items-center.pl-2.pr-1.py-2.text-left.text-sm.font-medium.rounded-md.focus:outline-none.focus:ring-2.focus:ring-primary-500 aria-controls="sub-menu-1" aria-expanded="false" href=item.link *item.link_attributes data-satis-sidebar-menu-item-target="link"
     /! Heroicon name: outline/users
     - if item.icon
-      i.fal.fa-lg.mr-3.flex-shrink-0.h-6.w-6.text-gray-400.group-hover:text-gray-500 class="fa-#{item.icon}" style="width: 20px;"
+      i.fa-lg.mr-3.flex-shrink-0.h-6.w-6.text-gray-400.group-hover:text-gray-500 class=item.icon style="width: 20px;"
     - else
       i.mr-3.flex-shrink-0.h-6 style="width: 20px;"
 

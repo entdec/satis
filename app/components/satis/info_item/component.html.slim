@@ -3,5 +3,5 @@
     dt.text-xs.uppercase.text-gray-400 = I18n.t(name, default: name.to_s.humanize, scope: :info_item)
     dd.text-sm.text-gray-900.dark:text-gray-300
       - if options[:icon]
-        i.mr-1 class="#{options[:icon]}"
+        i.mr-1 class=options[:icon]
       = content || options[:content]
