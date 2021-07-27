@@ -31,7 +31,7 @@ export default class extends ApplicationController {
       },
     },
     {
-      keys: ["meta+k"],
+      keys: ["mod+k"],
       handler: (event, combo, controller) => {
         controller.openSearch(event)
       },

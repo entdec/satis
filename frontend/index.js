@@ -36,7 +36,15 @@ export class Satis {
     // Load custom elements
     Satis.setupCustomElements()
 
+    // For keyboard shortcuts
+    if (navigator.userAgent.indexOf("Mac OS X") != -1) {
+      document.documentElement.classList.add("mac")
+    } else {
+      document.documentElement.classList("pc")
+    }
+
     // Show tooltips
+    // TODO: Try to combine this in one event call, this doesn't work for tables yet
     tippy("[data-tooltip-content]", {
       content: (reference) => reference.getAttribute("data-tooltip-content"),
     })

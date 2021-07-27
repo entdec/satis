@@ -1,36 +1,34 @@
-div.dropdown.relative data-action="keydown->satis-dropdown#dispatch" data-controller="satis-dropdown" data-satis-dropdown-page-size-value=10 data-satis-dropdown-url-value=url data-satis-dropdown-url-params-value=(options[:url_params]||{}).to_json
+div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controller="satis-dropdown" data-satis-dropdown-page-size-value=10 data-satis-dropdown-url-value=url data-satis-dropdown-url-params-value=(options[:url_params]||{}).to_json
   / Hidden form field containing results
   = form.hidden_field(attribute, options[:input_html])
-  .w-full.flex.flex-col
-     .w-full
-      .flex.flex-col.items-center
-        .w-full
-          .h-12.p-1.bg-white.dark:bg-gray-800.flex.border.border-gray-300.dark:border-gray-700.rounded
-            .flex.flex-auto.flex-wrap
-              / Input where you can search
-              input.p-1.px-2.appearance-none.outline-none.w-full.text-gray-800.dark:bg-gray-800 data-action="keyup->satis-dropdown#search" data-satis-dropdown-target="searchInput" placeholder=placeholder
-            div
-              / Reset button
-              button.cursor-pointer.w-6.h-full.flex.items-center.text-gray-400.outline-none.focus:outline-none data-satis-dropdown-target="resetButton" data-action="click->satis-dropdown#reset"
-                i.fas.fa-xmark
-            .text-gray-300.w-8.py-1.pl-2.pr-1.border-l.flex.items-center.border-gray-200
-              / Up/down chevrons
-              button.cursor-pointer.w-6.h-6.text-gray-600.outline-none.focus:outline-none data-action="click->satis-dropdown#toggleResultsList" data-satis-dropdown-target="toggleButton"
-                i.hidden.fas.fa-chevron-up
-                i.fas.fa-chevron-down
+  .flex.flex-col.relative
+    .flex.flex-col.items-center
+      .w-full
+        .h-12.p-1.bg-white.dark:bg-gray-800.flex.border.border-gray-300.dark:border-gray-700.rounded
+          .flex.flex-auto.flex-wrap
+            / Input where you can search
+            input.p-1.px-2.appearance-none.outline-none.w-full.text-gray-800.dark:bg-gray-800 data-action="keyup->satis-dropdown#search" data-satis-dropdown-target="searchInput" placeholder=placeholder
+          div
+            / Reset button
+            button.cursor-pointer.w-6.h-full.flex.items-center.text-gray-400.outline-none.focus:outline-none data-satis-dropdown-target="resetButton" data-action="click->satis-dropdown#reset"
+              i.fas.fa-xmark
+          .text-gray-300.w-8.py-1.pl-2.pr-1.border-l.flex.items-center.border-gray-200
+            / Up/down chevrons
+            button.cursor-pointer.w-6.h-6.text-gray-600.outline-none.focus:outline-none data-action="click->satis-dropdown#toggleResultsList" data-satis-dropdown-target="toggleButton"
+              i.hidden.fas.fa-chevron-up
+              i.fas.fa-chevron-down
 
-        / Container for results
-        / .hidden.absolute.shadow.bg-white.dark:bg-gray-800.top-50.z-40.w-full.lef-0.rounded.max-h-select.overflow-y-auto data-satis-dropdown-target="results" data-action="scroll->satis-dropdown#scroll"
-        .hidden.shadow.bg-white.border-gray-300.dark:bg-gray-800.dark:border-gray-700.z-10.w-full.lef-0.rounded.max-h-select.overflow-y-auto data-satis-dropdown-target="results" data-action="scroll->satis-dropdown#scroll"
-          .flex.flex-col.w-full data-satis-dropdown-target="items"
-            - options[:collection]&.each do |item|
-              div data-satis-dropdown-target="item" data-satis-dropdown-item-value=item.send(value_method) data-satis-dropdown-item-text=item.send(text_method) data-action="click->satis-dropdown#select"
-                - if custom_item_html?
-                    = item_html(item)
-                - else
-                  .cursor-pointer.w-full.dark:border-gray-700.border-gray-100.border-b.hover:bg-primary-200
-                    .flex.w-full.items-center.p-2.pl-2.border-transparent.border-l-2.hover:border-teal-100
-                      .w-full.items-center.flex
-                        .mx-2.-mt-1
-                          span = item.send(text_method)
+    / Container for results
+    .hidden.container.shadow.bg-white.border.border-gray-300.dark:bg-gray-800.dark:border-gray-700.z-10.rounded.max-h-select.overflow-y-auto.w-full data-satis-dropdown-target="results" data-action="scroll->satis-dropdown#scroll"
+      .flex.flex-col.w-full data-satis-dropdown-target="items"
+        - options[:collection]&.each do |item|
+          div data-satis-dropdown-target="item" data-satis-dropdown-item-value=item.send(value_method) data-satis-dropdown-item-text=item.send(text_method) data-action="click->satis-dropdown#select"
+            - if custom_item_html?
+                = item_html(item)
+            - else
+              .cursor-pointer.w-full.dark:border-gray-700.border-gray-100.border-b.hover:bg-primary-200
+                .flex.w-full.items-center.p-2.pl-2.border-transparent.border-l-2.hover:border-teal-100
+                  .w-full.items-center.flex
+                    .mx-2.-mt-1
+                      span = item.send(text_method)
 

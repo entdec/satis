@@ -29,7 +29,7 @@ export default class extends ApplicationController {
 
     this.popperInstance = createPopper(this.element, this.resultsTarget, {
       offset: [-20, 2],
-      placement: "bottom",
+      placement: "bottom-start",
       modifiers: [
         {
           name: "flip",
@@ -40,6 +40,7 @@ export default class extends ApplicationController {
         },
         {
           name: "preventOverflow",
+          enabled: true,
         },
       ],
     })

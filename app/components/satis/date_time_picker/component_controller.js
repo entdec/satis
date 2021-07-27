@@ -59,6 +59,7 @@ export default class extends ApplicationController {
           },
           {
             name: "preventOverflow",
+            enabled: true,
           },
         ],
       })

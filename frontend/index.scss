@@ -14,3 +14,21 @@ a:not([class]),
 a[class=""] {
   @apply text-primary-600 underline;
 }
+
+.mac {
+  .mac-only {
+    display: inline-block;
+  }
+  .pc-only {
+    display: none;
+  }
+}
+
+.pc {
+  .pc-only {
+    display: inline-block;
+  }
+  .mac-only {
+    display: none;
+  }
+}

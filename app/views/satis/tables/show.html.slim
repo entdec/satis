@@ -8,7 +8,11 @@ turbo-frame id="#{params[:table_name]}"
             input#search.shadow-sm.focus:ring-primary-500.focus:border-primary-500.block.w-full.pr-12.sm:text-sm.border-gray-300.rounded-md name="search" type="text" /
             .absolute.inset-y-0.right-0.flex class=("py-1.5 pr-1.5")
               kbd.inline-flex.items-center.border.border-gray-200.rounded.px-2.text-sm.font-sans.font-medium.text-gray-400
-                | ⌘K
+                .mac-only
+                  | ⌘K
+                .pc-only
+                  | Ctrl-K
+
 
     .bg-white.flex.items-center.overflow-x-auto.dark:bg-gray-900.dark:border-gray-700
       .flex.flex-col.flex-grow
