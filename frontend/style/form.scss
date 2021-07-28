@@ -80,6 +80,11 @@ form {
       .fields {
         @apply opacity-50;
       }
+      &:hover {
+        .fields {
+          @apply opacity-100;
+        }
+      }
     }
   }
 }
