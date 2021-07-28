@@ -66,7 +66,7 @@ module Satis
               text_method ||= :name
             # An array of arrays, whereby the inner array is size 2: [[text,value],[text,value]]
             elsif options[:collection].is_a?(Array) && options[:collection].first.is_a?(Array) && options[:collection].first.size == 2
-              value_method ||= :last
+              value_method ||= :second
               text_method ||= :first
             # An array:["textvalue","textvalue"]
             elsif options[:collection].is_a?(Array) && !options[:collection].first.is_a?(Array)
@@ -82,7 +82,7 @@ module Satis
               text_method ||= :name
             # Whatever else
             else
-              value_method ||= :last
+              value_method ||= :second
               text_method ||= :first
             end
 

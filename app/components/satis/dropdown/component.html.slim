@@ -22,7 +22,8 @@ div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controlle
     .hidden.container.shadow.bg-white.border.border-gray-300.dark:bg-gray-800.dark:border-gray-700.z-10.rounded.max-h-select.overflow-y-auto.w-full data-satis-dropdown-target="results" data-action="scroll->satis-dropdown#scroll"
       .flex.flex-col.w-full data-satis-dropdown-target="items"
         - options[:collection]&.each do |item|
-          div data-satis-dropdown-target="item" data-satis-dropdown-item-value=item.send(value_method) data-satis-dropdown-item-text=item.send(text_method) data-action="click->satis-dropdown#select"
+          - data_attrs = item.try(:third) ? item.third : {}
+          div data-satis-dropdown-target="item" data-satis-dropdown-item-value=item.send(value_method) data-satis-dropdown-item-text=item.send(text_method) data-action="click->satis-dropdown#select" *data_attrs
             - if custom_item_html?
                 = item_html(item)
             - else
