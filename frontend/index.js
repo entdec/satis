@@ -40,7 +40,7 @@ export class Satis {
     if (navigator.userAgent.indexOf("Mac OS X") != -1) {
       document.documentElement.classList.add("mac")
     } else {
-      document.documentElement.classList("pc")
+      document.documentElement.classList.add("pc")
     }
 
     // Show tooltips
