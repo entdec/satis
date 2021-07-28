@@ -15,6 +15,8 @@ module Satis
       end
 
       def photo_url
+        return unless photo.attached?
+
         helpers.main_app.url_for(photo)
       end
     end
