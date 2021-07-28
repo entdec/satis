@@ -76,6 +76,10 @@ module Satis
             elsif options[:collection].class < ActiveRecord::Relation
               value_method ||= :id
               text_method ||= :name
+            # An activerecord relation
+            elsif options[:collection].respond_to?(:each) && options[:collection].first.respond_to?(:id) && options[:collection].first.respond_to?(:name)
+              value_method ||= :id
+              text_method ||= :name
             # Whatever else
             else
               value_method ||= :last
