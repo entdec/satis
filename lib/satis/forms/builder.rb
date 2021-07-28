@@ -62,8 +62,7 @@ module Satis
         # FIXME: Yuk - is it possible to detect when this should not be allowed?
         # Like checking for whether destroy is allowed on assocations?
         allow_actions = options.key?(:allow_actions) ? options[:allow_actions] : true
-
-        reflection = @object.class.reflections[name.to_s] if @object.class.respond_to?(:reflections)
+        show_actions = @object.respond_to?("#{name}_attributes=") && @object.send(name).respond_to?(:each) && template_object && allow_actions == true
 
         html_options = options[:html] || {}
 
@@ -80,7 +79,7 @@ module Satis
                               end
 
         # Only do the whole nested-form thing with a collection
-        if reflection&.collection? && template_object && allow_actions == true
+        if show_actions
           view_options = {
             form: self,
             collection: name,
@@ -92,6 +91,7 @@ module Satis
             render 'shared/fields_for', view_options, &block
           end
 
+          # FIXME: You would want to do this:
           # render(Satis::FieldsFor::Component.new(
           #          form: self, name: name, template_object: template_object, **options, &block
           #        ))
