@@ -7,13 +7,12 @@ module Satis
 
       attr_writer :scope
 
-      def initialize(id, link: nil, label: nil, icon: nil, app: nil, link_attributes: {}, scope: [], level: nil, &block)
+      def initialize(id, link: nil, label: nil, icon: nil, link_attributes: {}, scope: [], level: nil, &block)
         @id = id
         @label = label
         @icon = icon
         @link = link
         @link_attributes = link_attributes
-        @app = app
         @scope = scope
         @level = level
         @menu = Menu.new(scope + ["#{id}_menu".to_sym], level: level + 1, &block) if block_given?
