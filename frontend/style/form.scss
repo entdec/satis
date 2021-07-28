@@ -74,4 +74,12 @@ form {
   trix-editor {
     @apply border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500;
   }
+
+  .fields_for {
+    .template {
+      .fields {
+        @apply opacity-50;
+      }
+    }
+  }
 }

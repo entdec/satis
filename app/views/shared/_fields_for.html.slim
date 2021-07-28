@@ -9,15 +9,15 @@
         = nested_form.input :id, as: :hidden
         = nested_form.input :_destroy, as: :hidden
         .grid.grid-cols-12.gap-4
-          .col-span-11
+          .col-span-11.fields
             = yield(nested_form)
           .col-span-1.flex.justify-center.items-center.association
             .h-full.w-1.border-r.border-dashed
-            a href="#" data-action='click->satis-fields-for#addAssociation' style="margin-left: -7px;"
+            a.text-primary-600.bg-white.dark:bg-gray-800 href="#" data-action='click->satis-fields-for#addAssociation' style="margin-left: -7px;"
               i.fal.fa-plus
           .hidden.col-span-1.flex.justify-center.items-center.association
             .h-full.w-1.border-r.border-dashed
-            a href="#" data-action='click->satis-fields-for#removeAssociation'  style="margin-left: -7px;"
+            a.text-primary-600.bg-white.dark:bg-gray-800 href="#" data-action='click->satis-fields-for#removeAssociation'  style="margin-left: -7px;"
               i.fal.fa-trash
 
 = form.rails_fields_for collection do |nested_form|
@@ -29,7 +29,7 @@
         = yield(nested_form)
       .col-span-1.flex.justify-center.items-center
         .h-full.w-1.border-r.border-dashed
-        a href="#" data-action='click->satis-fields-for#removeAssociation' style="margin-left: -7px;"
+        a.text-primary-600.bg-white.dark:bg-gray-800 href="#" data-action='click->satis-fields-for#removeAssociation' style="margin-left: -7px;"
           i.fal.fa-trash
 
 span data-satis-fields-for-target='insertionPoint'
