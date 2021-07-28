@@ -17,7 +17,7 @@ export default class extends ApplicationController {
     this.boundUpdate = this.update.bind(this)
     this.inputTarget.addEventListener("input", this.boundUpdate)
 
-    if (!this.showableTargets.length == 0) {
+    if (this.showableTargets.length == 0) {
       console.warn("show-hide has not showable targets")
     }
     this.update()
