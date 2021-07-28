@@ -15,12 +15,16 @@ export default class extends ApplicationController {
 
   connect() {
     this.boundUpdate = this.update.bind(this)
-    this.inputTarget.addEventListener("change", this.boundUpdate)
+    this.inputTarget.addEventListener("input", this.boundUpdate)
+
+    if (!this.showableTargets.length == 0) {
+      console.warn("show-hide has not showable targets")
+    }
     this.update()
   }
 
   disconnect() {
-    this.inputTarget.removeEventListener("change", this.boundUpdate)
+    this.inputTarget.removeEventListener("input", this.boundUpdate)
   }
 
   update() {
