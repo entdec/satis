@@ -88,6 +88,12 @@ export default class extends ApplicationController {
 
   //
   filter(event) {
+    console.log(event)
+    // Ignore if satis-dropdown triggered this change event because of the display
+    if (event?.detail?.src == "satis-dropdown") {
+      return
+    }
+
     let turboFrame = this.element.closest("turbo-frame")
     let ourUrl = new URL(turboFrame.src, window.location.href)
 
