@@ -88,7 +88,6 @@ export default class extends ApplicationController {
 
   //
   filter(event) {
-    console.log(event)
     // Ignore if satis-dropdown triggered this change event because of the display
     if (event?.detail?.src == "satis-dropdown") {
       return

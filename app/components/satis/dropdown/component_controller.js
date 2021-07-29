@@ -27,7 +27,6 @@ export default class extends ApplicationController {
     // To remember what the last search was we did
     this.lastSearch = null
 
-    console.log("connect!")
     this.display()
 
     this.popperInstance = createPopper(this.element, this.resultsTarget, {
@@ -64,7 +63,6 @@ export default class extends ApplicationController {
   // Called on connect
   // FIXME: Has code duplication with select
   display(event) {
-    console.log(event)
     // Ignore if we triggered this change event
     if (event?.detail?.src == "satis-dropdown") {
       return
