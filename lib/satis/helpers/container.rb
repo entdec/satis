@@ -18,10 +18,10 @@ module Satis
         extend Satis::Table::Helpers
       end
 
-      def copyable(name)
+      def copyable(name, scrub: '#')
         return if name.blank?
 
-        "<satis-copyable>#{name}</satis-copyable>"
+        "<satis-copyable scrub=\"#{scrub}\">#{name}</satis-copyable>"
       end
 
       def form_for(name, *args, &block)

@@ -23,7 +23,7 @@ export default class SatisCopyable extends HTMLElement {
     this.input.style.outline = "none"
     this.input.style.boxShadow = "none"
     this.input.style.background = "transparent"
-    this.input.value = this.textSpan.textContent
+    this.input.value = this.textSpan.textContent.replace(this.getAttribute("scrub"), "")
 
     shadow.appendChild(this.input)
 
