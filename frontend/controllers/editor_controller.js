@@ -100,6 +100,10 @@ export default class extends ApplicationController {
     }
 
     this.editor.setSize("100%", this.heightValue)
+    // Sometimes the editor does not refresh/initialize properly, this prevents that
+    setTimeout(() => {
+      this.editor.refresh()
+    }, 100)
 
     this.editor.on("change", function (editor, evt) {
       let event = new CustomEvent("editor.changed", { bubbles: true, cancelable: true, detail: { textarea: self.textareaTarget, editor: self.editor, dirty: !self.editor.getDoc().isClean() } })
