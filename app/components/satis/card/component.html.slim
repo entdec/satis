@@ -44,7 +44,7 @@
                     = tab.badge
 
     - tabs.each do |tab|
-      div id="#{tab.name}-content" class="tab-content" data-satis-tabs-target="content"
+      div id="#{tab.name}-content" class="tab-content #{tab.options[:padding] == true ? 'px-6 py-6' : ''}" data-satis-tabs-target="content"
         = tab.to_s
   - else
     div class="#{content_padding ? 'px-6 py-6' : ''}"
