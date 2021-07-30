@@ -336,6 +336,16 @@ export default class extends ApplicationController {
     } catch (error) {
       ourUrl = new URL(this.urlValue, window.location.href)
     }
+
+    // Add searchParams based on url_params
+    const form = this.element.closest("form")
+    Object.entries(this.urlParamsValue).forEach((item) => {
+      let elm = form.querySelector(`[name='${item[1]}']`)
+      if (elm) {
+        ourUrl.searchParams.append(item[0], elm.value)
+      }
+    })
+
     return ourUrl
   }
 

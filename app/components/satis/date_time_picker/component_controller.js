@@ -70,7 +70,7 @@ export default class extends ApplicationController {
       window.addEventListener("click", this.boundClickedOutside)
     }
 
-    this.refreshCalendar()
+    this.refreshCalendar(false)
   }
 
   disconnect() {
@@ -208,6 +208,7 @@ export default class extends ApplicationController {
       .join(joinChar)
 
     if (inputValue.split(joinChar).length >= this.maxSelectNr) {
+      console.log("this.hiddenInputTarget.value", this.hiddenInputTarget.value, inputValue)
       this.hiddenInputTarget.value = inputValue
       this.hiddenInputTarget.dispatchEvent(new Event("change"))
     }
@@ -226,7 +227,7 @@ export default class extends ApplicationController {
   }
 
   // Refreshes the calendar
-  refreshCalendar() {
+  refreshCalendar(refreshInputs) {
     this.monthTarget.innerHTML = this.monthName
     this.yearTarget.innerHTML = this.displayValue.getFullYear()
 
@@ -253,6 +254,7 @@ export default class extends ApplicationController {
       }
     }
     this.daysTarget.innerHTML = ""
+
     this.monthDays.forEach((day) => {
       if (day == " ") {
         this.daysTarget.insertAdjacentHTML("beforeend", this.emtpyTemplateTarget.innerHTML)
@@ -293,7 +295,9 @@ export default class extends ApplicationController {
       }
     })
 
-    this.refreshInputs()
+    if (refreshInputs != false) {
+      this.refreshInputs()
+    }
   }
 
   // Is date today?
