@@ -1,6 +1,7 @@
 # Satis
 
-Short description and motivation.
+UI/UX Framework.
+We use [TailwindCSS](https://tailwindui.com), [FontAwesome 6](https://fontawesome.com/v6.0/).
 
 ## Usage
 
@@ -37,15 +38,6 @@ Each component has it's own documentation in the component folder
     = f.reset
     = f.continue
 ```
-
-## Status
-
-- forms (switch/dropdown/fields_for) :heavy_check_mark:
-- card (+menu) :heavy_check_mark:
-- page :x:
-- sidebar :x:
-- topbar :x:
-- actiontable :heavy_check_mark:
 
 ## Dark
 
