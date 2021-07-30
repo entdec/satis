@@ -25,7 +25,7 @@ module Satis
 
       # Deal with context
       def hidden_value
-        value = form.object.send(attribute)
+        value = form.object&.send(attribute)
         value = value.id if value.respond_to? :id
         value
       end
