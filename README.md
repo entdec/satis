@@ -1,7 +1,12 @@
 # Satis
 
 UI/UX Framework.
-We use [TailwindCSS](https://tailwindui.com), [FontAwesome 6](https://fontawesome.com/v6.0/).
+We use:
+
+- [TailwindCSS](https://tailwindui.com)
+- [FontAwesome 6](https://fontawesome.com/v6.0/)
+- [ViewComponent](https://viewcomponent.org)
+- [HotWired](https://hotwired.dev)
 
 ## Usage
 
@@ -9,7 +14,7 @@ You can use satis helpers in your own helpers:
 
 ```ruby
 def mycard(&block)
-  satis.card(icon: 'fad fa-user', title: "Profile", &block)
+  sts.card(icon: 'fad fa-user', title: "Profile", &block)
 end
 ```
 
