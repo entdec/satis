@@ -1,7 +1,7 @@
-button.inline-flex.items-center.justify-center.rounded-full.bg-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-primary-500 aria-expanded="false" aria-haspopup="true" type="button" class=size_class
+button.inline-flex.items-center.justify-center.rounded-full.bg-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-primary-500 aria-expanded="false" aria-haspopup="true" type="button" class=options[:class]
   - if photo&.attached?
-    img class="rounded-full" src=photo_url alt=name class=size_class
+    img class="rounded-full" src=photo_url alt=name class=options[:class]
   - elsif gravatar?
-    img class="rounded-full" src=gravatar_url alt=name class=size_class
+    img class="rounded-full" src=gravatar_url alt=name class=options[:class]
   - else
     span.text-sm.font-medium.leading-none.text-white = initials
