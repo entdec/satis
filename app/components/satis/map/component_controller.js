@@ -29,6 +29,10 @@ export default class extends ApplicationController {
       })
   }
 
+  disconnect() {
+    this.map.remove()
+  }
+
   onClick(layer) {
     console.log(layer)
   }
