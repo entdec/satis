@@ -5,9 +5,8 @@
   "repository": "git@code.entropydecelerator.com:components/satis.git",
   "author": "Tom de Grunt <tom@degrunt.nl>",
   "license": "MIT",
-  "main": "frontend/index.js",
   "files": [
-    "frontend/**"
+    "./frontend/**/*"
   ],
   "dependencies": {
     "@fortawesome/fontawesome-pro": "^6.0.0-beta1",
