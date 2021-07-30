@@ -20,7 +20,8 @@ module Satis
           # A regular button
           def button(value = nil, options = {}, &block)
             options = options.reverse_merge(class: 'button')
-            options[:type] ||= :button
+            options[:name] ||= :commit
+            options[:type] ||= :submit
             button_button(value, options, &block)
           end
 
