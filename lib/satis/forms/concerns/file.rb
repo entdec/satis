@@ -12,22 +12,12 @@ module Satis
           def file_input(method, options = {})
             form_group(method, options) do
               safe_join [
-                (label(method, options[:label]) unless options[:label] == false),
-                custom_file_field(method, options)
-              ]
-            end
-          end
-
-          def custom_file_field(method, options = {})
-            tag.div(class: 'input-group') do
-              safe_join [
-                tag.div(class: 'input-group-prepend') do
-                  tag.span('Upload', class: 'input-group-text')
-                end,
-                tag.div(class: 'custom-file') do
+                (custom_label(method, options[:label]) unless options[:label] == false),
+                tag.div(class: 'overflow-hidden relative inline-block -mb-2') do
                   safe_join [
-                    file_field(method, options.merge(class: 'custom-file-input', data: { controller: 'file-input' })),
-                    label(method, 'Choose file...', class: 'custom-file-label')
+                    tag.button(t('.choose_file'), type: 'button',
+                                                  class: 'bg-white py-3 px-4 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500'),
+                    file_field(method, options.merge(class: 'w-full cursor-pointer absolute block opacity-0 inset-0'))
                   ]
                 end
               ]
