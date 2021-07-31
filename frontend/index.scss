@@ -34,3 +34,8 @@ a[class=""] {
     display: none;
   }
 }
+
+// For the draggable controller
+.draggable:hover {
+  cursor: pointer;
+}
