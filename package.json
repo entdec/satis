@@ -17,15 +17,19 @@
     "leaflet": "^1.7.1",
     "mousetrap": "^1.6.5",
     "sortablejs": "^1.14.0",
-    "tippy.js": "^6.3.1"
+    "tippy.js": "^6.3.1",
+    "trix": "^1.2.0",
+    "@rails/actiontext": "^6.0.3-4"
   },
   "devDependencies": {
-    "semver": "^7.3.4",
-    "tailwindcss": "^2.2.2"
+    "semver": "^7.3.4"
   },
   "peerDependencies": {
     "codemirror": "^5.48.4",
     "codemirror-liquid": "git+ssh://git@code.entropydecelerator.com/components/codemirror-liquid",
-    "stimulus": "^2"
+    "stimulus": "^2",
+    "tailwindcss": "^2.2.2",
+    "@tailwindcss/forms": "^0.3.3",
+    "@tailwindcss/typography": "^0.4.1"
   }
 }

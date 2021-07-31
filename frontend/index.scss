@@ -9,6 +9,8 @@
 
 @import "~flag-icon-css/css/flag-icon";
 
+@import "~trix/dist/trix";
+
 // Every link without a class or empty class should be underlined
 a:not([class]),
 a[class=""] {

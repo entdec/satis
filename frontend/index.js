@@ -11,6 +11,9 @@ dom.watch()
 import tippy from "tippy.js"
 import "tippy.js/dist/tippy.css" // optional for styling
 
+require("trix")
+require("@rails/actiontext")
+
 export class Satis {
   static start(application, configuration = {}) {
     if (!application) {
