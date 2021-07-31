@@ -54,3 +54,21 @@
 .diff li.diff-block-info {
   background: none repeat scroll 0 0 gray;
 }
+
+@media screen and (prefers-color-scheme: dark) {
+  .diff li.ins {
+    background: #030;
+  }
+  .diff li.del {
+    background: #300;
+  }
+}
+
+html.dark {
+  .diff li.ins {
+    background: #030;
+  }
+  .diff li.del {
+    background: #300;
+  }
+}
