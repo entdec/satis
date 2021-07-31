@@ -96,4 +96,8 @@ form {
       }
     }
   }
+
+  .form-text {
+    @apply dark:text-gray-600 text-white;
+  }
 }
