@@ -260,7 +260,7 @@ module Satis
                                                       'satis-editor-mode-value' => options.delete(:mode) || 'text/html',
                                                       'satis-editor-height-value' => options.delete(:height) || '200px',
                                                       'satis-editor-color-scheme-value' => options.delete(:color_scheme),
-                                                      'satis-editor-color-scheme-dark-value' => options.delete(:color_scheme_dark) || 'ayu-mirage'
+                                                      'satis-editor-color-scheme-dark-value' => options.delete(:color_scheme_dark) || 'lucario'
                                                     }
 
                                                   }, options[:input_html])), class: 'editor'),
