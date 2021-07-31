@@ -91,10 +91,10 @@ export default class extends ApplicationController {
     const colorSchemeDark = this.colorSchemeDarkValue
     const colorScheme = this.colorSchemeValue
 
-    if (colorScheme) {
-      if (colorSchemeDark && window.matchMedia("prefers-color-scheme: dark").matches) {
+    if (colorScheme || colorSchemeDark) {
+      if (colorSchemeDark && (window.matchMedia("prefers-color-scheme: dark").matches || document.documentElement.classList.contains("dark"))) {
         this.setTheme(colorSchemeDark)
-      } else {
+      } else if (colorScheme) {
         this.setTheme(colorScheme)
       }
     }
