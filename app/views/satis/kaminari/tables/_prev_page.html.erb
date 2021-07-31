@@ -7,5 +7,5 @@
     remote:        data-remote
 -%>
 <%unless current_page.first?%>
-  <%= link_to url, rel: 'prev', remote: remote, 'data-turbo-frame'=> "#{params[:table_name]}", class: "relative inline-flex items-center px-4 py-3 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50" do%><i class="fal fa-chevron-left"></i><%end%>
+  <%= link_to url, rel: 'prev', remote: remote, 'data-turbo-frame'=> "#{params[:table_name]}", class: "relative inline-flex items-center px-4 py-3 border border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-600 text-sm font-medium text-gray-500 hover:bg-gray-50" do%><i class="fal fa-chevron-left"></i><%end%>
 <%end%>
