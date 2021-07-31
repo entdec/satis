@@ -91,18 +91,18 @@ export default class extends ApplicationController {
     const colorSchemeDark = this.colorSchemeDarkValue
     const colorScheme = this.colorSchemeValue
 
-    if (colorScheme || colorSchemeDark) {
-      if (colorSchemeDark && (window.matchMedia("prefers-color-scheme: dark").matches || document.documentElement.classList.contains("dark"))) {
-        this.setTheme(colorSchemeDark)
-      } else if (colorScheme) {
-        this.setTheme(colorScheme)
-      }
-    }
-
     this.editor.setSize("100%", this.heightValue)
     // Sometimes the editor does not refresh/initialize properly, this prevents that
     setTimeout(() => {
       this.editor.refresh()
+
+      if (colorScheme || colorSchemeDark) {
+        if (colorSchemeDark && (window.matchMedia("prefers-color-scheme: dark").matches || document.documentElement.classList.contains("dark"))) {
+          this.setTheme(colorSchemeDark)
+        } else if (colorScheme) {
+          this.setTheme(colorScheme)
+        }
+      }
     }, 100)
 
     this.editor.on("change", function (editor, evt) {

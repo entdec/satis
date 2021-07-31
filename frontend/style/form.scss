@@ -63,7 +63,8 @@ form {
   }
 
   .editor {
-    @apply border border-gray-300 rounded;
+    @apply border border-gray-300 dark:bg-gray-800 rounded;
+
     .CodeMirror-wrap {
       border-top-right-radius: 3px;
       border-bottom-right-radius: 3px;
