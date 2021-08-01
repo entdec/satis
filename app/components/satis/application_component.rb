@@ -17,7 +17,7 @@ module Satis
     # It'll then try and find a translation with scope: en.admin.spaces.edit.tabs.main.admin_versions
     #
     def ct(key = nil, **options)
-      scope = options.delete(:scope)
+      scope = Array.wrap(options.delete(:scope))
 
       scope = if scope
                 scope.unshift(i18n_scope)
