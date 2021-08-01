@@ -7,7 +7,7 @@ module Satis
 
       attr_writer :scope
 
-      def initialize(id, link: nil, label: nil, icon: nil, link_attributes: {}, scope: [], level: nil, &block)
+      def initialize(id, link: nil, label: nil, icon: nil, link_attributes: {}, active: nil, scope: [], level: nil, &block)
         @id = id
         @label = label
         @icon = icon
@@ -20,6 +20,10 @@ module Satis
 
       def label
         @label || I18n.t(id, scope: [:menu] + @scope, default: id.to_s.humanize)
+      end
+
+      def active?
+        active
       end
     end
   end
