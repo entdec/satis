@@ -5,7 +5,7 @@ module Satis
     end
 
     def method_missing(method, *args, &block)
-      if main_app.respond_to?(method)
+      if method.to_s.ends_with?('_url') || method.to_s.ends_with?('_path') && main_app.respond_to?(method)
         main_app.send(method, *args)
       else
         super
