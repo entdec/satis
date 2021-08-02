@@ -19,7 +19,8 @@
     "sortablejs": "^1.14.0",
     "tippy.js": "^6.3.1",
     "trix": "^1.2.0",
-    "@rails/actiontext": "^6.0.3-4"
+    "@rails/actiontext": "^6.0.3-4",
+    "intl-tel-input": "^17.0.8"
   },
   "devDependencies": {
     "semver": "^7.3.4"

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Satis
   module Breadcrumbs
     class Component < Satis::ApplicationComponent

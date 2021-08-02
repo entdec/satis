@@ -1,10 +1,10 @@
-import ApplicationController from "./application_controller"
-import { getInitialTheme } from "../utils"
+import ApplicationController from "../../../../frontend/controllers/application_controller"
+import { getInitialTheme } from "../../../../frontend/utils"
 
 /*
  * Theme controller
  *
- *   div data-controller="satis-theme" data-action='click->satis-theme#switch'
+ *   div data-controller="satis-appearance-switcher" data-action='click->satis-appearance-switcher#switch'
  *     i.fal.fa-sun
  *     i.fal.fa-moon-stars
  *

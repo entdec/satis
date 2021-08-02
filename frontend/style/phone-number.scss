@@ -1,0 +1,30 @@
+// Int tel phonenumber lib
+
+@import "~intl-tel-input/build/css/intlTelInput";
+
+.iti input,
+.iti input[type="text"],
+.iti input[type="tel"] {
+  padding-left: 44px;
+  margin-top: 2px !important;
+  margin-bottom: 2px !important;
+  font-size: 1rem;
+}
+
+.iti {
+  width: 100%;
+}
+
+.iti__selected-flag {
+  outline: none;
+}
+
+.iti__flag {
+  background-image: url("intl-tel-input/flags.png");
+}
+
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .iti__flag {
+    background-image: url("intl-tel-input/flags@2x.png");
+  }
+}

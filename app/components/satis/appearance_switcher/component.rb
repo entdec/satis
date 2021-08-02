@@ -1,13 +1,10 @@
 # frozen_string_literal: true
 
 module Satis
-  module MenuItem
+  module AppearanceSwitcher
     class Component < Satis::ApplicationComponent
-      attr_reader :item
-
-      # renders_many :items
       def initialize(**options)
-        @item = options[:item]
+        super
       end
     end
   end

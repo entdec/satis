@@ -6,6 +6,7 @@ module Satis
       def initialize(action_view)
         @action_view = action_view
 
+        add_helper :appearance_switcher, Satis::AppearanceSwitcher::Component
         add_helper :avatar, Satis::Avatar::Component
         add_helper :card, Satis::Card::Component
         add_helper :info, Satis::Info::Component

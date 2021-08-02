@@ -306,6 +306,25 @@ module Satis
         end
       end
 
+      def phone_input(method, options = {})
+        # options[:input_html] = {}
+
+        # options[:input_html] = { 'data-controller' => 'phone-number',
+        #                          'data-phone-number-target': 'input',
+        #                          'data-action': 'keyup->phone-number#change blur->phone-number#change' }
+
+        tag.div('data-controller' => 'phone-number') do
+          safe_join [
+            hidden_field(method,
+                         merge_input_options({ class: "form-control #{if has_error?(method)
+                                                                        'is-invalid'
+                                                                      end}", 'data-phone-number-target': 'hiddenInput' }, options[:input_html])),
+            @template.text_field_tag('dummy', @object.send(method), class: 'form-control', 'data-phone-number-target': 'input',
+                                                                    'data-action': 'input->phone-number#change')
+          ]
+        end
+      end
+
       def collection_of(input_type, method, options = {})
         form_builder_method, custom_class, input_builder_method = case input_type
                                                                   when :radio_buttons then [:collection_radio_buttons,
@@ -354,7 +373,7 @@ module Satis
           # FIXME: Possibly use country_select with dropdown?
           when /country/ then country_select(method, options, class: 'custom-select form-control')
           when /email/ then email_field(method, options)
-          when /phone/ then telephone_field(method, options)
+          when /phone/ then phone_input(method, options)
           when /url/ then url_field(method, options)
           else
             text_field(method, options)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Satis
   module Avatar
     class Component < Satis::ApplicationComponent

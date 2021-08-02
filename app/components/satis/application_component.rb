@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Satis
   class ApplicationComponent < ViewComponent::Base
     include ViewComponent::SlotableV2

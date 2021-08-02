@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Satis
   module Map
     class Component < Satis::ApplicationComponent
