@@ -211,7 +211,6 @@ module Satis
 
       # Inputs and helpers
       def string_input(method, options = {})
-        binding.pry if method == :minutes_spent
         form_group(method, options) do
           safe_join [
             (custom_label(method, options[:label]) unless options[:label] == false),
