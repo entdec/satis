@@ -215,9 +215,9 @@ module Satis
           safe_join [
             (custom_label(method, options[:label]) unless options[:label] == false),
             string_field(method,
-                         merge_input_options({ class: "form-control #{if has_error?(method)
-                                                                        'is-invalid'
-                                                                      end}" }, options[:input_html]))
+                         merge_input_options({ as: options[:as], class: "form-control #{if has_error?(method)
+                                                                                          'is-invalid'
+                                                                                        end}" }, options[:input_html]))
           ]
         end
       end
