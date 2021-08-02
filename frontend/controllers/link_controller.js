@@ -1,9 +1,9 @@
 import ApplicationController from "./application_controller"
 
 /*
- * Theme controller
+ * Link controller
  *
- *   div data-controller="satis-link" href="" data-action='click->satis-link#select'
+ *   div data-controller="satis-link" href="" data-turbo="false" target="_blank" data-action='click->satis-link#follow'
  *
  */
 export default class extends ApplicationController {
@@ -11,7 +11,11 @@ export default class extends ApplicationController {
     super.connect()
   }
 
-  select() {
-    Turbo.visit(this.element.getAttribute("href"))
+  follow() {
+    if (this.element.getAttribute("data-turbo") == "false") {
+      window.open(this.element.getAttribute("href"), this.element.getAttribute("target"))
+    } else {
+      Turbo.visit(this.element.getAttribute("href"))
+    }
   }
 }
