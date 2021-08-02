@@ -211,6 +211,7 @@ module Satis
 
       # Inputs and helpers
       def string_input(method, options = {})
+        binding.pry if method == :minutes_spent
         form_group(method, options) do
           safe_join [
             (custom_label(method, options[:label]) unless options[:label] == false),
@@ -359,7 +360,7 @@ module Satis
       end
 
       def string_field(method, options = {})
-        case object_type_for_method(method)
+        case options[:as] || object_type_for_method(method)
         when :date then text_field(method, options)
         when :datetime then text_field(method, options)
         when :integer then number_field(method, options)
