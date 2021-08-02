@@ -15,7 +15,7 @@ module Satis
                      })
         super
         @title = title
-        @title = @title.compact.join(' ') if @title.is_a?(Array)
+        @title = @title.reject(&:empty?).compact.join(' ') if @title.is_a?(Array)
         @description = description
         @icon = icon
         @menu = menu
