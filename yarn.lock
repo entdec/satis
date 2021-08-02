@@ -2,15 +2,10 @@
 # yarn lockfile v1
 
 
-"@fortawesome/fontawesome-common-types@^0.2.35":
+"@fortawesome/fontawesome-common-types@^0.2.33-beta1", "@fortawesome/fontawesome-common-types@^0.2.35":
   version "0.2.35"
   resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-common-types/-/0.2.35/fontawesome-common-types-0.2.35.tgz#01dd3d054da07a00b764d78748df20daf2b317e9"
   integrity sha512-IHUfxSEDS9dDGqYwIW7wTN6tn/O8E0n5PcAHz9cAaBoZw6UpG20IG/YM3NNLaGPwPqgjBAFjIURzqoQs3rrtuw==
-
-"@fortawesome/fontawesome-pro@^6.0.0-beta1":
-  version "6.0.0-beta1"
-  resolved "https://npm.fontawesome.com/@fortawesome/fontawesome-pro/-/6.0.0-beta1/fontawesome-pro-6.0.0-beta1.tgz#84969c946b9b4a1a88d722e5f7e444e79a5eafb0"
-  integrity sha512-qn/HZ4I1xiGiWRUhZtO4TMZBwQ9p9Ku95IcwehqEnqQ3KWtg79gYVl5g4MZL/7JxW4bDmZzORc0Gc9MHRS111w==
 
 "@fortawesome/fontawesome-svg-core@^1.2.35":
   version "1.2.35"
@@ -18,6 +13,53 @@
   integrity sha512-uLEXifXIL7hnh2sNZQrIJWNol7cTVIzwI+4qcBIq9QWaZqUblm0IDrtSqbNg+3SQf8SMGHkiSigD++rHmCHjBg==
   dependencies:
     "@fortawesome/fontawesome-common-types" "^0.2.35"
+
+"@fortawesome/free-brands-svg-icons@^6.0.0-beta1":
+  version "6.0.0-beta1"
+  resolved "https://npm.fontawesome.com/@fortawesome/free-brands-svg-icons/-/6.0.0-beta1/free-brands-svg-icons-6.0.0-beta1.tgz#8c8eccfd4d6f48a7665f57971acf591144454cf3"
+  integrity sha512-99DRRoiBg4cqckoNodzurCOx2vVbKrmT4Vw1qo04c0fN1U6N16LkoDU7Rmdo0nTnGT3jKm/fs63kaKzVZMwo+Q==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.33-beta1"
+
+"@fortawesome/free-solid-svg-icons@^6.0.0-beta1":
+  version "6.0.0-beta1"
+  resolved "https://npm.fontawesome.com/@fortawesome/free-solid-svg-icons/-/6.0.0-beta1/free-solid-svg-icons-6.0.0-beta1.tgz#9b33461636410fe53e645f490015ced419322bc5"
+  integrity sha512-gQWF11RbtHSvaKNhYuqrbgNYbvWLRJRTaYQai7Bo1Pg4BMI+PbIe2QCjfPZnW2SpJATtdbdqFozez8lDOscQMg==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.33-beta1"
+
+"@fortawesome/pro-duotone-svg-icons@^6.0.0-beta1":
+  version "6.0.0-beta1"
+  resolved "https://npm.fontawesome.com/@fortawesome/pro-duotone-svg-icons/-/6.0.0-beta1/pro-duotone-svg-icons-6.0.0-beta1.tgz#24c386904401505cd0d9a66e6621880722454913"
+  integrity sha512-YubdFwgc/+/FGwwng8tvo1VEFPZmuwPoCwBUpeM4iH+60RrKPaK/X852cQa7/od3x7jAQETPiZOqiQTNP7wqyQ==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.33-beta1"
+
+"@fortawesome/pro-light-svg-icons@^6.0.0-beta1":
+  version "6.0.0-beta1"
+  resolved "https://npm.fontawesome.com/@fortawesome/pro-light-svg-icons/-/6.0.0-beta1/pro-light-svg-icons-6.0.0-beta1.tgz#fd81ad57d06cd8c51534ec7c4c188186b8ee274c"
+  integrity sha512-aR/Gr0wPjYvBRfdBfR7BK5XOx1MVCAhnAnc+RD9GHZbmlwVva0YXlKflHihsfooCBf1F3HuLS4BHVFhVOU47Dw==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.33-beta1"
+
+"@fortawesome/pro-regular-svg-icons@^6.0.0-beta1":
+  version "6.0.0-beta1"
+  resolved "https://npm.fontawesome.com/@fortawesome/pro-regular-svg-icons/-/6.0.0-beta1/pro-regular-svg-icons-6.0.0-beta1.tgz#16d12e0ca40cc4d1dcd76f95fbe42a89238b1986"
+  integrity sha512-a6v4ri3AZTtxxYBhE8cEPDrzkGAnGfzuJbOgqWyuOcmjvpIEnj7nvmRgafEHFZMZp4QI6OO5uSwhfQFCfDP9ag==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.33-beta1"
+
+"@fortawesome/pro-solid-svg-icons@^6.0.0-beta1":
+  version "6.0.0-beta1"
+  resolved "https://npm.fontawesome.com/@fortawesome/pro-solid-svg-icons/-/6.0.0-beta1/pro-solid-svg-icons-6.0.0-beta1.tgz#e8f34e6e2fb84763b2aef7cc4c28f4fec2f2a6f7"
+  integrity sha512-J5ZR0SQQKKxby4c0bLzC8dDcqNN7VVIDnxB9hmkxG68qejtpUj/yQvA/PKWvWe+GLiPyAE31n73STf/16OTG2w==
+  dependencies:
+    "@fortawesome/fontawesome-common-types" "^0.2.33-beta1"
+
+"@fortawesome/pro-thin-svg-icons@^6.0.0-beta1":
+  version "6.0.0-beta1"
+  resolved "https://npm.fontawesome.com/@fortawesome/pro-thin-svg-icons/-/6.0.0-beta1/pro-thin-svg-icons-6.0.0-beta1.tgz#09e4faa5d00136357849c20c3884c3a0b1a9f696"
+  integrity sha512-ma0/RfohvQQ7GKyK4IEJ0iswrVjfU19DTgdpIYE3OHm4Q6izftdnStrGSPz7ikdhgP0cIdXH7K0RUEmRPPNwtQ==
 
 "@popperjs/core@^2.8.3", "@popperjs/core@^2.9.2":
   version "2.9.2"

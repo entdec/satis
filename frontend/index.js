@@ -3,10 +3,17 @@ import { Application } from "stimulus"
 
 import Mousetrap from "mousetrap"
 
-import "@fortawesome/fontawesome-pro/js/all"
 import { config, library, dom } from "@fortawesome/fontawesome-svg-core"
+
 config.mutateApproach = "sync"
 dom.watch()
+
+import "@fortawesome/fontawesome-pro/js/all"
+
+// This code could be used to import only parts you need
+// import { fal } from "@fortawesome/pro-light-svg-icons"
+// import { fad } from "@fortawesome/pro-duotone-svg-icons"
+// library.add(fal, fad)
 
 import tippy from "tippy.js"
 import "tippy.js/dist/tippy.css" // optional for styling
@@ -65,7 +72,7 @@ export class Satis {
     })
   }
 
-  // Register a keybinding found a controller
+  // Register a keybinding found for a controller
   static registerKeybinding(identifier, keys, handler) {
     Mousetrap.bind(keys, (event, combo) => {
       if (this.application.satis.mouseElement) {
