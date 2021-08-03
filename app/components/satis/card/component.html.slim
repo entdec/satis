@@ -14,11 +14,14 @@
               p.mt-1.text-sm.text-gray-500.dark:text-gray-500
                 == description
 
-          - if actions.present?
+          - if actions.present? || override_actions.present?
             .ml-4.mt-4.flex-shrink-0
               .grid.grid-flow-col.gap-1
+                - for action in override_actions
+                  = action
                 - for action in actions
                   = action
+
           - if menu
             .ml-4.mt-4.flex-shrink-0
               = render(Satis::Menu::Component.new(menu))
