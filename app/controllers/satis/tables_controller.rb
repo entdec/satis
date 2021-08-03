@@ -40,10 +40,11 @@ module Satis
       @items = Kaminari.paginate_array(@items) if @items.is_a? Array
       @items = @items.page(params[:page]).per(params[:page_size]) if params[:page] && params[:page_size]
 
+      # TODO: Use the code from method value_text_method_options in lib/satis/forms/concerns/select.rb
       @value_method, @text_method = if @items.class < ActiveRecord::Relation
                                       %w[id name]
                                     elsif @items.first.size == 2
-                                      %w[first last]
+                                      %w[second first]
                                     else
                                       %w[to_s to_s]
                                     end
