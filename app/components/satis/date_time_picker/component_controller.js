@@ -208,7 +208,6 @@ export default class extends ApplicationController {
       .join(joinChar)
 
     if (inputValue.split(joinChar).length >= this.maxSelectNr) {
-      console.log("this.hiddenInputTarget.value", this.hiddenInputTarget.value, inputValue)
       this.hiddenInputTarget.value = inputValue
       this.hiddenInputTarget.dispatchEvent(new Event("change"))
     }

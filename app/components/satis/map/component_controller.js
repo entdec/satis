@@ -33,7 +33,5 @@ export default class extends ApplicationController {
     this.map.remove()
   }
 
-  onClick(layer) {
-    console.log(layer)
-  }
+  onClick(layer) {}
 }

@@ -12,7 +12,6 @@ export default class extends ApplicationController {
 
   connect() {
     super.connect()
-    console.log("hi")
     this.instance = intlTelInput(this.inputTarget, {
       initialCountry: "nl",
       formatOnInit: true,
