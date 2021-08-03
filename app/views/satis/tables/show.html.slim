@@ -39,7 +39,7 @@ turbo-frame id="#{params[:table_name]}"
                         - if column.sortable
                           .title.w-full.cursor-pointer
                             = column.title
-                            .icon.absolute.bottom-4.left-3
+                            .icon.absolute.bottom-3.left-3
                               - if @table.sorted_column&.attribute == column.attribute
                                 - if @table.sorted_column_direction == 'ASC'
                                   i.fal.fa-sort-down
