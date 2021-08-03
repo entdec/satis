@@ -4,6 +4,7 @@ require 'satis/forms/concerns/buttons'
 require 'satis/forms/concerns/file'
 require 'satis/forms/concerns/required'
 require 'satis/forms/concerns/select'
+require 'satis/forms/concerns/options'
 
 module Satis
   module Forms
@@ -12,6 +13,7 @@ module Satis
 
       attr_reader :template, :assocation
 
+      include Concerns::Options
       include Concerns::Select
       include Concerns::File
       include Concerns::Required
