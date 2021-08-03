@@ -7,7 +7,7 @@ module Satis
       renders_many :tabs, Tab::Component
       renders_one :footer
 
-      attr_reader :icon, :title, :description, :menu, :content_padding, :header_background_color, :override_actions
+      attr_reader :icon, :title, :description, :menu, :content_padding, :header_background_color, :initial_actions
 
       def initialize(icon: nil,
                      title: nil,
@@ -26,7 +26,7 @@ module Satis
         @menu = menu
         @content_padding = content_padding
         @header_background_color = header_background_color
-        @override_actions = actions
+        @initial_actions = actions
       end
 
       def tabs?
