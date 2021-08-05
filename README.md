@@ -55,6 +55,7 @@ bg-gray-600 - body achtergrond kleur
 
 - dropdown results will not overlap the card, they should, just like date-time picker
 - dropdown triggers on-change upon initial population (for attributes), which is different from select's
+- dropdown hoogte van results is niet altijd goed
 - table state is not saved
 - table columns removing is weird, you really need to be on the left part of the screen to drag
 - table filters initially passed should not be editable
