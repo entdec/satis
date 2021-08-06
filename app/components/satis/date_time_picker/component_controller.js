@@ -162,7 +162,7 @@ export default class extends ApplicationController {
     let oldCurrentValue = this.selectedValue[0]
     if (!this.rangeValue && !this.multipleValue) {
       this.selectedValue[0] = new Date(new Date(this.displayValue).setDate(+event.target.innerText))
-      if (this.timePickerValue) {
+      if (this.timePickerValue && oldCurrentValue) {
         this.selectedValue[0].setHours(oldCurrentValue.getHours())
         this.selectedValue[0].setMinutes(oldCurrentValue.getMinutes())
       }
