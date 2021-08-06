@@ -17,6 +17,8 @@ export default class extends ApplicationController {
   }
 
   connect() {
+    super.connect()
+
     if (!this.localeValue) {
       this.localeValue = navigator.language
     }
@@ -123,13 +125,17 @@ export default class extends ApplicationController {
       return
     }
 
-    const isInside = event.path.some((el) => {
-      return el && el.getAttribute && el.getAttribute("data-controller") == "satis-date-time-picker"
-    })
+    let isInside = false
+    let controllerEl = event.target.closest('[data-controller="satis-date-time-picker"]')
+    if (controllerEl) {
+      isInside = controllerEl["satis-date-time-picker"] == this
+    }
 
     if (!isInside) {
       this.hideCalendar(event)
     }
+
+    event.cancelBubble = true
   }
 
   changeHours(event) {
