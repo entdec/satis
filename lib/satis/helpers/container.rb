@@ -8,11 +8,13 @@ module Satis
 
         add_helper :appearance_switcher, Satis::AppearanceSwitcher::Component
         add_helper :avatar, Satis::Avatar::Component
+        add_helper :breadcrumbs, Satis::Breadcrumbs::Component
         add_helper :card, Satis::Card::Component
         add_helper :info, Satis::Info::Component
         add_helper :map, Satis::Map::Component
         add_helper :menu, Satis::Menu::Component
         add_helper :page, Satis::Page::Component
+        add_helper :sidebar, Satis::Sidebar::Component
         add_helper :sidebar_menu, Satis::SidebarMenu::Component
         add_helper :tabs, Satis::Tabs::Component
         add_helper :table, Satis::Table::Component

@@ -1,0 +1,25 @@
+.sts-page {
+  &__container {
+    @apply h-screen flex overflow-hidden bg-gray-100 dark:bg-gray-600;
+  }
+
+  &__main {
+    @apply flex-1 relative overflow-y-auto focus:outline-none py-4;
+  }
+
+  &__main-container {
+    @apply mx-auto px-4 sm:px-4 md:px-4;
+  }
+
+  &__topbar-container {
+    @apply flex flex-col w-0 flex-1 overflow-hidden;
+  }
+
+  &__topbar-content {
+    @apply relative z-10 flex-shrink-0 flex h-16 bg-white shadow dark:bg-gray-900 dark:border-gray-700 bg-primary-600;
+  }
+
+  &__navbar-container {
+    @apply flex-1 px-4 flex justify-between;
+  }
+}

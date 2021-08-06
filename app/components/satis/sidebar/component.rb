@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
 module Satis
-  module Page
+  module Sidebar
     class Component < Satis::ApplicationComponent
-      renders_one :head
-      renders_one :navbar
-      renders_one :sidebar, Sidebar::Component
-      renders_one :body
+      renders_one :desktop_menu
+      renders_one :mobile_menu
 
       def initialize(**options); end
     end
