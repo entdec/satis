@@ -1,7 +1,7 @@
 div.satis-date-time-picker data-controller="satis-date-time-picker" data-satis-date-time-picker-time-picker-value=time_picker.to_s data-satis-date-time-picker-clearable-value=clearable.to_s data-satis-date-time-picker-locale-value="" data-satis-date-time-picker-range-value=range.to_s data-satis-date-time-picker-multiple-value=multiple.to_s data-satis-date-time-picker-week-start-value="1" data-satis-date-time-picker-inline-value=inline.to_s data-satis-date-time-picker-format-value=JSON.dump(format)
   .relative.flex.items-center
     = form.hidden attribute, input_html: options[:input_html]
-    input.form-control data-action="focus->satis-date-time-picker#showCalendar" data-satis-date-time-picker-target="input"
+    input.form-control data-action="focus->satis-date-time-picker#showCalendar input->satis-date-time-picker#dateTimeEntered" data-satis-date-time-picker-target="input"
     .absolute.inset-y-0.right-0.flex.py-1.5.pr-1.5
       button.cursor-pointer.w-6.h-full.flex.items-center.text-gray-400.outline-none.focus:outline-none data-satis-date-time-picker-target="clearButton" data-action="click->satis-date-time-picker#clear"
         i.fas.fa-xmark

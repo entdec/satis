@@ -151,10 +151,32 @@ export default class extends ApplicationController {
   }
 
   keyPress(event) {
-    var code = event.keyCode || event.which
-    if (code == 13) {
-      event.preventDefault()
-      event.cancelBubble = true
+    console.log("keyPress", event.key)
+    switch (event.key) {
+      case "Escape":
+        this.hideCalendar(event)
+        break
+      case "Enter":
+        event.preventDefault()
+        event.cancelBubble = true
+        break
+      default:
+        break
+    }
+  }
+
+  dateTimeEntered(event) {
+    return
+
+    // FIXME: This doesn't work properly yet
+    let newValue
+    try {
+      newValue = new Date(this.inputTarget.value)
+    } catch (error) {}
+    console.log("dateTimeEntered", this.inputTarget.value, newValue)
+    if (!isNaN(newValue.getTime())) {
+      this.selectedValue = [newValue]
+      this.refreshCalendar()
     }
   }
 
