@@ -7,6 +7,7 @@ We use:
 - [FontAwesome 6](https://fontawesome.com/v6.0/)
 - [ViewComponent](https://viewcomponent.org)
 - [HotWired](https://hotwired.dev)
+- [BEM](https://cssguidelin.es/#bem-like-naming)
 
 ## Usage
 
