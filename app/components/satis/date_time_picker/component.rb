@@ -22,11 +22,17 @@ module Satis
         @format = if options.key?(:format)
                     options[:format]
                   else
-                    { "weekday": 'long', "month": 'short', "day": 'numeric',
+                    { "weekday": 'long', "month": 'short', "year": 'numeric', "day": 'numeric',
                       "hour": 'numeric', "minute": 'numeric', "hour12": false }
                   end
 
         options[:input_html].merge!('data-satis-date-time-picker-target' => 'hiddenInput')
+
+        hidden_value = options[:input_html][:value]
+        hidden_value ||= @form.object.send(attribute)
+        hidden_value = hidden_value&.iso8601
+
+        options[:input_html][:value] = hidden_value
       end
     end
   end
