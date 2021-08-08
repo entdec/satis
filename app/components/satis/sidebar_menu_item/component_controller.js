@@ -23,7 +23,7 @@ export default class extends ApplicationController {
         this.submenuTarget.classList.remove("hidden")
         this.indicatorTarget.classList.add("rotate-90")
       } else {
-        this.linkTarget.classList.add("bg-gray-100", "text-gray-900")
+        this.linkTarget.classList.add("focus")
       }
     }
   }

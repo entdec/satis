@@ -1,4 +1,5 @@
 // Allow buttons outside forms
+button,
 .button {
   @apply mt-2 inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500;
 
@@ -55,11 +56,9 @@ form {
     @apply text-sm text-red-600;
   }
 
-  .field_with_errors {
-    input,
-    select {
-      @apply border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500;
-    }
+  input.is-invalid,
+  select.is-invalid {
+    @apply border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500;
   }
 
   .editor {

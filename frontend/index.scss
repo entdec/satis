@@ -1,8 +1,12 @@
+@import "../app/components/satis/card/component";
 @import "../app/components/satis/map/component";
 @import "../app/components/satis/tabs/component";
 @import "../app/components/satis/table/component";
 @import "../app/components/satis/date_time_picker/component";
 @import "../app/components/satis/dropdown/component";
+@import "../app/components/satis/input/component";
+@import "../app/components/satis/sidebar_menu/component";
+@import "../app/components/satis/sidebar_menu_item/component";
 
 @import "./style/table";
 @import "./style/form";
@@ -17,6 +21,10 @@
 a:not([class]),
 a[class=""] {
   @apply text-primary-600 underline;
+}
+
+.sts-grid {
+  @apply grid grid-cols-12 gap-4;
 }
 
 .mac {

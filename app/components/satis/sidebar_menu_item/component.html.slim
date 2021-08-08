@@ -1,16 +1,13 @@
-div.pt-1 class="#{item.level >= 1 ? 'pl-4' : ''}" data-controller="satis-sidebar-menu-item" data-action="mouseenter->satis-sidebar-menu-item#open mouseleave->satis-sidebar-menu-item#close"
-  /! Current: "bg-gray-100 text-gray-900", Default: "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-  a.bg-white.dark:bg-gray-900.text-gray-600.dark:text-gray-300.hover:bg-gray-50.dark:hover:bg-gray-700.hover:text-gray-900.group.w-full.flex.items-center.pl-2.pr-1.py-2.text-left.text-sm.font-medium.rounded-md.focus:outline-none.focus:ring-2.focus:ring-primary-500 aria-controls="sub-menu-1" aria-expanded="false" href=item.link *item.link_attributes data-satis-sidebar-menu-item-target="link"
-    /! Heroicon name: outline/users
+.sts-sidebar-menu-item class="#{item.level >= 1 ? 'pl-4' : ''}" data-controller="satis-sidebar-menu-item" data-action="mouseenter->satis-sidebar-menu-item#open mouseleave->satis-sidebar-menu-item#close"
+  a.sts-sidebar-menu-item__link aria-controls="sub-menu-1" aria-expanded="false" href=item.link *item.link_attributes data-satis-sidebar-menu-item-target="link"
     - if item.icon
-      i.fa-lg.mr-3.flex-shrink-0.h-6.w-6.text-gray-400.group-hover:text-gray-500 class=item.icon style="width: 20px;"
+      i.sts-sidebar-menu-item__icon.fa-lg class=item.icon style="width: 20px;"
     - else
-      i.mr-3.flex-shrink-0.h-6 style="width: 20px;"
+      i.sts-sidebar-menu-item__no-icon style="width: 20px;"
 
-    span.flex-1
-      = item.label
+    span.sts-sidebar-menu-item__label= item.label
     - if item.menu
-      i.fa-solid.fa-angle-right.text-gray-300.ml-3.flex-shrink-0.h-5.w-5.transform.group-hover:text-gray-400.transition-colors.ease-in-out.duration-150 style="width: 20px;" data-satis-sidebar-menu-item-target="indicator"
+      i.sts-sidebar-menu-item__menu-icon.fa-solid.fa-angle-right style="width: 20px;" data-satis-sidebar-menu-item-target="indicator"
 
   - if item.menu
     div.hidden data-satis-sidebar-menu-item-target="submenu"

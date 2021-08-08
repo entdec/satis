@@ -1,0 +1,11 @@
+.sts-card {
+  @apply bg-white overflow-hidden sm:rounded-lg sm:shadow dark:bg-gray-800 mb-4;
+
+  &__header {
+    @apply px-4 py-5 sm:px-6 dark:border-gray-700
+  }
+
+  &__tabs {
+    @apply bg-white px-4 border-b border-gray-200 sm:px-5 dark:bg-gray-800 dark:border-gray-700
+  }
+}

@@ -1,34 +1,31 @@
-.satis-card.satis-tabs.bg-white.overflow-hidden.sm:rounded-lg.sm:shadow.dark:bg-gray-800 data-controller="satis-tabs" data-satis-tabs-persist-value="false"
+.sts-card.sts-tabs data-controller="satis-tabs" data-satis-tabs-persist-value="false"
   - if header?
-    .px-4.py-5.sm:px-6.dark:border-gray-700 class="#{tabs? ? '' : 'border-b border-gray-200'} #{header_background_color[:light]} dark:#{header_background_color[:dark]}"
+    .sts-card__header class="#{tabs? ? '' : 'border-b border-gray-200'} #{header_background_color[:light]} dark:#{header_background_color[:dark]}"
+      .-ml-4.-mt-4.flex.justify-between.items-center.flex-wrap.sm:flex-nowrap
+        - if icon
+          .ml-4.mt-4.flex-shrink-0.text-primary-600.dark:text-gray-300
+            i class=icon
+        .ml-4.mt-4.flex-1
+          h3.text-lg.leading-6.font-medium.text-gray-900.dark:text-gray-300
+            == title
+          - if description.present?
+            p.mt-1.text-sm.text-gray-500.dark:text-gray-500
+              == description
 
-      - if header?
-        .-ml-4.-mt-4.flex.justify-between.items-center.flex-wrap.sm:flex-nowrap
-          - if icon
-            .ml-4.mt-4.flex-shrink-0.text-primary-600.dark:text-gray-300
-              i class=icon
-          .ml-4.mt-4.flex-1
-            h3.text-lg.leading-6.font-medium.text-gray-900.dark:text-gray-300
-              == title
-            - if description.present?
-              p.mt-1.text-sm.text-gray-500.dark:text-gray-500
-                == description
+        - if actions.present? || initial_actions.present?
+          .ml-4.mt-4.flex-shrink-0
+            .grid.grid-flow-col.gap-1
+              - for action in initial_actions
+                = action
+              - for action in actions
+                = action
 
-          - if actions.present? || initial_actions.present?
-            .ml-4.mt-4.flex-shrink-0
-              .grid.grid-flow-col.gap-1
-                - for action in initial_actions
-                  = action
-                - for action in actions
-                  = action
-
-          - if menu
-            .ml-4.mt-4.flex-shrink-0
-              = render(Satis::Menu::Component.new(menu))
+        - if menu
+          .ml-4.mt-4.flex-shrink-0
+            = render(Satis::Menu::Component.new(menu))
 
   - if tabs?
-    .bg-white.px-4.border-b.border-gray-200.sm:px-5.dark:bg-gray-800.dark:border-gray-700
-
+    .sts-card__tabs
       .sm:hidden
         label.sr-only for="tabs" Select a tab
         select#tabs.block.w-full.pl-3.pr-10.py-2.text-base.border-gray-300.focus:outline-none.focus:ring-primary-500.focus:border-primary-500.sm:text-sm.rounded-md name="tabs" data-action="change->satis-tabs#select" data-satis-tabs-target="select"

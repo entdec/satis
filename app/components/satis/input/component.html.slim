@@ -1,0 +1,9 @@
+.sts-input
+  = form.custom_label(attribute, options[:label]) unless options[:label] == false
+  .sts-input__input-container class=input_container_class
+    - prefixes.each do |prefix|
+      = prefix
+    = input || form.string_field(attribute, { class: input_class }.merge(options.fetch(:input_html, {})))
+    - postfixes.each do |postfix|
+      = postfix
+  = form.error_text(attribute) if form.has_error?(attribute)

@@ -1,0 +1,49 @@
+.sts-input {
+  &__input-container {
+    @apply mt-1 flex border rounded h-12 text-gray-800 dark:text-gray-300 border-gray-300 dark:bg-gray-800 dark:border-gray-700 overflow-hidden;
+  }
+
+  &__label {
+
+  }
+
+  &__input-container {
+    &.is-invalid {
+      @apply border-red-300 text-red-900 placeholder-red-300 focus:outline-none focus:ring-red-500 focus:border-red-500;
+    }
+  }
+
+  &__input {
+    @apply flex-1 min-w-0 block w-full border-none py-2 px-3 sm:text-sm;
+    background: transparent;
+
+    &:focus {
+      box-shadow: none;
+    }
+  }
+
+  &__element {
+    @apply inline-flex items-center py-2 px-3 sm:text-sm;
+
+    &.colored {
+      background: rgba(1, 1, 1, 0.1);
+
+      .dark & {
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+    input {
+      @apply -ml-3 -mr-3 -mt-2 -mb-2 w-full;
+
+      &:focus {
+        box-shadow: none;
+      }
+    }
+
+    * {
+      @apply border-none;
+
+      background-color: transparent;
+    }
+  }
+}

@@ -12,6 +12,9 @@ module Satis
       Rails.application.reloader.to_prepare do
         ActiveSupport.on_load :action_view do
           include Satis::ApplicationHelper
+
+          # F*CK Rails, adding an extra surrounding div 'field_with_errors' breaking all the things.
+          self.field_error_proc = ->(html_tag, _instance) { html_tag }
         end
       end
     end
