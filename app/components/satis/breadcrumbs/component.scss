@@ -1,0 +1,19 @@
+.sts-breadcrumbs {
+  @apply bg-white border-b border-gray-200 flex mb-4;
+
+  height: 40px;
+
+  &__list {
+    @apply max-w-screen-xl w-full mx-auto px-4 flex space-x-4 sm:px-6 lg:px-8;
+
+    margin-left: 0;
+  }
+
+  &__link {
+    @apply ml-4 text-sm font-medium text-gray-500 hover:text-gray-700;
+
+    svg {
+      margin-right: 0.5rem;
+    }
+  }
+}
