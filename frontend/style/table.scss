@@ -18,3 +18,13 @@ table.sts-table {
     }
   }
 }
+
+.sts-table {
+  &__action-bar {
+    @apply text-sm text-gray-500;
+
+    svg, i {
+      margin: 0 0.2rem;
+    }
+  }
+}

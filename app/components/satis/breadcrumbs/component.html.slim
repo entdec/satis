@@ -1,21 +1,9 @@
 /! This example requires Tailwind CSS v2.0+
-nav.bg-white.border-b.border-gray-200.flex.mb-4 aria-label="Breadcrumb"
-  ol.max-w-screen-xl.w-full.mx-auto.px-4.flex.space-x-4.sm:px-6.lg:px-8
+nav.sts-breadcrumbs aria-label="Breadcrumb"
+  ol.sts-breadcrumbs__list
     li.flex
       .flex.items-center
-        a.text-gray-400.hover:text-gray-500 href="#"
-          /! Heroicon name: solid/home
-          svg.flex-shrink-0.h-5.w-5 aria-hidden="true" fill="currentColor" viewbox=("0 0 20 20") xmlns="http://www.w3.org/2000/svg"
-            path d=("M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z") /
-          span.sr-only Home
-    li.flex
-      .flex.items-center
-        svg.flex-shrink-0.w-6.h-full.text-gray-200 aria-hidden="true" fill="currentColor" preserveaspectratio="none" viewbox=("0 0 24 44") xmlns="http://www.w3.org/2000/svg"
-          path d=("M.293 0l22 22-22 22h1.414l22-22-22-22H.293z") /
-        a.ml-4.text-sm.font-medium.text-gray-500.hover:text-gray-700 href="#"  Projects
-    li.flex
-      .flex.items-center
-        svg.flex-shrink-0.w-6.h-full.text-gray-200 aria-hidden="true" fill="currentColor" preserveaspectratio="none" viewbox=("0 0 24 44") xmlns="http://www.w3.org/2000/svg"
-          path d=("M.293 0l22 22-22 22h1.414l22-22-22-22H.293z") /
-        a.ml-4.text-sm.font-medium.text-gray-500.hover:text-gray-700 aria-current="page" href="#"  Project Nero
-
+        a.text-gray-400.hover:text-gray-500 href=root_path
+          i.fas.fa-house
+    - crumbs.each do |crumb|
+      = crumb

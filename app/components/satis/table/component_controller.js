@@ -190,7 +190,8 @@ export default class extends ApplicationController {
     this.overlayTarget.classList.remove("ease-in", "duration-200", "opacity-0")
     this.overlayTarget.classList.add("ease-out", "duration-300", "opacity-100")
     let input = this.modalTarget.querySelector("input")
-    input.focus()
+    // Yup this solves the not focussingin Safari.
+    setTimeout(() => { input.focus() }, 0)
     input.addEventListener("keydown", this.boundSearchKeydown)
   }
 

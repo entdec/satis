@@ -37,7 +37,7 @@
               a.tab id="#{tab.name}" href="#" aria-current="#{tab.selected? ? "page" : ''}" data-satis-tabs-target="tab" data-action="click->satis-tabs#select"
                 - if tab.icon
                   i.mr-2 class=tab.icon
-                = t(tab.name, scope: [:tabs])
+                = t(tab.name, scope: [:tabs], default: tab.title)
                 i.fal.fa-triangle-exclamation.ml-2.hidden
                 - if tab.badge
                   span.badge

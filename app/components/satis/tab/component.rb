@@ -23,6 +23,10 @@ module Satis
         options[:selected] == true
       end
 
+      def title
+        options[:title]
+      end
+
       def call
         content
       end
