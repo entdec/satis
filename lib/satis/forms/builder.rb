@@ -361,12 +361,14 @@ module Satis
       end
 
       def string_field(method, options = {})
+        # if specifically set to string, no more magic.
+        return text_field(method, options) if options[:as] == :string
+
         case options[:as] || object_type_for_method(method)
         when :date then text_field(method, options)
         when :datetime then text_field(method, options)
         when :integer then number_field(method, options)
         when :float then text_field(method, options)
-        when :string then text_field(method, options)
         else
           case method.to_s
           when /password/ then password_field(method, options)

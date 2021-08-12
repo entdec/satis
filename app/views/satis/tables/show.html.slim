@@ -28,14 +28,14 @@ turbo-frame id="#{params[:table_name]}"
                   / Hidden columns
                   tr.hidden-header.opacity-20.h-16.w-full.hidden data-satis-table-target="hiddenHeader"
                     - @table.hidden_columns.each.with_index do |column, index|
-                      th.relative.align-bottom.px-6.py-3.text-left.text-xs.font-medium.text-gray-500.uppercase.tracking-wider scope="col"
+                      th.relative.align-bottom.px-6.py-3.text-left.text-xs.font-medium.text-gray-500.dark:text-gray-300.uppercase.tracking-wider scope="col"
                         .title.w-full.cursor-pointer
                           = column.title
 
                   / Header - columns
                   tr.cursor-move data-satis-table-target="header"
                     - @table.ordered_columns.each.with_index do |column, index|
-                      th.relative.align-bottom.px-6.py-3.text-left.text-xs.font-medium.text-gray-500.uppercase.tracking-wider scope="col" data-satis-table-target="column" data-column="#{column.attribute}" data-action="click->satis-table#sort"
+                      th.relative.align-bottom.px-6.py-3.text-left.text-xs.font-medium.text-gray-500.dark:text-gray-300.uppercase.tracking-wider scope="col" data-satis-table-target="column" data-column="#{column.attribute}" data-action="click->satis-table#sort"
                         - if column.sortable
                           .title.w-full.cursor-pointer
                             = column.title
@@ -66,7 +66,7 @@ turbo-frame id="#{params[:table_name]}"
                   / Filters
                   tr.bg-gray-100.border-b.border-gray-200.hidden.dark:bg-gray-900 data-satis-table-target="filterRow"
                     - @table.ordered_columns.each.with_index do |column, index|
-                      td.px-3.py-4.whitespace-nowrap.text-sm.text-gray-500 style="min-width: 200px;"
+                      td.px-3.py-4.whitespace-nowrap.text-sm.text-gray-500.dark:text-gray-300 style="min-width: 200px;"
                         - filter = @table.filter_by_attribute(column.attribute)
                         - if filter&.collection
                           = f.input filter.parameter, url: filter_collection_tables_path(table_name: params[:table_name], filter: column.attribute), as: :dropdown, label: false, input_html: { "data-action" => "change->satis-table#filter", "data-satis-table-target" => "filter" }
@@ -80,25 +80,25 @@ turbo-frame id="#{params[:table_name]}"
                       tr.cursor-pointer class="#{index % 2 == 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700'}" href="#{row.find{|c| c.first == :link}&.[](1)}" data-controller="satis-link" data-action="click->satis-link#follow tap->satis-link#follow"
                         - row.each do |column, value|
                           - if %i[link context_menu].exclude?(column)
-                            td.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500
+                            td.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500.dark:text-gray-300
                               == value
 
     / Footer
     .bg-white.px-4.py-3.flex.items-center.justify-between.border-t.border-gray-200.sm:px-6.dark:bg-gray-800
       .flex-1.flex.justify-between.sm:hidden
         - if prev_page_url @table.paged_scope
-          = link_to_prev_page @table.paged_scope, 'Previous', class: 'relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50', 'data-turbo-frame'=> "#{params[:table_name]}"
+          = link_to_prev_page @table.paged_scope, 'Previous', class: 'relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700.dark:text-gray-400 bg-white hover:bg-gray-50', 'data-turbo-frame'=> "#{params[:table_name]}"
         - else
           div.inline-flex
         - if next_page_url @table.paged_scope
-          = link_to_next_page @table.paged_scope, 'Next', class: 'ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50', 'data-turbo-frame'=> "#{params[:table_name]}"
+          = link_to_next_page @table.paged_scope, 'Next', class: 'ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700.dark:text-gray-400 bg-white hover:bg-gray-50', 'data-turbo-frame'=> "#{params[:table_name]}"
         - else
           div.inline-flex
-        /a.ml-3.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.text-sm.font-medium.rounded-md.text-gray-700.bg-white.hover:bg-gray-50 href="#"
+        /a.ml-3.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.text-sm.font-medium.rounded-md.text-gray-700.dark:text-gray-400.bg-white.hover:bg-gray-50 href="#"
           | Next
       .hidden.sm:flex-1.sm:flex.sm:items-center.sm:justify-between
         div
-          p.text-sm.text-gray-700
+          p.text-sm.text-gray-700.dark:text-gray-400
             = page_entries_info @table.paged_scope, entry_name: 'row'
         .sts-table__action-bar
           i.fa.fa-magnifying-glass data-action="click->satis-table#openSearch"
