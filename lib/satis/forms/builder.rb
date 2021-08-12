@@ -366,6 +366,7 @@ module Satis
         when :datetime then text_field(method, options)
         when :integer then number_field(method, options)
         when :float then text_field(method, options)
+        when :string then text_field(method, options)
         else
           case method.to_s
           when /password/ then password_field(method, options)
