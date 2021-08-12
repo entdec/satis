@@ -9,8 +9,8 @@ div.satis-date-time-picker data-controller="satis-date-time-picker" data-satis-d
   .container.z-10.shadow.bg-white.border.border-gray-300.dark:bg-gray-800.dark:border-gray-700.rounded.p-4.w-72 class="#{inline ? 'inline-block' : 'hidden'}" data-satis-date-time-picker-target="calendarView"
     .flex.justify-between.items-center.mb-2
       div
-        span.text-lg.font-bold.text-gray-800 data-satis-date-time-picker-target="month"
-        span.ml-1.text-lg.text-gray-600.font-normal data-satis-date-time-picker-target="year"
+        span.text-lg.font-bold.text-gray-800.dark:text-gray-200 data-satis-date-time-picker-target="month"
+        span.ml-1.text-lg.text-gray-600.dark:text-gray-200.font-normal data-satis-date-time-picker-target="year"
       div
         button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-2 rounded-full" data-action="satis-date-time-picker#previousMonth"
           i.fal.fa-angle-left.text-gray-500.inline-flex.px-2.py-1
@@ -21,7 +21,7 @@ div.satis-date-time-picker data-controller="satis-date-time-picker" data-satis-d
     .grid.grid-cols-7 data-satis-date-time-picker-target="weekDays"
     template data-satis-date-time-picker-target="weekDayTemplate"
       div.px-2.w-8
-        div.text-gray-800.font-medium.text-center.text-xs ${name}
+        div.text-gray-800.dark:text-gray-200.font-medium.text-center.text-xs ${name}
 
     .grid.grid-cols-7 data-satis-date-time-picker-target="days"
 
