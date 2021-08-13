@@ -1,0 +1,8 @@
+.sts-flash-messages__message_container
+  .p-2.rounded-lg class=color_class
+    .flex.items-center.justify-between.flex-wrap
+      .w-0.flex-1.flex.items-center
+        .sts-flash-messages__message
+          - if icon
+            i class=icon
+          = message

@@ -23,7 +23,6 @@ export default class extends ApplicationController {
 
   change(event) {
     this.hiddenInputTarget.value = this.instance.getNumber(intlTelInputUtils.numberFormat.INTERNATIONAL)
-
     this.inputTarget.value = this.instance.getNumber(intlTelInputUtils.numberFormat.INTERNATIONAL)
   }
 }

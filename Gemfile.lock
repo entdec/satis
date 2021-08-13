@@ -13,7 +13,7 @@ GIT
 PATH
   remote: .
   specs:
-    satis (0.1.61)
+    satis (0.1.62)
       diffy
       rails (~> 6.1.3, >= 6.1.3.2)
       view_component

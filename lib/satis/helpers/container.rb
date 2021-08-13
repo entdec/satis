@@ -10,6 +10,7 @@ module Satis
         add_helper :avatar, Satis::Avatar::Component
         add_helper :breadcrumbs, Satis::Breadcrumbs::Component
         add_helper :card, Satis::Card::Component
+        add_helper :flash_messages, Satis::FlashMessages::Component
         add_helper :info, Satis::Info::Component
         add_helper :map, Satis::Map::Component
         add_helper :menu, Satis::Menu::Component
