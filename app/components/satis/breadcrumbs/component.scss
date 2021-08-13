@@ -10,7 +10,7 @@
   }
 
   &__link {
-    @apply ml-4 text-sm font-medium text-gray-400 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300;
+    @apply ml-4 text-sm font-normal text-gray-400 hover:text-gray-500 dark:text-gray-400 dark:hover:text-gray-300;
 
     svg {
       margin-right: 0.5rem;

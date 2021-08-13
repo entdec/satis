@@ -11,8 +11,10 @@ export default class extends ApplicationController {
     super.connect()
   }
 
-  follow() {
-    if (this.element.getAttribute("data-turbo") == "false") {
+  follow(event) {
+    if (event.metaKey || event.ctrlKey) {
+      window.open(this.element.getAttribute("href"), '_blank')
+    } else if (this.element.getAttribute("data-turbo") == "false") {
       window.open(this.element.getAttribute("href"), this.element.getAttribute("target"))
     } else {
       Turbo.visit(this.element.getAttribute("href"))
