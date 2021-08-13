@@ -14,7 +14,7 @@
   }
 
   &__input {
-    @apply flex-1 min-w-0 block w-full border-none py-2 px-3 sm:text-sm;
+    @apply flex-1 min-w-0 block w-full border-none py-2 px-3;
     background: transparent;
 
     &:focus {
@@ -23,7 +23,7 @@
   }
 
   &__element {
-    @apply inline-flex items-center py-2 px-3 sm:text-sm;
+    @apply inline-flex items-center py-2 px-3;
 
     &.colored {
       background: rgba(1, 1, 1, 0.1);
@@ -32,6 +32,7 @@
         background: rgba(255, 255, 255, 0.1);
       }
     }
+
     input {
       @apply -ml-3 -mr-3 -mt-2 -mb-2 w-full;
 

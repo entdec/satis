@@ -24,7 +24,7 @@ module Satis
       def copyable(name, scrub: '#')
         return if name.blank?
 
-        "<satis-copyable scrub=\"#{scrub}\">#{name}</satis-copyable>"
+        action_view.content_tag('satis-copyable', name, scrub: scrub)
       end
 
       def form_for(name, *args, &block)
