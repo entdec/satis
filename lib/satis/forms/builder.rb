@@ -23,6 +23,8 @@ module Satis
       def input(method, options = {}, &block)
         @form_options = options
 
+        options[:input_html] ||= {}
+        options[:input_html][:disabled] = options.delete(:disabled)
         send(input_type_for(method, options), method, options, &block)
       end
 
@@ -335,15 +337,16 @@ module Satis
                                                                                           'custom-checkbox', :check_box]
                                                                   else raise 'Invalid input_type for collection_of, valid input_types are ":radio_buttons", ":check_boxes"'
                                                                   end
+        options[:value_method] ||= :last
+        options[:text_method]  ||= options[:label_method] || :first
         form_group(method, options) do
           safe_join [
             label(method, options[:label]),
             tag.br,
-            (send(form_builder_method, method, options[:collection], options[:value_method],
-                  options[:text_method]) do |b|
+            (send(form_builder_method, method, options[:collection], options[:value_method], options[:text_method]) do |b|
                tag.div(class: "custom-control #{custom_class}") do
                  safe_join [
-                   b.send(input_builder_method, class: 'custom-control-input'),
+                   b.send(input_builder_method, options.fetch(:input_html, {}).merge(class: 'custom-control-input')),
                    b.label(class: 'custom-control-label')
                  ]
                end
