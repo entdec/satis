@@ -1,4 +1,4 @@
-turbo-frame id="#{params[:table_name]}"
+turbo-frame id="#{params[:turbo_frame_id] || params[:table_name]}"
   .satis-table.relative data-controller="satis-table" data-satis-table-current-page-value=@table.paged_scope.current_page data-satis-table-total-pages-value=@table.paged_scope.total_pages
 
     .hidden.absolute.inset-0.pt-2.flex.justify-center.items-start.z-10.bg-gray-500.bg-opacity-70.opacity-0 data-satis-table-target="overlay"
@@ -87,11 +87,11 @@ turbo-frame id="#{params[:table_name]}"
     .bg-white.px-4.py-3.flex.items-center.justify-between.border-t.border-gray-200.sm:px-6.dark:bg-gray-800
       .flex-1.flex.justify-between.sm:hidden
         - if prev_page_url @table.paged_scope
-          = link_to_prev_page @table.paged_scope, 'Previous', class: 'relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700.dark:text-gray-400 bg-white hover:bg-gray-50', 'data-turbo-frame'=> "#{params[:table_name]}"
+          = link_to_prev_page @table.paged_scope, 'Previous', class: 'relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700.dark:text-gray-400 bg-white hover:bg-gray-50', 'data-turbo-frame'=> "#{params[:turbo_frame_id] || params[:table_name]}"
         - else
           div.inline-flex
         - if next_page_url @table.paged_scope
-          = link_to_next_page @table.paged_scope, 'Next', class: 'ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700.dark:text-gray-400 bg-white hover:bg-gray-50', 'data-turbo-frame'=> "#{params[:table_name]}"
+          = link_to_next_page @table.paged_scope, 'Next', class: 'ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700.dark:text-gray-400 bg-white hover:bg-gray-50', 'data-turbo-frame'=> "#{params[:turbo_frame_id] || params[:table_name]}"
         - else
           div.inline-flex
         /a.ml-3.relative.inline-flex.items-center.px-4.py-2.border.border-gray-300.text-sm.font-medium.rounded-md.text-gray-700.dark:text-gray-400.bg-white.hover:bg-gray-50 href="#"

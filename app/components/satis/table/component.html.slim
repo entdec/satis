@@ -1,1 +1,1 @@
-turbo-frame id="#{table_name}" src=view_context._satis.table_path(table_name, params: params.reject{|p|%[action controller id].include?(p)}.permit!.merge(parameters)) target="_top"
+turbo-frame id="#{parameters[:turbo_frame_id] || table_name}" src=view_context._satis.table_path(table_name, params: params.reject{|p|%[action controller id].include?(p)}.permit!.merge(parameters)) target="_top"

@@ -10,5 +10,5 @@
 <%if page.current?%>
   <span href="#" aria-current="page" class="<%=current_page.first? ? "rounded-l-md" : ""%> <%=current_page.last? ? "rounded-r-md" : ""%> z-10 bg-primary-50 dark:bg-primary-200 border-primary-500 text-primary-600 relative inline-flex items-center px-4 py-2 border text-sm font-medium"><%=page%></span>
 <%else%>
-  <%= link_to page, url, {remote: remote, rel: page.rel, 'data-turbo-frame'=> "#{params[:table_name]}", class: "bg-white dark:bg-gray-600 border-gray-300 dark:border-gray-500 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium"}  %>
+  <%= link_to page, url, { remote: remote, rel: page.rel, 'data-turbo-frame'=> "#{params[:turbo_frame_id] || params[:table_name]}", class: "bg-white dark:bg-gray-600 border-gray-300 dark:border-gray-500 text-gray-500 hover:bg-gray-50 relative inline-flex items-center px-4 py-2 border text-sm font-medium" }  %>
 <%end%>
