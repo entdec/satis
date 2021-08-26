@@ -8,6 +8,7 @@ export default class extends ApplicationController {
   static targets = ["header", "hiddenHeader", "column", "filterRow", "filter", "filterIndicator", "overlay", "modal"]
   static values = {
     currentPage: Number,
+    resetUrl: String,
     totalPages: Number,
   }
 
@@ -46,6 +47,11 @@ export default class extends ApplicationController {
 
   connect() {
     super.connect()
+
+    let turboFrame = this.element.closest("turbo-frame")
+    if (turboFrame) {
+      this.resetUrlValue = turboFrame.getAttribute("data-satis-table-reset-url")
+    }
 
     this.searchOpen = false
     this.boundSearchKeydown = this.searchKeydown.bind(this)
@@ -210,11 +216,8 @@ export default class extends ApplicationController {
       this.closeSearch(event)
     } else {
       let turboFrame = this.element.closest("turbo-frame")
-      if (turboFrame) {
-        let ourUrl = new URL(turboFrame.src, window.location.href)
-        ourUrl.searchParams.forEach((value, key) => {
-          ourUrl.searchParams.delete(key)
-        })
+      if (turboFrame && this.hasResetUrlValue) {
+        let ourUrl = new URL(this.resetUrlValue, window.location.href)
         turboFrame.src = ourUrl
       }
     }

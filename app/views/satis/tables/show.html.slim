@@ -1,6 +1,5 @@
 turbo-frame id="#{params[:turbo_frame_id] || params[:table_name]}"
   .satis-table.relative data-controller="satis-table" data-satis-table-current-page-value=@table.paged_scope.current_page data-satis-table-total-pages-value=@table.paged_scope.total_pages
-
     .hidden.absolute.inset-0.pt-2.flex.justify-center.items-start.z-10.bg-gray-500.bg-opacity-70.opacity-0 data-satis-table-target="overlay"
       .opacity-100.inline-block.align-bottom.bg-white.rounded-lg.px-4.pt-5.pb-4.text-left.overflow-hidden.shadow-xl.transform.transition-all.sm:my-8.sm:align-middle.sm:max-w-sm.sm:w-full.sm:p-6 data-satis-table-target="modal"
         div

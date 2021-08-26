@@ -1,1 +1,2 @@
-turbo-frame id="#{parameters[:turbo_frame_id] || table_name}" src=view_context._satis.table_path(table_name, params: params.reject{|p|%[action controller id].include?(p)}.permit!.merge(parameters)) target="_top"
+- table_url = view_context._satis.table_path(table_name, params: params.reject{|p|%[action controller id].include?(p)}.permit!.merge(parameters))
+turbo-frame id="#{parameters[:turbo_frame_id] || table_name}" src=table_url data-satis-table-reset-url=table_url target="_top"
