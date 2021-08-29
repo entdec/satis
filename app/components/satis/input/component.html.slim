@@ -6,4 +6,6 @@
     = input || form.string_field(attribute, { class: input_class }.merge(options.fetch(:input_html, {})))
     - postfixes.each do |postfix|
       = postfix
+  - if hint
+    small.form-text.text-muted= hint
   = form.error_text(attribute) if form.has_error?(attribute)
