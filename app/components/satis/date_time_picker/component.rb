@@ -35,6 +35,10 @@ module Satis
 
         options[:input_html][:value] = hidden_value
       end
+
+      def week_start
+        Date::DAYS_INTO_WEEK[Date.beginning_of_week] || 1
+      end
     end
   end
 end
