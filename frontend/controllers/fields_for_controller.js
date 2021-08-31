@@ -37,6 +37,10 @@ export default class extends ApplicationController {
       }
     })
 
+    tmpNode.querySelectorAll("template").forEach((node) => {
+      node.innerHTML = node.innerHTML.replace(/TEMPLATE/g, id)
+    })
+
     this.addNewLine()
 
     window.scrollBy(0, this.element.querySelector(".nested-fields").clientHeight)
