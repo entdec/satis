@@ -187,7 +187,10 @@ export default class extends ApplicationController {
   export(event) {
     let turboFrame = this.element.closest("turbo-frame")
 
-    window.location.replace(`/action_table/${turboFrame.id}/export.xlsx`)
+    let ourUrl = new URL(turboFrame.src, window.location.href)
+    let exportUrl = new URL(`/action_table/${turboFrame.id}/export.xlsx`, window.location.href)
+    exportUrl.search = ourUrl.search
+    window.location.replace(exportUrl)
   }
 
   openSearch(event) {
