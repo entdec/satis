@@ -12,8 +12,12 @@ export default class extends ApplicationController {
   }
 
   follow(event) {
+    if (event.target.tagName == "A" || (event.target.tagName == "svg" && event.target != this.element)) {
+      return
+    }
+
     if (event.metaKey || event.ctrlKey) {
-      window.open(this.element.getAttribute("href"), '_blank')
+      window.open(this.element.getAttribute("href"), "_blank")
     } else if (this.element.getAttribute("data-turbo") == "false") {
       window.open(this.element.getAttribute("href"), this.element.getAttribute("target"))
     } else {
