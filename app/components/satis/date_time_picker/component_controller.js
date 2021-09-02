@@ -382,11 +382,12 @@ export default class extends ApplicationController {
 
   // Gets the names of week days
   getWeekDays(locale) {
-    // new Date(Date.UTC(2021, 1, 1)) is a monday (1 Feb 2021)
-    const baseDate = new Date(Date.UTC(2021, 1, this.weekStartValue))
+    const baseDate = new Date(2021, 1, this.weekStartValue) // 1 Feb 2021 is a monday
     let weekDays = []
     for (let i = 0; i < 7; i++) {
-      weekDays.push(baseDate.toLocaleDateString(locale, { weekday: "short" }))
+      let weekDay = baseDate.toLocaleDateString(locale, { weekday: "short" })
+      console.log(baseDate, weekDay)
+      weekDays.push(weekDay)
       baseDate.setDate(baseDate.getDate() + 1)
     }
     return weekDays
