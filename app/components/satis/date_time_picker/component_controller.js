@@ -237,7 +237,7 @@ export default class extends ApplicationController {
 
     let inputValue = this.selectedValue
       .map((val) => {
-        return val.toISOString()
+        return this.iso8601(val)
       })
       .join(joinChar)
 
@@ -331,6 +331,25 @@ export default class extends ApplicationController {
     if (refreshInputs != false) {
       this.refreshInputs()
     }
+  }
+
+  // Format the given Date into an ISO8601 string whilst preserving the given timezone
+  iso8601(date) {
+    let tzo = -date.getTimezoneOffset(),
+        dif = tzo >= 0 ? '+' : '-',
+        pad = function(num) {
+            let norm = Math.floor(Math.abs(num));
+            return (norm < 10 ? '0' : '') + norm;
+        };
+
+    return date.getFullYear() +
+        '-' + pad(date.getMonth() + 1) +
+        '-' + pad(date.getDate()) +
+        'T' + pad(date.getHours()) +
+        ':' + pad(date.getMinutes()) +
+        ':' + pad(date.getSeconds()) +
+        dif + pad(tzo / 60) +
+        ':' + pad(tzo % 60);
   }
 
   // Is date today?
