@@ -6,9 +6,10 @@ import { createPopper } from "@popperjs/core"
 export default class extends ApplicationController {
   static targets = ["results", "items", "item", "searchInput", "resetButton", "toggleButton", "hiddenInput"]
   static values = {
+    chainTo: String,
+    pageSize: Number,
     url: String,
     urlParams: Object,
-    pageSize: Number,
   }
 
   connect() {
@@ -96,6 +97,8 @@ export default class extends ApplicationController {
     if (event.target.closest('[data-controller="satis-dropdown"]') != this.element) {
       return
     }
+
+    this.filterResultsChainTo()
 
     switch (event.key) {
       case "ArrowDown":
@@ -205,6 +208,7 @@ export default class extends ApplicationController {
     if (this.resultsShown) {
       this.hideResultsList(event)
     } else {
+      this.filterResultsChainTo()
       if (this.hasResults) {
         this.showResultsList(event)
       } else {
@@ -231,6 +235,32 @@ export default class extends ApplicationController {
     this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.remove("hidden")
   }
 
+  filterResultsChainTo() {
+    if (! this.chainToValue) {
+      return
+    }
+
+    let chainToValue;
+    let chainTo = this.hiddenInputTarget.form.querySelector(`[name="${this.chainToValue}"]`)
+    if (chainTo) {
+      chainToValue = chainTo.value
+    }
+
+    this.itemTargets.forEach((item) => {
+      let itemChainToValue = item.getAttribute("data-chain")
+      let chainMatch = true
+      if (this.chainToValue || itemChainToValue) {
+        chainMatch = (chainToValue == itemChainToValue)
+      }
+
+      if (chainMatch) {
+        item.classList.remove("hidden")
+      } else {
+        item.classList.add("hidden")
+      }
+    })
+  }
+
   localResults(event) {
     if (this.searchInputTarget.value == this.lastSearch) {
       return
@@ -242,12 +272,14 @@ export default class extends ApplicationController {
       item.classList.remove("hidden")
     })
 
+    this.filterResultsChainTo()
+
     let matches = []
     this.itemTargets.forEach((item) => {
       let text = item.getAttribute("data-satis-dropdown-item-text").toLowerCase()
       let value = item.getAttribute("data-satis-dropdown-item-value").toLowerCase()
 
-      if (text.indexOf(this.searchInputTarget.value.toLowerCase()) >= 0 || text.indexOf(this.searchInputTarget.value.toLowerCase()) >= 0) {
+      if (!item.classList.contains('hidden') && (text.indexOf(this.searchInputTarget.value.toLowerCase()) >= 0 || text.indexOf(this.searchInputTarget.value.toLowerCase()) >= 0)) {
         matches = matches.concat(item)
       } else {
         item.classList.add("hidden")
@@ -292,6 +324,7 @@ export default class extends ApplicationController {
 
       this.fetchResultsWith(ourUrl).then(() => {
         if (this.hasResults) {
+          this.filterResultsChainTo()
           this.highLightSelected()
           this.showResultsList()
           resolve()

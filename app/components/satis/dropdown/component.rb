@@ -13,6 +13,7 @@ module Satis
         @title = title
         @options = options
         @url = options[:url]
+        @chain_to = options[:chain_to]
 
         options[:input_html] ||= {}
 

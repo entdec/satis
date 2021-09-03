@@ -1,4 +1,4 @@
-div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controller="satis-dropdown" data-satis-dropdown-page-size-value=10 data-satis-dropdown-url-value=url data-satis-dropdown-url-params-value=(options[:url_params]||{}).to_json
+div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controller="satis-dropdown" data-satis-dropdown-page-size-value=10 data-satis-dropdown-url-value=url data-satis-dropdown-url-params-value=(options[:url_params]||{}).to_json data-satis-dropdown-chain-to-value=@chain_to
   / Hidden form field containing results
   = form.hidden_field(attribute, options[:input_html].reverse_merge(value: hidden_value))
   .flex.flex-col.relative
