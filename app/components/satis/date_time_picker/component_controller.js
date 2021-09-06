@@ -157,7 +157,6 @@ export default class extends ApplicationController {
   }
 
   keyPress(event) {
-    console.log("keyPress", event.key)
     switch (event.key) {
       case "Escape":
         this.hideCalendar(event)
@@ -179,7 +178,6 @@ export default class extends ApplicationController {
     try {
       newValue = new Date(this.inputTarget.value)
     } catch (error) {}
-    console.log("dateTimeEntered", this.inputTarget.value, newValue)
     if (!isNaN(newValue.getTime())) {
       this.selectedValue = [newValue]
       this.refreshCalendar()
@@ -386,7 +384,6 @@ export default class extends ApplicationController {
     let weekDays = []
     for (let i = 0; i < 7; i++) {
       let weekDay = baseDate.toLocaleDateString(locale, { weekday: "short" })
-      console.log(baseDate, weekDay)
       weekDays.push(weekDay)
       baseDate.setDate(baseDate.getDate() + 1)
     }
