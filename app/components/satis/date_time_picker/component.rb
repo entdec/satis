@@ -31,7 +31,11 @@ module Satis
         # FIXME: deal with ranges and multiples
         hidden_value = options[:input_html][:value]
         hidden_value ||= @form.object.send(attribute)
-        hidden_value = hidden_value&.iso8601
+        hidden_value = if hidden_value.is_a?(String)
+                         hidden_value&.split(' - ')&.map { |d| Date.parse(d).iso8601 }
+                       else
+                         hidden_value&.iso8601
+                       end
 
         options[:input_html][:value] = hidden_value
       end

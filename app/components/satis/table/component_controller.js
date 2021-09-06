@@ -188,7 +188,7 @@ export default class extends ApplicationController {
     let turboFrame = this.element.closest("turbo-frame")
 
     let ourUrl = new URL(turboFrame.src, window.location.href)
-    let exportUrl = new URL(`/action_table/${turboFrame.id}/export.xlsx`, window.location.href)
+    let exportUrl = new URL(`/action_table/${encodeURIComponent(turboFrame.id)}/export.xlsx`, window.location.href)
     exportUrl.search = ourUrl.search
     window.location.replace(exportUrl)
   }
@@ -199,8 +199,10 @@ export default class extends ApplicationController {
     this.overlayTarget.classList.remove("ease-in", "duration-200", "opacity-0")
     this.overlayTarget.classList.add("ease-out", "duration-300", "opacity-100")
     let input = this.modalTarget.querySelector("input")
-    // Yup this solves the not focussingin Safari.
-    setTimeout(() => { input.focus() }, 0)
+    // Yup this solves the not focussing in Safari.
+    setTimeout(() => {
+      input.focus()
+    }, 0)
     input.addEventListener("keydown", this.boundSearchKeydown)
   }
 
