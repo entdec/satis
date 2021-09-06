@@ -7,6 +7,7 @@ export default class extends ApplicationController {
   static targets = ["results", "items", "item", "searchInput", "resetButton", "toggleButton", "hiddenInput"]
   static values = {
     chainTo: String,
+    freeText: Boolean,
     pageSize: Number,
     url: String,
     urlParams: Object,
@@ -79,6 +80,10 @@ export default class extends ApplicationController {
         })
       } else {
         this.setHiddenInput()
+      }
+
+      if (! this.searchInputTarget.value && this.freeTextValue) {
+        this.searchInputTarget.value = this.hiddenInputTarget.value
       }
     }
   }
@@ -279,12 +284,17 @@ export default class extends ApplicationController {
       let text = item.getAttribute("data-satis-dropdown-item-text").toLowerCase()
       let value = item.getAttribute("data-satis-dropdown-item-value").toLowerCase()
 
-      if (!item.classList.contains('hidden') && (text.indexOf(this.searchInputTarget.value.toLowerCase()) >= 0 || text.indexOf(this.searchInputTarget.value.toLowerCase()) >= 0)) {
+      if (!item.classList.contains("hidden") && (text.indexOf(this.searchInputTarget.value.toLowerCase()) >= 0 || text.indexOf(this.searchInputTarget.value.toLowerCase()) >= 0)) {
         matches = matches.concat(item)
       } else {
         item.classList.add("hidden")
       }
     })
+
+    if (this.freeTextValue && matches.length != 1) {
+      this.hiddenInputTarget.value = this.lastSearch
+    }
+
     if (matches.length > 0) {
       this.showResultsList(event)
     }

@@ -14,6 +14,7 @@ module Satis
         @options = options
         @url = options[:url]
         @chain_to = options[:chain_to]
+        @free_text = options[:free_text]
 
         options[:input_html] ||= {}
 
