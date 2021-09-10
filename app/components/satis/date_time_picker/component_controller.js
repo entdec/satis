@@ -35,7 +35,7 @@ export default class extends ApplicationController {
     this.selectedValue = []
     let startDate = new Date()
     if (this.hiddenInputTarget.value) {
-      this.hiddenInputTarget.value.split(/;| - /).forEach((value) => {
+      this.hiddenInputTarget.value.split(/;| - |\s/).forEach((value) => {
         this.selectedValue.push(new Date(Date.parse(value)))
       })
     }
