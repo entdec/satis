@@ -83,9 +83,11 @@ export default class extends ApplicationController {
 
     let indicator = event.target.closest('[data-satis-table-target="filterIndicator"]')
     let filter = indicator.getAttribute("data-filter")
+    let column = indicator.getAttribute("data-column")
 
     let input = this.filterRowTarget.querySelector(`[name="tables_controller_filters[${filter}]"]`)
     if (input) {
+      input.closest('table').querySelector(`th[data-column="${column}"]`).scrollIntoView()
       input.dispatchEvent(new Event("focus"))
     }
 
