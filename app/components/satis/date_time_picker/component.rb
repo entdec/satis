@@ -32,7 +32,7 @@ module Satis
         hidden_value = options[:input_html][:value]
         hidden_value ||= @form.object.send(attribute)
         hidden_value = if hidden_value.is_a?(String)
-                         hidden_value&.split(' - ')&.map { |d| Date.parse(d).iso8601 }
+                         hidden_value&.split(' - ')&.map { |d| Time.parse(d).iso8601 }.join(' - ')
                        else
                          hidden_value&.iso8601
                        end
