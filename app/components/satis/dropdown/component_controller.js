@@ -1,6 +1,6 @@
 import ApplicationController from "../../../../frontend/controllers/application_controller"
 // FIXME: Is this full path really needed?
-import { debounce } from "../../../../frontend/utils"
+import { debounce, popperSameWidth } from "../../../../frontend/utils"
 import { createPopper } from "@popperjs/core"
 
 export default class extends ApplicationController {
@@ -46,6 +46,7 @@ export default class extends ApplicationController {
           name: "preventOverflow",
           enabled: true,
         },
+        popperSameWidth,
       ],
     })
 
@@ -82,7 +83,7 @@ export default class extends ApplicationController {
         this.setHiddenInput()
       }
 
-      if (! this.searchInputTarget.value && this.freeTextValue) {
+      if (!this.searchInputTarget.value && this.freeTextValue) {
         this.searchInputTarget.value = this.hiddenInputTarget.value
       }
     }
@@ -241,11 +242,11 @@ export default class extends ApplicationController {
   }
 
   filterResultsChainTo() {
-    if (! this.chainToValue) {
+    if (!this.chainToValue) {
       return
     }
 
-    let chainToValue;
+    let chainToValue
     let chainTo = this.hiddenInputTarget.form.querySelector(`[name="${this.chainToValue}"]`)
     if (chainTo) {
       chainToValue = chainTo.value
@@ -255,7 +256,7 @@ export default class extends ApplicationController {
       let itemChainToValue = item.getAttribute("data-chain")
       let chainMatch = true
       if (this.chainToValue || itemChainToValue) {
-        chainMatch = (chainToValue == itemChainToValue)
+        chainMatch = chainToValue == itemChainToValue
       }
 
       if (chainMatch) {
