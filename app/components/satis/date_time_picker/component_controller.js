@@ -72,6 +72,9 @@ export default class extends ApplicationController {
       window.addEventListener("click", this.boundClickedOutside)
     }
 
+    let input = this.inputTarget
+    this.hiddenInputTarget.addEventListener("focus", function(event) { input.focus() })
+
     if (this.hiddenInputTarget.value) {
       // If there is an existing value, parse it.
       this.refreshCalendar(true)
