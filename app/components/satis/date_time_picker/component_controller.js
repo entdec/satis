@@ -211,6 +211,12 @@ export default class extends ApplicationController {
     }
 
     this.refreshCalendar()
+
+    if (!this.rangeValue || this.selectedValue.length == 2) {
+      this.hideCalendar()
+    }
+
+    event.cancelBubble = true
   }
 
   /***********
