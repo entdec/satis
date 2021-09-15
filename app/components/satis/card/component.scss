@@ -1,5 +1,5 @@
 .sts-card {
-  @apply bg-white sm:rounded-lg sm:shadow dark:bg-gray-800;
+  @apply bg-white sm:rounded-lg sm:shadow dark:bg-gray-800 overflow-hidden;
 
   &__header {
     @apply px-4 py-5 sm:px-6 dark:border-gray-700
