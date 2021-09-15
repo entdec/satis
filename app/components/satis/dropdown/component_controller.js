@@ -120,6 +120,7 @@ export default class extends ApplicationController {
         }
         break
       case "Enter":
+        event.preventDefault()
         this.select(event)
 
         break
@@ -172,6 +173,10 @@ export default class extends ApplicationController {
     let dataDiv = event.target.closest('[data-satis-dropdown-target="item"]')
     if (dataDiv == null) {
       dataDiv = this.selectedItem
+    }
+
+    if (dataDiv == null) {
+      return
     }
 
     this.hideResultsList()
@@ -338,6 +343,9 @@ export default class extends ApplicationController {
           this.filterResultsChainTo()
           this.highLightSelected()
           this.showResultsList()
+          if (this.nrOfItems == 1) {
+            this.moveDown()
+          }
           resolve()
         }
       })
