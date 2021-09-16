@@ -52,7 +52,7 @@ module Satis
         @items = @filter.collection
       end
 
-      @items = @items.select { |item| item.is_a?(Array) ? item[0].match?(/#{params[:term]}/) || item[1].match?(/#{params[:term]}/) : item.match?(/#{params[:term]}/) } if @filter_items && @items.is_a?(Array)
+      @items = @items.select { |item| item.is_a?(Array) ? item[0].match?(/#{params[:term]}/i) || item[1].match?(/#{params[:term]}/i) : item.match?(/#{params[:term]}/i) } if @filter_items && @items.is_a?(Array)
       @items = Kaminari.paginate_array(@items) if @items.is_a? Array
       @items = @items.page(params[:page]).per(params[:page_size]) if params[:page] && params[:page_size]
 
