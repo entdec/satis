@@ -38,7 +38,11 @@ module Satis
       @table ||= ActionTable::ActionTable.for_name(params[:table_name], params.permit!)
       @filter = @table.filter_by_attribute(params[:filter])
 
-      @items = @filter.collection.is_a?(Proc) ? @filter.collection.call : @filter.collection
+      if @filter.collection.is_a?(Proc)
+        @items = @filter.collection.parameters.blank? ? @filter.collection.call : @filter.collection.call(params)
+      else
+        @items = @filter.collection
+      end
 
       @items = Kaminari.paginate_array(@items) if @items.is_a? Array
       @items = @items.page(params[:page]).per(params[:page_size]) if params[:page] && params[:page_size]
