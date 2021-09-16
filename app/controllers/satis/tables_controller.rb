@@ -38,13 +38,12 @@ module Satis
       @table ||= ActionTable::ActionTable.for_name(params[:table_name], params.permit!)
       @filter = @table.filter_by_attribute(params[:filter])
 
-      @filter_items = !(@filter.collection.is_a?(Proc) && @filter.collection.parameters.present?)
+      @filter_items = true
 
       if @filter.collection.is_a?(Proc)
         if @filter.collection.parameters.size == 1
+          @filter_items = false
           @items = @filter.collection.call(params[:term])
-        elsif @filter.collection.parameters.size == 2
-          @items = @filter.collection.call(params[:term], params)
         else
           @items = @filter.collection.call
         end
