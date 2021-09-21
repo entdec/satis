@@ -100,10 +100,12 @@ module Satis
           #          form: self, name: name, template_object: template_object, **options, &block
           #        ))
         else
+          invalid_feedback = nil
+          invalid_feedback = tag.div(@object.errors.messages[name].join(', '), class: 'invalid-feedback') if @object.errors.messages[name].present?
           safe_join [
-            tag.div(@object.errors.messages[name].join(', '), class: 'invalid-feedback'),
+            invalid_feedback,
             rails_fields_for(*args, options, &block)
-          ]
+          ].compact
         end
       end
 
