@@ -4,6 +4,7 @@ import { debounce } from "../../../../frontend/utils"
 
 export default class extends ApplicationController {
   static targets = ["link", "indicator", "submenu"]
+
   connect() {
     super.connect()
 
@@ -19,6 +20,7 @@ export default class extends ApplicationController {
 
     if (this.isActive) {
       this.linkTarget.classList.add("active")
+
       if (this.hasSubmenuTarget) {
         this.submenuTarget.classList.remove("hidden")
         this.indicatorTarget.classList.add("rotate-90")
@@ -42,7 +44,6 @@ export default class extends ApplicationController {
 
   openMenu(event) {
     if (this.linkTarget.matches(":hover") || this.isActive) {
-      this.linkTarget.classList.add("active")
       this.submenuTarget.classList.remove("hidden")
       this.indicatorTarget.classList.add("rotate-90")
     }
@@ -66,7 +67,7 @@ export default class extends ApplicationController {
 
   get hasOpenSubmenus() {
     return Array.from(this.element.querySelectorAll('[data-satis-sidebar-menu-item-target="submenu"]')).some((el) => {
-      return !el.classList.contains("hidden")
+      return Array.from(el.querySelectorAll('[data-satis-sidebar-menu-item-target="submenu"]')).some((el) => {!el.classList.contains("hidden")})
     })
   }
 
