@@ -23,7 +23,7 @@ export default class extends ApplicationController {
     this.boundClickedOutside = this.clickedOutside.bind(this)
 
     // To remember what the current page and last page were, we queried
-    this.currentPage = 0
+    this.currentPage = 1
     this.lastPage = null
 
     // To remember what the last search was we did
@@ -159,6 +159,9 @@ export default class extends ApplicationController {
       this.selectedItem.classList.remove("bg-primary-200")
     }
     this.selectedIndex = -1
+    if (this.hasUrlValue) {
+      this.itemsTarget.innerHTML = ''
+    }
     this.hideResultsList()
     this.itemTargets.forEach((item) => {
       item.classList.remove("hidden")
@@ -313,7 +316,7 @@ export default class extends ApplicationController {
         return
       }
       if (this.searchInputTarget.value != this.lastSearch) {
-        this.currentPage = 0
+        this.currentPage = 1
       }
       if (!this.hasUrlValue) {
         return
@@ -366,7 +369,7 @@ export default class extends ApplicationController {
             item.setAttribute("data-action", "click->satis-dropdown#select")
           })
 
-          if (this.currentPage == 0) {
+          if (this.currentPage == 1) {
             this.itemsTarget.innerHTML = tmpDiv.innerHTML
           } else {
             if (tmpDiv.innerHTML.length > 0) {
