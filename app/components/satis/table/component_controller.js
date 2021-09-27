@@ -88,6 +88,7 @@ export default class extends ApplicationController {
     let input = this.filterRowTarget.querySelector(`[name="tables_controller_filters[${filter}]"]`)
     if (input) {
       input.closest('table').querySelector(`th[data-column="${column}"]`).scrollIntoView()
+      input.focus()
       input.dispatchEvent(new Event("focus"))
     }
 
