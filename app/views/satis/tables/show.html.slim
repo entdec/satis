@@ -76,7 +76,14 @@ turbo-frame id="#{params[:turbo_frame_id] || params[:table_name]}"
 
                   / Columns and rows
                   - @table.rows(self).each_with_index do |row, index|
+                    - if row.find { |c| c.first == :link }
                       tr.cursor-pointer class="#{index % 2 == 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700'}" href="#{row.find{|c| c.first == :link}&.[](1)}" data-controller="satis-link" data-action="click->satis-link#follow tap->satis-link#follow"
+                        - row.each do |column, value|
+                          - if %i[link context_menu].exclude?(column)
+                            td.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500.dark:text-gray-300
+                              == value
+                    - else
+                      tr class="#{index % 2 == 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700'}"
                         - row.each do |column, value|
                           - if %i[link context_menu].exclude?(column)
                             td.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500.dark:text-gray-300
