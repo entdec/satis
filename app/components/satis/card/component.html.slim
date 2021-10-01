@@ -32,7 +32,7 @@
           - tabs.each do |tab|
             option selected=tab.selected? = t(tab.name, scope: [:tabs])
       .hidden.sm:block
-        nav.-mb-px.flex.space-x-8 aria-label="Tabs"
+        nav.-mb-px.flex.space-x-8.overflow-x-auto aria-label="Tabs"
           - tabs.each do |tab|
               a.tab id="#{tab.name}" href="#" aria-current="#{tab.selected? ? "page" : ''}" data-satis-tabs-target="tab" data-action="click->satis-tabs#select"
                 - if tab.icon

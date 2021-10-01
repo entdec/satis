@@ -1,6 +1,6 @@
 - if form.object.present? && form.object.errors.messages[collection].present?
   div.invalid-feedback
-    = form.object.errors.messages[collection].join(', ')
+    = form.object.errors.full_messages_for(collection).join(', ')
 
 - if template_object
   template data-satis-fields-for-target='template'
