@@ -19,7 +19,9 @@ module Satis
       end
 
       def label
-        @label || I18n.t(id, scope: [:menu] + @scope, default: id.to_s.humanize)
+        return @label if @label
+
+        @label ||= I18n.t(id, scope: [:menu] + @scope, default: id.to_s.humanize)
       end
 
       def active?
