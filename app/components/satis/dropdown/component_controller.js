@@ -75,6 +75,8 @@ export default class extends ApplicationController {
       if (this.itemTargets.length == 0) {
         let ourUrl = this.normalizedUrl
         ourUrl.searchParams.append("id", this.hiddenInputTarget.value)
+        ourUrl.searchParams.append("page", this.currentPage)
+        ourUrl.searchParams.append("page_size", this.pageSizeValue)
 
         this.fetchResultsWith(ourUrl).then(() => {
           this.setHiddenInput()
