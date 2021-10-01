@@ -10,11 +10,11 @@ div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controlle
             input.p-1.px-2.appearance-none.outline-none.w-full.text-gray-800.dark:bg-gray-800 data-action="keyup->satis-dropdown#search" data-satis-dropdown-target="searchInput" placeholder=placeholder
           div
             / Reset button
-            button.cursor-pointer.w-6.h-full.flex.items-center.text-gray-400.outline-none.focus:outline-none data-satis-dropdown-target="resetButton" data-action="click->satis-dropdown#reset"
+            button.cursor-pointer.w-6.h-full.flex.items-center.text-gray-400.outline-none.focus:outline-none data-satis-dropdown-target="resetButton" data-action="click->satis-dropdown#reset" tabindex="-1"
               i.fas.fa-xmark
           .text-gray-300.w-8.py-1.pl-2.pr-1.border-l.flex.items-center.border-gray-200.dark:border-gray-700
             / Up/down chevrons
-            button.cursor-pointer.w-6.h-6.text-gray-600.outline-none.focus:outline-none data-action="click->satis-dropdown#toggleResultsList" data-satis-dropdown-target="toggleButton"
+            button.cursor-pointer.w-6.h-6.text-gray-600.outline-none.focus:outline-none data-action="click->satis-dropdown#toggleResultsList" data-satis-dropdown-target="toggleButton" tabindex="-1"
               i.hidden.fas.fa-chevron-up
               i.fas.fa-chevron-down
 
