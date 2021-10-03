@@ -12,7 +12,7 @@ export default class extends ApplicationController {
   }
 
   follow(event) {
-    if (event.target.tagName == "A" || (event.target.tagName == "svg" && event.target != this.element)) {
+    if (event.target.tagName == "A" || (event.target.tagName == "svg" && event.target != this.element) || (event.target.tagName == "path" && event.target != this.element)) {
       return
     }
 
