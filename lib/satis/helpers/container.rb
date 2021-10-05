@@ -43,7 +43,8 @@ module Satis
           original_args = args.dup
           options = args.extract_options!
           instance = if options.key? :variant
-                       component.new(*original_args).with_variant(options[:variant])
+                       variant_component = component.to_s.sub(/::Component$/, "::#{options[:variant].to_s.camelize}::Component").safe_constantize
+                       (variant_component || component).new(*original_args)
                      else
                        component.new(*original_args)
                      end

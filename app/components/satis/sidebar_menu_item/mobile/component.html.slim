@@ -14,4 +14,4 @@
   - if item.menu
     #sub-menu-1.space-y-1
       - item.menu.items.each do |item|
-        = render(Satis::SidebarMenuItem::Component.new(item: item).with_variant(:mobile))
+        = render(Satis::SidebarMenuItem::Mobile::Component.new(item: item))
