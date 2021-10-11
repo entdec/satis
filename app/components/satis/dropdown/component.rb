@@ -35,7 +35,13 @@ module Satis
       end
 
       def placeholder
-        title || attribute.to_s.humanize
+        return title if title.present?
+
+        if form.object.class.respond_to?(:human_attribute_name)
+          form.object.class.human_attribute_name(attribute)
+        else
+          attribute.to_s.humanize
+        end
       end
 
       def value_method
