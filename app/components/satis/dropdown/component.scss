@@ -3,4 +3,8 @@
     min-height: 50px;
     max-height: 200px;
   }
+
+  input {
+    @apply dark:text-gray-300
+  }
 }
