@@ -2,7 +2,7 @@
   "name": "@components/satis",
   "version": "1.0.4",
   "description": "",
-  "repository": "git@code.entropydecelerator.com:components/satis.git",
+  "repository": "git@github.com:entdec/satis.git",
   "author": "Tom de Grunt <tom@degrunt.nl>",
   "license": "MIT",
   "files": [
