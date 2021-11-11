@@ -239,6 +239,7 @@ export default class extends ApplicationController {
       if (turboFrame) {
         let ourUrl = new URL(turboFrame.src, window.location.href)
         ourUrl.searchParams.set("query", event.target.value)
+        ourUrl.searchParams.set("page", "1")
         turboFrame.src = ourUrl
       }
       this.closeSearch()
