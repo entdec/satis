@@ -23,7 +23,7 @@ export default class extends ApplicationController {
 
       if (this.hasSubmenuTarget) {
         this.submenuTarget.classList.remove("hidden")
-        this.indicatorTarget.classList.add("rotate-90")
+        this.indicatorTarget.setAttribute("data-fa-transform", "rotate-90")
       } else {
         this.linkTarget.classList.add("focus")
       }
@@ -43,16 +43,17 @@ export default class extends ApplicationController {
   }
 
   openMenu(event) {
-    if (this.linkTarget.matches(":hover") || this.isActive) {
+    if (this.isActive) {
       this.submenuTarget.classList.remove("hidden")
-      this.indicatorTarget.classList.add("rotate-90")
+      this.indicatorTarget.setAttribute("data-fa-transform", "rotate-90")
     }
   }
 
   closeMenu(event) {
-    if (!this.linkTarget.matches(":hover") && !this.isActive) {
+    if (!this.isActive) {
       this.linkTarget.classList.remove("active")
-      this.indicatorTarget.classList.remove("rotate-90")
+      this.indicatorTarget.removeAttribute("data-fa-transform")
+
       this.submenuTarget.classList.add("hidden")
     }
   }
@@ -67,7 +68,9 @@ export default class extends ApplicationController {
 
   get hasOpenSubmenus() {
     return Array.from(this.element.querySelectorAll('[data-satis-sidebar-menu-item-target="submenu"]')).some((el) => {
-      return Array.from(el.querySelectorAll('[data-satis-sidebar-menu-item-target="submenu"]')).some((el) => {!el.classList.contains("hidden")})
+      return Array.from(el.querySelectorAll('[data-satis-sidebar-menu-item-target="submenu"]')).some((el) => {
+        !el.classList.contains("hidden")
+      })
     })
   }
 

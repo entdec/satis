@@ -12,13 +12,7 @@ module Satis
       end
 
       def data_actions
-        return unless open_on_hover?
-
-        'mouseenter->satis-sidebar-menu-item#open mouseleave->satis-sidebar-menu-item#close'
-      end
-
-      def open_on_hover?
-        menu_options.fetch(:open_on_hover, true)
+        'click->satis-sidebar-menu-item#open'
       end
     end
   end
