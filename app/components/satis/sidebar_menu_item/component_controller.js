@@ -8,9 +8,6 @@ export default class extends ApplicationController {
   connect() {
     super.connect()
 
-    this.debouncedOpenMenu = debounce(this.openMenu.bind(this), 500)
-    this.debouncedCloseMenu = debounce(this.closeMenu.bind(this), 500)
-
     // Primitive, yes
     Array.from(this.element.querySelectorAll('[data-satis-sidebar-menu-item-target="link"]')).forEach((el) => {
       if (el.href.length > 0 && window.location.href.indexOf(el.href) >= 0) {
@@ -31,30 +28,12 @@ export default class extends ApplicationController {
   }
 
   open(event) {
-    if (this.hasSubmenuTarget) {
-      this.debouncedOpenMenu(event)
-    }
-  }
-
-  close(event) {
-    if (this.hasSubmenuTarget) {
-      this.debouncedCloseMenu(event)
-    }
-  }
-
-  openMenu(event) {
-    if (this.isActive) {
-      this.submenuTarget.classList.remove("hidden")
-      this.indicatorTarget.setAttribute("data-fa-transform", "rotate-90")
-    }
-  }
-
-  closeMenu(event) {
-    if (!this.isActive) {
-      this.linkTarget.classList.remove("active")
-      this.indicatorTarget.removeAttribute("data-fa-transform")
-
-      this.submenuTarget.classList.add("hidden")
+    if (!this.isActive && this.hasSubmenuTarget) {
+      if (this.hasSubmenuTarget) {
+        this.submenuTarget.classList.remove("hidden")
+        this.indicatorTarget.setAttribute("data-fa-transform", "rotate-90")
+      }
+      event.preventDefault()
     }
   }
 
@@ -68,9 +47,10 @@ export default class extends ApplicationController {
 
   get hasOpenSubmenus() {
     return Array.from(this.element.querySelectorAll('[data-satis-sidebar-menu-item-target="submenu"]')).some((el) => {
-      return Array.from(el.querySelectorAll('[data-satis-sidebar-menu-item-target="submenu"]')).some((el) => {
-        !el.classList.contains("hidden")
-      })
+      return !el.classList.contains("hidden")
+      // return Array.from(el.querySelectorAll('[data-satis-sidebar-menu-item-target="submenu"]')).some((el) => {
+      //   return !el.classList.contains("hidden")
+      // })
     })
   }
 

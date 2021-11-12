@@ -13,7 +13,7 @@ GIT
 PATH
   remote: .
   specs:
-    satis (1.0.4)
+    satis (1.0.5)
       diffy
       rails (~> 6.1.3, >= 6.1.3.2)
       view_component
@@ -204,9 +204,9 @@ GEM
     sprockets (4.0.2)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
-    sprockets-rails (3.2.2)
-      actionpack (>= 4.0)
-      activesupport (>= 4.0)
+    sprockets-rails (3.3.0)
+      actionpack (>= 5.2)
+      activesupport (>= 5.2)
       sprockets (>= 3.0.0)
     sqlite3 (1.4.2)
     thor (1.1.0)

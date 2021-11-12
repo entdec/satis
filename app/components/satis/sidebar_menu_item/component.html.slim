@@ -1,5 +1,5 @@
-.sts-sidebar-menu-item class="#{item.level >= 1 ? 'pl-4' : ''}" data-controller="satis-sidebar-menu-item" data-action=data_actions
-  a.sts-sidebar-menu-item__link aria-controls="sub-menu-1" aria-expanded="false" href=item.link *item.link_attributes data-satis-sidebar-menu-item-target="link"
+.sts-sidebar-menu-item class="#{item.level >= 1 ? 'pl-4' : ''}" data-controller="satis-sidebar-menu-item"
+  a.sts-sidebar-menu-item__link aria-controls="sub-menu-1" aria-expanded="false" href=item.link *item.link_attributes data-satis-sidebar-menu-item-target="link" data-action=data_actions
     - if item.icon
       i.sts-sidebar-menu-item__icon.fa-lg class=item.icon style="width: 20px;"
     - else
