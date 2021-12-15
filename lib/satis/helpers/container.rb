@@ -29,12 +29,20 @@ module Satis
 
       def form_for(name, *args, &block)
         options = args.extract_options!
+        options.deep_merge!(html: { data: {} })
+        options[:html][:data][:controller] ||= ''
+        options[:html][:data][:controller] += ' form'
+        options[:html][:data][:"form-no-submit-on-enter-value"] = !Satis.submit_on_enter?
         args << options.merge(builder: Satis::Forms::Builder)
         action_view.form_for(name, *args, &block)
       end
 
       def form_with(model: nil, scope: nil, url: nil, format: nil, **options, &block)
         options = options.reverse_merge(builder: Satis::Forms::Builder, class: '')
+        options.deep_merge!(data: {})
+        options[:data][:controller] ||= ''
+        options[:data][:controller] += ' form'
+        options[:data][:"form-no-submit-on-enter-value"] = !Satis.submit_on_enter?
         action_view.form_with(model: model, scope: scope, url: url, format: format, **options, &block)
       end
 
