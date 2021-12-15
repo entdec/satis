@@ -9,6 +9,10 @@ group :development do
   gem 'sqlite3'
 end
 
+group :test do
+  gem 'slim'
+end
+
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 gem 'auxilium', '~> 3', entdec: 'components/auxilium'
