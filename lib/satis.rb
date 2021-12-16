@@ -13,6 +13,12 @@ module Satis
       yield config
     end
 
+    def confirm_before_leave?
+      return false if config.nil?
+
+      config.confirm_before_leave
+    end
+
     def submit_on_enter?
       return true if config.nil?
 
