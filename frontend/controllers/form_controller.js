@@ -21,12 +21,20 @@ export default class extends ApplicationController {
     if (this.confirmBeforeLeaveValue) {
       this.originalData = this.getFormData()
       document.addEventListener('turbo:before-visit', this.checkForChanges.bind(this))
+      window.addEventListener('beforeunload', this.checkForChangesBeforeUnload.bind(this))
     }
   }
 
   checkForChanges(event) {
     if (this.isDirty() && ! window.confirm("Changes you made may not be saved, are you sure you want to leave this page?")) {
       event.preventDefault()
+    }
+  }
+
+  checkForChangesBeforeUnload(event) {
+    if (this.isDirty()) {
+      event.preventDefault()
+      return "Changes you made may not be saved, are you sure you want to leave this page?"
     }
   }
 
