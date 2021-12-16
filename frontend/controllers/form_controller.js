@@ -37,7 +37,7 @@ export default class extends ApplicationController {
   }
 
   checkForChanges(event) {
-    if (this.isDirty() && ! window.confirm("Changes you made may not be saved, are you sure you want to leave this page?")) {
+    if (this.isDirty() && ! this.formSubmitting && ! window.confirm("Changes you made may not be saved, are you sure you want to leave this page?")) {
       event.preventDefault()
     }
   }
