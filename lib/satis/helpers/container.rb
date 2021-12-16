@@ -28,22 +28,30 @@ module Satis
       end
 
       def form_for(name, *args, &block)
-        options = args.extract_options!
-        options.deep_merge!(html: { data: {} })
-        options[:html][:data][:controller] ||= ''
-        options[:html][:data][:controller] += ' form'
-        options[:html][:data][:"form-no-submit-on-enter-value"] = !Satis.submit_on_enter?
+        options = args.extract_options!.deep_merge!(html: { data: {} })
+        form_options_defaults!(options)
+        update_form_data_options!(options[:html][:data], options)
         args << options.merge(builder: Satis::Forms::Builder)
         action_view.form_for(name, *args, &block)
       end
 
       def form_with(model: nil, scope: nil, url: nil, format: nil, **options, &block)
-        options = options.reverse_merge(builder: Satis::Forms::Builder, class: '')
-        options.deep_merge!(data: {})
-        options[:data][:controller] ||= ''
-        options[:data][:controller] += ' form'
-        options[:data][:"form-no-submit-on-enter-value"] = !Satis.submit_on_enter?
+        options = options.reverse_merge(builder: Satis::Forms::Builder, class: '').deep_merge!(data: {})
+        form_options_defaults!(options)
+        update_form_data_options!(options[:data], options)
         action_view.form_with(model: model, scope: scope, url: url, format: format, **options, &block)
+      end
+
+      def form_options_defaults!(options)
+        options[:submit_on_enter] = Satis.submit_on_enter? if options[:submit_on_enter].nil?
+        options[:confirm_before_leave] = Satis.confirm_before_leave? if options[:confirm_before_leave].nil?
+      end
+
+      def update_form_data_options!(data, options)
+        data[:controller] ||= ''
+        data[:controller] += ' form'
+        data[:"form-no-submit-on-enter-value"] = !options[:submit_on_enter]
+        data[:"form-confirm-before-leave-value"] = options[:confirm_before_leave]
       end
 
       def add_helper(name, component)
