@@ -12,6 +12,7 @@ module Satis
         @options = args.extract_options!
         @group = options[:group]
         @icon = options[:icon]
+        @placeholder = options[:placeholder] || '—'
       end
     end
   end
