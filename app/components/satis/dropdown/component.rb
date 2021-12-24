@@ -15,6 +15,7 @@ module Satis
         @url = options[:url]
         @chain_to = options[:chain_to]
         @free_text = options[:free_text]
+        @needs_exact_match = options[:needs_exact_match]
 
         options[:input_html] ||= {}
 

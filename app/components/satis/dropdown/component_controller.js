@@ -1,13 +1,14 @@
 import ApplicationController from "../../../../frontend/controllers/application_controller"
 // FIXME: Is this full path really needed?
-import { debounce, popperSameWidth } from "../../../../frontend/utils"
-import { createPopper } from "@popperjs/core"
+import {debounce, popperSameWidth} from "../../../../frontend/utils"
+import {createPopper} from "@popperjs/core"
 
 export default class extends ApplicationController {
   static targets = ["results", "items", "item", "searchInput", "resetButton", "toggleButton", "hiddenInput"]
   static values = {
     chainTo: String,
     freeText: Boolean,
+    needsExactMatch: Boolean,
     pageSize: Number,
     url: String,
     urlParams: Object,
@@ -162,7 +163,7 @@ export default class extends ApplicationController {
     }
     this.selectedIndex = -1
     if (this.hasUrlValue) {
-      this.itemsTarget.innerHTML = ''
+      this.itemsTarget.innerHTML = ""
     }
     this.hideResultsList()
     this.itemTargets.forEach((item) => {
@@ -216,7 +217,7 @@ export default class extends ApplicationController {
           this.hiddenInputTarget.setAttribute(attr.name, attr.value)
         }
       })
-      this.hiddenInputTarget.dispatchEvent(new CustomEvent("change", { detail: { src: "satis-dropdown" } }))
+      this.hiddenInputTarget.dispatchEvent(new CustomEvent("change", {detail: {src: "satis-dropdown"}}))
     }
   }
 
@@ -295,8 +296,17 @@ export default class extends ApplicationController {
       let text = item.getAttribute("data-satis-dropdown-item-text").toLowerCase()
       let value = item.getAttribute("data-satis-dropdown-item-value").toLowerCase()
 
-      if (!item.classList.contains("hidden") && (text.indexOf(this.searchInputTarget.value.toLowerCase()) >= 0 || text.indexOf(this.searchInputTarget.value.toLowerCase()) >= 0)) {
-        matches = matches.concat(item)
+      if (!item.classList.contains("hidden")) {
+        if(this.needsExactMatchValue) {
+          if(text === this.searchInputTarget.value.toLowerCase()) {
+            matches = matches.concat(item)
+          }
+        } else {
+          if(text.indexOf(this.searchInputTarget.value.toLowerCase()) >= 0) {
+            matches = matches.concat(item)
+          }
+        }
+
       } else {
         item.classList.add("hidden")
       }
@@ -333,6 +343,7 @@ export default class extends ApplicationController {
       }
       ourUrl.searchParams.append("page", this.currentPage)
       ourUrl.searchParams.append("page_size", this.pageSizeValue)
+      ourUrl.searchParams.append("needs_exact_match", this.needsExactMatchValue)
 
       // Add searchParams based on url_params
       const form = this.element.closest("form")
@@ -449,7 +460,7 @@ export default class extends ApplicationController {
   highLightSelected() {
     if (this.selectedItem) {
       this.selectedItem.classList.add("bg-primary-200")
-      this.selectedItem.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })
+      this.selectedItem.scrollIntoView({behavior: "smooth", block: "nearest", inline: "start"})
     }
   }
 
