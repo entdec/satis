@@ -13,10 +13,10 @@ module Satis
         yield self if block_given?
       end
 
-      def item(*args, &block)
-        args.last[:scope] = @scope
-        args.last[:level] = @level
-        @items << Item.new(*args, &block)
+      def item(*args, **kwargs, &block)
+        kwargs[:scope] = @scope
+        kwargs[:level] = @level
+        @items << Item.new(*args, **kwargs, &block)
       end
     end
   end

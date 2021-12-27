@@ -60,9 +60,9 @@ module Satis
           options = args.extract_options!
           instance = if options.key? :variant
                        variant_component = component.to_s.sub(/::Component$/, "::#{options[:variant].to_s.camelize}::Component").safe_constantize
-                       (variant_component || component).new(*original_args)
+                       (variant_component || component).new(*args, **options)
                      else
-                       component.new(*original_args)
+                      component.new(*args, **options)
                      end
 
           instance.original_view_context = action_view
