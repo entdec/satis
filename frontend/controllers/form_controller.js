@@ -11,11 +11,14 @@ export default class extends ApplicationController {
     super.connect()
 
     this.formSubmitting = false
-    this.element.addEventListener('submit', this.setFormSubmitting.bind(this))
+    this.boundSetFormSubmitting = this.setFormSubmitting.bind(this)
+
+    this.element.addEventListener('submit', this.boundSetFormSubmitting)
 
     if (this.noSubmitOnEnterValue) {
       this.element.addEventListener('keydown', function(event) {
-        if (event.key == 'Enter' && event.target && event.target.nodeName != 'TEXTAREA') {
+        if (event.key === 'Enter' && event.target && !(event.target.nodeName === 'TEXTAREA' || event.target.nodeName === 'TRIX-EDITOR')) {
+          console.log("prevented")
           event.preventDefault()
         }
       })
@@ -32,6 +35,7 @@ export default class extends ApplicationController {
   }
 
   disconnect() {
+    this.element.removeEventListener('submit', this.boundSetFormSubmitting)
     document.removeEventListener('turbo:before-visit', this.boundCheckForChanges)
     window.removeEventListener('beforeunload', this.boundCheckForChangesBeforeUnload)
   }
@@ -50,7 +54,14 @@ export default class extends ApplicationController {
   }
 
   getFormData() {
-    return new URLSearchParams(new FormData(this.element)).toString()
+    let formData = new FormData(this.element)
+    for(let pair of formData.entries()) {
+      if(pair[0].indexOf('[TEMPLATE]') >= 0) {
+        formData.delete(pair[0])
+      }
+    }
+
+    return new URLSearchParams(formData).toString()
   }
 
   isDirty() {
