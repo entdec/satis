@@ -55,14 +55,14 @@ module Satis
       end
 
       def add_helper(name, component)
-        self.class.define_method(name) do |*args, &block|
+        self.class.define_method(name) do |*args, **kwargs, &block|
           original_args = args.dup
           options = args.extract_options!
           instance = if options.key? :variant
                        variant_component = component.to_s.sub(/::Component$/, "::#{options[:variant].to_s.camelize}::Component").safe_constantize
-                       (variant_component || component).new(*original_args)
+                       (variant_component || component).new(*original_args, **kwargs)
                      else
-                       component.new(*original_args)
+                       component.new(*original_args, **kwargs)
                      end
 
           instance.original_view_context = action_view
