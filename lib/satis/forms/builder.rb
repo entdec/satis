@@ -90,8 +90,7 @@ module Satis
             template_object: template_object,
             options: options
           }
-
-          tag.div(html_options) do
+          tag.div(**html_options) do
             render 'shared/fields_for', view_options, &block
           end
 
