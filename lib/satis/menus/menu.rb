@@ -5,11 +5,11 @@ module Satis
     class Menu
       attr_reader :items, :level
 
-      def initialize(*args, level: 0)
+      def initialize(*args, **kwargs)
         @options = args.extract_options!
         @items = []
         @scope = Array.wrap(args.first)
-        @level = level
+        @level = kwargs[:level] || 0
         yield self if block_given?
       end
 
