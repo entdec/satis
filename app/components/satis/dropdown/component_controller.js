@@ -345,15 +345,6 @@ export default class extends ApplicationController {
       ourUrl.searchParams.append("page_size", this.pageSizeValue)
       ourUrl.searchParams.append("needs_exact_match", this.needsExactMatchValue)
 
-      // Add searchParams based on url_params
-      const form = this.element.closest("form")
-      Object.entries(this.urlParamsValue).forEach((item) => {
-        let elm = form.querySelector(`[name='${item[1]}']`)
-        if (elm) {
-          ourUrl.searchParams.append(item[0], elm.value)
-        }
-      })
-
       this.fetchResultsWith(ourUrl).then(() => {
         if (this.hasResults) {
           this.filterResultsChainTo()
@@ -411,6 +402,8 @@ export default class extends ApplicationController {
       let elm = form.querySelector(`[name='${item[1]}']`)
       if (elm) {
         ourUrl.searchParams.append(item[0], elm.value)
+      } else {
+        ourUrl.searchParams.append(item[0], item[1])
       }
     })
 
