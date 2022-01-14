@@ -343,7 +343,9 @@ export default class extends ApplicationController {
       }
       ourUrl.searchParams.append("page", this.currentPage)
       ourUrl.searchParams.append("page_size", this.pageSizeValue)
-      ourUrl.searchParams.append("needs_exact_match", this.needsExactMatchValue)
+      if (this.needsExactMatchValue) {
+        ourUrl.searchParams.append("needs_exact_match", this.needsExactMatchValue)
+      }
 
       this.fetchResultsWith(ourUrl).then(() => {
         if (this.hasResults) {
