@@ -13,7 +13,7 @@ GIT
 PATH
   remote: .
   specs:
-    satis (1.0.14)
+    satis (1.0.15)
       diffy
       rails (>= 6.1.3.2)
       view_component
@@ -114,6 +114,12 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.12.5)
       mini_portile2 (~> 2.6.1)
+      racc (~> 1.4)
+    nokogiri (1.12.5-arm64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.12.5-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.12.5-x86_64-linux)
       racc (~> 1.4)
     parallel (1.21.0)
     parser (3.0.2.0)
