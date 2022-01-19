@@ -54,10 +54,11 @@ export default class extends ApplicationController {
   }
 
   getFormData() {
-    let formData = new FormData(this.element)
-    for(let pair of formData.entries()) {
-      if(pair[0].indexOf('[TEMPLATE]') >= 0) {
-        formData.delete(pair[0])
+    let elementFormData = new FormData(this.element)
+    let formData = new FormData()
+    for(let pair of elementFormData.entries()) {
+      if(pair[0].indexOf('[TEMPLATE]') == -1) {
+        formData.append(pair[0], pair[1])
       }
     }
 
