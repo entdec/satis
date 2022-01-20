@@ -18,7 +18,6 @@ export default class extends ApplicationController {
     if (this.noSubmitOnEnterValue) {
       this.element.addEventListener('keydown', function(event) {
         if (event.key === 'Enter' && event.target && !(event.target.nodeName === 'TEXTAREA' || event.target.nodeName === 'TRIX-EDITOR')) {
-          console.log("prevented")
           event.preventDefault()
         }
       })
@@ -57,11 +56,10 @@ export default class extends ApplicationController {
     let elementFormData = new FormData(this.element)
     let formData = new FormData()
     for(let pair of elementFormData.entries()) {
-      if(pair[0].indexOf('[TEMPLATE]') == -1) {
+      if(pair[0].indexOf('[TEMPLATE]') == -1 && pair[0] != 'search' && pair[0] != 'tabs') {
         formData.append(pair[0], pair[1])
       }
     }
-
     return new URLSearchParams(formData).toString()
   }
 
