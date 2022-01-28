@@ -71,6 +71,7 @@ export default class extends ApplicationController {
     if (event?.detail?.src == "satis-dropdown") {
       return
     }
+
     // Put current selection in search field
     if (this.hiddenInputTarget.value) {
       if (this.itemTargets.length == 0) {
@@ -145,9 +146,9 @@ export default class extends ApplicationController {
   // User enters text in the search field
   search(event) {
     if (this.hasUrlValue) {
-      this.debouncedFetchResults()
+      this.debouncedFetchResults(event)
     } else {
-      this.debouncedLocalResults()
+      this.debouncedLocalResults(event)
     }
   }
 
@@ -296,19 +297,14 @@ export default class extends ApplicationController {
       let text = item.getAttribute("data-satis-dropdown-item-text").toLowerCase()
       let value = item.getAttribute("data-satis-dropdown-item-value").toLowerCase()
 
-      if (!item.classList.contains("hidden")) {
-        if(this.needsExactMatchValue) {
-          if(text === this.searchInputTarget.value.toLowerCase()) {
-            matches = matches.concat(item)
-          }
+      if (! item.classList.contains("hidden")) {
+        if (this.needsExactMatchValue && text === this.searchInputTarget.value.toLowerCase()) {
+          matches = matches.concat(item)
+        } else if (!this.needsExactMatchValue && text.indexOf(this.searchInputTarget.value.toLowerCase()) >= 0) {
+          matches = matches.concat(item)
         } else {
-          if(text.indexOf(this.searchInputTarget.value.toLowerCase()) >= 0) {
-            matches = matches.concat(item)
-          }
+          item.classList.add("hidden")
         }
-
-      } else {
-        item.classList.add("hidden")
       }
     })
 
