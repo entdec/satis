@@ -16,6 +16,7 @@ module Satis
         @chain_to = options[:chain_to]
         @free_text = options[:free_text]
         @needs_exact_match = options[:needs_exact_match]
+        @reset_button = options[:reset_button]
 
         options[:input_html] ||= {}
 
