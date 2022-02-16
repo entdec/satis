@@ -321,10 +321,10 @@ module Satis
         tag.div('data-controller' => 'phone-number') do
           safe_join [
             hidden_field(method,
-                         merge_input_options({ class: "form-control #{if has_error?(method)
-                                                                        'is-invalid'
-                                                                      end}", 'data-phone-number-target': 'hiddenInput' }, options[:input_html])),
-            @template.text_field_tag('dummy', @object.try(method), class: 'form-control', 'data-phone-number-target': 'input',
+                         merge_input_options({ class: "form-control", 'data-phone-number-target': 'hiddenInput' }, options[:input_html])),
+            @template.text_field_tag('dummy', @object.try(method), class: "form-control #{if has_error?(method)
+                                                                                            'is-invalid'
+                                                                                          end}", 'data-phone-number-target': 'input',
                                                                     'data-action': 'input->phone-number#change')
           ]
         end
