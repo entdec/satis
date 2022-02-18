@@ -12,7 +12,8 @@ export default class extends ApplicationController {
   }
 
   follow(event) {
-    if (event.target.tagName == "A" || (event.target.tagName == "svg" && event.target != this.element) || (event.target.tagName == "path" && event.target != this.element)) {
+    if (event.target.closest(this.element.tagName.toLowerCase()) != this.element) {
+      // This is in to make sure row-links using satis-link controller will not trigger when an A or an SVG in that A is triggered.
       return
     }
 
