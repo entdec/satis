@@ -19,6 +19,7 @@ module Satis
         @reset_button = options[:reset_button]
 
         options[:input_html] ||= {}
+        options[:input_html][:value] = hidden_value
 
         actions = [options[:input_html]['data-action'], 'change->satis-dropdown#display',
                    'focus->satis-dropdown#focus'].join(' ')
@@ -31,7 +32,8 @@ module Satis
 
       # Deal with context
       def hidden_value
-        value = form.object&.send(attribute)
+        value = @options[:selected]
+        value ||= form.object&.send(attribute)
         value = value.id if value.respond_to? :id
         value
       end
