@@ -126,6 +126,7 @@ export default class extends ApplicationController {
       }
     })
 
+    ourUrl.searchParams.set("page", "1")
     turboFrame.src = ourUrl
     return true
   }
