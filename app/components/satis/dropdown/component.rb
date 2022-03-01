@@ -33,6 +33,7 @@ module Satis
       # Deal with context
       def hidden_value
         value = @options[:selected]
+        value ||= @options.dig(:input_html, :value)
         value ||= form.object&.send(attribute)
         value = value.id if value.respond_to? :id
         value
