@@ -57,6 +57,11 @@ export default class extends ApplicationController {
   }
 
   monitorChanges(event) {
+    if (event?.detail?.src == "satis-dropdown") {
+      // Skip events caused by the initial load of a satis-dropdown
+      return
+    }
+
     this.addAssociation(event)
   }
 
