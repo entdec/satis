@@ -16,7 +16,7 @@ module Satis
         @chain_to = options[:chain_to]
         @free_text = options[:free_text]
         @needs_exact_match = options[:needs_exact_match]
-        @reset_button = options[:reset_button]
+        @reset_button = options[:reset_button] || options[:include_blank]
 
         options[:input_html] ||= {}
         options[:input_html][:value] = hidden_value
