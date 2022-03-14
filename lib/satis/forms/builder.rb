@@ -100,7 +100,10 @@ module Satis
           #        ))
         else
           invalid_feedback = nil
-          invalid_feedback = tag.div(@object.errors.messages[name].join(', '), class: 'invalid-feedback') if @object.errors.messages[name].present?
+          if @object.errors.messages[name].present?
+            invalid_feedback = tag.div(@object.errors.messages[name].join(', '),
+                                       class: 'invalid-feedback')
+          end
           safe_join [
             invalid_feedback,
             rails_fields_for(*args, options, &block)
@@ -257,7 +260,7 @@ module Satis
             (custom_label(method, options[:label]) unless options[:label] == false),
             tag.div(text_area(method,
                               merge_input_options({
-                                                    class: "form-control #{'is-invalid' if has_error?(method)}",
+                                                    class: 'form-control',
                                                     data: {
                                                       controller: 'satis-editor',
                                                       'satis-editor-target' => 'textarea',
@@ -268,7 +271,9 @@ module Satis
                                                       'satis-editor-color-scheme-dark-value' => options.delete(:color_scheme_dark) || 'lucario'
                                                     }
 
-                                                  }, options[:input_html])), class: 'editor'),
+                                                  }, options[:input_html])), class: "editor #{if has_error?(method)
+                                                                                                'is-invalid'
+                                                                                              end}"),
             hint_text(options[:hint] || '⌘-F/⌃-f: search; ⌥-g: goto line, ⌃-space: autocomplete')
           ]
         end
@@ -321,11 +326,12 @@ module Satis
         tag.div('data-controller' => 'phone-number') do
           safe_join [
             hidden_field(method,
-                         merge_input_options({ class: "form-control", 'data-phone-number-target': 'hiddenInput' }, options[:input_html])),
+                         merge_input_options({ class: 'form-control', 'data-phone-number-target': 'hiddenInput' },
+                                             options[:input_html])),
             @template.text_field_tag('dummy', @object.try(method), class: "form-control #{if has_error?(method)
                                                                                             'is-invalid'
                                                                                           end}", 'data-phone-number-target': 'input',
-                                                                    'data-action': 'input->phone-number#change')
+                                                                   'data-action': 'input->phone-number#change')
           ]
         end
       end
@@ -344,7 +350,8 @@ module Satis
           safe_join [
             label(method, options[:label]),
             tag.br,
-            (send(form_builder_method, method, options[:collection], options[:value_method], options[:text_method]) do |b|
+            (send(form_builder_method, method, options[:collection], options[:value_method],
+                  options[:text_method]) do |b|
                tag.div(class: "custom-control #{custom_class}") do
                  safe_join [
                    b.send(input_builder_method, options.fetch(:input_html, {}).merge(class: 'custom-control-input')),
