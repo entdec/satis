@@ -23,6 +23,7 @@ export default class extends ApplicationController {
 
     this.boundClickedOutside = this.clickedOutside.bind(this)
     this.boundResetSearchInput = this.resetSearchInput.bind(this)
+    this.boundHandleHiddenInputChange = this.handleHiddenInputChange.bind(this)
 
     // To remember what the current page and last page were, we queried
     this.currentPage = 1
@@ -54,6 +55,8 @@ export default class extends ApplicationController {
 
     this.searchInputTarget.addEventListener("blur", this.boundResetSearchInput)
     window.addEventListener("click", this.boundClickedOutside)
+
+    this.hiddenInputTarget.addEventListener("change", this.boundHandleHiddenInputChange)
   }
 
   disconnect() {
@@ -64,6 +67,18 @@ export default class extends ApplicationController {
 
   focus(event) {
     this.searchInputTarget.focus()
+  }
+
+  handleHiddenInputChange(event) {
+    if (event?.detail?.src == "satis-dropdown") {
+      return
+    }
+
+    if (this.hiddenInputTarget.value == '') {
+      this.searchInputTarget.value = null
+    } else {
+      this.resetSearchInput()
+    }
   }
 
   // Called on connect
@@ -173,7 +188,10 @@ export default class extends ApplicationController {
       item.classList.remove("hidden")
     })
 
-    event.preventDefault()
+    if (event) {
+      event.preventDefault()
+    }
+
     return false
   }
 
