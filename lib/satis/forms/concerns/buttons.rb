@@ -14,7 +14,9 @@ module Satis
 
           # A submit button
           def submit(value = nil, options = {})
-            button_button(value, options.reverse_merge(name: 'commit', type: :submit, class: 'button primary', value: 'commit'))
+            button_button(value,
+                          options.reverse_merge(name: 'commit', type: :submit, class: 'button primary',
+                                                value: 'commit'))
           end
 
           # A regular button

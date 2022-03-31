@@ -25,6 +25,7 @@ module Satis
 
         options[:input_html] ||= {}
         options[:input_html][:disabled] = options.delete(:disabled)
+
         send(input_type_for(method, options), method, options, &block)
       end
 
@@ -203,14 +204,33 @@ module Satis
 
       def custom_label(method, title, options = {})
         all_classes = "#{options[:class]} form-label".strip
-        # title += '*' if required?(method)
         label(method, title, class: all_classes, data: options[:data]) do |translation|
           safe_join [
             tag.span(title || translation, class: required?(method) ? 'required' : ''),
             ' ',
-            tag.i(class: (required?(method) ? 'fal fa-circle-exclamation' : ''))
+            required(method, options),
+            help(method, options)
           ]
         end
+      end
+
+      def required(method, _options = {})
+        return unless required?(method)
+
+        tag.i(class: 'fal fa-hexagon-exclamation')
+      end
+
+      def help(method, options = {})
+        text = if options[:help].present?
+                 options[:help]
+               else
+                 Satis.config.default_help_text(@template, @object, method,
+                                                @options[:help_scope] || options[:help_scope])
+               end
+
+        return if text.blank?
+
+        tag.i(class: 'fas fa-circle-info', 'data-controller': 'help', 'data-help-content-value': text)
       end
 
       def hidden_input(method, options = {})
@@ -221,7 +241,7 @@ module Satis
       def string_input(method, options = {})
         form_group(method, options) do
           safe_join [
-            (custom_label(method, options[:label]) unless options[:label] == false),
+            (custom_label(method, options[:label], options) unless options[:label] == false),
             string_field(method,
                          merge_input_options({ as: options[:as], class: "form-control #{if has_error?(method)
                                                                                           'is-invalid'
@@ -233,7 +253,7 @@ module Satis
       def number_input(method, options = {})
         form_group(method, options) do
           safe_join [
-            (custom_label(method, options[:label]) unless options[:label] == false),
+            (custom_label(method, options[:label], options) unless options[:label] == false),
             number_field(method,
                          merge_input_options({ class: "form-control #{if has_error?(method)
                                                                         'is-invalid'
@@ -245,7 +265,7 @@ module Satis
       def text_input(method, options = {})
         form_group(method, options) do
           safe_join [
-            (custom_label(method, options[:label]) unless options[:label] == false),
+            (custom_label(method, options[:label], options) unless options[:label] == false),
             text_area(method,
                       merge_input_options({ class: "form-control #{if has_error?(method)
                                                                      'is-invalid'
@@ -257,7 +277,7 @@ module Satis
       def editor_input(method, options = {})
         form_group(method, options) do
           safe_join [
-            (custom_label(method, options[:label]) unless options[:label] == false),
+            (custom_label(method, options[:label], options) unless options[:label] == false),
             tag.div(text_area(method,
                               merge_input_options({
                                                     class: 'form-control',
@@ -309,7 +329,7 @@ module Satis
         end
         form_group(method, options) do
           safe_join [
-            (custom_label(method, options[:label]) unless options[:label] == false),
+            (custom_label(method, options[:label], options) unless options[:label] == false),
             render(Satis::DateTimePicker::Component.new(form: self, attribute: method, title: options[:label], **options,
     &block))
           ]

@@ -14,7 +14,7 @@ module Satis
                                                controller: 'satis-file'
                                              })) do
               safe_join [
-                (custom_label(method, options[:label]) unless options[:label] == false),
+                (custom_label(method, options[:label], options) unless options[:label] == false),
                 tag.div(class: 'overflow-hidden relative inline-block -mb-2') do
                   safe_join [
                     tag.button((options[:multiple] ? t('choose_files') : t('choose_file')), type: 'button',
