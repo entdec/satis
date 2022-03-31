@@ -39,7 +39,7 @@ module Satis
 
       scope += Array.wrap(additional_scope) if additional_scope
 
-      scope
+      scope.map(&:to_s)
     end
   end
 end
