@@ -217,7 +217,7 @@ module Satis
       def required(method, _options = {})
         return unless required?(method)
 
-        tag.i(class: 'fal fa-hexagon-exclamation')
+        tag.i(class: 'fas fa-hexagon-exclamation')
       end
 
       def help(method, options = {})
@@ -230,7 +230,7 @@ module Satis
 
         return if text.blank?
 
-        tag.i(class: 'fas fa-circle-info', 'data-controller': 'help', 'data-help-content-value': text)
+        tag.i(class: 'fal fa-circle-info', 'data-controller': 'help', 'data-help-content-value': text)
       end
 
       def hidden_input(method, options = {})
