@@ -17,8 +17,6 @@
 
 @import "~flag-icon-css/css/flag-icon";
 
-@import "~trix/dist/trix";
-
 // Every link without a class or empty class should be underlined
 a:not([class]),
 a[class=""] {
@@ -50,4 +48,15 @@ a[class=""] {
 // For the draggable controller
 .draggable:hover {
   cursor: pointer;
+}
+
+@import "~trix/dist/trix";
+
+.trix-content {
+  ul {
+    list-style: square !important;
+  }
+  ol {
+    list-style: lower-alpha !important;
+  }
 }
