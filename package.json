@@ -1,8 +1,8 @@
 {
-  "name": "@entdec/satis",
+  "name": "@components/satis",
   "version": "1.0.25",
   "description": "",
-  "repository": "git@github.com:entdec/satis.git",
+  "repository": "git@git.freedomnet.nl:gems/satis",
   "author": "Tom de Grunt <tom@degrunt.nl>",
   "license": "MIT",
   "files": [
@@ -36,7 +36,7 @@
     "@tailwindcss/forms": "^0.3.3",
     "@tailwindcss/typography": "^0.4.1",
     "codemirror": "^5.48.4",
-    "codemirror-liquid": "git+ssh://git@code.entropydecelerator.com/components/codemirror-liquid",
+    "codemirror-liquid": "git+ssh://git@git.freedomnet.nl/gems/codemirror-liquid#0.1.0",
     "stimulus": "^2",
     "tailwindcss": "^2.2.2"
   }
