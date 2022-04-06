@@ -23,8 +23,8 @@ export default class extends ApplicationController {
   connect() {
     super.connect()
 
-    const ourUrl = new URL(window.location.href)
-    this.keyBase = ourUrl.pathname.substring(1, ourUrl.pathname.length).replace(/\//, "_") + "_tabs_" + this.context.scope.element.id
+    // const ourUrl = new URL(window.location.href)
+    // this.keyBase = ourUrl.pathname.substring(1, ourUrl.pathname.length).replace(/\//, "_") + "_tabs_" + this.context.scope.element.id
 
     let firstErrorIndex
     this.tabTargets.forEach((tab, index) => {
@@ -81,7 +81,7 @@ export default class extends ApplicationController {
     }
 
     if (typeof Storage !== "undefined") {
-      sessionStorage.setItem(this.keyBase + "_" + key, value)
+      sessionStorage.setItem(this.keyBase() + "_" + key, value)
     }
   }
 
@@ -91,7 +91,7 @@ export default class extends ApplicationController {
     }
 
     if (typeof Storage !== "undefined") {
-      return sessionStorage.getItem(this.keyBase + "_" + key)
+      return sessionStorage.getItem(this.keyBase() + "_" + key)
     }
   }
 
@@ -119,5 +119,10 @@ export default class extends ApplicationController {
     })
 
     return vars
+  }
+
+  keyBase() {
+    const ourUrl = new URL(window.location.href)
+    return ourUrl.pathname.substring(1, ourUrl.pathname.length).replace(/\//, "_") + "_tabs_" + this.context.scope.element.id
   }
 }
