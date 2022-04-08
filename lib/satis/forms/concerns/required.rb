@@ -10,13 +10,16 @@ module Satis
 
         included do
           def required?(method)
-            if !options[:required].nil?
+            result = if !options[:required].nil?
               options[:required]
             elsif @object.respond_to?("#{method}_required?".to_sym)
               @object.send("#{method}_required?".to_sym)
             elsif has_validators?(method)
               required_by_validators?(method)
             end
+
+            result = required?(method.to_s.sub(/_id$/, '')) if !result && method.match(/_id$/)
+            result
           end
 
           def has_validators?(method)
