@@ -111,7 +111,7 @@ turbo-frame id="#{params[:turbo_frame_id] || params[:table_name]}"
           - if params[:query].present?
             i.fa.fa-xmark.text-red-400 data-action="click->satis-table#reset"
           - if @table.class.exportable
-            i.fa.fa-file-export data-action="click->satis-table#export"
+            i.fa.fa-file-export data-action="click->satis-table#export" data-satis-table-target="exportButton"
 
         div
           = paginate @table.paged_scope, views_prefix: 'satis', theme: 'tables'

@@ -5,7 +5,7 @@ import { debounce } from "../../../../frontend/utils"
 import Sortable from "sortablejs"
 
 export default class extends ApplicationController {
-  static targets = ["header", "hiddenHeader", "column", "filterRow", "filter", "filterIndicator", "overlay", "modal"]
+  static targets = ["header", "hiddenHeader", "column", "filterRow", "filter", "filterIndicator", "overlay", "modal", "exportButton"]
   static values = {
     currentPage: Number,
     resetUrl: String,
@@ -189,12 +189,14 @@ export default class extends ApplicationController {
   }
 
   export(event) {
-    let turboFrame = this.element.closest("turbo-frame")
+    if (this.hasExportButtonTarget) {
+      let turboFrame = this.element.closest("turbo-frame")
 
-    let ourUrl = new URL(turboFrame.src, window.location.href)
-    let exportUrl = new URL(`/action_table/${encodeURIComponent(turboFrame.id)}/export.xlsx`, window.location.href)
-    exportUrl.search = ourUrl.search
-    window.location.replace(exportUrl)
+      let ourUrl = new URL(turboFrame.src, window.location.href)
+      let exportUrl = new URL(`/action_table/${encodeURIComponent(turboFrame.id)}/export.xlsx`, window.location.href)
+      exportUrl.search = ourUrl.search
+      window.location.replace(exportUrl)
+    }
   }
 
   openSearch(event) {
