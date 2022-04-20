@@ -51,11 +51,25 @@ module Satis
         @items = @filter.collection
       end
 
-      @items = @items.select { |item| item.is_a?(Array) ? item[0].match?(/#{params[:term]}/i) || item[1].match?(/#{params[:term]}/i) : item.match?(/#{params[:term]}/i) } if @filter_items && @items.is_a?(Array)
+      if @filter_items && @items.is_a?(Array)
+        @items = @items.select do |item|
+          item.is_a?(Array) ? item[0].match?(/#{params[:term]}/i) || item[1].match?(/#{params[:term]}/i) : item.match?(/#{params[:term]}/i)
+        end
+      end
       @items = Kaminari.paginate_array(@items) if @items.is_a? Array
       @items = @items.page(params[:page]).per(params[:page_size]) if params[:page] && params[:page_size]
 
       @value_method, @text_method = value_text_methods(@items)
     end
+
+    private
+
+    def needs_reset?
+      params.to_h.reject do |p|
+        %w[controller action table_name order_field order_direction page page_size].include?(p)
+      end.present?
+    end
+
+    helper_method :needs_reset?
   end
 end

@@ -108,7 +108,7 @@ turbo-frame id="#{params[:turbo_frame_id] || params[:table_name]}"
             = page_entries_info @table.paged_scope, entry_name: 'row'
         .sts-table__action-bar
           i.fa.fa-magnifying-glass data-action="click->satis-table#openSearch"
-          - if params[:query].present?
+          - if needs_reset?
             i.fa.fa-xmark.text-red-400 data-action="click->satis-table#reset"
           - if @table.class.exportable
             i.fa.fa-file-export data-action="click->satis-table#export" data-satis-table-target="exportButton"
