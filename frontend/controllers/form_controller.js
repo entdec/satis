@@ -68,6 +68,10 @@ export default class extends ApplicationController {
   }
 
   setFormSubmitting(event) {
+    if (this.formSubmitting) {
+      event.preventDefault()
+    }
+
     this.formSubmitting = true
   }
 }
