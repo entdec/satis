@@ -32,14 +32,23 @@ module Satis
     end
 
     # Maybe not the right place?
-    def help_scope(template, object, additional_scope)
+    def help_scope(template, object, additional_scope, action: nil)
       scope = template.controller.controller_path.split('/')
-      scope << template.controller.action_name
+      scope << (action || template.controller.action_name)
       scope << object.class.name.demodulize.tableize.singularize
 
       scope += Array.wrap(additional_scope) if additional_scope
 
       scope.map(&:to_s)
+    end
+
+    def help_scopes(template, object, additional_scope)
+      actions = [template.controller.action_name]
+      %w[show new edit create update destroy index].each do |action|
+        actions << action unless actions.include?(action)
+      end
+
+      actions.map { |action| help_scope(template, object, additional_scope, action: action) }
     end
   end
 end
