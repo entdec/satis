@@ -1,6 +1,6 @@
-button.w-8.h-8.bg-white.rounded-full.text-gray-400.hover:text-gray-500.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-primary-500.dark:bg-gray-900.dark:border-gray-700.overflow-hidden.relative data-controller="satis-appearance-switcher" data-action='click->satis-appearance-switcher#switch'
-  span.sr-only Switch theme
-  div.absolute.top-1.left-1 data-satis-appearance-switcher-target="light"
-    i.fa-solid.fa-sun.text-yellow-500 style="width: 24px;"
-  div.absolute.top-7.left-0 data-satis-appearance-switcher-target="dark"
-    i.fa-solid.fa-moon-stars.text-indigo-600.absolute.top-2.left-1 style="width: 24px;"
+.sts-appearance-switcher data-controller="satis-appearance-switcher" data-action='click->satis-appearance-switcher#switch'
+  .sts-appearance-switcher__theme.sts-appearance-switcher__theme_light data-satis-appearance-switcher-target="light"
+    i.fa-solid.fa-sun.sts-appearance-switcher__icon.sts-appearance-switcher__icon_light
+  .sts-appearance-switcher__theme.sts-appearance-switcher__theme_dark data-satis-appearance-switcher-target="dark"
+    i.fa-solid.fa-moon-stars.sts-appearance-switcher__icon.sts-appearance-switcher__icon_dark
+  .sts-appearance-switcher__label Switch theme
