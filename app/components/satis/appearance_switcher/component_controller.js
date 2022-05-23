@@ -11,6 +11,7 @@ import { getInitialTheme } from "../../../../frontend/utils"
  */
 export default class extends ApplicationController {
   static targets = ["light", "dark"]
+
   connect() {
     super.connect()
 
@@ -20,6 +21,7 @@ export default class extends ApplicationController {
 
   switch() {
     const theme = getInitialTheme()
+
     if (theme == "dark") {
       this.rawSetTheme("light", true)
     } else {
@@ -29,17 +31,21 @@ export default class extends ApplicationController {
 
   rawSetTheme(rawTheme, delay) {
     const root = window.document.documentElement
+    const eventLight = new CustomEvent('theme_change', { detail: { theme: 'light' } });
+    const eventDark = new CustomEvent('theme_change', { detail: { theme: 'dark' } });
     const isDark = rawTheme === "dark"
 
     if (delay == true) {
-      this.lightTarget.classList.add("transition", "ease-in-out", "duration-800")
-      this.darkTarget.classList.add("transition", "ease-in-out", "duration-800")
+      this.lightTarget.classList.add("transition", "ease-in-out", "duration-1000")
+      this.darkTarget.classList.add("transition", "ease-in-out", "duration-1000")
     }
 
     if (isDark) {
+      window.dispatchEvent(eventDark);
       this.lightTarget.classList.add("transform", "translate-y-7")
       this.darkTarget.classList.remove("transform", "-translate-y-7")
     } else {
+      window.dispatchEvent(eventLight);
       this.lightTarget.classList.remove("transform", "translate-y-7")
       this.darkTarget.classList.add("transform", "-translate-y-7")
     }
@@ -50,7 +56,7 @@ export default class extends ApplicationController {
         root.classList.remove(isDark ? "light" : "dark")
         root.classList.add(rawTheme)
       },
-      delay ? 400 : 0
+      delay ? 500 : 0
     )
   }
 }
