@@ -31,8 +31,8 @@ export default class extends ApplicationController {
 
   rawSetTheme(rawTheme, delay) {
     const root = window.document.documentElement
-    const eventLight = new CustomEvent('theme_change', { detail: { theme: 'light' } });
-    const eventDark = new CustomEvent('theme_change', { detail: { theme: 'dark' } });
+    const eventLight = new CustomEvent('theme-change', { detail: { theme: 'light' } });
+    const eventDark = new CustomEvent('theme-change', { detail: { theme: 'dark' } });
     const isDark = rawTheme === "dark"
 
     if (delay == true) {
