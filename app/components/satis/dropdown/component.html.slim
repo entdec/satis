@@ -7,7 +7,7 @@ div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controlle
         .h-12.p-1.bg-white.dark:bg-gray-800.flex.border.border-gray-300.dark:border-gray-700.rounded
           .flex.flex-auto.flex-wrap
             / Input where you can search
-            input.p-1.px-2.appearance-none.outline-none.w-full.text-gray-800.dark:bg-gray-800 data-action="keyup->satis-dropdown#search" data-satis-dropdown-target="searchInput" placeholder=placeholder
+            input.p-1.px-2.appearance-none.outline-none.w-full.text-gray-800.dark:bg-gray-800 data-action="keyup->satis-dropdown#search" data-satis-dropdown-target="searchInput" placeholder=placeholder autofocus=options[:autofocus]
           div
             / Reset button
             - unless @reset_button == false
