@@ -73,7 +73,7 @@ export default class extends ApplicationController {
     }
 
     let input = this.inputTarget
-    this.hiddenInputTarget.addEventListener("focus", function(event) { input.focus() })
+    this.hiddenInputTarget.addEventListener("focus", function (event) { input.focus() })
 
     if (this.hiddenInputTarget.value) {
       // If there is an existing value, parse it.
@@ -270,7 +270,6 @@ export default class extends ApplicationController {
   refreshCalendar(refreshInputs) {
     this.monthTarget.innerHTML = this.monthName
     this.yearTarget.innerHTML = this.displayValue.getFullYear()
-
     this.weekDaysTarget.innerHTML = ""
     this.getWeekDays(this.localeValue).forEach((dayName) => {
       this.weekDaysTarget.insertAdjacentHTML("beforeend", this.weekDayTemplateTarget.innerHTML.replace(/\${name}/g, dayName))
@@ -294,40 +293,60 @@ export default class extends ApplicationController {
       }
     }
     this.daysTarget.innerHTML = ""
+    const firstDay = new Date(this.displayValue)
+    const currentMonth = String(firstDay.getMonth() + 1).padStart(2, '0')
+    const currentYear = firstDay.getFullYear()
+
+    const ignoreDates = this.hiddenInputTarget.dataset.disabledDays ? JSON.parse(this.hiddenInputTarget.dataset.disabledDays) : []
+    const doIgnoreWeekends = this.hiddenInputTarget.dataset.disableWeekends === 'true'
 
     this.monthDays.forEach((day) => {
       if (day == " ") {
         this.daysTarget.insertAdjacentHTML("beforeend", this.emtpyTemplateTarget.innerHTML)
       } else {
+        const currentDay = `${currentYear}-${currentMonth}-${String(day).padStart(2, '0')}`
+
         let date = new Date(new Date(this.displayValue).setDate(day))
+        let isWeekend = [6, 0].includes(date.getDay())
 
         let tmpDiv = document.createElement("div")
         tmpDiv.innerHTML = this.dayTemplateTarget.innerHTML.replace(/\${day}/g, day)
+        if ((isWeekend && doIgnoreWeekends) || ignoreDates.includes(currentDay)) {
+          let link = tmpDiv.querySelector("a")
+          delete link.dataset.action
+          link.classList.remove('cursor-pointer', 'hover:bg-primary-200')
 
-        if (this.isToday(date)) {
           let div = tmpDiv.querySelector(".text-center")
-          div.classList.add("border-red-500", "border")
+          div.classList.add("text-gray-300")
         }
-        let div = tmpDiv.querySelector(".text-center")
+        else {
+          if (this.isToday(date)) {
+            let div = tmpDiv.querySelector(".text-center")
+            div.classList.add("border-red-500", "border")
+          }
 
-        if (this.isSelected(date)) {
-          if (this.rangeValue && this.selectedValue.length == 2) {
-            if (this.isDate(this.selectedValue[0], date)) {
+
+          let div = tmpDiv.querySelector(".text-center")
+
+          if (this.isSelected(date)) {
+            if (this.rangeValue && this.selectedValue.length == 2) {
+              if (this.isDate(this.selectedValue[0], date)) {
+                div.classList.add("bg-primary-500", "text-white", "dark:text-gray-200")
+                div.classList.remove("rounded-r-full")
+              } else if (this.isDate(this.selectedValue[1], date)) {
+                div.classList.add("bg-primary-500", "text-white", "dark:text-gray-200")
+                div.classList.remove("rounded-l-full")
+              } else if (this.isSelected(date)) {
+                div.classList.remove("rounded-r-full")
+                div.classList.remove("rounded-l-full")
+                div.classList.add("bg-primary-200", "text-white", "dark:text-gray-200")
+              }
+            } else {
               div.classList.add("bg-primary-500", "text-white", "dark:text-gray-200")
-              div.classList.remove("rounded-r-full")
-            } else if (this.isDate(this.selectedValue[1], date)) {
-              div.classList.add("bg-primary-500", "text-white", "dark:text-gray-200")
-              div.classList.remove("rounded-l-full")
-            } else if (this.isSelected(date)) {
-              div.classList.remove("rounded-r-full")
-              div.classList.remove("rounded-l-full")
-              div.classList.add("bg-primary-200", "text-white", "dark:text-gray-200")
             }
           } else {
-            div.classList.add("bg-primary-500", "text-white", "dark:text-gray-200")
+            div.classList.add("text-gray-700", "dark:text-gray-300")
           }
-        } else {
-          div.classList.add("text-gray-700", "dark:text-gray-300")
         }
 
         this.daysTarget.insertAdjacentHTML("beforeend", tmpDiv.innerHTML)
@@ -343,20 +362,20 @@ export default class extends ApplicationController {
   // Format the given Date into an ISO8601 string whilst preserving the given timezone
   iso8601(date) {
     let tzo = -date.getTimezoneOffset(),
-        dif = tzo >= 0 ? '+' : '-',
-        pad = function(num) {
-            let norm = Math.floor(Math.abs(num));
-            return (norm < 10 ? '0' : '') + norm;
-        };
+      dif = tzo >= 0 ? '+' : '-',
+      pad = function (num) {
+        let norm = Math.floor(Math.abs(num));
+        return (norm < 10 ? '0' : '') + norm;
+      };
 
     return date.getFullYear() +
-        '-' + pad(date.getMonth() + 1) +
-        '-' + pad(date.getDate()) +
-        'T' + pad(date.getHours()) +
-        ':' + pad(date.getMinutes()) +
-        ':' + pad(date.getSeconds()) +
-        dif + pad(tzo / 60) +
-        ':' + pad(tzo % 60);
+      '-' + pad(date.getMonth() + 1) +
+      '-' + pad(date.getDate()) +
+      'T' + pad(date.getHours()) +
+      ':' + pad(date.getMinutes()) +
+      ':' + pad(date.getSeconds()) +
+      dif + pad(tzo / 60) +
+      ':' + pad(tzo % 60);
   }
 
   // Is date today?
