@@ -1,7 +1,7 @@
 import ApplicationController from "../../../../frontend/controllers/application_controller"
 // FIXME: Is this full path really needed?
-import {debounce, popperSameWidth} from "../../../../frontend/utils"
-import {createPopper} from "@popperjs/core"
+import { debounce, popperSameWidth } from "../../../../frontend/utils"
+import { createPopper } from "@popperjs/core"
 
 export default class extends ApplicationController {
   static targets = ["results", "items", "item", "searchInput", "resetButton", "toggleButton", "hiddenInput"]
@@ -74,7 +74,7 @@ export default class extends ApplicationController {
       return
     }
 
-    if (this.hiddenInputTarget.value == '') {
+    if (this.hiddenInputTarget.value == "") {
       this.searchInputTarget.value = null
     } else {
       this.resetSearchInput()
@@ -206,6 +206,12 @@ export default class extends ApplicationController {
       return
     }
 
+    this.selectItem(dataDiv)
+
+    event.preventDefault()
+  }
+
+  selectItem(dataDiv) {
     this.hideResultsList()
 
     // Copy over data attributes on the item div to the hidden input
@@ -220,8 +226,6 @@ export default class extends ApplicationController {
     this.lastSearch = this.searchInputTarget.value
 
     this.hiddenInputTarget.dispatchEvent(new Event("change"))
-
-    event.preventDefault()
   }
 
   // --- Helpers
@@ -238,7 +242,7 @@ export default class extends ApplicationController {
           this.hiddenInputTarget.setAttribute(attr.name, attr.value)
         }
       })
-      this.hiddenInputTarget.dispatchEvent(new CustomEvent("change", {detail: {src: "satis-dropdown"}}))
+      this.hiddenInputTarget.dispatchEvent(new CustomEvent("change", { detail: { src: "satis-dropdown" } }))
     }
   }
 
@@ -304,6 +308,10 @@ export default class extends ApplicationController {
       return
     }
 
+    if (this.searchInputTarget.value.length < 2) {
+      return
+    }
+
     this.lastSearch = this.searchInputTarget.value
 
     this.itemTargets.forEach((item) => {
@@ -317,7 +325,7 @@ export default class extends ApplicationController {
       let text = item.getAttribute("data-satis-dropdown-item-text").toLowerCase()
       let value = item.getAttribute("data-satis-dropdown-item-value").toLowerCase()
 
-      if (! item.classList.contains("hidden")) {
+      if (!item.classList.contains("hidden")) {
         if (this.needsExactMatchValue && text === this.searchInputTarget.value.toLowerCase()) {
           matches = matches.concat(item)
         } else if (!this.needsExactMatchValue && text.indexOf(this.searchInputTarget.value.toLowerCase()) >= 0) {
@@ -332,7 +340,9 @@ export default class extends ApplicationController {
       this.hiddenInputTarget.value = this.lastSearch
     }
 
-    if (matches.length > 0) {
+    if (matches.length == 1 && matches[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.lastSearch.toLowerCase()) >= 0) {
+      this.selectItem(matches[0].closest('[data-satis-dropdown-target="item"]'))
+    } else if (matches.length > 1) {
       this.showResultsList(event)
     }
   }
@@ -368,7 +378,10 @@ export default class extends ApplicationController {
           this.filterResultsChainTo()
           this.highLightSelected()
           this.showResultsList()
-          if (this.nrOfItems == 1) {
+
+          if (this.nrOfItems == 1 && this.itemTargets[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.searchInputTarget.value.toLowerCase()) >= 0) {
+            this.selectItem(this.itemTargets[0].closest('[data-satis-dropdown-target="item"]'))
+          } else if (this.nrOfItems == 1) {
             this.moveDown()
           }
           resolve()
@@ -471,7 +484,7 @@ export default class extends ApplicationController {
   highLightSelected() {
     if (this.selectedItem) {
       this.selectedItem.classList.add("bg-primary-200")
-      this.selectedItem.scrollIntoView({behavior: "smooth", block: "nearest", inline: "start"})
+      this.selectedItem.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })
     }
   }
 
