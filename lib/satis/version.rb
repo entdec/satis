@@ -1,4 +1,4 @@
 
 module Satis
-  VERSION = '1.0.44'
+  VERSION = '1.0.45'
 end
