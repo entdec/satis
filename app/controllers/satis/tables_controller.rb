@@ -64,12 +64,15 @@ module Satis
 
     private
 
-    def needs_reset?
-      params.to_h.reject do |p|
-        %w[controller action table_name order_field order_direction page page_size].include?(p)
-      end.present?
+    def menu
+      Satis::Menus::Builder.build(:table_menu) do |m|
+        if @table.class.exportable
+          m.item :export, link: action_table.export_action_table_path(params[:table_name]),
+                          link_attributes: { data: { turbo: false } }
+        end
+      end
     end
 
-    helper_method :needs_reset?
+    helper_method :menu
   end
 end

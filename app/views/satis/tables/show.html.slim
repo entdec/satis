@@ -1,18 +1,5 @@
 turbo-frame id="#{params[:turbo_frame_id] || params[:table_name]}"
   .satis-table data-controller="satis-table" data-satis-table-current-page-value=@table.paged_scope.current_page data-satis-table-total-pages-value=@table.paged_scope.total_pages
-    .hidden.absolute.inset-0.pt-2.flex.justify-center.items-start.z-10.bg-gray-500.bg-opacity-70.opacity-0 data-satis-table-target="overlay"
-      .opacity-100.inline-block.align-bottom.bg-white.rounded-lg.px-4.pt-5.pb-4.text-left.overflow-hidden.shadow-xl.transform.transition-all.sm:my-8.sm:align-middle.sm:max-w-sm.sm:w-full.sm:p-6 data-satis-table-target="modal"
-        div
-          .mt-1.relative.flex.items-center
-            input#search.shadow-sm.focus:ring-primary-500.focus:border-primary-500.block.w-full.pr-12.sm:text-sm.border-gray-300.rounded-md name="search" type="text" /
-            .absolute.inset-y-0.right-0.flex class=("py-1.5 pr-1.5")
-              kbd.inline-flex.items-center.border.border-gray-200.rounded.px-2.text-sm.font-sans.font-medium.text-gray-400
-                .mac-only
-                  | ⌘K
-                .pc-only
-                  | Ctrl-K
-
-
     .bg-white.flex.items-center.overflow-x-auto.dark:bg-gray-900.dark:border-gray-700
       .flex.flex-col.flex-grow
         .align-middle.inline-block.min-w-full
@@ -21,9 +8,17 @@ turbo-frame id="#{params[:turbo_frame_id] || params[:table_name]}"
               .flex-grow.bg-gray-50.text-center.h-16
                 i.fa.fa-trash.mt-5
             = sts.form_with model: @filters, url: _satis.table_path(params[:table_name]) do |f|
+              .flex
+                .flex-none.w-8.h-22.text-right.pt-2
+                  i.fal.fa-magnifying-glass.cursor-pointer data-satis-table-target="filterIcon" data-action="click->satis-table#focusFilter"
+                .flex-auto
+                  input.border-none.ring-0.focus:ring-0.w-full.text-sm type="text" placeholder="Search" data-action="keydown->satis-table#boundFilterKeydown" value=params[:query] data-satis-table-target="filter"
+                - if @table.class.exportable
+                  .flex-none.w-10.h-22.pt-2.text-left.cursor-pointer
+                    = render(Satis::Menu::Component.new(menu, icon: 'fa-solid fa-ellipsis'))
+
               table.min-w-full.divide-y.divide-gray-200
                 thead.bg-gray-50.sticky.top-0.dark:bg-gray-900.dark:border-gray-700
-
                   / Hidden columns
                   tr.hidden-header.opacity-20.h-16.w-full.hidden data-satis-table-target="hiddenHeader"
                     - @table.hidden_columns.each.with_index do |column, index|
@@ -106,12 +101,6 @@ turbo-frame id="#{params[:turbo_frame_id] || params[:table_name]}"
         div
           p.text-sm.text-gray-700.dark:text-gray-400
             = page_entries_info @table.paged_scope, entry_name: 'row'
-        .sts-table__action-bar
-          i.fa.fa-magnifying-glass data-action="click->satis-table#openSearch"
-          - if needs_reset?
-            i.fa.fa-xmark.text-red-400 data-action="click->satis-table#reset"
-          - if @table.class.exportable
-            i.fa.fa-file-export data-action="click->satis-table#export" data-satis-table-target="exportButton"
 
         div
           = paginate @table.paged_scope, views_prefix: 'satis', theme: 'tables'

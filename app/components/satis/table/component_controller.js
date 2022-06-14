@@ -5,7 +5,7 @@ import { debounce } from "../../../../frontend/utils"
 import Sortable from "sortablejs"
 
 export default class extends ApplicationController {
-  static targets = ["header", "hiddenHeader", "column", "filterRow", "filter", "filterIndicator", "overlay", "modal", "exportButton"]
+  static targets = ["header", "hiddenHeader", "column", "filterRow", "filter", "filterIndicator", "overlay", "modal", "exportButton", "filter", "filterIcon"]
   static values = {
     currentPage: Number,
     resetUrl: String,
@@ -32,12 +32,6 @@ export default class extends ApplicationController {
       },
     },
     {
-      keys: ["mod+k"],
-      handler: (event, combo, controller) => {
-        controller.openSearch(event)
-      },
-    },
-    {
       keys: ["esc"],
       handler: (event, combo, controller) => {
         controller.reset(event)
@@ -48,13 +42,16 @@ export default class extends ApplicationController {
   connect() {
     super.connect()
 
+    if (this.filterTarget.value.length > 0) {
+      this.filterTarget.focus()
+    }
+
     let turboFrame = this.element.closest("turbo-frame")
     if (turboFrame) {
       this.resetUrlValue = turboFrame.getAttribute("data-satis-table-reset-url")
     }
 
-    this.searchOpen = false
-    this.boundSearchKeydown = this.searchKeydown.bind(this)
+    this.boundFilterKeydown = this.filterKeydown.bind(this)
 
     new Sortable(this.hiddenHeaderTarget, {
       group: "columns",
@@ -87,12 +84,16 @@ export default class extends ApplicationController {
 
     let input = this.filterRowTarget.querySelector(`[name="tables_controller_filters[${filter}]"]`)
     if (input) {
-      input.closest('table').querySelector(`th[data-column="${column}"]`).scrollIntoView()
+      input.closest("table").querySelector(`th[data-column="${column}"]`).scrollIntoView()
       input.focus()
       input.dispatchEvent(new Event("focus"))
     }
 
     event.cancelBubble = true
+  }
+
+  focusFilter(event) {
+    this.filterTarget.focus()
   }
 
   //
@@ -188,55 +189,13 @@ export default class extends ApplicationController {
     }
   }
 
-  export(event) {
-    if (this.hasExportButtonTarget) {
-      let turboFrame = this.element.closest("turbo-frame")
-
-      let ourUrl = new URL(turboFrame.src, window.location.href)
-      let exportUrl = new URL(`/action_table/${encodeURIComponent(turboFrame.id)}/export.xlsx`, window.location.href)
-      exportUrl.search = ourUrl.search
-      window.location.replace(exportUrl)
-    }
-  }
-
-  openSearch(event) {
-    this.searchOpen = true
-    this.overlayTarget.classList.remove("hidden")
-    this.overlayTarget.classList.remove("ease-in", "duration-200", "opacity-0")
-    this.overlayTarget.classList.add("ease-out", "duration-300", "opacity-100")
-    let input = this.modalTarget.querySelector("input")
-    // Yup this solves the not focussing in Safari.
-    setTimeout(() => {
-      input.focus()
-    }, 0)
-    input.addEventListener("keydown", this.boundSearchKeydown)
-  }
-
-  closeSearch(event) {
-    let input = this.modalTarget.querySelector("input")
-    input.blur()
-    input.removeEventListener("keydown", this.boundSearchKeydown)
-    this.searchOpen = false
-    this.overlayTarget.classList.remove("ease-out", "duration-300", "opacity-100")
-    this.overlayTarget.classList.add("ease-in", "duration-200", "opacity-0")
-    this.overlayTarget.classList.add("hidden")
-  }
-
-  reset(event) {
-    if (this.searchOpen) {
-      this.closeSearch(event)
-    } else {
+  filterKeydown(event) {
+    if (event.key == "Escape") {
       let turboFrame = this.element.closest("turbo-frame")
       if (turboFrame && this.hasResetUrlValue) {
         let ourUrl = new URL(this.resetUrlValue, window.location.href)
         turboFrame.src = ourUrl
       }
-    }
-  }
-
-  searchKeydown(event) {
-    if (event.key == "Escape") {
-      this.closeSearch(event)
     } else if (event.key == "Enter") {
       let turboFrame = this.element.closest("turbo-frame")
       if (turboFrame) {
@@ -245,7 +204,6 @@ export default class extends ApplicationController {
         ourUrl.searchParams.set("page", "1")
         turboFrame.src = ourUrl
       }
-      this.closeSearch()
     }
   }
 }
