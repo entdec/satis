@@ -4,7 +4,7 @@ div data-controller="satis-menu" data-action="mouseover->satis-menu#show mousele
   - else
     button.inline-flex.items-center.justify-center.h-8.w-8.rounded-full.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-primary-500.dark:text-gray-500 aria-expanded="false" aria-haspopup="true" type="button"
       span.font-semibold.flex-1 class="#{menu.items.present? ? '' : 'text-gray-200'}"
-        i.fa-solid.fa-ellipsis-vertical
+        i class=icon
 
   - if menu.items.present?
     ul.hidden.z-10.bg-white.dark:bg-gray-400.border.dark:border-gray-800.rounded-md.shadow-lg.min-w-max data-satis-menu-target="submenu" data-satis-menu-submenu-placement="bottom"
