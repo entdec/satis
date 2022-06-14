@@ -9,7 +9,8 @@
   "@tailwindcss/typography": "^0.4.1",
   "codemirror": "^5.48.4",
   "codemirror-liquid": "git+ssh://git@code.entropydecelerator.com/components/codemirror-liquid",
-  "stimulus": "^2",
+  "@hotwired/stimulus": ">2.0",
+  "@hotwired/stimulus-webpack-helpers": "^1.0.1",
   "tailwindcss": "^2.2.2"
   }
 

@@ -1,5 +1,5 @@
 // application_controller.js
-import { Controller } from "stimulus"
+import { Controller } from "@hotwired/stimulus"
 
 export default class ApplicationController extends Controller {
   connect() {
