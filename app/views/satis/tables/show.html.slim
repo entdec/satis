@@ -1,5 +1,14 @@
 turbo-frame id="#{params[:turbo_frame_id] || params[:table_name]}"
   .satis-table data-controller="satis-table" data-satis-table-current-page-value=@table.paged_scope.current_page data-satis-table-total-pages-value=@table.paged_scope.total_pages
+    .bg-white.flex.dark:bg-gray-900.dark:border-gray-700
+      .flex-none.w-8.h-22.text-right.pt-2.text-gray-500.dark:text-gray-300
+        i.fal.fa-magnifying-glass.cursor-pointer data-satis-table-target="filterIcon" data-action="click->satis-table#focusFilter"
+      .flex-auto
+        input.border-none.ring-0.focus:ring-0.w-full.py-3.px-3.text-gray-800.dark:text-gray-300.leading-tight.dark:bg-gray-800.text-sm type="text" placeholder="Search" data-action="keydown->satis-table#boundFilterKeydown" value=params[:query] data-satis-table-target="filter"
+      - if @table.class.exportable
+        .flex-none.w-10.h-22.pt-2.text-left.cursor-pointer
+          = render(Satis::Menu::Component.new(menu, icon: 'fa-solid fa-ellipsis'))
+
     .bg-white.flex.items-center.overflow-x-auto.dark:bg-gray-900.dark:border-gray-700
       .flex.flex-col.flex-grow
         .align-middle.inline-block.min-w-full
@@ -8,15 +17,6 @@ turbo-frame id="#{params[:turbo_frame_id] || params[:table_name]}"
               .flex-grow.bg-gray-50.text-center.h-16
                 i.fa.fa-trash.mt-5
             = sts.form_with model: @filters, url: _satis.table_path(params[:table_name]) do |f|
-              .flex
-                .flex-none.w-8.h-22.text-right.pt-2
-                  i.fal.fa-magnifying-glass.cursor-pointer data-satis-table-target="filterIcon" data-action="click->satis-table#focusFilter"
-                .flex-auto
-                  input.border-none.ring-0.focus:ring-0.w-full.text-sm type="text" placeholder="Search" data-action="keydown->satis-table#boundFilterKeydown" value=params[:query] data-satis-table-target="filter"
-                - if @table.class.exportable
-                  .flex-none.w-10.h-22.pt-2.text-left.cursor-pointer
-                    = render(Satis::Menu::Component.new(menu, icon: 'fa-solid fa-ellipsis'))
-
               table.min-w-full.divide-y.divide-gray-200
                 thead.bg-gray-50.sticky.top-0.dark:bg-gray-900.dark:border-gray-700
                   / Hidden columns
@@ -28,6 +28,8 @@ turbo-frame id="#{params[:turbo_frame_id] || params[:table_name]}"
 
                   / Header - columns
                   tr.cursor-move data-satis-table-target="header"
+                    / Selection
+                    / th.relative.align-bottom.px-6.py-3.text-left.text-xs.font-medium.text-gray-500.dark:text-gray-300.uppercase.tracking-wider scope="col"
                     - @table.ordered_columns.each.with_index do |column, index|
                       th.relative.align-bottom.px-6.py-3.text-left.text-xs.font-medium.text-gray-500.dark:text-gray-300.uppercase.tracking-wider scope="col" data-satis-table-target="column" data-column="#{column.attribute}" data-action="click->satis-table#sort"
                         - if column.sortable
@@ -53,12 +55,11 @@ turbo-frame id="#{params[:turbo_frame_id] || params[:table_name]}"
                               - else
                                 i.fa-light.fa-filter
 
-                    / Action column?
-                    /th.relative.px-6.py-3 scope="col"
-                      span.sr-only Edit
                 tbody
                   / Filters
                   tr.bg-gray-100.border-b.border-gray-200.hidden.dark:bg-gray-900 data-satis-table-target="filterRow"
+                    / Selection
+                    / td.px-3.py-4.whitespace-nowrap.text-sm.text-gray-500.dark:text-gray-300 style="min-width: 200px;"
                     - @table.ordered_columns.each.with_index do |column, index|
                       td.px-3.py-4.whitespace-nowrap.text-sm.text-gray-500.dark:text-gray-300 style="min-width: 200px;"
                         - filter = @table.filter_by_attribute(column.attribute)
@@ -73,6 +74,9 @@ turbo-frame id="#{params[:turbo_frame_id] || params[:table_name]}"
                   - @table.rows(self).each_with_index do |row, index|
                     - if row.find { |c| c.first == :link }
                       tr.cursor-pointer class="#{index % 2 == 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700'}" href="#{row.find{|c| c.first == :link}&.[](1)}" data-controller="satis-link" data-action="click->satis-link#follow tap->satis-link#follow"
+                        / Selection
+                        / td.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500.dark:text-gray-300
+                        /   input type="checkbox" data-action="click->satis-table#selectRow" value=(row.find { |c| c.first == :id }.last)
                         - row.each do |column, value|
                           - if %i[link context_menu].exclude?(column)
                             td.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500.dark:text-gray-300

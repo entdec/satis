@@ -96,6 +96,11 @@ export default class extends ApplicationController {
     this.filterTarget.focus()
   }
 
+  selectRow(event) {
+    event.cancelBubble = true
+    event.stopPropagation()
+  }
+
   //
   filter(event) {
     // Ignore if satis-dropdown triggered this change event because of the display
