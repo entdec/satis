@@ -5,7 +5,7 @@ import { debounce } from "../../../../frontend/utils"
 import Sortable from "sortablejs"
 
 export default class extends ApplicationController {
-  static targets = ["header", "hiddenHeader", "column", "filterRow", "filter", "filterIndicator", "overlay", "modal", "exportButton", "filter", "filterIcon"]
+  static targets = ["header", "hiddenHeader", "column", "filterRow", "filter", "filterIndicator", "overlay", "modal", "filter", "searchIcon", "search"]
   static values = {
     currentPage: Number,
     resetUrl: String,
@@ -92,8 +92,8 @@ export default class extends ApplicationController {
     event.cancelBubble = true
   }
 
-  focusFilter(event) {
-    this.filterTarget.focus()
+  focusSearch(event) {
+    this.searchTarget.focus()
   }
 
   selectRow(event) {
