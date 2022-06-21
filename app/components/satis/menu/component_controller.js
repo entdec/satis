@@ -4,7 +4,7 @@ import { debounce } from "../../../../frontend/utils"
 import { createPopper } from "@popperjs/core"
 
 export default class extends ApplicationController {
-  static targets = ["submenu"]
+  static targets = ["submenu", "toggle"]
 
   connect() {
     super.connect()
@@ -30,7 +30,7 @@ export default class extends ApplicationController {
   }
 
   show(event) {
-    if (this.hasSubmenuTarget) {
+    if (this.hasSubmenuTarget && (!this.hasToggleTarget || (this.hasToggleTarget && this.toggledOn))) {
       this.submenuTarget.classList.remove("hidden")
       this.submenuTarget.setAttribute("data-show", "")
       this.popperInstance.update()
@@ -42,5 +42,21 @@ export default class extends ApplicationController {
       this.submenuTarget.classList.add("hidden")
       this.submenuTarget.removeAttribute("data-show")
     }
+  }
+
+  toggle(event) {
+    if (this.hasToggleTarget) {
+      this.toggleTarget.classList.toggle("hidden")
+      this.triggerEvent(this.toggleTarget, "toggle", { toggled: !this.toggleTarget.classList.contains("hidden"), id: this.toggleTarget.getAttribute("id") })
+      if (this.toggleTarget.classList.contains("hidden")) {
+        this.hide(event)
+      } else {
+        this.show(event)
+      }
+    }
+  }
+
+  get toggledOn() {
+    return !this.toggleTarget.classList.contains("hidden")
   }
 }
