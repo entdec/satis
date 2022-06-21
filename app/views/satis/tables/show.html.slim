@@ -76,13 +76,13 @@ turbo-frame id="#{params[:turbo_frame_id] || params[:table_name]}"
                         td.hidden.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500.dark:text-gray-300 data-satis-table-target="selectionColumn"
                           input type="checkbox" data-action="click->satis-table#selectRow" value=(row.find { |c| c.first == :id }.last)
                         - row.each do |column, value|
-                          - if %i[link context_menu].exclude?(column)
+                          - if %i[id link context_menu].exclude?(column)
                             td.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500.dark:text-gray-300
                               == value
                     - else
                       tr class="#{index % 2 == 0 ? 'bg-white dark:bg-gray-800' : 'bg-gray-50 dark:bg-gray-700'}"
                         - row.each do |column, value|
-                          - if %i[link context_menu].exclude?(column)
+                          - if %i[id link context_menu].exclude?(column)
                             td.px-6.py-4.whitespace-nowrap.text-sm.text-gray-500.dark:text-gray-300
                               == value
 
