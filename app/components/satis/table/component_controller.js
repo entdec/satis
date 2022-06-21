@@ -182,7 +182,10 @@ export default class extends ApplicationController {
     return true
   }
 
-  refreshTable() {}
+  refresh() {
+    let turboFrame = this.element.closest("turbo-frame")
+    turboFrame.reload()
+  }
 
   prevPage() {
     if (this.currentPageValue > 1) {
@@ -224,6 +227,18 @@ export default class extends ApplicationController {
     }
   }
 
+  export(event) {
+    let turboFrame = this.element.closest("turbo-frame")
+
+    let ourUrl = new URL(turboFrame.src, window.location.href)
+    let exportUrl = new URL(`/action_table/${encodeURIComponent(turboFrame.id)}/export.xlsx`, window.location.href)
+    exportUrl.search = ourUrl.search
+
+    let response = fetch(exportUrl, { method: "GET" }).then((response) => {
+      turboFrame.reload()
+    })
+  }
+
   _toggleListener(event) {
     this.selectionColumnTargets.forEach((element) => {
       if (event.detail.toggled) {
@@ -235,6 +250,7 @@ export default class extends ApplicationController {
   }
 
   multi_select(event) {
+    let turboFrame = this.element.closest("turbo-frame")
     let aElement = event.target.closest("a")
 
     let url = new URL(aElement.href, window.location.href)
@@ -248,13 +264,11 @@ export default class extends ApplicationController {
         "X-CSRF-Token": csrfToken,
       },
       body: JSON.stringify({
-        action: aElement.id,
-        selectedIds: this.selectedRows,
+        action_name: aElement.id,
+        ids: this.selectedRows,
       }),
     }).then((response) => {
-      if (response.ok) {
-      } else if (!response.ok) {
-      }
+      turboFrame.reload()
     })
     event.preventDefault()
   }

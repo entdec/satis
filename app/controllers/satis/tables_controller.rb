@@ -66,9 +66,9 @@ module Satis
 
     def menu
       Satis::Menus::Builder.build(:table_menu) do |m|
+        m.item :refresh, icon: 'fal fa-rotate', link: nil, link_attributes: { data: { action: 'click->satis-table#refresh' } }
         if @table.class.exportable
-          m.item :export, link: action_table.export_action_table_path(params[:table_name]),
-                          link_attributes: { data: { turbo: false } }
+          m.item :export, icon: 'fal fa-file-export', link: nil, link_attributes: { data: { action: 'click->satis-table#export' } }
         end
         if params[:multi_select].present?
           m.item :multi_select, icon: 'fal fa-check-double', link: nil, type: :toggle do |m2|
