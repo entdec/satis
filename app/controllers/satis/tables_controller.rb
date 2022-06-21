@@ -70,6 +70,14 @@ module Satis
           m.item :export, link: action_table.export_action_table_path(params[:table_name]),
                           link_attributes: { data: { turbo: false } }
         end
+        if params[:multi_select].present?
+          m.item :multi_select, icon: 'fal fa-check-double', link: nil, type: :toggle do |m2|
+            params[:multi_select].each do |item|
+              m2.item item['id'], icon: item['icon'], link: item['link'],
+                                  link_attributes: { data: { action: 'click->satis-table#multi_select' }, id: item['id'] }
+            end
+          end
+        end
       end
     end
 

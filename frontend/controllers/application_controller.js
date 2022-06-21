@@ -13,7 +13,7 @@ export default class ApplicationController extends Controller {
   triggerEvent(el, name, data) {
     let event
     if (typeof window.CustomEvent === "function") {
-      event = new CustomEvent(name, { detail: data })
+      event = new CustomEvent(name, { detail: data, cancelable: true, bubbles: true })
     } else {
       event = document.createEvent("CustomEvent")
       event.initCustomEvent(name, true, true, data)

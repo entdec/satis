@@ -5,7 +5,7 @@ import { debounce } from "../../../../frontend/utils"
 import Sortable from "sortablejs"
 
 export default class extends ApplicationController {
-  static targets = ["header", "hiddenHeader", "column", "filterRow", "filter", "filterIndicator", "overlay", "modal", "filter", "searchIcon", "search"]
+  static targets = ["header", "hiddenHeader", "column", "filterRow", "filter", "filterIndicator", "overlay", "modal", "filter", "searchIcon", "search", "menu", "selectionColumn"]
   static values = {
     currentPage: Number,
     resetUrl: String,
@@ -42,6 +42,9 @@ export default class extends ApplicationController {
   connect() {
     super.connect()
 
+    this.boundToggleListener = this._toggleListener.bind(this)
+    this.element.addEventListener("toggle", this.boundToggleListener)
+
     if (this.filterTarget.value.length > 0) {
       this.filterTarget.focus()
     }
@@ -52,6 +55,8 @@ export default class extends ApplicationController {
     }
 
     this.boundFilterKeydown = this.filterKeydown.bind(this)
+
+    this.selectedRows = []
 
     new Sortable(this.hiddenHeaderTarget, {
       group: "columns",
@@ -97,6 +102,13 @@ export default class extends ApplicationController {
   }
 
   selectRow(event) {
+    let id = event.target.getAttribute("value")
+    if (this.selectedRows.includes(id)) {
+      this.selectedRows = this.selectedRows.filter((element) => element != id)
+    } else {
+      this.selectedRows.push(id)
+    }
+
     event.cancelBubble = true
     event.stopPropagation()
   }
@@ -210,5 +222,40 @@ export default class extends ApplicationController {
         turboFrame.src = ourUrl
       }
     }
+  }
+
+  _toggleListener(event) {
+    this.selectionColumnTargets.forEach((element) => {
+      if (event.detail.toggled) {
+        element.classList.remove("hidden")
+      } else {
+        element.classList.add("hidden")
+      }
+    })
+  }
+
+  multi_select(event) {
+    let aElement = event.target.closest("a")
+
+    let url = new URL(aElement.href, window.location.href)
+    let csrfToken = document.querySelector("meta[name=csrf-token]").content
+
+    let response = fetch(url, {
+      method: "POST",
+      headers: {
+        Accept: "application/json, text/javascript",
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken,
+      },
+      body: JSON.stringify({
+        action: aElement.id,
+        selectedIds: this.selectedRows,
+      }),
+    }).then((response) => {
+      if (response.ok) {
+      } else if (!response.ok) {
+      }
+    })
+    event.preventDefault()
   }
 }
