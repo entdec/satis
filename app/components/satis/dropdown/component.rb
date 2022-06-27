@@ -21,6 +21,12 @@ module Satis
         options[:input_html] ||= {}
         options[:input_html][:value] = hidden_value
 
+        options[:input_html][:autofocus] ||= false
+        if options[:input_html][:autofocus]
+          options[:autofocus] = 'autofocus'
+          options[:input_html].delete(:autofocus)
+        end
+
         actions = [options[:input_html]['data-action'], 'change->satis-dropdown#display',
                    'focus->satis-dropdown#focus'].join(' ')
 
