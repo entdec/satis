@@ -9,10 +9,11 @@ module Satis
       def initialize(**options)
         @item = options[:item]
         @menu_options = options.fetch(:menu_options, {})
+        @actions = item.link_attributes.delete(:'data-action')
       end
 
       def data_actions
-        'click->satis-sidebar-menu-item#open'
+        "click->satis-sidebar-menu-item#open #{@actions}"
       end
     end
   end
