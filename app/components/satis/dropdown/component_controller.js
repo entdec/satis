@@ -24,6 +24,7 @@ export default class extends ApplicationController {
     this.boundClickedOutside = this.clickedOutside.bind(this)
     this.boundResetSearchInput = this.resetSearchInput.bind(this)
     this.boundHandleHiddenInputChange = this.handleHiddenInputChange.bind(this)
+    this.boundBlur = this.handleBlur.bind(this)
 
     // To remember what the current page and last page were, we queried
     this.currentPage = 1
@@ -53,7 +54,10 @@ export default class extends ApplicationController {
       ],
     })
 
-    this.searchInputTarget.addEventListener("blur", this.boundResetSearchInput)
+    this.searchInputTarget.addEventListener("blur", this.boundBlur)
+    this.toggleButtonTarget.addEventListener("blur", this.boundBlur)
+    this.resultsTarget.addEventListener("blur", this.boundBlur)
+
     window.addEventListener("click", this.boundClickedOutside)
 
     this.hiddenInputTarget.addEventListener("change", this.boundHandleHiddenInputChange)
@@ -67,6 +71,18 @@ export default class extends ApplicationController {
 
   focus(event) {
     this.searchInputTarget.focus()
+  }
+
+  blur(event) {
+    this.handleBlur(event)
+  }
+
+  handleBlur(event) {
+    if (!this.element.contains(event.relatedTarget) && this.resultsShown) {
+      this.hideResultsList()
+      if (event.target == this.searchInputTarget)
+        this.boundResetSearchInput(event)
+    }
   }
 
   handleHiddenInputChange(event) {
