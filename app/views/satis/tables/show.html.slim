@@ -63,7 +63,7 @@ turbo-frame id="#{params[:turbo_frame_id] || params[:table_name]}"
                       td.px-3.py-4.whitespace-nowrap.text-sm.text-gray-500.dark:text-gray-300 style="min-width: 200px;"
                         - filter = @table.filter_by_attribute(column.attribute)
                         - if filter&.collection
-                          = f.input filter.parameter, url: filter_collection_tables_path(table_name: params[:table_name], filter: column.attribute), as: :dropdown, label: false, input_html: { "data-action" => "change->satis-table#filter", "data-satis-table-target" => "filter" }
+                          = f.input filter.parameter, url: filter_collection_tables_path(table_name: params[:table_name], filter: column.attribute), as: :dropdown, label: false, input_html: { "data-action" => "change->satis-table#filter", "data-satis-table-target" => "filter" }, page_size: filter.options[:page_size]
                         - elsif filter&.as == :date_range
                           = f.input filter.parameter, input_html: { "class" => 'form-control', "data-action" => "change->satis-table#filter", "data-satis-table-target" => "filter" }, value: params[filter.parameter], label: false, as: :date_time, range: true, time_picker: false
                         - elsif filter
