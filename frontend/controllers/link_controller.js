@@ -17,6 +17,11 @@ export default class extends ApplicationController {
       return
     }
 
+    if (event.target != this.element && event.target.closest('a') != undefined) {
+      // There is an 'a' tag inside the 'satis-link' tag, and we just clicked on it.
+      return
+    }
+
     if (event.metaKey || event.ctrlKey) {
       window.open(this.element.getAttribute("href"), "_blank")
     } else if (this.element.getAttribute("data-turbo") == "false") {
