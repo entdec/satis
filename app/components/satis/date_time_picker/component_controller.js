@@ -72,6 +72,9 @@ export default class extends ApplicationController {
       window.addEventListener("click", this.boundClickedOutside)
     }
 
+    this.boundKeyUp = this.keyUp.bind(this)
+    window.addEventListener("keyup", this.boundKeyUp)
+
     let input = this.inputTarget
     this.hiddenInputTarget.addEventListener("focus", function(event) { input.focus() })
 
@@ -86,6 +89,7 @@ export default class extends ApplicationController {
 
   disconnect() {
     window.removeEventListener("click", this.boundClickedOutside)
+    window.removeEventListener("keyup", this.boundKeyUp)
   }
 
   /**************
@@ -145,6 +149,24 @@ export default class extends ApplicationController {
     }
 
     event.cancelBubble = true
+  }
+
+  keyUp(event) {
+    if(event.key == 'Tab')
+    {
+      let controllerEl = document.activeElement.closest('[data-controller="satis-date-time-picker"]')
+      if (controllerEl) {
+        if(controllerEl["satis-date-time-picker"] != this)
+        {
+          this.hideCalendar(event)
+        }
+      }
+      else{
+        this.hideCalendar(event)
+      }
+
+      event.cancelBubble = true
+    }
   }
 
   changeHours(event) {
