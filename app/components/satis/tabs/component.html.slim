@@ -11,7 +11,8 @@
             a.tab id="#{tab.name}" href="#" aria-current="#{tab.selected? ? "page" : ''}" data-satis-tabs-target="tab" data-action="click->satis-tabs#select"
               - if tab.icon
                 i.mr-2 class=tab.icon
-              = ct(".#{tab.name}", scope: [group.to_sym], default: tab.name.to_s.humanize)
+              - else
+                = tab.disable_i18n ? tab.name : ct(".#{tab.name}", scope: [group.to_sym], default: tab.name.to_s.humanize)
               i.fal.fa-triangle-exclamation.ml-2.hidden
               - if tab.badge
                 span.badge

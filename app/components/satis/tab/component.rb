@@ -3,7 +3,7 @@
 module Satis
   module Tab
     class Component < Satis::ApplicationComponent
-      attr_reader :options, :name, :icon, :badge
+      attr_reader :options, :name, :icon, :badge, :disable_i18n
 
       def initialize(name, *args, &block)
         super
@@ -12,6 +12,7 @@ module Satis
         @args = args
         @icon = options[:icon]
         @badge = options[:badge]
+        @disable_i18n = options[:disable_i18n]
         @block = block
       end
 
