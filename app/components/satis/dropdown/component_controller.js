@@ -1,4 +1,5 @@
 import ApplicationController from "../../../../frontend/controllers/application_controller"
+
 // FIXME: Is this full path really needed?
 import { debounce, popperSameWidth } from "../../../../frontend/utils"
 import { createPopper } from "@popperjs/core"
@@ -29,6 +30,7 @@ export default class extends ApplicationController {
     // To remember what the current page and last page were, we queried
     this.currentPage = 1
     this.lastPage = null
+    this.maxPages = null
 
     // To remember what the last search was we did
     this.lastSearch = null
@@ -113,7 +115,7 @@ export default class extends ApplicationController {
         ourUrl.searchParams.append("page", this.currentPage)
         ourUrl.searchParams.append("page_size", this.pageSizeValue)
 
-        this.fetchResultsWith(ourUrl).then(() => {
+        this.fetchResultsWith(ourUrl, this.currentPage).then(() => {
           this.setHiddenInput()
         })
       } else {
@@ -129,8 +131,6 @@ export default class extends ApplicationController {
   // Called when scrolling in the resultsTarget
   scroll(event) {
     if (this.elementScrolled(this.resultsTarget)) {
-      // FIXME: One problem with this is that you could possibly go beyond the max nr of pages
-      this.currentPage += 1
       this.fetchResults(event)
     }
   }
@@ -192,6 +192,7 @@ export default class extends ApplicationController {
     this.searchInputTarget.value = null
     this.lastSearch = null
     this.lastPage = null
+
     if (this.selectedItem) {
       this.selectedItem.classList.remove("bg-primary-200")
     }
@@ -265,7 +266,7 @@ export default class extends ApplicationController {
   toggleResultsList(event) {
     if (this.resultsShown) {
       this.hideResultsList(event)
-    } else {
+    } else if (this.element.contains(document.activeElement)) {
       this.filterResultsChainTo()
       if (this.hasResults) {
         this.showResultsList(event)
@@ -366,30 +367,30 @@ export default class extends ApplicationController {
   // Remote search
   fetchResults(event) {
     const promise = new Promise((resolve, reject) => {
-      if (this.searchInputTarget.value == this.lastSearch && this.currentPage == this.lastPage) {
+      if ((this.searchInputTarget.value == this.lastSearch && this.currentPage == this.lastPage) || this.currentPage == this.maxPages || !this.hasUrlValue) {
         return
       }
+
       if (this.searchInputTarget.value != this.lastSearch) {
         this.currentPage = 1
-      }
-      if (!this.hasUrlValue) {
-        return
+        this.maxPages = null
       }
 
       this.lastSearch = this.searchInputTarget.value
       this.lastPage = this.currentPage
 
       let ourUrl = this.normalizedUrl
+      let pageSize = this.pageSizeValue
       if (this.searchInputTarget.value.length >= 2) {
         ourUrl.searchParams.append("term", this.searchInputTarget.value)
       }
       ourUrl.searchParams.append("page", this.currentPage)
-      ourUrl.searchParams.append("page_size", this.pageSizeValue)
+      ourUrl.searchParams.append("page_size", pageSize)
       if (this.needsExactMatchValue) {
         ourUrl.searchParams.append("needs_exact_match", this.needsExactMatchValue)
       }
 
-      this.fetchResultsWith(ourUrl).then(() => {
+      this.fetchResultsWith(ourUrl, this.currentPage + 1).then((itemCount) => {
         if (this.hasResults) {
           this.filterResultsChainTo()
           this.highLightSelected()
@@ -400,14 +401,19 @@ export default class extends ApplicationController {
           } else if (this.nrOfItems == 1) {
             this.moveDown()
           }
+
+          this.currentPage += 1
+          if (itemCount < pageSize) this.lastPage = this.currentPage
+
           resolve()
-        }
+        } else
+          this.lastPage = this.currentPage
       })
     })
     return promise
   }
 
-  fetchResultsWith(ourUrl) {
+  fetchResultsWith(ourUrl, page) {
     const promise = new Promise((resolve, reject) => {
       fetch(ourUrl.href, {}).then((response) => {
         response.text().then((data) => {
@@ -420,7 +426,7 @@ export default class extends ApplicationController {
             item.setAttribute("data-action", "click->satis-dropdown#select")
           })
 
-          if (this.currentPage == 1) {
+          if (page == 1) {
             this.itemsTarget.innerHTML = tmpDiv.innerHTML
           } else {
             if (tmpDiv.innerHTML.length > 0) {
@@ -428,7 +434,7 @@ export default class extends ApplicationController {
             }
           }
 
-          resolve()
+          resolve(tmpDiv.children.length)
         })
       })
     })
