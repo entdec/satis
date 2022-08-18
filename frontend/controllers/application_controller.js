@@ -22,7 +22,7 @@ export default class ApplicationController extends Controller {
   }
 
   elementScrolled(element) {
-    if (element.offsetHeight + element.scrollTop === element.scrollHeight) {
+    if (element.scrollHeight - Math.round(element.scrollTop) === element.clientHeight) {
       return true
     }
     return false
