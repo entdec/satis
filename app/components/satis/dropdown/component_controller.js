@@ -30,7 +30,7 @@ export default class extends ApplicationController {
     // To remember what the current page and last page were, we queried
     this.currentPage = 1
     this.lastPage = null
-    this.maxPages = null
+    this.endPage = null
 
     // To remember what the last search was we did
     this.lastSearch = null
@@ -115,7 +115,7 @@ export default class extends ApplicationController {
         ourUrl.searchParams.append("page", this.currentPage)
         ourUrl.searchParams.append("page_size", this.pageSizeValue)
 
-        this.fetchResultsWith(ourUrl, this.currentPage).then(() => {
+        this.fetchResultsWith(ourUrl).then(() => {
           this.setHiddenInput()
         })
       } else {
@@ -192,6 +192,7 @@ export default class extends ApplicationController {
     this.searchInputTarget.value = null
     this.lastSearch = null
     this.lastPage = null
+    this.endPage = null
 
     if (this.selectedItem) {
       this.selectedItem.classList.remove("bg-primary-200")
@@ -367,13 +368,13 @@ export default class extends ApplicationController {
   // Remote search
   fetchResults(event) {
     const promise = new Promise((resolve, reject) => {
-      if ((this.searchInputTarget.value == this.lastSearch && this.currentPage == this.lastPage) || this.currentPage == this.maxPages || !this.hasUrlValue) {
+      if ((this.searchInputTarget.value == this.lastSearch && (this.currentPage == this.lastPage || this.currentPage == this.endPage)) || !this.hasUrlValue) {
         return
       }
 
       if (this.searchInputTarget.value != this.lastSearch) {
         this.currentPage = 1
-        this.maxPages = null
+        this.endPage = null
       }
 
       this.lastSearch = this.searchInputTarget.value
@@ -390,7 +391,8 @@ export default class extends ApplicationController {
         ourUrl.searchParams.append("needs_exact_match", this.needsExactMatchValue)
       }
 
-      this.fetchResultsWith(ourUrl, this.currentPage + 1).then((itemCount) => {
+
+      this.fetchResultsWith(ourUrl).then((itemCount) => {
         if (this.hasResults) {
           this.filterResultsChainTo()
           this.highLightSelected()
@@ -402,18 +404,18 @@ export default class extends ApplicationController {
             this.moveDown()
           }
 
-          this.currentPage += 1
-          if (itemCount < pageSize) this.lastPage = this.currentPage
+          if (itemCount > 0)
+            this.currentPage += 1
+          if (itemCount < pageSize) this.endPage = this.currentPage
 
           resolve()
-        } else
-          this.lastPage = this.currentPage
+        }
       })
     })
     return promise
   }
 
-  fetchResultsWith(ourUrl, page) {
+  fetchResultsWith(ourUrl) {
     const promise = new Promise((resolve, reject) => {
       fetch(ourUrl.href, {}).then((response) => {
         response.text().then((data) => {
@@ -426,7 +428,7 @@ export default class extends ApplicationController {
             item.setAttribute("data-action", "click->satis-dropdown#select")
           })
 
-          if (page == 1) {
+          if (this.currentPage == 1) {
             this.itemsTarget.innerHTML = tmpDiv.innerHTML
           } else {
             if (tmpDiv.innerHTML.length > 0) {
