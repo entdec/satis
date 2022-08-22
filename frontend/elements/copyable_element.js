@@ -42,11 +42,13 @@ export default class SatisCopyable extends HTMLElement {
       this.tippy.setContent("Oops, unable to copy")
       this.tippy.show()
     }
+    setTimeout(() => {
+      this.tippy.hide()
+    }, 700)
 
     setTimeout(() => {
-      // this.tippy.hide()
       this.tippy.setContent("Click to copy")
-    }, 500)
+    }, 1000)
 
     window.getSelection().removeAllRanges()
   }
