@@ -82,8 +82,9 @@ export default class extends ApplicationController {
   handleBlur(event) {
     if (!this.element.contains(event.relatedTarget) && this.resultsShown) {
       this.hideResultsList()
-      if (event.target == this.searchInputTarget)
+      if (event.target == this.searchInputTarget) {
         this.boundResetSearchInput(event)
+      }
     }
   }
 
@@ -267,7 +268,10 @@ export default class extends ApplicationController {
   toggleResultsList(event) {
     if (this.resultsShown) {
       this.hideResultsList(event)
-    } else if (this.element.contains(document.activeElement)) {
+
+      // Not sure what the intent is, but this causes Safari not to open a ticket
+      // } else if (this.element.contains(document.activeElement)) {
+    } else {
       this.filterResultsChainTo()
       if (this.hasResults) {
         this.showResultsList(event)
@@ -391,7 +395,6 @@ export default class extends ApplicationController {
         ourUrl.searchParams.append("needs_exact_match", this.needsExactMatchValue)
       }
 
-
       this.fetchResultsWith(ourUrl).then((itemCount) => {
         if (this.hasResults) {
           this.filterResultsChainTo()
@@ -404,9 +407,12 @@ export default class extends ApplicationController {
             this.moveDown()
           }
 
-          if (itemCount > 0)
+          if (itemCount > 0) {
             this.currentPage += 1
-          if (itemCount < pageSize) this.endPage = this.currentPage
+          }
+          if (itemCount < pageSize) {
+            this.endPage = this.currentPage
+          }
 
           resolve()
         }
