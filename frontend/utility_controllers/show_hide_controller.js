@@ -8,10 +8,13 @@ import ApplicationController from "../controllers/application_controller"
     <div data-show-hide-showable="true" data-show-hide-value="true">
       This is shown when the show-hide.input value equates to true, it is hidden otherwise
     </div>
+    <div data-show-hide-hidable="true" data-show-hide-value="true">
+      This is hidden when the show-hide.input value equates to true, it is shown otherwise
+    </div>
   </div>
  */
 export default class extends ApplicationController {
-  static targets = ["showable", "input"]
+  static targets = ["showable", "hidable", "input"]
 
   connect() {
     this.boundUpdate = this.update.bind(this)
@@ -22,10 +25,6 @@ export default class extends ApplicationController {
     }
 
     this.inputTarget.addEventListener(this.watchOn, this.boundUpdate)
-
-    if (this.showableTargets.length == 0) {
-      console.warn("show-hide has not showable targets")
-    }
 
     this.update()
   }
@@ -39,13 +38,24 @@ export default class extends ApplicationController {
   }
 
   toggle(value) {
-    this.showableTargets.forEach((element) => {
-      if (element.getAttribute("data-show-hide-value") == value) {
-        element.classList.remove("hidden")
-      } else {
-        element.classList.add("hidden")
-      }
-    })
+    if (this.hasShowableTarget) {
+      this.showableTargets.forEach((element) => {
+        if (element.getAttribute("data-show-hide-value") == value) {
+          element.classList.remove("hidden")
+        } else {
+          element.classList.add("hidden")
+        }
+      })
+    }
+    if (this.hasHidableTarget) {
+      this.hidableTargets.forEach((element) => {
+        if (element.getAttribute("data-show-hide-value") == value) {
+          element.classList.add("hidden")
+        } else {
+          element.classList.remove("hidden")
+        }
+      })
+    }
   }
 
   get currentValue() {
