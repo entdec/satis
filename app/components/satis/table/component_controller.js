@@ -45,9 +45,7 @@ export default class extends ApplicationController {
     this.boundToggleListener = this._toggleListener.bind(this)
     this.element.addEventListener("toggle", this.boundToggleListener)
 
-    if (this.searchTarget.value.length > 0) {
-      this.searchTarget.focus()
-    }
+    this.searchTarget.focus()
 
     //ssss
     let turboFrame = this.element.closest("turbo-frame")
