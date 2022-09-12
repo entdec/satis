@@ -79,13 +79,14 @@ export default class extends ApplicationController {
     this.hiddenInputTarget.addEventListener("focus", function(event) { input.focus() })
 
     if (this.hiddenInputTarget.value) {
-      // If there is an existing value, parse it.
-      this.refreshCalendar(true)
+      // Obsolete logic, input refresh is already done (setting this to true creates a loop)
+      this.refreshCalendar(false)
     } else {
-      // if the existing value is blank, leave it be.
+      // 
       this.refreshCalendar(false)
     }
   }
+
 
   disconnect() {
     window.removeEventListener("click", this.boundClickedOutside)
@@ -152,16 +153,14 @@ export default class extends ApplicationController {
   }
 
   keyUp(event) {
-    if(event.key == 'Tab')
-    {
+    if (event.key == 'Tab') {
       let controllerEl = document.activeElement.closest('[data-controller="satis-date-time-picker"]')
       if (controllerEl) {
-        if(controllerEl["satis-date-time-picker"] != this)
-        {
+        if (controllerEl["satis-date-time-picker"] != this) {
           this.hideCalendar(event)
         }
       }
-      else{
+      else {
         this.hideCalendar(event)
       }
 
@@ -202,7 +201,7 @@ export default class extends ApplicationController {
     let newValue
     try {
       newValue = new Date(this.inputTarget.value)
-    } catch (error) {}
+    } catch (error) { }
     if (!isNaN(newValue.getTime())) {
       this.selectedValue = [newValue]
       this.refreshCalendar()
@@ -365,20 +364,20 @@ export default class extends ApplicationController {
   // Format the given Date into an ISO8601 string whilst preserving the given timezone
   iso8601(date) {
     let tzo = -date.getTimezoneOffset(),
-        dif = tzo >= 0 ? '+' : '-',
-        pad = function(num) {
-            let norm = Math.floor(Math.abs(num));
-            return (norm < 10 ? '0' : '') + norm;
-        };
+      dif = tzo >= 0 ? '+' : '-',
+      pad = function (num) {
+        let norm = Math.floor(Math.abs(num));
+        return (norm < 10 ? '0' : '') + norm;
+      };
 
     return date.getFullYear() +
-        '-' + pad(date.getMonth() + 1) +
-        '-' + pad(date.getDate()) +
-        'T' + pad(date.getHours()) +
-        ':' + pad(date.getMinutes()) +
-        ':' + pad(date.getSeconds()) +
-        dif + pad(tzo / 60) +
-        ':' + pad(tzo % 60);
+      '-' + pad(date.getMonth() + 1) +
+      '-' + pad(date.getDate()) +
+      'T' + pad(date.getHours()) +
+      ':' + pad(date.getMinutes()) +
+      ':' + pad(date.getSeconds()) +
+      dif + pad(tzo / 60) +
+      ':' + pad(tzo % 60);
   }
 
   // Is date today?
