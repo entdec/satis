@@ -5,7 +5,20 @@ import { debounce } from "../../../../frontend/utils"
 import Sortable from "sortablejs"
 
 export default class extends ApplicationController {
-  static targets = ["header", "hiddenHeader", "column", "filter", "filterRow", "filterIndicator", "overlay", "modal", "searchIcon", "search", "menu", "selectionColumn"]
+  static targets = [
+    "header",
+    "hiddenHeader",
+    "column",
+    "filter",
+    "filterRow",
+    "filterIndicator",
+    "overlay",
+    "modal",
+    "searchIcon",
+    "search",
+    "menu",
+    "selectionColumn",
+  ]
   static values = {
     currentPage: Number,
     resetUrl: String,
@@ -44,8 +57,6 @@ export default class extends ApplicationController {
 
     this.boundToggleListener = this._toggleListener.bind(this)
     this.element.addEventListener("toggle", this.boundToggleListener)
-
-    this.searchTarget.focus()
 
     //ssss
     let turboFrame = this.element.closest("turbo-frame")
@@ -224,6 +235,10 @@ export default class extends ApplicationController {
         turboFrame.src = ourUrl
       }
     }
+  }
+
+  searchClicked(event) {
+    this.searchTarget.select()
   }
 
   export(event) {
