@@ -1,4 +1,5 @@
 import ApplicationController from "../../../../frontend/controllers/application_controller"
+
 // FIXME: Is this full path really needed?
 import { debounce, popperSameWidth } from "../../../../frontend/utils"
 import { createPopper } from "@popperjs/core"
@@ -29,6 +30,7 @@ export default class extends ApplicationController {
     // To remember what the current page and last page were, we queried
     this.currentPage = 1
     this.lastPage = null
+    this.endPage = null
 
     // To remember what the last search was we did
     this.lastSearch = null
@@ -80,8 +82,9 @@ export default class extends ApplicationController {
   handleBlur(event) {
     if (!this.element.contains(event.relatedTarget) && this.resultsShown) {
       this.hideResultsList()
-      if (event.target == this.searchInputTarget)
+      if (event.target == this.searchInputTarget) {
         this.boundResetSearchInput(event)
+      }
     }
   }
 
@@ -129,8 +132,6 @@ export default class extends ApplicationController {
   // Called when scrolling in the resultsTarget
   scroll(event) {
     if (this.elementScrolled(this.resultsTarget)) {
-      // FIXME: One problem with this is that you could possibly go beyond the max nr of pages
-      this.currentPage += 1
       this.fetchResults(event)
     }
   }
@@ -192,6 +193,8 @@ export default class extends ApplicationController {
     this.searchInputTarget.value = null
     this.lastSearch = null
     this.lastPage = null
+    this.endPage = null
+
     if (this.selectedItem) {
       this.selectedItem.classList.remove("bg-primary-200")
     }
@@ -265,6 +268,9 @@ export default class extends ApplicationController {
   toggleResultsList(event) {
     if (this.resultsShown) {
       this.hideResultsList(event)
+
+      // Not sure what the intent is, but this causes Safari not to open a ticket
+      // } else if (this.element.contains(document.activeElement)) {
     } else {
       this.filterResultsChainTo()
       if (this.hasResults) {
@@ -366,30 +372,30 @@ export default class extends ApplicationController {
   // Remote search
   fetchResults(event) {
     const promise = new Promise((resolve, reject) => {
-      if (this.searchInputTarget.value == this.lastSearch && this.currentPage == this.lastPage) {
+      if ((this.searchInputTarget.value == this.lastSearch && (this.currentPage == this.lastPage || this.currentPage == this.endPage)) || !this.hasUrlValue) {
         return
       }
+
       if (this.searchInputTarget.value != this.lastSearch) {
         this.currentPage = 1
-      }
-      if (!this.hasUrlValue) {
-        return
+        this.endPage = null
       }
 
       this.lastSearch = this.searchInputTarget.value
       this.lastPage = this.currentPage
 
       let ourUrl = this.normalizedUrl
+      let pageSize = this.pageSizeValue
       if (this.searchInputTarget.value.length >= 2) {
         ourUrl.searchParams.append("term", this.searchInputTarget.value)
       }
       ourUrl.searchParams.append("page", this.currentPage)
-      ourUrl.searchParams.append("page_size", this.pageSizeValue)
+      ourUrl.searchParams.append("page_size", pageSize)
       if (this.needsExactMatchValue) {
         ourUrl.searchParams.append("needs_exact_match", this.needsExactMatchValue)
       }
 
-      this.fetchResultsWith(ourUrl).then(() => {
+      this.fetchResultsWith(ourUrl).then((itemCount) => {
         if (this.hasResults) {
           this.filterResultsChainTo()
           this.highLightSelected()
@@ -400,6 +406,14 @@ export default class extends ApplicationController {
           } else if (this.nrOfItems == 1) {
             this.moveDown()
           }
+
+          if (itemCount > 0) {
+            this.currentPage += 1
+          }
+          if (itemCount < pageSize) {
+            this.endPage = this.currentPage
+          }
+
           resolve()
         }
       })
@@ -428,7 +442,7 @@ export default class extends ApplicationController {
             }
           }
 
-          resolve()
+          resolve(tmpDiv.children.length)
         })
       })
     })

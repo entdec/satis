@@ -1,4 +1,4 @@
-div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controller="satis-dropdown" data-satis-dropdown-page-size-value=10 data-satis-dropdown-url-value=url data-satis-dropdown-url-params-value=(options[:url_params]||{}).to_json data-satis-dropdown-chain-to-value=@chain_to data-satis-dropdown-free-text-value=@free_text data-satis-dropdown-needs-exact-match-value="#{@needs_exact_match ? 'true' : 'false'}"
+div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controller="satis-dropdown" data-satis-dropdown-page-size-value=@page_size data-satis-dropdown-url-value=url data-satis-dropdown-url-params-value=(options[:url_params]||{}).to_json data-satis-dropdown-chain-to-value=@chain_to data-satis-dropdown-free-text-value=@free_text data-satis-dropdown-needs-exact-match-value="#{@needs_exact_match ? 'true' : 'false'}"
   / Hidden (using CSS) form field containing results
   = form.text_field(attribute, options[:input_html].reverse_merge(class: 'hidden'))
   .flex.flex-col
@@ -7,7 +7,7 @@ div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controlle
         .h-12.p-1.bg-white.dark:bg-gray-800.flex.border.border-gray-300.dark:border-gray-700.rounded
           .flex.flex-auto.flex-wrap
             / Input where you can search
-            input.p-1.px-2.appearance-none.outline-none.w-full.text-gray-800.dark:bg-gray-800 data-action="keyup->satis-dropdown#search" data-satis-dropdown-target="searchInput" placeholder=placeholder autofocus=options[:autofocus]
+            input.p-1.px-2.appearance-none.outline-none.w-full.text-gray-800.dark:bg-gray-800 data-action="input->satis-dropdown#search" data-satis-dropdown-target="searchInput" placeholder=placeholder autofocus=options[:autofocus]
           div
             / Reset button
             - unless @reset_button == false

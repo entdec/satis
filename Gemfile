@@ -18,5 +18,5 @@ end
 gem 'auxilium', '~> 3', entdec: 'auxilium'
 
 gem 'pry'
+gem "ruby-lsp", :group => :development
 gem 'sidekiq'
-gem 'solargraph'

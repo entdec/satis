@@ -34,6 +34,7 @@ module Satis
                                     'data-action' => actions)
 
         @block = block
+        @page_size = options[:page_size] || 10
       end
 
       # Deal with context

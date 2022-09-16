@@ -1,6 +1,6 @@
 # Satis
 
-UI/UX Framework.
+Tailwind CSS based UI framework for Rails.
 We use:
 
 - [TailwindCSS](https://tailwindui.com)
