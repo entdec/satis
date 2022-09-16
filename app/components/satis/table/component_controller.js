@@ -5,7 +5,20 @@ import { debounce } from "../../../../frontend/utils"
 import Sortable from "sortablejs"
 
 export default class extends ApplicationController {
-  static targets = ["header", "hiddenHeader", "column", "filter", "filterRow", "filterIndicator", "overlay", "modal", "searchIcon", "search", "menu", "selectionColumn"]
+  static targets = [
+    "header",
+    "hiddenHeader",
+    "column",
+    "filter",
+    "filterRow",
+    "filterIndicator",
+    "overlay",
+    "modal",
+    "searchIcon",
+    "search",
+    "menu",
+    "selectionColumn",
+  ]
   static values = {
     currentPage: Number,
     resetUrl: String,
@@ -224,8 +237,7 @@ export default class extends ApplicationController {
     }
   }
 
-  searchClicked(event)
-  {
+  searchClicked(event) {
     this.searchTarget.select()
   }
 
