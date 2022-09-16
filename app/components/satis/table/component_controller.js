@@ -45,8 +45,6 @@ export default class extends ApplicationController {
     this.boundToggleListener = this._toggleListener.bind(this)
     this.element.addEventListener("toggle", this.boundToggleListener)
 
-    this.searchTarget.focus()
-
     //ssss
     let turboFrame = this.element.closest("turbo-frame")
     if (turboFrame) {
@@ -224,6 +222,11 @@ export default class extends ApplicationController {
         turboFrame.src = ourUrl
       }
     }
+  }
+
+  searchClicked(event)
+  {
+    this.searchTarget.select()
   }
 
   export(event) {
