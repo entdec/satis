@@ -6,9 +6,9 @@ module Satis
     def show
       current_user = Satis.config.current_user
 
-      tokens = current_user.user_data['tokens'] || []
+      tabs = current_user.user_data['tabs'] || []
 
-      t = tokens.find { |t| t['key'] == params[:id] }
+      t = tabs.find { |t| t['key'] == params[:id] }
 
       if t.nil?
         render json: {}, status: 404
@@ -20,18 +20,18 @@ module Satis
     def update
       current_user = Satis.config.current_user
 
-      tokens = current_user.user_data['tokens'] || []
+      tabs = current_user.user_data['tabs'] || []
 
-      t = tokens.find { |t| t['key'] == user_data_update_params[:data_key] }
+      t = tabs.find { |t| t['key'] == user_data_update_params[:data_key] }
 
       if t.nil?
         t = { key: user_data_update_params[:data_key], index: user_data_update_params[:tab_index] }
-        tokens << t
+        tabs << t
       else
         t['index'] = user_data_update_params[:tab_index]
       end
 
-      current_user.user_data['tokens'] = tokens
+      current_user.user_data['tabs'] = tabs
       current_user.save!
 
       render json: {}, status: 200
