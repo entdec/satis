@@ -5,7 +5,7 @@ import ApplicationController from "../../../../frontend/controllers/application_
  */
 export default class extends ApplicationController {
   static targets = ["tab", "content", "select"]
-  static values = { persist: Boolean }
+  static values = { persist: Boolean, key: String }
 
   static keyBindings = [
     {
@@ -23,9 +23,6 @@ export default class extends ApplicationController {
   connect() {
     super.connect()
 
-    const ourUrl = new URL(window.location.href)
-    this.keyBase = ourUrl.pathname.substring(1, ourUrl.pathname.length).replace(/\//, "_") + "_tabs_" + this.context.scope.element.id
-
     let firstErrorIndex
     this.tabTargets.forEach((tab, index) => {
       let hasErrors = this.contentTargets[index].querySelectorAll(".is-invalid")
@@ -37,7 +34,26 @@ export default class extends ApplicationController {
       }
     })
 
-    this.open(firstErrorIndex || this.tabToOpen())
+    if (this.keyValue) {
+      fetch("/satis/user_data_tabs/" + this.keyValue, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => {
+          if (res.ok) {
+            res.json().then((data) => {
+              this.open(firstErrorIndex || data.index)
+            })
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    } else {
+      this.open(firstErrorIndex || 0)
+    }
   }
 
   select(event) {
@@ -51,7 +67,26 @@ export default class extends ApplicationController {
       })
     }
     this.open(index)
-    this.storeValue("openTab", index)
+
+    if (this.keyValue) {
+      fetch("/satis/user_data_tabs/" + index, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ tab_index: index, data_key: this.keyValue }),
+      })
+        .then((res) => {
+          if (res.ok) {
+            res.json().then((data) => {
+              //console.log(data)
+            })
+          }
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
 
     // Cancel the this event (dont show the browser context menu)
     event.preventDefault()
@@ -75,49 +110,5 @@ export default class extends ApplicationController {
     this.selectTarget.selectedIndex = index
   }
 
-  storeValue(key, value) {
-    if (!this.persistValue) {
-      return
-    }
-
-    if (typeof Storage !== "undefined") {
-      sessionStorage.setItem(this.keyBase + "_" + key, value)
-    }
-  }
-
-  getValue(key) {
-    if (!this.persistValue) {
-      return
-    }
-
-    if (typeof Storage !== "undefined") {
-      return sessionStorage.getItem(this.keyBase + "_" + key)
-    }
-  }
-
   disconnect() {}
-
-  tabToOpen() {
-    let urlValue = this.getUrlVar(this.context.scope.element.id + "Tab")
-
-    if (typeof urlValue !== "undefined") {
-      return urlValue
-    }
-
-    return this.getValue("openTab") || 0
-  }
-
-  getUrlVar(name) {
-    return this.getUrlVars()[name]
-  }
-
-  getUrlVars() {
-    let vars = {}
-
-    window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function (m, key, value) {
-      vars[key] = value
-    })
-
-    return vars
-  }
 }

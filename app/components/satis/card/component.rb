@@ -7,7 +7,7 @@ module Satis
       renders_many :tabs, Tab::Component
       renders_one :footer
 
-      attr_reader :icon, :title, :description, :menu, :content_padding, :header_background_color, :initial_actions
+      attr_reader :icon, :title, :description, :menu, :content_padding, :header_background_color, :initial_actions, :key
 
       def initialize(icon: nil,
                      title: nil,
@@ -17,7 +17,8 @@ module Satis
                      header_background_color: {
                        dark: 'bg-gray-800', light: 'bg-white'
                      },
-                     actions: [])
+                     actions: [],
+                     key: nil)
         super
         @title = title
         @title = @title.reject(&:blank?).compact.join(' ') if @title.is_a?(Array)
@@ -27,6 +28,7 @@ module Satis
         @content_padding = content_padding
         @header_background_color = header_background_color
         @initial_actions = actions
+        @key = key
       end
 
       def tabs?

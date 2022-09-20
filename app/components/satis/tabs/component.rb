@@ -4,12 +4,13 @@ module Satis
   module Tabs
     class Component < Satis::ApplicationComponent
       renders_many :tabs, Tab::Component
-      attr_reader :group, :persist
+      attr_reader :group, :persist, :key
 
-      def initialize(group: :main, persist: false)
+      def initialize(group: :main, persist: false, key: nil)
         super
         @group = group
         @persist = persist
+        @key = key
       end
     end
   end
