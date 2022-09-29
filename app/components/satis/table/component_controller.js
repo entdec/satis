@@ -125,8 +125,10 @@ export default class extends ApplicationController {
 
   //
   filter(event) {
-    // Ignore if satis-dropdown triggered this change event because of the display
-    if (event?.detail?.src == "satis-dropdown") {
+    // Ignore if
+    // - satis-dropdown triggered this change event because of the display
+    // - the value of the target remained the same.
+    if (event?.detail?.src == "satis-dropdown" || event?.target?.value == event.target.defaultValue) {
       return
     }
 

@@ -103,16 +103,12 @@ export default class extends ApplicationController {
       input.focus()
     })
 
+    // we set the calendar data and update the visual layout
     if (this.hiddenInputTarget.value) {
-      // Obsolete logic, input refresh is already done (setting this to true creates a loop)
-      this.refreshCalendar(false)
+      // flag true indicates we are also updating/refreshing the input field data
+      this.refreshCalendar(true)
     } else {
-      //
       this.refreshCalendar(false)
-    }
-
-    if (!this.inputTarget.value && this.hiddenInputTarget.value) {
-      this.refreshInputs()
     }
   }
 
