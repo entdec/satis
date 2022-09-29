@@ -76,13 +76,13 @@ export default class extends ApplicationController {
     window.addEventListener("keyup", this.boundKeyUp)
 
     let input = this.inputTarget
-    this.hiddenInputTarget.addEventListener("focus", function(event) { input.focus() })
+    this.hiddenInputTarget.addEventListener("focus", function (event) { input.focus() })
 
     if (this.hiddenInputTarget.value) {
-      // Obsolete logic, input refresh is already done (setting this to true creates a loop)
-      this.refreshCalendar(false)
+      // If there is an existing value, parse it.
+      this.refreshCalendar(true)
     } else {
-      // 
+      // if the existing value is blank, leave it be.
       this.refreshCalendar(false)
     }
   }
