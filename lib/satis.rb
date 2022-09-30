@@ -1,6 +1,7 @@
 require 'satis/version'
 require 'satis/engine'
 require 'satis/configuration'
+require 'satis/active_record_helpers'
 
 require 'view_component'
 
@@ -24,5 +25,10 @@ module Satis
 
       config.submit_on_enter
     end
+  end
+
+  # Include helpers
+  ActiveSupport.on_load(:active_record) do
+    include Satis::ActiveRecordHelpers
   end
 end

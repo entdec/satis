@@ -27,4 +27,45 @@ export default class ApplicationController extends Controller {
     }
     return false
   }
+
+  getUserData(key) {
+    return fetch("/satis/user_data/" + key, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json().then((data) => {
+            return data
+          })
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+
+  setUserData(key, data) {
+    let csrfToken = document.querySelector("meta[name=csrf-token]").content
+    return fetch("/satis/user_data/" + key, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRF-Token": csrfToken,
+      },
+      body: JSON.stringify(data),
+    })
+      .then((res) => {
+        if (res.ok) {
+          return res.json().then((data) => {
+            return data
+          })
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
 }

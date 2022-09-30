@@ -35,22 +35,9 @@ export default class extends ApplicationController {
     })
 
     if (this.keyValue) {
-      fetch("/satis/user_data_tabs/" + this.keyValue, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      this.getUserData(this.keyValue).then((data) => {
+        this.open(firstErrorIndex || data?.tab_index || 0)
       })
-        .then((res) => {
-          if (res.ok) {
-            res.json().then((data) => {
-              this.open(firstErrorIndex || data.index)
-            })
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-        })
     } else {
       this.open(firstErrorIndex || 0)
     }
@@ -69,23 +56,9 @@ export default class extends ApplicationController {
     this.open(index)
 
     if (this.keyValue) {
-      fetch("/satis/user_data_tabs/" + index, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ tab_index: index, data_key: this.keyValue }),
+      this.setUserData(this.keyValue, { tab_index: index }).then((data) => {
+        //console.log(data)
       })
-        .then((res) => {
-          if (res.ok) {
-            res.json().then((data) => {
-              //console.log(data)
-            })
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-        })
     }
 
     // Cancel the this event (dont show the browser context menu)

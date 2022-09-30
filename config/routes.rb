@@ -3,5 +3,5 @@ Satis::Engine.routes.draw do
     get 'filter_collection', on: :collection
   end
 
-  resources :user_data_tabs, only: %i[show update]
+  resources :user_data, only: %i[show update]
 end
