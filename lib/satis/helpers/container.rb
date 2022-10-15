@@ -17,7 +17,7 @@ module Satis
         add_helper :page, Satis::Page::Component
         add_helper :sidebar_menu, Satis::SidebarMenu::Component
         add_helper :tabs, Satis::Tabs::Component
-        add_helper :table, Satis::Table::Component
+        add_helper :table, ActionTable::ActTable::Component
         add_helper :input, Satis::Input::Component
       end
 

@@ -1,2 +1,0 @@
-- table_url = view_context._satis.table_path(table_name, params: params.reject{|p|%[action controller id].include?(p)}.permit!.merge(parameters).merge(multi_select: multi_select))
-turbo-frame id="#{parameters[:turbo_frame_id] || table_name}" src=table_url data-satis-table-reset-url=table_url target="_top" loading="lazy"
