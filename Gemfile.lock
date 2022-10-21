@@ -13,7 +13,7 @@ GIT
 PATH
   remote: .
   specs:
-    satis (1.0.60)
+    satis (1.0.61)
       diffy
       rails (>= 6)
       view_component
@@ -193,7 +193,7 @@ GEM
     timeout (0.3.0)
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
-    view_component (2.74.0)
+    view_component (2.74.1)
       activesupport (>= 5.0.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
