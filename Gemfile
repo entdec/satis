@@ -18,5 +18,12 @@ end
 gem 'auxilium', '~> 3', entdec: 'auxilium'
 
 gem 'pry'
-gem "ruby-lsp", :group => :development
+
 gem 'sidekiq'
+
+group :development, :test do
+  gem 'ruby-lsp'
+  gem "standard", require: false
+  gem "rubocop-rails", require: false
+end
+

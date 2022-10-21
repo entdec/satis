@@ -3,6 +3,10 @@ require 'satis/engine'
 require 'satis/configuration'
 
 require 'view_component'
+require 'browser'
+require 'browser/aliases'
+
+Browser::Base.include(Browser::Aliases)
 
 module Satis
   class << self

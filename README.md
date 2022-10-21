@@ -45,6 +45,17 @@ Each component has it's own documentation in the component folder
     = f.continue
 ```
 
+### Browser detection
+
+Satis now includes browser detection using the browser gem, you can use it in controllers and in your views:
+
+```
+sts.browser.chrome?
+sts.browser.mobile?
+```
+
+For more information see the [browser gem](https://github.com/fnando/browser)
+
 ## Dark
 
 bg-gray-800 - hoofd achtergrond card/sidebar
