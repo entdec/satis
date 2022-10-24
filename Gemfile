@@ -22,7 +22,8 @@ gem 'pry'
 gem 'sidekiq'
 
 group :development, :test do
-  gem 'ruby-lsp'
+  gem 'solargraph', require: false
+  gem 'ruby-lsp', require: false
   gem "standard", require: false
   gem "rubocop-rails", require: false
 end
