@@ -1,7 +1,9 @@
 module Satis
   module Helpers
-    class Container
+      class Container
       attr_reader :action_view
+
+      delegate :add_helper, to: :class
 
       def initialize(action_view)
         @action_view = action_view
@@ -19,6 +21,7 @@ module Satis
         add_helper :tabs, Satis::Tabs::Component
         add_helper :table, ActionTable::ActTable::Component
         add_helper :input, Satis::Input::Component
+        add_helper :spotlight, Satis::Spotlight::Component
       end
 
       def copyable(name, scrub: "#")
@@ -58,8 +61,12 @@ module Satis
         data[:"form-confirm-before-leave-value"] = options[:confirm_before_leave]
       end
 
-      def add_helper(name, component)
-        self.class.define_method(name) do |*args, **kwargs, &block|
+      def self.add_helper(name, component)
+        if method_defined?(name)
+          Satis.config.logger.warn("Helper #{name} already defined, skipping.")
+          return
+        end
+        define_method(name) do |*args, **kwargs, &block|
           original_args = args.dup
           options = args.extract_options!
           instance = if options.key? :variant

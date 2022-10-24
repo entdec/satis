@@ -27,7 +27,12 @@ and then in your template:
 
 ### Components
 
-Each component has it's own documentation in the component folder
+Each component has it's own documentation in the component folder.
+Other engines can add components to Satis too:
+
+```ruby
+Satis.add_helper :name, ViewComponent::Class
+```
 
 ### Forms
 

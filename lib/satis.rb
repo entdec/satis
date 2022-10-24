@@ -28,5 +28,9 @@ module Satis
 
       config.submit_on_enter
     end
+
+    def add_helper(name, component)
+      Satis::Helpers::Container.add_helper(name, component)
+    end
   end
 end

@@ -1,6 +1,7 @@
 require 'satis/forms/builder'
 require 'satis/helpers/container'
 require 'satis/menus/builder'
+
 module Satis
   class Engine < ::Rails::Engine
     isolate_namespace Satis
