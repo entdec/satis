@@ -1,6 +1,6 @@
 module Satis
   module Helpers
-      class Container
+    class Container
       attr_reader :action_view
 
       delegate :add_helper, to: :class
@@ -21,7 +21,6 @@ module Satis
         add_helper :tabs, Satis::Tabs::Component
         add_helper :table, ActionTable::ActTable::Component
         add_helper :input, Satis::Input::Component
-        add_helper :spotlight, Satis::Spotlight::Component
       end
 
       def copyable(name, scrub: "#")
