@@ -24,6 +24,11 @@ module Satis
       end
     end
 
+    # Config: logger [Object].
+    def logger
+      @logger.is_a?(Proc) ? instance_exec(&@logger) : @logger
+    end
+
     def default_help_text(template, object, method, additional_scope)
       if @default_help_text.is_a?(Proc)
         instance_exec(template, object, method, additional_scope,
