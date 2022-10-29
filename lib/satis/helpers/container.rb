@@ -19,7 +19,6 @@ module Satis
         add_helper :page, Satis::Page::Component
         add_helper :sidebar_menu, Satis::SidebarMenu::Component
         add_helper :tabs, Satis::Tabs::Component
-        add_helper :table, ActionTable::ActTable::Component
         add_helper :input, Satis::Input::Component
       end
 
@@ -61,7 +60,7 @@ module Satis
       end
 
       def self.add_helper(name, component)
-        if method_defined?(name)
+        if respond_to?(name)
           Satis.config.logger.warn("Helper #{name} already defined, skipping.")
           return
         end
