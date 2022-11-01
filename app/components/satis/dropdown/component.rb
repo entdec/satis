@@ -43,6 +43,7 @@ module Satis
         value ||= @options.dig(:input_html, :value)
         value ||= form.object&.send(attribute)
         value = value.id if value.respond_to? :id
+        value = value.second if value.is_a?(Array) && value.size == 2 && value.first.casecmp?(value.second)
         value
       end
 
