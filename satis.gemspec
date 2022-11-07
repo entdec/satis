@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.authors = ["Tom de Grunt"]
   spec.email = ["tom@degrunt.nl"]
   spec.homepage = "https://github.com/entdec/satis"
-  spec.summary = "Satis allow you to focus on the important things in life, not on UI/UX. It'll give you satisfaction."
+  spec.summary = "Satis allow you to focus on features, let us do the UI/UX. It'll give you satisfaction."
   spec.description = "Pretty cool"
   spec.license = "MIT"
 
