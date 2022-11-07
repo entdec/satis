@@ -125,6 +125,8 @@ export default class extends ApplicationController {
     if (this.clearableValue) {
       this.selectedValue = []
 
+      this.currentSelectNr = 1
+
       let today = new Date()
       this.displayValue = new Date(today.getFullYear(), today.getMonth(), 1)
       this.hiddenInputTarget.value = ""
