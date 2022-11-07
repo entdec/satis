@@ -5,8 +5,8 @@ Gem::Specification.new do |spec|
   spec.version = Satis::VERSION
   spec.authors = ["Tom de Grunt"]
   spec.email = ["tom@degrunt.nl"]
-  spec.homepage = "https://code.entropydecelerator.com/components/satis"
-  spec.summary = "Its so pretty"
+  spec.homepage = "https://github.com/entdec/satis"
+  spec.summary = "Satis allow you to focus on the important things in life, not on UI/UX. It'll give you satisfaction."
   spec.description = "Pretty cool"
   spec.license = "MIT"
 
@@ -26,5 +26,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "rails", ">= 6"
   spec.add_dependency "view_component"
 
-  spec.add_development_dependency "auxilium", "~> 0.2"
+  spec.add_development_dependency "auxilium", "~> 3"
 end
