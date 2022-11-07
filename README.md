@@ -3,7 +3,8 @@
 Tailwind CSS based UI framework for Rails.
 We use:
 
-- [TailwindCSS](https://tailwindui.com)
+- [TailwindCSS](https://tailwindcss.com)
+- [TailwindUI](https://tailwindui.com)
 - [FontAwesome 6](https://fontawesome.com/v6.0/)
 - [ViewComponent](https://viewcomponent.org)
 - [HotWired](https://hotwired.dev)
