@@ -3,6 +3,10 @@ require 'satis/engine'
 require 'satis/configuration'
 
 require 'view_component'
+require 'browser'
+require 'browser/aliases'
+
+Browser::Base.include(Browser::Aliases)
 
 module Satis
   class << self
@@ -23,6 +27,10 @@ module Satis
       return true if config.nil?
 
       config.submit_on_enter
+    end
+
+    def add_helper(name, component)
+      Satis::Helpers::Container.add_helper(name, component)
     end
   end
 end
