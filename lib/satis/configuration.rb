@@ -4,8 +4,10 @@ module Satis
   class Configuration
     attr_accessor :submit_on_enter, :confirm_before_leave
     attr_writer :default_help_text, :current_user
+    attr_writer :logger
 
     def initialize
+      @logger = Logger.new(STDOUT)
       @submit_on_enter = true
       @confirm_before_leave = false
       @current_user = -> {}
@@ -13,9 +15,9 @@ module Satis
       @default_help_text = lambda do |_template, _object, key, _additional_scope|
         scope = help_scope(template, object, additional_scope)
 
-        value = I18n.t((['help'] + scope + [key.to_s]).join('.'))
+        value = I18n.t((["help"] + scope + [key.to_s]).join("."))
 
-        if value.match(/translation missing: (.+)/)
+        if /translation missing: (.+)/.match?(value)
           nil
         else
           value
@@ -23,10 +25,15 @@ module Satis
       end
     end
 
+    # Config: logger [Object].
+    def logger
+      @logger.is_a?(Proc) ? instance_exec(&@logger) : @logger
+    end
+
     def default_help_text(template, object, method, additional_scope)
       if @default_help_text.is_a?(Proc)
         instance_exec(template, object, method, additional_scope,
-                      &@default_help_text)
+          &@default_help_text)
       else
         @default_help_text
       end
@@ -34,7 +41,7 @@ module Satis
 
     # Maybe not the right place?
     def help_scope(template, object, additional_scope, action: nil)
-      scope = template.controller.controller_path.split('/')
+      scope = template.controller.controller_path.split("/")
       scope << (action || template.controller.action_name)
       scope << object.class.name.demodulize.tableize.singularize
 

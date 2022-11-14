@@ -72,14 +72,29 @@ export class Satis {
     })
   }
 
-  // Register a keybinding found for a controller
-  static registerKeybinding(identifier, keys, handler) {
+  // Register a keybinding found for a controller, you don't have to call this directly,
+  // just add the following to your controller:
+  //
+  // static keyBindings = [
+  //   {
+  //     global: true, // For things that are not mouse-location bound
+  //     keys: ["alt+p", "alt+shift+p"],
+  //     handler: (event, combo, controller) => {
+  //       // Do something here
+  //     },
+  //   },
+  // ]
+
+  static registerKeybinding(global, identifier, keys, handler) {
     Mousetrap.bind(keys, (event, combo) => {
-      if (this.application.satis.mouseElement) {
-        let elm = this.application.satis.mouseElement.closest(`[data-controller="${identifier}"]`)
-        if (elm) {
-          handler(event, combo, elm[identifier])
-        }
+      let elm
+      if (global) {
+        elm = document.body.querySelector(`[data-controller="${identifier}"]`)
+      } else if (this.application.satis.mouseElement) {
+        elm = this.application.satis.mouseElement.closest(`[data-controller="${identifier}"]`)
+      }
+      if (elm) {
+        handler(event, combo, elm[identifier])
       }
     })
   }
@@ -115,7 +130,7 @@ export class Satis {
         let identifier = `satis-${name.replace(/_/g, "-")}`
         if (controller.keyBindings) {
           controller.keyBindings.forEach((keyBinding) => {
-            Satis.registerKeybinding(identifier, keyBinding.keys, keyBinding.handler)
+            Satis.registerKeybinding(keyBinding.global, identifier, keyBinding.keys, keyBinding.handler)
           })
         }
         this.application.register(identifier, controller)

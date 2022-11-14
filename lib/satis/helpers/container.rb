@@ -3,6 +3,8 @@ module Satis
     class Container
       attr_reader :action_view
 
+      delegate :add_helper, to: :class
+
       def initialize(action_view)
         @action_view = action_view
 
@@ -17,18 +19,21 @@ module Satis
         add_helper :page, Satis::Page::Component
         add_helper :sidebar_menu, Satis::SidebarMenu::Component
         add_helper :tabs, Satis::Tabs::Component
-        add_helper :table, Satis::Table::Component
         add_helper :input, Satis::Input::Component
       end
 
-      def copyable(name, scrub: '#')
+      def copyable(name, scrub: "#")
         return if name.blank?
 
-        action_view.content_tag('satis-copyable', name, scrub: scrub)
+        action_view.content_tag("satis-copyable", name, scrub: scrub)
+      end
+
+      def browser
+        @browser ||= Browser.new(action_view.request.user_agent)
       end
 
       def form_for(name, *args, &block)
-        options = args.extract_options!.deep_merge!(html: { data: {} })
+        options = args.extract_options!.deep_merge!(html: {data: {}})
         form_options_defaults!(options)
         update_form_data_options!(options[:html][:data], options)
         args << options.merge(builder: Satis::Forms::Builder)
@@ -36,7 +41,7 @@ module Satis
       end
 
       def form_with(model: nil, scope: nil, url: nil, format: nil, **options, &block)
-        options = options.reverse_merge(builder: Satis::Forms::Builder, class: '').deep_merge!(data: {})
+        options = options.reverse_merge(builder: Satis::Forms::Builder, class: "").deep_merge!(data: {})
         form_options_defaults!(options)
         update_form_data_options!(options[:data], options)
         action_view.form_with(model: model, scope: scope, url: url, format: format, **options, &block)
@@ -48,22 +53,26 @@ module Satis
       end
 
       def update_form_data_options!(data, options)
-        data[:controller] ||= ''
-        data[:controller] += ' form'
+        data[:controller] ||= ""
+        data[:controller] += " form"
         data[:"form-no-submit-on-enter-value"] = !options[:submit_on_enter]
         data[:"form-confirm-before-leave-value"] = options[:confirm_before_leave]
       end
 
-      def add_helper(name, component)
-        self.class.define_method(name) do |*args, **kwargs, &block|
+      def self.add_helper(name, component)
+        if respond_to?(name)
+          Satis.config.logger.warn("Helper #{name} already defined, skipping.")
+          return
+        end
+        define_method(name) do |*args, **kwargs, &block|
           original_args = args.dup
           options = args.extract_options!
           instance = if options.key? :variant
-                       variant_component = component.to_s.sub(/::Component$/, "::#{options[:variant].to_s.camelize}::Component").safe_constantize
-                       (variant_component || component).new(*original_args, **kwargs)
-                     else
-                       component.new(*original_args, **kwargs)
-                     end
+            variant_component = component.to_s.sub(/::Component$/, "::#{options[:variant].to_s.camelize}::Component").safe_constantize
+            (variant_component || component).new(*original_args, **kwargs)
+          else
+            component.new(*original_args, **kwargs)
+          end
 
           instance.original_view_context = action_view
           action_view.render(instance, &block)

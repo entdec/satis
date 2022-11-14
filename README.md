@@ -3,7 +3,8 @@
 Tailwind CSS based UI framework for Rails.
 We use:
 
-- [TailwindCSS](https://tailwindui.com)
+- [TailwindCSS](https://tailwindcss.com)
+- [TailwindUI](https://tailwindui.com)
 - [FontAwesome 6](https://fontawesome.com/v6.0/)
 - [ViewComponent](https://viewcomponent.org)
 - [HotWired](https://hotwired.dev)
@@ -27,7 +28,12 @@ and then in your template:
 
 ### Components
 
-Each component has it's own documentation in the component folder
+Each component has it's own documentation in the component folder.
+Other engines can add components to Satis too:
+
+```ruby
+Satis.add_helper :name, ViewComponent::Class
+```
 
 ### Forms
 
@@ -44,6 +50,17 @@ Each component has it's own documentation in the component folder
     = f.reset
     = f.continue
 ```
+
+### Browser detection
+
+Satis now includes browser detection using the browser gem, you can use it in controllers and in your views:
+
+```
+sts.browser.chrome?
+sts.browser.mobile?
+```
+
+For more information see the [browser gem](https://github.com/fnando/browser)
 
 ## Dark
 
