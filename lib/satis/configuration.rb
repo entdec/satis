@@ -3,13 +3,14 @@
 module Satis
   class Configuration
     attr_accessor :submit_on_enter, :confirm_before_leave
-    attr_writer :default_help_text
+    attr_writer :default_help_text, :current_user
     attr_writer :logger
 
     def initialize
       @logger = Logger.new(STDOUT)
       @submit_on_enter = true
       @confirm_before_leave = false
+      @current_user = -> {}
 
       @default_help_text = lambda do |_template, _object, key, _additional_scope|
         scope = help_scope(template, object, additional_scope)
@@ -56,6 +57,12 @@ module Satis
       end
 
       actions.map { |action| help_scope(template, object, additional_scope, action: action) }
+    end
+
+    def current_user
+      raise 'current_user should be a Proc' unless @current_user.is_a? Proc
+
+      instance_exec(&@current_user)
     end
   end
 end
