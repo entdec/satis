@@ -261,7 +261,9 @@ export default class extends ApplicationController {
           this.hiddenInputTarget.setAttribute(attr.name, attr.value)
         }
       })
-      this.hiddenInputTarget.dispatchEvent(new CustomEvent("change", { detail: { src: "satis-dropdown" } }))
+      if (!this.hiddenInputTarget.getAttribute("data-reflex")) {
+        this.hiddenInputTarget.dispatchEvent(new CustomEvent("change", { detail: { src: "satis-dropdown" } }))
+      }
     }
   }
 
