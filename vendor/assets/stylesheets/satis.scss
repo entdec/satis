@@ -1,0 +1,62 @@
+@import "appearance_switcher_component";
+@import "breadcrumbs_component";
+@import "card_component";
+@import "date_time_picker_component";
+@import "dropdown_component";
+@import "flash_messages_component";
+@import "input_component";
+@import "map_component";
+@import "sidebar_menu_component";
+@import "sidebar_menu_item_component";
+@import "tabs_component";
+
+@import "style/table";
+@import "style/form";
+@import "style/diffy";
+@import "style/phone-number";
+
+// @import "~flag-icon-css/css/flag-icon";
+
+// Every link without a class or empty class should be underlined
+a:not([class]),
+a[class=""] {
+  @apply text-primary-600 underline;
+}
+
+.sts-grid {
+  @apply grid grid-cols-1 md:grid-cols-12 gap-4;
+}
+
+.mac {
+  .mac-only {
+    display: inline-block;
+  }
+  .pc-only {
+    display: none;
+  }
+}
+
+.pc {
+  .pc-only {
+    display: inline-block;
+  }
+  .mac-only {
+    display: none;
+  }
+}
+
+// For the draggable controller
+.draggable:hover {
+  cursor: pointer;
+}
+
+// @import "~trix/dist/trix";
+
+.trix-content {
+  ul {
+    list-style: square !important;
+  }
+  ol {
+    list-style: decimal !important;
+  }
+}
