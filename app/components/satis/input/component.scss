@@ -20,6 +20,14 @@
     &:focus {
       box-shadow: none;
     }
+
+    &.white {
+      background: rgb(255, 255, 255);
+
+      .dark & {
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
   }
 
   &__element {
@@ -27,6 +35,14 @@
 
     &.colored {
       background: rgba(1, 1, 1, 0.1);
+
+      .dark & {
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+
+    &.white {
+      background: rgb(255, 255, 255);
 
       .dark & {
         background: rgba(255, 255, 255, 0.1);
