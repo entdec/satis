@@ -8,18 +8,22 @@
     .border-b.border-gray-200
       nav.-mb-px.flex.space-x-8.overflow-x-auto aria-label="Tabs"
         - tabs.each do |tab|
-            a.tab id="#{tab.id}" href="#" aria-current="#{tab.selected? ? "page" : ''}" data-satis-tabs-target="tab" data-action="click->satis-tabs#select"
+            - id = tab.id.present? ? tab.id : tab.name
+            a.tab id="#{id}" href="#" aria-current="#{tab.selected? ? "page" : ''}" data-satis-tabs-target="tab" data-action="click->satis-tabs#select"
               - if tab.icon
                 i.mr-2 class=tab.icon
-              = ct(".#{tab.name}", scope: [group.to_sym], default: tab.name.to_s.humanize)
+              span id="rename_label_#{tab.id}"
+                = ct(".#{tab.name}", scope: [group.to_sym], default: tab.name.to_s.humanize)
               i.fal.fa-triangle-exclamation.ml-2.hidden
               - if tab.badge
                 span.badge
                   = tab.badge
+            - if action_table_view
+              = render(Satis::Menu::Component.new(view_menu(tab.id), icon: 'fa-regular fa-square-caret-down') )
         - if action_table_view
           = link_to('+ New View', '#', "data-reflex" => 'click->ActionTable::FilterReflex#create_view', 'data-reflex-serialize-form' => "true", "data-table" => params[:table],  'class'=>'no-underline new-view')
 
   div
     - tabs.each do |tab|
-      div id="#{tab.id}-content" class="tab-content #{tab.options[:padding] == false ? '' : 'mt-4'}" data-satis-tabs-target="content"
+      div id="#{tab.name}-content" class="tab-content #{tab.options[:padding] == false ? '' : 'mt-4'}" data-satis-tabs-target="content"
         = tab.to_s

@@ -17,7 +17,7 @@ module Satis
         kwargs[:scope] = @scope
         kwargs[:level] = @level
         @items << Item.new(*args, **kwargs, &block)
-        @event = @scope.include?(:filter_menu) ?  "click->satis-menu#show mouseleave->satis-menu#hide" : "mouseover->satis-menu#show mouseleave->satis-menu#hide"
+        @event = @scope.include?(:filter_menu) || @scope.include?(:view_menu) ?  "click->satis-menu#show mouseleave->satis-menu#hide" : "mouseover->satis-menu#show mouseleave->satis-menu#hide"
       end
     end
   end
