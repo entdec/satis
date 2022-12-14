@@ -66,6 +66,30 @@ export default class extends ApplicationController {
     return false
   }
 
+  update(event) {
+    let index = null
+    let currentTabIndex = null
+    if (event.srcElement.dataset.attr == 'new_view') {
+      index = this.tabTargets.length
+    }
+    else {
+      currentTabIndex = this.tabTargets.findIndex((el) => {
+        return el.classList.contains('selected')
+      })
+      index = currentTabIndex - 1
+    }
+
+    this.open(index)
+
+    if (this.keyValue) {
+      this.setUserData(this.keyValue, { tab_index: index }).then((data) => {
+      })
+    }
+
+    event.preventDefault()
+    return false
+  }
+
   open(index) {
     if (index == -1 || this.tabTargets[index] === undefined) {
       return

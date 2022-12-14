@@ -20,7 +20,7 @@ module Satis
           m.item :save_view, icon: 'fa-regular fa-floppy-disk', link: nil, link_attributes: { data: { reflex: 'click->ActionTable::FilterReflex#save_filters', 'reflex-serialize-form': "true", table: params[:table], view_id: view_id} }
           m.item :rename, icon: 'fa-light fa-pen', link: nil, link_attributes: { data: { reflex: "click->ActionTable::FilterReflex#change_label_to_text", 'reflex-serialize-form': "true", table: params[:table], view_id: view_id} }
           m.item :duplicate_view, icon: 'fa-regular fa-copy', link: nil, link_attributes: { data: { reflex: "click->ActionTable::FilterReflex#duplicate_view", 'reflex-serialize-form': "true", table: params[:table], view_id: view_id} }
-          m.item :delete_view, icon: 'fa-solid fa-trash-can', link: nil, link_attributes: { data: { reflex: 'click->ActionTable::FilterReflex#delete_view', 'reflex-serialize-form': "true", table: params[:table], view_id: view_id} }
+          m.item :delete_view, icon: 'fa-solid fa-trash-can', link: nil, link_attributes: { data: { reflex: 'click->ActionTable::FilterReflex#delete_view', action: "click->satis-tabs#update",'reflex-serialize-form': "true", table: params[:table], view_id: view_id} }
         end
       end
 
