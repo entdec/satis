@@ -21,7 +21,7 @@
             - if action_table_view
               = render(Satis::Menu::Component.new(view_menu(tab.id), icon: 'fa-regular fa-square-caret-down') )
         - if action_table_view
-          = link_to('+ New View', '#', "data-reflex" => 'click->ActionTable::FilterReflex#create_view', 'data-reflex-serialize-form' => "true", "data-table" => params[:table],  'class'=>'no-underline new-view')
+          = link_to('+ New View', '#', "data-reflex" => 'click->ActionTable::FilterReflex#create_view', 'data-action'=>"click->satis-tabs#update" , 'data-reflex-serialize-form' => "true", "data-table" => params[:table],  'data-attr'=>'new_view', 'class'=>'no-underline new-view')
 
   div
     - tabs.each do |tab|
