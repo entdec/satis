@@ -6,8 +6,8 @@ module Satis
       attr_reader :classes
 
       def initialize(classes: nil, colored: true)
-        @classes = classes || ''
-        @classes += ' colored' if colored
+        @classes = classes || ""
+        @classes += " colored" if colored
       end
     end
 
@@ -27,11 +27,11 @@ module Satis
       end
 
       def input_class
-        [@options.fetch(:input_html, {}).fetch(:class, ''), 'sts-input__input', form.has_error?(attribute) ? 'is-invalid' || ''].join(' ')
+        [@options.fetch(:input_html, {}).fetch(:class, ""), "sts-input__input", form.has_error?(attribute) ? "is-invalid" : ""].join(" ")
       end
 
       def input_container_class
-        form.has_error?(attribute) && 'is-invalid'
+        form.has_error?(attribute) && "is-invalid"
       end
     end
   end
