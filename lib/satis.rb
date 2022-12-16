@@ -33,6 +33,12 @@ module Satis
     def add_helper(name, component)
       Satis::Helpers::Container.add_helper(name, component)
     end
+
+    def add_component_helper(component_name, name, component)
+      klass = "Satis::#{component_name.to_s.classify}::Component".safe_constantize
+      return if klass.blank?
+      klass.add_helper name, component
+    end
   end
 
   # Include helpers

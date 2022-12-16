@@ -1,4 +1,4 @@
-div data-controller="satis-menu" data-action=menu.event
+div data-controller="satis-menu" data-action="#{menu.event}->satis-menu#show mouseleave->satis-menu#hide"
   - if content
     = content
   - else
