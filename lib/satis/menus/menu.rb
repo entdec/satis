@@ -9,7 +9,7 @@ module Satis
         @items = []
         @scope = Array.wrap(args.first)
         @level = kwargs[:level] || 0
-        @event = "mouseover->satis-menu#show mouseleave->satis-menu#hide"
+        @event = kwargs[:event] || 'mouseover'
         yield self if block_given?
       end
 
@@ -17,7 +17,6 @@ module Satis
         kwargs[:scope] = @scope
         kwargs[:level] = @level
         @items << Item.new(*args, **kwargs, &block)
-        @event = @scope.include?(:filter_menu) || @scope.include?(:view_menu) ?  "click->satis-menu#show mouseleave->satis-menu#hide" : "mouseover->satis-menu#show mouseleave->satis-menu#hide"
       end
     end
   end
