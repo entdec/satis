@@ -7,7 +7,7 @@ module Satis
       renders_many :tabs, Tab::Component
       renders_one :footer
 
-      attr_reader :icon, :title, :description, :menu, :content_padding, :header_background_color, :initial_actions, :key
+      attr_reader :icon, :title, :description, :menu, :content_padding, :header_background_color, :initial_actions, :key, :allow_new_view
 
       def initialize(icon: nil,
                      title: nil,
@@ -18,7 +18,8 @@ module Satis
                        dark: 'bg-gray-800', light: 'bg-white'
                      },
                      actions: [],
-                     key: nil)
+                     key: nil,
+                     allow_new_view: false)
         super
         @title = title
         @title = @title.reject(&:blank?).compact.join(' ') if @title.is_a?(Array)
@@ -29,6 +30,7 @@ module Satis
         @header_background_color = header_background_color
         @initial_actions = actions
         @key = key
+        @allow_new_view = allow_new_view
       end
 
       def tabs?
