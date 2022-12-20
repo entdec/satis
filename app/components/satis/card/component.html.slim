@@ -46,7 +46,7 @@
                   = tab.badge
             - if tab.tab_menu
               = render(Satis::Menu::Component.new(tab.tab_menu, icon: 'fa-regular fa-square-caret-down'))
-          - if allow_new_view
+          - if custom_views
             = link_to('+ New View', '#', "data-reflex" => 'click->ActionTable::FilterReflex#create_view', 'data-action'=>"click->satis-tabs#update" , 'data-reflex-serialize-form' => "true", "data-table" => "#{params[:table]}",  'data-attr'=>'new_view', 'class'=>'no-underline new-view')
 
     - tabs.each do |tab|
