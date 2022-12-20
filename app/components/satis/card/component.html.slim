@@ -47,7 +47,7 @@
             - if tab.tab_menu
               = render(Satis::Menu::Component.new(tab.tab_menu, icon: 'fa-regular fa-square-caret-down'))
           - if allow_new_view
-            = link_to('+ New View', '#', "data-reflex" => 'click->ActionTable::FilterReflex#create_view', 'data-action'=>"click->satis-tabs#update" , 'data-reflex-serialize-form' => "true", "data-table" => 'orders',  'data-attr'=>'new_view', 'class'=>'no-underline new-view')
+            = link_to('+ New View', '#', "data-reflex" => 'click->ActionTable::FilterReflex#create_view', 'data-action'=>"click->satis-tabs#update" , 'data-reflex-serialize-form' => "true", "data-table" => "#{params[:table]}",  'data-attr'=>'new_view', 'class'=>'no-underline new-view')
 
     - tabs.each do |tab|
       div id="#{tab.name}-content" class="tab-content #{tab.options[:padding] == true ? 'px-6 py-6' : ''}" data-satis-tabs-target="content"
