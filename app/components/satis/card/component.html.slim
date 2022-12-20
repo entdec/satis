@@ -45,9 +45,9 @@
                 span.badge id="tab_badge_#{tab.id}"
                   = tab.badge
             - if tab.tab_menu
-              = render(Satis::Menu::Component.new(tab.tab_menu, icon: 'fa-regular fa-square-caret-down'))
-          - if custom_views
-            = link_to('+ New View', '#', "data-reflex" => 'click->ActionTable::FilterReflex#create_view', 'data-action'=>"click->satis-tabs#update" , 'data-reflex-serialize-form' => "true", "data-table" => "#{params[:table]}",  'data-attr'=>'new_view', 'class'=>'no-underline new-view')
+              = render(Satis::Menu::Component.new(tab.tab_menu, icon: 'fa-thin fa-square-chevron-down'))
+          - if custom_tabs_link_html.present?
+            = custom_tabs_link_html
 
     - tabs.each do |tab|
       div id="#{tab.name}-content" class="tab-content #{tab.options[:padding] == true ? 'px-6 py-6' : ''}" data-satis-tabs-target="content"
