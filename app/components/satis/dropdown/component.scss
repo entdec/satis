@@ -5,6 +5,16 @@
   }
 
   input {
-    @apply dark:text-gray-300
+    @apply dark:text-gray-300;
+    
+  }
+  
+  .warning
+  {
+    @apply border-orange-500;
+    input {
+      @apply text-gray-400;
+      
+    }
   }
 }
