@@ -4,13 +4,13 @@ module Satis
   module Menu
     class Component < Satis::ApplicationComponent
       # renders_many :tabs, Tab::Component
-      attr_reader :menu, :icon, :selected_column
+      attr_reader :menu, :icon, :icon_id
 
-      def initialize(menu, icon: nil, selected_column: nil)
+      def initialize(menu, icon: nil, icon_id: nil)
         super
         @menu = menu
         @icon = icon || 'fa-solid fa-ellipsis-vertical'
-        @selected_column = selected_column
+        @icon_id = "filter_icon#{icon_id}"
       end
     end
   end
