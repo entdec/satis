@@ -10,7 +10,7 @@ module Satis
         super
         @menu = menu
         @icon = icon || 'fa-solid fa-ellipsis-vertical'
-        @icon_id = "filter_icon#{icon_id}"
+        @icon_id = icon_id
       end
     end
   end
