@@ -3,7 +3,7 @@ div data-controller="satis-menu" data-action="#{menu.event}->satis-menu#show mou
     = content
   - else
     button.inline-flex.items-center.justify-center.h-8.w-8.rounded-full.focus:outline-none.focus:ring-2.focus:ring-offset-2.focus:ring-primary-500.dark:text-gray-500 aria-expanded="false" aria-haspopup="true" type="button"
-      span.font-semibold.flex-1 id="filter_icon#{selected_column}" class="#{menu.items.present? ? '' : 'text-gray-200'}"
+      span.font-semibold.flex-1 id="#{icon_id}" class="#{menu.items.present? ? '' : 'text-gray-200'}"
         i class=icon
 
   - if menu.items.present?
