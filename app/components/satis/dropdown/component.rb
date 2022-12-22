@@ -27,8 +27,8 @@ module Satis
           options[:input_html].delete(:autofocus)
         end
 
-        actions = [options[:input_html]['data-action'], 'change->satis-dropdown#display',
-                   'focus->satis-dropdown#focus'].join(' ')
+        actions =  [options[:input_html]['data-action'], 'change->satis-dropdown#display',
+                   'focus->satis-dropdown#focus'].join(' ') unless options[:input_html]['data-reflex']
 
         options[:input_html].merge!('data-satis-dropdown-target' => 'hiddenInput',
                                     'data-action' => actions)

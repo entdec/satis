@@ -33,19 +33,27 @@
             option selected=tab.selected? = t(tab.name, scope: [:tabs])
       .hidden.sm:block
         nav.-mb-px.flex.space-x-8.overflow-x-auto aria-label="Tabs"
-          - tabs.each do |tab|
-              a.tab id="#{tab.name}" href="#" aria-current="#{tab.selected? ? "page" : ''}" data-satis-tabs-target="tab" data-action="click->satis-tabs#select"
+          - tabs.each_with_index do |tab, index|
+            - id = tab.id.present? ? tab.id : tab.name
+            .flex
+              a.tab id="#{id}" class="#{index == (tab.selected_tab_index) ? 'selected' : ''}" href="#" aria-current="#{tab.selected? ? "page" : ''}" data-satis-tabs-target="tab" data-action="click->satis-tabs#select"
                 - if tab.icon
                   i.mr-2 class=tab.icon
-                = t(tab.name, scope: [:tabs], default: tab.title || tab.name)
+                span id="tab_label_#{tab.id}"
+                  = t(tab.name, scope: [:tabs], default: tab.title || tab.name)
                 i.fal.fa-triangle-exclamation.ml-2.hidden
                 - if tab.badge
-                  span.badge
+                  span.badge id="tab_badge_#{tab.id}"
                     = tab.badge
+              - if tab.tab_menu
+                = render(Satis::Menu::Component.new(tab.tab_menu, icon: 'fa-thin fa-square-chevron-down'))
+          - if custom_tabs_link_html.present?
+            = custom_tabs_link_html
 
-    - tabs.each do |tab|
-      div id="#{tab.name}-content" class="tab-content #{tab.options[:padding] == true ? 'px-6 py-6' : ''}" data-satis-tabs-target="content"
+    - tabs.each_with_index do |tab, index|
+      div id="#{tab.name}-content" class="tab-content #{tab.options[:padding] == true ? 'px-6 py-6' : ''} #{index == (tab.selected_tab_index) ? 'selected' : ''}" data-satis-tabs-target="content"
         = tab.to_s
+
   - else
     div class="#{content_padding ? 'px-6 py-6' : ''}"
       = content
