@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "diffy"
   spec.add_dependency "rails", ">= 6"
   spec.add_dependency "view_component"
+  spec.add_dependency 'strong_migrations', '~> 1.4'
 
   spec.add_development_dependency "auxilium", "~> 3"
 end
