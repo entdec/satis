@@ -1,4 +1,4 @@
 module Satis
-  class ApplicationController < ::ApplicationController
+  class ApplicationController < Satis.config.base_controller.constantize
   end
 end
