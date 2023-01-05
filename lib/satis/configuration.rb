@@ -2,13 +2,12 @@
 
 module Satis
   class Configuration
-    attr_accessor :submit_on_enter, :confirm_before_leave, :base_controller
+    attr_accessor :submit_on_enter, :confirm_before_leave
     attr_writer :default_help_text, :current_user
     attr_writer :logger
 
     def initialize
       @logger = Logger.new(STDOUT)
-      @base_controller = '::ApplicationController'
       @submit_on_enter = true
       @confirm_before_leave = false
       @current_user = -> {}
