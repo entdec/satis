@@ -48,7 +48,7 @@ export default class extends ApplicationController {
     if (event.srcElement.tagName == "SELECT") {
       index = event.srcElement.selectedIndex
     } else {
-      let clickedTab = event.srcElement.closest("a")
+      let clickedTab = event.srcElement.closest(".tab")
       index = this.tabTargets.findIndex((el) => {
         return el.attributes["id"] === clickedTab.attributes["id"]
       })

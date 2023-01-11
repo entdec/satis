@@ -2,10 +2,10 @@ li.rounded-sm.px-3.py-1.hover:bg-gray-100.dark:hover:bg-gray-200.flex.items-cent
   a.cursor-pointer.py-1.w-full.text-left.flex.items-center.outline-none.focus:outline-none href=item.link *item.link_attributes
     - if item.type == :custom
       = render(partial: item.link_attributes[:data][:path], locals: item.link_attributes[:data][:parameters])
-    span.pr-1.flex-shrink-0.w-6
+    span.pr-1.flex-shrink-0.w-6.text-gray-500
       - if item.icon.present?
         i class=item.icon
-    span.pr-1.flex-1
+    span.pr-1.flex-1.text-gray-500
       - unless item.type == :custom
         = item.label
     span.pr-1.flex-shrink-0.w-6
