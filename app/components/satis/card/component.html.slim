@@ -39,7 +39,7 @@
               a
                 - if tab.icon
                   i.mr-2 class=tab.icon
-                span id="tab_label_#{tab.id}"
+                span id="tab_label_#{tab.id}" class="#{tab.dirty? ? 'italic' : ''}"
                   = t(tab.name, scope: [:tabs], default: tab.title || tab.name)
                 i.fal.fa-triangle-exclamation.ml-2.hidden
                 - if tab.badge

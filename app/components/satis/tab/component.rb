@@ -3,7 +3,7 @@
 module Satis
   module Tab
     class Component < Satis::ApplicationComponent
-      attr_reader :options, :name, :icon, :badge, :id, :tab_menu, :selected_tab_index
+      attr_reader :options, :name, :icon, :badge, :id, :tab_menu, :selected_tab_index, :dirty
 
       def initialize(name, *args, &block)
         super
@@ -16,6 +16,7 @@ module Satis
         @tab_menu = options[:tab_menu]
         @block = block
         @selected_tab_index = options[:selected_tab_index]
+        @dirty = options[:dirty]
       end
 
       def responsive?
@@ -24,6 +25,10 @@ module Satis
 
       def selected?
         options[:selected] == true
+      end
+
+      def dirty?
+        options[:dirty] == true
       end
 
       def title
