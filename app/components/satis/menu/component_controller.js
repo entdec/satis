@@ -35,6 +35,7 @@ export default class extends ApplicationController {
       this.submenuTarget.setAttribute("data-show", "")
       this.popperInstance.update()
     }
+    event.stopPropagation()
   }
 
   hide(event) {
@@ -42,6 +43,7 @@ export default class extends ApplicationController {
       this.submenuTarget.classList.add("hidden")
       this.submenuTarget.removeAttribute("data-show")
     }
+    event.stopPropagation()
   }
 
   toggle(event) {
