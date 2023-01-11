@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    satis (1.0.72)
+    satis (1.0.73)
       browser
       diffy
       rails (>= 6)
@@ -112,7 +112,6 @@ GEM
       crass (~> 1.0.2)
       nokogiri (>= 1.5.9)
     mail (2.8.0)
-    mail (2.8.0)
       mini_mime (>= 0.1.1)
       net-imap
       net-pop
@@ -127,7 +126,6 @@ GEM
       net-protocol
     net-pop (0.1.2)
       net-protocol
-    net-protocol (0.2.1)
     net-protocol (0.2.1)
       timeout
     net-smtp (0.3.3)
@@ -247,7 +245,7 @@ GEM
     standard (1.16.1)
       rubocop (= 1.35.1)
       rubocop-performance (= 1.14.3)
-    strong_migrations (1.4.0)
+    strong_migrations (1.4.1)
       activerecord (>= 5.2)
     syntax_tree (4.0.2)
       prettier_print (>= 1.0.2)
@@ -258,7 +256,7 @@ GEM
     tzinfo (2.0.5)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.3.0)
-    view_component (2.80.0)
+    view_component (2.81.0)
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
