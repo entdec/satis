@@ -1,41 +1,33 @@
-div.satis-input-array data-controller="satis-input-array" data-satis-input-array-input-name-value="#{options[:sub_attribute].present? ? "#{form.object_name}[#{attribute.to_s}][][#{options[:sub_attribute]}]" : "#{form.object_name}[#{attribute.to_s}][]"}"
-    / loops incorrect number of time, some unknown issue
-    / - options[:collection].each do |field|
-    /     = form.fields_for "#{attribute.to_s}[]", field do | attr_form |
-    /         = attr_form.text_field options[:sub_attribute], class: 'form-control mt-1'
-
-
-    / works correctly for array of objects
-    / - options[:collection].each do |field|
-    /     = fields_for "#{form.object_name}[#{attribute.to_s}][]", field do | attr_form |
-    /         = attr_form.text_field options[:sub_attribute], class: 'form-control mt-1'
-
+div.satis-input-array data-controller="satis-input-array" data-satis-input-array-input-name-value="#{options[:value_method].present? ? "#{form.object_name}[#{attribute.to_s}][][#{options[:value_method]}]" : "#{form.object_name}[#{attribute.to_s}][]"}"
     template data-satis-input-array-target="rowTemplate"
         .flex data-satis-input-array-target="inputRow"
             div.flex-auto
                 = text_field_tag  nil, nil, class: 'form-control mt-1', data: { action: "input->satis-input-array#input" }
             div.flex-none.shrink-0
-                button.w-10.h-full.items-center data-action="click->satis-input-array#removeRow"
+                button.w-10.h-full.items-center.hidden.crossButton data-action="click->satis-input-array#removeRow"
                     i.fas.fa-xmark
+                button.w-10.h-full.items-center.plusButton data-action="click->satis-input-array#addRow"
+                            i.fas.fa-plus
 
     div data-satis-input-array-target="rowsContainer"
-        - if options[:sub_attribute].present? 
-            - options[:collection].each do |field|
+        - if options[:value_method].present? 
+            - options[:collection]&.each do |field|
                 .flex data-satis-input-array-target="inputRow"
                     div.flex-auto
                         = fields_for "#{form.object_name}[#{attribute.to_s}][]", field do | attr_form |
-                            = attr_form.text_field options[:sub_attribute], class: 'form-control mt-1', data: { action: "input->satis-input-array#input" }
+                            = attr_form.text_field options[:value_method], class: 'form-control mt-1', data: { action: "input->satis-input-array#input" }
                     div.flex-none.shrink-0
-                        button.w-10.h-full.items-center data-action="click->satis-input-array#removeRow"
+                        button.w-10.h-full.items-center.crossButton data-action="click->satis-input-array#removeRow"
                             i.fas.fa-xmark
+                        button.w-10.h-full.items-center.plusButton data-action="click->satis-input-array#addRow"
+                            i.fas.fa-plus
         - else
-            - options[:collection].each do |field|
+            - options[:collection]&.each do |field|
                 .flex data-satis-input-array-target="inputRow"
                     div.flex-auto
                         = text_field_tag  "#{form.object_name}[#{attribute.to_s}][]", field, class: 'form-control mt-1'
                     div.flex-none.shrink-0
-                        button.w-10.h-full.items-center data-action="click->satis-input-array#removeRow"
+                        button.w-10.h-full.items-center.crossButton data-action="click->satis-input-array#removeRow"
                             i.fas.fa-xmark
-    div.mt-3
-        button.button.secondary data-action="click->satis-input-array#addRow"
-            | Add Row
+                        button.w-10.h-full.items-center.plusButton data-action="click->satis-input-array#addRow"
+                            i.fas.fa-plus            

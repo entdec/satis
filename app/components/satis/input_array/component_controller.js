@@ -1,11 +1,13 @@
 import ApplicationController from "../../../../frontend/controllers/application_controller"
 
 export default class extends ApplicationController {
-  static targets = ["rowsContainer", "inputRow", "rowTemplate"]
+  static targets = ["rowsContainer", "inputRow", "rowTemplate", "crossButton", "plusButton"]
   static values = { inputName: String }
 
   connect() {
     super.connect()
+
+    this.updateAddRemoveButtons()
   }
 
   disconnect() {}
@@ -13,6 +15,8 @@ export default class extends ApplicationController {
   removeRow(event) {
     event.preventDefault()
     event.currentTarget.parentElement.parentElement.remove()
+
+    this.updateAddRemoveButtons()
   }
 
   addRow(event) {
@@ -23,6 +27,8 @@ export default class extends ApplicationController {
     inputControl.setAttribute("name", this.inputNameValue)
 
     this.rowsContainerTarget.appendChild(rowTemplate)
+
+    this.updateAddRemoveButtons()
   }
 
   input(event) {
@@ -32,5 +38,17 @@ export default class extends ApplicationController {
     ) {
       this.addRow(event)
     }
+  }
+
+  updateAddRemoveButtons() {
+    this.inputRowTargets.forEach((inputRow, i) => {
+      if (i + 1 == this.inputRowTargets.length) {
+        inputRow.querySelector(".crossButton").classList.add("hidden")
+        inputRow.querySelector(".plusButton").classList.remove("hidden")
+      } else {
+        inputRow.querySelector(".crossButton").classList.remove("hidden")
+        inputRow.querySelector(".plusButton").classList.add("hidden")
+      }
+    })
   }
 }
