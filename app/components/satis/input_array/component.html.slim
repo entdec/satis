@@ -4,9 +4,9 @@ div.satis-input-array data-controller="satis-input-array" data-satis-input-array
             div.flex-auto
                 = text_field_tag  nil, nil, class: 'form-control mt-1', data: { action: "input->satis-input-array#input" }
             div.flex-none.shrink-0
-                button.w-10.h-full.items-center.hidden.crossButton data-action="click->satis-input-array#removeRow"
+                button.w-10.h-full.items-center.hidden.crossButton data-action="click->satis-input-array#removeRow" tabindex="-1"
                     i.fas.fa-xmark
-                button.w-10.h-full.items-center.plusButton data-action="click->satis-input-array#addRow"
+                button.w-10.h-full.items-center.plusButton data-action="click->satis-input-array#addRow" tabindex="-1"
                             i.fas.fa-plus
 
     div data-satis-input-array-target="rowsContainer"
@@ -17,9 +17,9 @@ div.satis-input-array data-controller="satis-input-array" data-satis-input-array
                         = fields_for "#{form.object_name}[#{attribute.to_s}][]", field do | attr_form |
                             = attr_form.text_field options[:value_method], class: 'form-control mt-1', data: { action: "input->satis-input-array#input" }
                     div.flex-none.shrink-0
-                        button.w-10.h-full.items-center.crossButton data-action="click->satis-input-array#removeRow"
+                        button.w-10.h-full.items-center.crossButton data-action="click->satis-input-array#removeRow" tabindex="-1"
                             i.fas.fa-xmark
-                        button.w-10.h-full.items-center.plusButton data-action="click->satis-input-array#addRow"
+                        button.w-10.h-full.items-center.plusButton data-action="click->satis-input-array#addRow" tabindex="-1"
                             i.fas.fa-plus
         - else
             - options[:collection]&.each do |field|
@@ -27,7 +27,7 @@ div.satis-input-array data-controller="satis-input-array" data-satis-input-array
                     div.flex-auto
                         = text_field_tag  "#{form.object_name}[#{attribute.to_s}][]", field, class: 'form-control mt-1'
                     div.flex-none.shrink-0
-                        button.w-10.h-full.items-center.crossButton data-action="click->satis-input-array#removeRow"
+                        button.w-10.h-full.items-center.crossButton data-action="click->satis-input-array#removeRow" tabindex="-1"
                             i.fas.fa-xmark
-                        button.w-10.h-full.items-center.plusButton data-action="click->satis-input-array#addRow"
+                        button.w-10.h-full.items-center.plusButton data-action="click->satis-input-array#addRow" tabindex="-1"
                             i.fas.fa-plus            
