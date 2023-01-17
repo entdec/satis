@@ -3,21 +3,7 @@ import { createPopper } from "@popperjs/core"
 import { debounce } from "../../../../frontend/utils"
 
 export default class extends ApplicationController {
-  static targets = [
-    "input",
-    "hiddenInput",
-    "clearButton",
-    "hours",
-    "minutes",
-    "month",
-    "year",
-    "days",
-    "weekDays",
-    "calendarView",
-    "weekDayTemplate",
-    "emtpyTemplate",
-    "dayTemplate",
-  ]
+  static targets = ["input", "hiddenInput", "clearButton", "hours", "minutes", "month", "year", "days", "weekDays", "calendarView", "weekDayTemplate", "emtpyTemplate", "dayTemplate"]
   static values = {
     locale: String, // Which locale should be used, if nothing entered, browser locale is used
     weekStart: Number, // On which day do we start the week, sunday - saturday : 0 - 6
@@ -55,16 +41,7 @@ export default class extends ApplicationController {
     }
 
     if (this.selectedValue.length == 0) {
-      this.selectedValue.push(
-        new Date(
-          startDate.getFullYear(),
-          startDate.getMonth(),
-          startDate.getDate(),
-          startDate.getHours(),
-          startDate.getMinutes(),
-          0
-        )
-      )
+      this.selectedValue.push(new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), startDate.getHours(), startDate.getMinutes(), 0))
     }
 
     this.displayValue = new Date(this.selectedValue[0].getFullYear(), this.selectedValue[0].getMonth(), 1)
@@ -79,7 +56,7 @@ export default class extends ApplicationController {
             name: "flip",
             enabled: true,
             options: {
-              boundary: this.element.closest(".satis-card"),
+              boundary: this.element.closest(".sts-card"),
             },
           },
           {
@@ -246,17 +223,13 @@ export default class extends ApplicationController {
       if (this.currentSelectNr == 1) {
         this.selectedValue = []
       }
-      this.selectedValue[this.currentSelectNr - 1] = new Date(
-        new Date(this.displayValue).setDate(+event.target.innerText)
-      )
+      this.selectedValue[this.currentSelectNr - 1] = new Date(new Date(this.displayValue).setDate(+event.target.innerText))
       this.currentSelectNr += 1
       if (this.currentSelectNr > 2) {
         this.currentSelectNr = 1
       }
     } else if (this.multipleValue) {
-      this.selectedValue[this.currentSelectNr - 1] = new Date(
-        new Date(this.displayValue).setDate(+event.target.innerText)
-      )
+      this.selectedValue[this.currentSelectNr - 1] = new Date(new Date(this.displayValue).setDate(+event.target.innerText))
       this.currentSelectNr += 1
     }
 
@@ -323,10 +296,7 @@ export default class extends ApplicationController {
 
     this.weekDaysTarget.innerHTML = ""
     this.getWeekDays(this.localeValue).forEach((dayName) => {
-      this.weekDaysTarget.insertAdjacentHTML(
-        "beforeend",
-        this.weekDayTemplateTarget.innerHTML.replace(/\${name}/g, dayName)
-      )
+      this.weekDaysTarget.insertAdjacentHTML("beforeend", this.weekDayTemplateTarget.innerHTML.replace(/\${name}/g, dayName))
     })
 
     // Deal with AM/PM
@@ -424,19 +394,11 @@ export default class extends ApplicationController {
   // Is date today?
   isToday(date) {
     const today = new Date()
-    return (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear()
-    )
+    return date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear()
   }
 
   isDate(today, date) {
-    return (
-      date.getDate() === today.getDate() &&
-      date.getMonth() === today.getMonth() &&
-      date.getFullYear() === today.getFullYear()
-    )
+    return date.getDate() === today.getDate() && date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear()
   }
 
   // Is date the currently selected value
@@ -445,11 +407,7 @@ export default class extends ApplicationController {
       return date >= this.selectedValue[0] && date <= this.selectedValue[1]
     } else {
       return this.selectedValue.some((selDate) => {
-        return (
-          date.getDate() === selDate.getDate() &&
-          date.getMonth() === selDate.getMonth() &&
-          date.getFullYear() === selDate.getFullYear()
-        )
+        return date.getDate() === selDate.getDate() && date.getMonth() === selDate.getMonth() && date.getFullYear() === selDate.getFullYear()
       })
     }
   }
@@ -484,9 +442,7 @@ export default class extends ApplicationController {
       monthStart += 7
     }
 
-    let monthEnd = new Date(
-      new Date(new Date(this.displayValue).setMonth(this.displayValue.getMonth() + 1)).setDate(0)
-    ).getDate()
+    let monthEnd = new Date(new Date(new Date(this.displayValue).setMonth(this.displayValue.getMonth() + 1)).setDate(0)).getDate()
 
     for (let index = 0; index < monthStart; index++) {
       results.push(" ")
