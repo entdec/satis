@@ -45,7 +45,7 @@ export default class extends ApplicationController {
           name: "flip",
           enabled: true,
           options: {
-            boundary: this.element.closest(".satis-card"),
+            boundary: this.element.closest(".sts-card"),
           },
         },
         {
@@ -271,11 +271,7 @@ export default class extends ApplicationController {
       this.searchInputTarget.value = currentItem.getAttribute("data-satis-dropdown-item-text")
 
       Array.prototype.slice.call(currentItem.attributes).forEach((attr) => {
-        if (
-          attr.name.startsWith("data") &&
-          !attr.name.startsWith("data-satis") &&
-          !attr.name.startsWith("data-action")
-        ) {
+        if (attr.name.startsWith("data") && !attr.name.startsWith("data-satis") && !attr.name.startsWith("data-action")) {
           this.hiddenInputTarget.setAttribute(attr.name, attr.value)
         }
       })
@@ -382,10 +378,7 @@ export default class extends ApplicationController {
       this.hiddenInputTarget.value = this.lastSearch
     }
 
-    if (
-      matches.length == 1 &&
-      matches[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.lastSearch.toLowerCase()) >= 0
-    ) {
+    if (matches.length == 1 && matches[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.lastSearch.toLowerCase()) >= 0) {
       this.selectItem(matches[0].closest('[data-satis-dropdown-target="item"]'))
     } else if (matches.length > 1) {
       this.showResultsList(event)
@@ -395,11 +388,7 @@ export default class extends ApplicationController {
   // Remote search
   fetchResults(event) {
     const promise = new Promise((resolve, reject) => {
-      if (
-        (this.searchInputTarget.value == this.lastSearch &&
-          (this.currentPage == this.lastPage || this.currentPage == this.endPage)) ||
-        !this.hasUrlValue
-      ) {
+      if ((this.searchInputTarget.value == this.lastSearch && (this.currentPage == this.lastPage || this.currentPage == this.endPage)) || !this.hasUrlValue) {
         return
       }
 
@@ -428,13 +417,7 @@ export default class extends ApplicationController {
           this.highLightSelected()
           this.showResultsList()
 
-          if (
-            this.nrOfItems == 1 &&
-            this.itemTargets[0]
-              .getAttribute("data-satis-dropdown-item-text")
-              .toLowerCase()
-              .indexOf(this.searchInputTarget.value.toLowerCase()) >= 0
-          ) {
+          if (this.nrOfItems == 1 && this.itemTargets[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.searchInputTarget.value.toLowerCase()) >= 0) {
             this.selectItem(this.itemTargets[0].closest('[data-satis-dropdown-target="item"]'))
           } else if (this.nrOfItems == 1) {
             this.moveDown()

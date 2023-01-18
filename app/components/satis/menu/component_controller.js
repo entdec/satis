@@ -18,7 +18,7 @@ export default class extends ApplicationController {
             name: "flip",
             enabled: true,
             options: {
-              boundary: this.element.closest(".satis-card"),
+              boundary: this.element.closest(".sts-card"),
             },
           },
           {
