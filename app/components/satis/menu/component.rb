@@ -9,7 +9,7 @@ module Satis
       def initialize(menu, icon: nil, icon_id: nil)
         super
         @menu = menu
-        @icon = icon || 'fa-solid fa-ellipsis-vertical'
+        @icon = icon || "fa-solid fa-ellipsis"
         @icon_id = icon_id
       end
     end
