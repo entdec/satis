@@ -84,10 +84,8 @@ export default class extends ApplicationController {
     setTimeout(() => {
       let turboFrame = this.contentTargets[index].querySelector("turbo-frame")
       if (turboFrame && turboFrame.ariaBusy != "true") {
-        console.log(turboFrame)
         let loading = turboFrame.getAttribute("loading")
         turboFrame.setAttribute("loading", "eager")
-        // turboFrame.focus()
         turboFrame.reload()
         turboFrame.setAttribute("loading", loading)
       }
