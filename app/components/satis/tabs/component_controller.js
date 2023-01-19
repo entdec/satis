@@ -67,6 +67,7 @@ export default class extends ApplicationController {
   }
 
   open(index) {
+    const self = this
     if (index == -1 || this.tabTargets[index] === undefined) {
       return
     }
@@ -80,8 +81,17 @@ export default class extends ApplicationController {
       target.classList.remove("selected")
     })
     this.contentTargets[index].classList.add("selected")
+    setTimeout(() => {
+      let turboFrame = this.contentTargets[index].querySelector("turbo-frame")
+      if (turboFrame && turboFrame.ariaBusy != "true") {
+        console.log(turboFrame)
+        let loading = turboFrame.getAttribute("loading")
+        turboFrame.setAttribute("loading", "eager")
+        // turboFrame.focus()
+        turboFrame.reload()
+        turboFrame.setAttribute("loading", loading)
+      }
+    }, 100)
     this.selectTarget.selectedIndex = index
   }
-
-  disconnect() {}
 }

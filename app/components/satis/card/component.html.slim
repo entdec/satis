@@ -35,7 +35,7 @@
         nav.-mb-px.flex.space-x-4.overflow-x-auto aria-label="Tabs"
           - tabs.each_with_index do |tab, index|
             - id = tab.id.present? ? tab.id : tab.name
-            .flex.tab class="#{index == (tab.selected_tab_index) ? 'selected' : ''}" data-satis-tabs-target="tab" data-action="click->satis-tabs#select" id="#{id}" href="#" aria-current="#{tab.selected? ? "page" : ''}"
+            .flex.tab class="#{index == (tab.selected_tab_index) ? 'selected' : ''}" data-satis-tabs-target="tab" data-action="click->satis-tabs#select" id=id href="#" aria-current="#{tab.selected? ? "page" : ''}"
               a.relative
                 - if tab.icon
                   i.mr-2 class=tab.icon
@@ -54,7 +54,8 @@
             = custom_tabs_link_html
 
     - tabs.each_with_index do |tab, index|
-      div id="#{tab.name}-content" class="tab-content #{tab.options[:padding] == true ? 'px-6 py-6' : ''} #{index == (tab.selected_tab_index) ? 'selected' : ''}" data-satis-tabs-target="content"
+      - id = "#{tab.id.present? ? tab.id : tab.name}-content"
+      div id=id class="tab-content #{tab.options[:padding] == true ? 'px-6 py-6' : ''} #{index == (tab.selected_tab_index) ? 'selected' : ''}" data-satis-tabs-target="content"
         = tab.to_s
 
   - else
