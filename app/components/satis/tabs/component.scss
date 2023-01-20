@@ -24,9 +24,15 @@
       a {
         @apply text-primary-600;
       }
+
+      .sts-menu {
+        @apply block;
+      }
     }
 
     .sts-menu {
+      @apply hidden;
+
       &__button {
         @apply h-0 w-0 pl-4;
       }
