@@ -19,6 +19,7 @@ end
 gem "pry"
 
 gem "sidekiq"
+gem "strong_migrations"
 
 group :development, :test do
   gem "solargraph", require: false
