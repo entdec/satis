@@ -29,6 +29,12 @@ module Satis
         send(input_type_for(method, options), method, options, &block)
       end
 
+      def input_array(method, options = {}, &block)
+        @form_options = options
+
+        input_array(method, options, &block)
+      end
+
       # A codemirror editor, backed by a text-area
       def editor(method, options = {}, &block)
         @form_options = options
@@ -270,6 +276,15 @@ module Satis
                       merge_input_options({ class: "form-control #{if has_error?(method)
                                                                      'is-invalid'
                                                                    end}" }, options[:input_html]))
+          ]
+        end
+      end
+
+      def input_array(method, options = {})
+        form_group(method, options) do
+          safe_join [
+            (custom_label(method, options[:label], options) unless options[:label] == false),
+            render(Satis::InputArray::Component.new(form: self, attribute: method, **options))
           ]
         end
       end
