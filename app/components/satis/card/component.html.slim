@@ -39,9 +39,9 @@
               a.relative
                 - if tab.icon
                   i.mr-2 class=tab.icon
-                  span.flex.absolute.h-3.w-3.top-0.left-0.mt-0.5.ml-2 id="tab_changed_#{tab.id}"
+                  span.flex.absolute.h-2.w-2.top-0.left-0 id="tab_changed_#{tab.id}" class="mt-0.5 ml-2.5"
                     - if tab.dirty?
-                      span.relative.inline-flex.rounded-full.h-3.w-3.bg-blue-500
+                      span.relative.inline-flex.rounded-full.h-2.w-2.bg-blue-500
                 span id="tab_label_#{tab.id}"
                   = t(tab.name, scope: [:tabs], default: tab.title || tab.name)
                 i.fal.fa-triangle-exclamation.ml-2.hidden
