@@ -49,7 +49,8 @@
                   span.badge id="tab_badge_#{tab.id}"
                     = tab.badge
                 - if tab.tab_menu
-                  = render(Satis::Menu::Component.new(tab.tab_menu, icon: 'fa-thin fa-chevron-down'))
+                  div id="menu_update_#{tab.id}"
+                    = render(Satis::Menu::Component.new(tab.tab_menu, icon: 'fa-thin fa-chevron-down'))
           - if custom_tabs_link_html.present?
             = custom_tabs_link_html
 
