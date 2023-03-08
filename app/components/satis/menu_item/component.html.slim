@@ -13,7 +13,7 @@ li.rounded-sm.px-3.py-1.hover:bg-gray-100.dark:hover:bg-gray-200.flex.items-cent
         i.fal.fa-check.hidden data-satis-menu-target="toggle" id="#{item.id}"
 
   - if item.menu
-    ul.hidden.bg-white.border.rounded-md.shadow-lg data-satis-menu-target="submenu" data-satis-menu-submenu-placement="left"
+    ul.hidden.bg-white.border.rounded-md.shadow-lg data-satis-menu-target="submenu" data-satis-menu-submenu-placement="auto"
       - item.menu.items.each do |sub_item|
         = render(Satis::MenuItem::Component.new(item: sub_item))
 
