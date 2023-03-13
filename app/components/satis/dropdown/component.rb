@@ -23,15 +23,17 @@ module Satis
 
         options[:input_html][:autofocus] ||= false
         if options[:input_html][:autofocus]
-          options[:autofocus] = 'autofocus'
+          options[:autofocus] = "autofocus"
           options[:input_html].delete(:autofocus)
         end
 
-        actions =  [options[:input_html]['data-action'], 'change->satis-dropdown#display',
-                   'focus->satis-dropdown#focus'].join(' ') unless options[:input_html]['data-reflex']
+        unless options[:input_html]["data-reflex"]
+          actions = [options[:input_html]["data-action"], "change->satis-dropdown#display",
+            "focus->satis-dropdown#focus"].join(" ")
+        end
 
-        options[:input_html].merge!('data-satis-dropdown-target' => 'hiddenInput',
-                                    'data-action' => actions)
+        options[:input_html].merge!("data-satis-dropdown-target" => "hiddenSelect",
+          "data-action" => actions)
 
         @block = block
         @page_size = options[:page_size] || 10

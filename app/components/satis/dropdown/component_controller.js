@@ -5,7 +5,18 @@ import { debounce, popperSameWidth } from "../../../../frontend/utils"
 import { createPopper } from "@popperjs/core"
 
 export default class extends ApplicationController {
-  static targets = ["results", "items", "item", "searchInput", "resetButton", "toggleButton", "hiddenInput"]
+  static targets = [
+    "results",
+    "items",
+    "item",
+    "searchInput",
+    "resetButton",
+    "toggleButton",
+    "hiddenSelect",
+    "pills",
+    "pillTemplate",
+    "pill",
+  ]
   static values = {
     chainTo: String,
     freeText: Boolean,
@@ -13,6 +24,7 @@ export default class extends ApplicationController {
     pageSize: Number,
     url: String,
     urlParams: Object,
+    isMultiple: Boolean,
   }
 
   connect() {
@@ -24,7 +36,6 @@ export default class extends ApplicationController {
 
     this.boundClickedOutside = this.clickedOutside.bind(this)
     this.boundResetSearchInput = this.resetSearchInput.bind(this)
-    this.boundHandleHiddenInputChange = this.handleHiddenInputChange.bind(this)
     this.boundBlur = this.handleBlur.bind(this)
 
     // To remember what the current page and last page were, we queried
@@ -61,8 +72,6 @@ export default class extends ApplicationController {
     this.resultsTarget.addEventListener("blur", this.boundBlur)
 
     window.addEventListener("click", this.boundClickedOutside)
-
-    this.hiddenInputTarget.addEventListener("change", this.boundHandleHiddenInputChange)
   }
 
   disconnect() {
@@ -88,18 +97,6 @@ export default class extends ApplicationController {
     }
   }
 
-  handleHiddenInputChange(event) {
-    if (event?.detail?.src == "satis-dropdown") {
-      return
-    }
-
-    if (this.hiddenInputTarget.value == "") {
-      this.searchInputTarget.value = null
-    } else {
-      this.resetSearchInput()
-    }
-  }
-
   // Called on connect
   // FIXME: Has code duplication with select
   display(event) {
@@ -108,24 +105,31 @@ export default class extends ApplicationController {
       return
     }
 
-    // Put current selection in search field
-    if (this.hiddenInputTarget.value) {
+    // Put current selection in search field and add pills
+    if (this.hiddenSelectTarget.options.length > 0) {
       if (this.itemTargets.length == 0) {
         let ourUrl = this.normalizedUrl
-        ourUrl.searchParams.append("id", this.hiddenInputTarget.value)
+        ourUrl.searchParams.append(
+          "id",
+          Array.from(this.hiddenSelectTarget.options)
+            .map((opt) => opt.value)
+            .join("|")
+        )
         ourUrl.searchParams.append("page", this.currentPage)
         ourUrl.searchParams.append("page_size", this.pageSizeValue)
 
         this.fetchResultsWith(ourUrl).then(() => {
-          this.setHiddenInput()
+          this.setHiddenSelect()
         })
       } else {
-        this.setHiddenInput()
+        this.setHiddenSelect()
       }
+    } else {
+      this.pillsTarget.innerHTML = ""
+    }
 
-      if (!this.searchInputTarget.value && this.freeTextValue) {
-        this.searchInputTarget.value = this.hiddenInputTarget.value
-      }
+    if (!this.searchInputTarget.value && this.freeTextValue) {
+      this.searchInputTarget.value = this.hiddenSelectTarget.options[0].value
     }
   }
 
@@ -194,8 +198,8 @@ export default class extends ApplicationController {
 
   // User presses reset button
   reset(event) {
-    this.hiddenInputTarget.value = null
-    this.hiddenInputTarget.dispatchEvent(new Event("change"))
+    this.hiddenSelectTarget.innerHTML = ""
+    this.hiddenSelectTarget.dispatchEvent(new Event("change"))
     this.searchInputTarget.value = null
     this.lastSearch = null
     this.lastPage = null
@@ -246,15 +250,31 @@ export default class extends ApplicationController {
     // Copy over data attributes on the item div to the hidden input
     Array.prototype.slice.call(dataDiv.attributes).forEach((attr) => {
       if (attr.name.startsWith("data") && !attr.name.startsWith("data-satis") && !attr.name.startsWith("data-action")) {
-        this.hiddenInputTarget.setAttribute(attr.name, attr.value)
+        this.hiddenSelectTarget.setAttribute(attr.name, attr.value)
       }
     })
 
-    this.searchInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-text")
-    this.hiddenInputTarget.value = dataDiv.getAttribute("data-satis-dropdown-item-value")
+    const selectedValue = dataDiv.getAttribute("data-satis-dropdown-item-value")
+    var option = document.createElement("option")
+    option.text = selectedValue
+    option.value = selectedValue
+    option.setAttribute("selected", true)
+
+    if (!this.isMultipleValue) {
+      this.hiddenSelectTarget.innerHTML = ""
+    }
+
+    if (
+      !Array.from(this.hiddenSelectTarget.options)
+        .map((opt) => opt.value)
+        .includes(option.value)
+    ) {
+      this.hiddenSelectTarget.add(option)
+    }
+
     this.lastSearch = this.searchInputTarget.value
 
-    this.hiddenInputTarget.dispatchEvent(new Event("change"))
+    this.hiddenSelectTarget.dispatchEvent(new Event("change"))
 
     if (this.searchInputTarget.closest(".bg-white").classList.contains("warning")) {
       this.searchInputTarget.closest(".bg-white").classList.remove("warning")
@@ -263,22 +283,69 @@ export default class extends ApplicationController {
 
   // --- Helpers
 
-  setHiddenInput() {
-    const currentItem = this.itemTargets.find((item) => {
-      return this.hiddenInputTarget.value == item.getAttribute("data-satis-dropdown-item-value")
+  setHiddenSelect() {
+    const currentItems = this.itemTargets.filter((item) => {
+      return Array.from(this.hiddenSelectTarget.options)
+        .map((opt) => opt.value)
+        .includes(item.getAttribute("data-satis-dropdown-item-value"))
     })
-    if (currentItem) {
-      this.searchInputTarget.value = currentItem.getAttribute("data-satis-dropdown-item-text")
 
-      Array.prototype.slice.call(currentItem.attributes).forEach((attr) => {
-        if (attr.name.startsWith("data") && !attr.name.startsWith("data-satis") && !attr.name.startsWith("data-action")) {
-          this.hiddenInputTarget.setAttribute(attr.name, attr.value)
+    if (currentItems.length > 0) {
+      if (this.isMultipleValue) {
+        this.searchInputTarget.value = ""
+        // this.pillsTarget.innerHTML = ""
+        this.pillsTarget.classList.remove("hidden")
+      } else {
+        this.searchInputTarget.value = currentItems[0].getAttribute("data-satis-dropdown-item-text")
+      }
+
+      currentItems.forEach((currentItem) => {
+        if (this.isMultipleValue) {
+          const itemValue = currentItem.getAttribute("data-satis-dropdown-item-value")
+          if (
+            !this.pillTargets
+              .map((pill) => pill.querySelector("button"))
+              .some((button) => button.getAttribute("data-satis-dropdown-id-param") == itemValue)
+          ) {
+            const pillTemplate = this.pillTemplateTarget.content.firstElementChild.cloneNode(true)
+            pillTemplate.prepend(currentItem.getAttribute("data-satis-dropdown-item-text"))
+            pillTemplate
+              .querySelector("button")
+              .setAttribute("data-satis-dropdown-id-param", currentItem.getAttribute("data-satis-dropdown-item-value"))
+            this.pillsTarget.appendChild(pillTemplate)
+          }
         }
+
+        Array.prototype.slice.call(currentItem.attributes).forEach((attr) => {
+          if (
+            attr.name.startsWith("data") &&
+            !attr.name.startsWith("data-satis") &&
+            !attr.name.startsWith("data-action")
+          ) {
+            this.hiddenSelectTarget.setAttribute(attr.name, attr.value)
+          }
+        })
       })
-      if (!this.hiddenInputTarget.getAttribute("data-reflex")) {
-        this.hiddenInputTarget.dispatchEvent(new CustomEvent("change", { detail: { src: "satis-dropdown" } }))
+
+      if (!this.hiddenSelectTarget.getAttribute("data-reflex")) {
+        this.hiddenSelectTarget.dispatchEvent(new CustomEvent("change", { detail: { src: "satis-dropdown" } }))
+      }
+    } else {
+      if (this.hi.options.length == 0) {
+        this.pillsTarget.classList.add("hidden")
       }
     }
+  }
+
+  removePill(event) {
+    event.preventDefault()
+
+    this.hiddenSelectTarget.removeChild(this.hiddenSelectTarget.querySelector(`option[value="${event.params.id}"]`))
+    this.pillTargets
+      .find((pill) => pill.querySelector("button").getAttribute("data-satis-dropdown-id-param") == event.params.id)
+      ?.remove()
+
+    //this.hiddenSelectTarget.dispatchEvent(new Event("change"))
   }
 
   toggleResultsList(event) {
@@ -321,7 +388,7 @@ export default class extends ApplicationController {
     }
 
     let chainToValue
-    let chainTo = this.hiddenInputTarget.form.querySelector(`[name="${this.chainToValue}"]`)
+    let chainTo = this.hiddenSelectTarget.form.querySelector(`[name="${this.chainToValue}"]`)
     if (chainTo) {
       chainToValue = chainTo.value
     }
@@ -374,11 +441,10 @@ export default class extends ApplicationController {
       }
     })
 
-    if (this.freeTextValue && matches.length != 1) {
-      this.hiddenInputTarget.value = this.lastSearch
-    }
-
-    if (matches.length == 1 && matches[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.lastSearch.toLowerCase()) >= 0) {
+    if (
+      matches.length == 1 &&
+      matches[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.lastSearch.toLowerCase()) >= 0
+    ) {
       this.selectItem(matches[0].closest('[data-satis-dropdown-target="item"]'))
     } else if (matches.length > 1) {
       this.showResultsList(event)
@@ -388,7 +454,11 @@ export default class extends ApplicationController {
   // Remote search
   fetchResults(event) {
     const promise = new Promise((resolve, reject) => {
-      if ((this.searchInputTarget.value == this.lastSearch && (this.currentPage == this.lastPage || this.currentPage == this.endPage)) || !this.hasUrlValue) {
+      if (
+        (this.searchInputTarget.value == this.lastSearch &&
+          (this.currentPage == this.lastPage || this.currentPage == this.endPage)) ||
+        !this.hasUrlValue
+      ) {
         return
       }
 
@@ -417,7 +487,13 @@ export default class extends ApplicationController {
           this.highLightSelected()
           this.showResultsList()
 
-          if (this.nrOfItems == 1 && this.itemTargets[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.searchInputTarget.value.toLowerCase()) >= 0) {
+          if (
+            this.nrOfItems == 1 &&
+            this.itemTargets[0]
+              .getAttribute("data-satis-dropdown-item-text")
+              .toLowerCase()
+              .indexOf(this.searchInputTarget.value.toLowerCase()) >= 0
+          ) {
             this.selectItem(this.itemTargets[0].closest('[data-satis-dropdown-target="item"]'))
           } else if (this.nrOfItems == 1) {
             this.moveDown()
@@ -547,7 +623,7 @@ export default class extends ApplicationController {
   }
 
   resetSearchInput(event) {
-    this.setHiddenInput()
+    this.setHiddenSelect()
   }
 
   clickedOutside(event) {
