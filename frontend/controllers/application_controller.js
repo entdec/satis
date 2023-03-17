@@ -48,6 +48,9 @@ export default class ApplicationController extends Controller {
   }
 
   setUserData(key, data) {
+    if(event.target.innerHTML == 'Delete view') {
+      return false
+    }
     let csrfToken = document.querySelector("meta[name=csrf-token]").content
     return fetch("/satis/user_data/" + key, {
       method: "PUT",
