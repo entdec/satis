@@ -1,6 +1,8 @@
 div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controller="satis-dropdown" data-satis-dropdown-page-size-value=@page_size data-satis-dropdown-url-value=url data-satis-dropdown-url-params-value=(options[:url_params]||{}).to_json data-satis-dropdown-chain-to-value=@chain_to data-satis-dropdown-free-text-value=@free_text data-satis-dropdown-needs-exact-match-value="#{@needs_exact_match ? 'true' : 'false'}" data-satis-dropdown-is-multiple-value="#{options[:input_html][:multiple] || false}"
   - if form.object.send(attribute).is_a?(String)
     - selection = options_for_select(form.object.send(attribute).split(",").map{|item| [item, item, {selected: true}]})
+  - elsif form.object.send(attribute).is_a?(Array)
+    - selection = options_for_select(form.object.send(attribute).map{|item| [item, item, {selected: true}]})
   - else
     - selection = options_for_select((form.object&.attributes[attribute].nil? ? "" : form.object&.attributes[attribute].send(value_method)).split(",").map{|item| [item, item, {selected: true}]})
   = form.select(attribute, selection, {}, options[:input_html].except(:multiple).reverse_merge(class: 'hidden', multiple: true))
@@ -40,7 +42,7 @@ div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controlle
 
 
   template data-satis-dropdown-target="pillTemplate"
-    span.inline-flex.items-center.rounded.bg-gray-200.px-2.py-1.text-xs.font-medium.text-gray-600.mr-1.mt-1 data-satis-dropdown-target="pill"
+    span.inline-flex.items-center.rounded.bg-primary-200.px-2.py-1.text-xs.font-medium.text-gray-600.mr-1.mt-1 data-satis-dropdown-target="pill"
       button.inline-flex.items-center.justify-center.w-5.h-5.ml-1 data-action="click->satis-dropdown#removePill"
         svg.w-3.h-3 xmlns="http://www.w3.org/2000/svg" viewbox="0 0 20 20" fill="currentColor"
           path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"
