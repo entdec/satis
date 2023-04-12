@@ -7,7 +7,7 @@ div.sts-menu data-controller="satis-menu" data-action="#{menu.event}->satis-menu
         i class=icon
 
   - if menu.items.present?
-    ul.sts-menu__items.hidden data-satis-menu-target="submenu" data-satis-menu-submenu-placement="bottom"
+    ul.sts-menu__items.hidden data-satis-menu-target="submenu" data-satis-menu-submenu-placement="bottom" data-satis-menu-submenu-strategy="#{strategy}"
       - menu.items.each do |item|
         = render(Satis::MenuItem::Component.new(item: item))
 
