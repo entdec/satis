@@ -51,6 +51,7 @@ export default class extends ApplicationController {
     this.popperInstance = createPopper(this.element, this.resultsTarget, {
       offset: [-20, 2],
       placement: "bottom-start",
+      strategy: "fixed",
       modifiers: [
         {
           name: "flip",
@@ -72,6 +73,32 @@ export default class extends ApplicationController {
     this.resultsTarget.addEventListener("blur", this.boundBlur)
 
     window.addEventListener("click", this.boundClickedOutside)
+
+    this.hiddenInputTarget.addEventListener("change", this.boundHandleHiddenInputChange)
+
+    setTimeout(() => {
+      this.getScrollParent(this.element)?.addEventListener("scroll", this.boundBlur)
+    }, 500)
+  }
+
+  getScrollParent(node) {
+    if (node == null) {
+      return null
+    }
+
+    let isScrollable = false
+
+    if (node instanceof Element) {
+      const vScrollValue = window.getComputedStyle(node).getPropertyValue("overflow-y")
+
+      isScrollable = vScrollValue == "auto" || vScrollValue == "scroll"
+    }
+
+    if (isScrollable) {
+      return node
+    } else {
+      return node.parentNode == null ? node : this.getScrollParent(node.parentNode)
+    }
   }
 
   disconnect() {
@@ -299,21 +326,13 @@ export default class extends ApplicationController {
         this.searchInputTarget.value = currentItems[0].getAttribute("data-satis-dropdown-item-text")
       }
 
-      currentItems.forEach((currentItem) => {
-        if (this.isMultipleValue) {
-          const itemValue = currentItem.getAttribute("data-satis-dropdown-item-value")
-          if (
-            !this.pillTargets
-              .map((pill) => pill.querySelector("button"))
-              .some((button) => button.getAttribute("data-satis-dropdown-id-param") == itemValue)
-          ) {
-            const pillTemplate = this.pillTemplateTarget.content.firstElementChild.cloneNode(true)
-            pillTemplate.prepend(currentItem.getAttribute("data-satis-dropdown-item-text"))
-            pillTemplate
-              .querySelector("button")
-              .setAttribute("data-satis-dropdown-id-param", currentItem.getAttribute("data-satis-dropdown-item-value"))
-            this.pillsTarget.appendChild(pillTemplate)
-          }
+      Array.prototype.slice.call(currentItem.attributes).forEach((attr) => {
+        if (
+          attr.name.startsWith("data") &&
+          !attr.name.startsWith("data-satis") &&
+          !attr.name.startsWith("data-action")
+        ) {
+          this.hiddenInputTarget.setAttribute(attr.name, attr.value)
         }
 
         Array.prototype.slice.call(currentItem.attributes).forEach((attr) => {
@@ -440,6 +459,10 @@ export default class extends ApplicationController {
         }
       }
     })
+
+    if (this.freeTextValue && matches.length != 1) {
+      this.hiddenInputTarget.value = this.lastSearch
+    }
 
     if (
       matches.length == 1 &&

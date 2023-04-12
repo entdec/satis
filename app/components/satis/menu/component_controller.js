@@ -13,6 +13,7 @@ export default class extends ApplicationController {
       this.popperInstance = createPopper(this.element, this.submenuTarget, {
         offset: [-20, 2],
         placement: this.submenuTarget.getAttribute("data-satis-menu-submenu-placement") || "auto",
+        strategy: this.submenuTarget.getAttribute("data-satis-menu-submenu-strategy") || "fixed",
         modifiers: [
           {
             name: "flip",
@@ -49,7 +50,10 @@ export default class extends ApplicationController {
   toggle(event) {
     if (this.hasToggleTarget) {
       this.toggleTarget.classList.toggle("hidden")
-      this.triggerEvent(this.toggleTarget, "toggle", { toggled: !this.toggleTarget.classList.contains("hidden"), id: this.toggleTarget.getAttribute("id") })
+      this.triggerEvent(this.toggleTarget, "toggle", {
+        toggled: !this.toggleTarget.classList.contains("hidden"),
+        id: this.toggleTarget.getAttribute("id"),
+      })
       if (this.toggleTarget.classList.contains("hidden")) {
         this.hide(event)
       } else {
