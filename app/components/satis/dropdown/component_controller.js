@@ -51,6 +51,7 @@ export default class extends ApplicationController {
     this.popperInstance = createPopper(this.element, this.resultsTarget, {
       offset: [-20, 2],
       placement: "bottom-start",
+      strategy: "fixed",
       modifiers: [
         {
           name: "flip",
