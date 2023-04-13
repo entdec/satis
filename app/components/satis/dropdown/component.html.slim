@@ -5,7 +5,7 @@ div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controlle
     - selection = options_for_select(form.object.send(attribute).map{|item| [item, item, {selected: true}]})
   - else
     - selection = options_for_select((form.object&.attributes[attribute].nil? ? "" : form.object&.attributes[attribute].send(value_method)).split(",").map{|item| [item, item, {selected: true}]})
-  = form.select(attribute, selection, {}, options[:input_html].except(:multiple).reverse_merge(class: 'hidden', multiple: true))
+  = form.select(attribute, selection, {}, options[:input_html].except(:multiple).reverse_merge(class: 'hidden', multiple: options[:input_html][:multiple] || false))
   .flex.flex-col
     div.hidden.py-1 data-satis-dropdown-target="pills"
     .flex.flex-col.items-center
