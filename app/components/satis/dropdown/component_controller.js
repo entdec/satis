@@ -284,7 +284,11 @@ export default class extends ApplicationController {
     option.text = selectedValue
     option.value = selectedValue
     option.setAttribute("selected", true)
-
+    Array.prototype.slice.call(dataDiv.attributes).forEach((attr) => {
+      if (attr.name.startsWith("data") && !attr.name.startsWith("data-satis") && !attr.name.startsWith("data-action")) {
+        option.setAttribute(attr.name, attr.value)
+      }
+    })
     if (!this.isMultipleValue) {
       this.hiddenSelectTarget.innerHTML = ""
     }
