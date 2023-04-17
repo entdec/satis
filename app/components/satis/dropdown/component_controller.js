@@ -356,7 +356,7 @@ export default class extends ApplicationController {
         this.hiddenSelectTarget.dispatchEvent(new CustomEvent("change", { detail: { src: "satis-dropdown" } }))
       }
     } else {
-      if (this.hi.options.length == 0) {
+      if (this.hiddenSelectTarget.options.length == 0) {
         this.pillsTarget.classList.add("hidden")
       }
     }
