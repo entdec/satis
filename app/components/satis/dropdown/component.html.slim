@@ -1,7 +1,10 @@
 div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controller="satis-dropdown" data-satis-dropdown-page-size-value=@page_size data-satis-dropdown-url-value=url data-satis-dropdown-url-params-value=(options[:url_params]||{}).to_json data-satis-dropdown-chain-to-value=@chain_to data-satis-dropdown-free-text-value=@free_text data-satis-dropdown-needs-exact-match-value="#{@needs_exact_match ? 'true' : 'false'}" data-satis-dropdown-is-multiple-value="#{options[:input_html][:multiple] || false}"
   - selection = []
   - if options[:input_html][:value].present?
-      - selection = options_for_select(options[:input_html][:value].to_s.split(",").map{|item| [item, item, {selected: true}]})
+      - if options[:input_html][:value].is_a?(Array)
+        - selection = options_for_select(options[:input_html][:value].map{|item| [item, item, {selected: true}]})
+      - else
+        - selection = options_for_select(options[:input_html][:value].to_s.split(",").map{|item| [item, item, {selected: true}]})
   - elsif form.object.present?
     - if form.object.send(attribute).is_a?(String)
       - selection = options_for_select(form.object.send(attribute).split(",").map{|item| [item, item, {selected: true}]})
