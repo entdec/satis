@@ -153,7 +153,7 @@ export default class extends ApplicationController {
       this.pillsTarget.innerHTML = ""
     }
 
-    if (!this.searchInputTarget.value && this.freeTextValue) {
+    if (!this.searchInputTarget.value && this.freeTextValue && this.hiddenSelectTarget.options.length > 0) {
       this.searchInputTarget.value = this.hiddenSelectTarget.options[0].value
     }
   }
@@ -219,12 +219,31 @@ export default class extends ApplicationController {
     } else {
       this.searchInputTarget.closest(".bg-white").classList.remove("warning")
     }
+
+    if (this.searchInputTarget.closest(".bg-white").classList.contains("warning") || !this.searchInputTarget.value) {
+      if (this.hiddenSelectTarget.options.length > 0 && !this.isMultipleValue) {
+        this.hiddenSelectTarget.innerHTML = ""
+        var option = document.createElement("option")
+        option.text = ""
+        option.value = ""
+
+        this.hiddenSelectTarget.add(option)
+      }
+    }
   }
 
   // User presses reset button
   reset(event) {
-    this.hiddenSelectTarget.innerHTML = ""
-    this.hiddenSelectTarget.dispatchEvent(new Event("change"))
+    if (!this.isMultipleValue) {
+      this.hiddenSelectTarget.innerHTML = ""
+      var option = document.createElement("option")
+      option.text = ""
+      option.value = ""
+
+      this.hiddenSelectTarget.add(option)
+
+      this.hiddenSelectTarget.dispatchEvent(new Event("change"))
+    }
     this.searchInputTarget.value = null
     this.lastSearch = null
     this.lastPage = null
