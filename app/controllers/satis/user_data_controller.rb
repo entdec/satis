@@ -14,8 +14,9 @@ module Satis
     def update
       key = request.url.split('/user_data/').last
       data = Satis.config.current_user.user_data.keyed(key)
-
-      data.data = user_data_update_params.as_json
+      new_data = data.data.merge(user_data_update_params.as_json)
+      data.data = new_data
+      #data.data = user_data_update_params.as_json
       data.save!
 
       render json: data.data, status: 200
