@@ -221,11 +221,11 @@ export default class extends ApplicationController {
     }
 
     if (this.searchInputTarget.closest(".bg-white").classList.contains("warning") || !this.searchInputTarget.value) {
-      if (this.hiddenSelectTarget.options.length > 0 && !this.isMultipleValue) {
+      if (!this.isMultipleValue) {
         this.hiddenSelectTarget.innerHTML = ""
         var option = document.createElement("option")
-        option.text = ""
-        option.value = ""
+        option.text = this.freeTextValue ? this.searchInputTarget.value : ""
+        option.value = this.freeTextValue ? this.searchInputTarget.value : ""
 
         this.hiddenSelectTarget.add(option)
       }
