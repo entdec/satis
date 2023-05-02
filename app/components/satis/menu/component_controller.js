@@ -28,6 +28,13 @@ export default class extends ApplicationController {
         ],
       })
     }
+
+    if(this.hasToggleugTarget) {
+      let g_by_data = JSON.parse(this.toggleugTarget.dataset.show_params)
+      if(this.toggleugTarget.id == "group_by_"+g_by_data.current_view+"_"+g_by_data.group_by_column) {
+        this.toggleugTarget.classList.toggle("hidden")
+      }
+    }
   }
 
   show(event) {
@@ -59,6 +66,10 @@ export default class extends ApplicationController {
       } else {
         this.show(event)
       }
+    }
+
+    if (this.hasToggleugTarget) {
+      this.toggleugTarget.classList.toggle("hidden")
     }
   }
 
