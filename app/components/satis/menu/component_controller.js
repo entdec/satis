@@ -4,7 +4,7 @@ import { debounce } from "../../../../frontend/utils"
 import { createPopper } from "@popperjs/core"
 
 export default class extends ApplicationController {
-  static targets = ["submenu", "toggle"]
+  static targets = ["submenu", "toggle", "toggleug"]
 
   connect() {
     super.connect()
