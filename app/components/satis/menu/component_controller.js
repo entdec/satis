@@ -69,7 +69,9 @@ export default class extends ApplicationController {
     }
 
     if (this.hasToggleugTarget) {
-      this.toggleugTarget.classList.toggle("hidden")
+      if (this.toggleugTarget.classList.contains("hidden")) {
+        this.toggleugTarget.classList.toggle("hidden")
+      }
     }
   }
 
