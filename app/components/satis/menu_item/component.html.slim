@@ -12,8 +12,8 @@ li.rounded-sm.px-3.py-1.hover:bg-gray-100.dark:hover:bg-gray-200.flex.items-cent
       - if item.type == :toggle
         i.fal.fa-check.hidden data-satis-menu-target="toggle" id="#{item.id}"
   - if item.type == :group
-    a.cursor-pointer.hidden data-satis-menu-target="toggleug" data-ungroup="true" id="#{item.id}_#{item.link_attributes[:data][:view_id]}_#{item.link_attributes[:data][:column]}" data=item.link_attributes[:data]
-      = 'X'
+    a.cursor-pointer.text-gray-400.hidden data-satis-menu-target="toggleug" data-ungroup="true" id="#{item.id}_#{item.link_attributes[:data][:view_id]}_#{item.link_attributes[:data][:column]}" data=item.link_attributes[:data]
+      i.fas.fa-xmark
 
   - if item.menu
     ul.hidden.bg-white.border.rounded-md.shadow-lg data-satis-menu-target="submenu" data-satis-menu-submenu-placement="left"
