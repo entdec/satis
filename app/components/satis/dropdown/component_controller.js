@@ -49,20 +49,21 @@ export default class extends ApplicationController {
     this.display()
 
     this.popperInstance = createPopper(this.element, this.resultsTarget, {
-      offset: [-20, 2],
       placement: "bottom-start",
       strategy: "fixed",
       modifiers: [
+        { name: "offset", options: { offset: [0, 1] } },
         {
           name: "flip",
-          enabled: true,
           options: {
             boundary: this.element.closest(".sts-card"),
           },
         },
         {
           name: "preventOverflow",
-          enabled: true,
+          options: {
+            boundary: this.element.closest(".sts-card"),
+          },
         },
         popperSameWidth,
       ],
