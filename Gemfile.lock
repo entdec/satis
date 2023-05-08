@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    satis (1.0.88)
+    satis (1.0.93)
       browser
       diffy
       rails (>= 6)

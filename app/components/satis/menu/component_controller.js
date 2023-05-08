@@ -11,19 +11,23 @@ export default class extends ApplicationController {
 
     if (this.hasSubmenuTarget) {
       this.popperInstance = createPopper(this.element, this.submenuTarget, {
-        offset: [-20, 2],
         placement: this.submenuTarget.getAttribute("data-satis-menu-submenu-placement") || "auto",
         strategy: this.submenuTarget.getAttribute("data-satis-menu-submenu-strategy") || "fixed",
         modifiers: [
+          { name: "offset", options: { offset: [0, 0] } },
           {
             name: "flip",
             enabled: true,
             options: {
+              //fallbackPlacements: ["top", "right"],
               boundary: this.element.closest(".sts-card"),
             },
           },
           {
             name: "preventOverflow",
+            options: {
+              boundary: this.element.closest(".sts-card"),
+            },
           },
         ],
       })
