@@ -517,7 +517,8 @@ export default class extends ApplicationController {
 
       let ourUrl = this.normalizedUrl
       let pageSize = this.pageSizeValue
-      if (this.searchInputTarget.value.length >= 2) {
+
+      if (event.type == "input" && this.searchInputTarget.value.length >= 2) {
         ourUrl.searchParams.append("term", this.searchInputTarget.value)
       }
       ourUrl.searchParams.append("page", this.currentPage)
