@@ -160,11 +160,11 @@ export default class extends ApplicationController {
   }
 
   // Called when scrolling in the resultsTarget
-  // scroll(event) {
-  //   if (this.elementScrolled(this.resultsTarget)) {
-  //     this.fetchResults(event)
-  //   }
-  // }
+  scroll(event) {
+    if (this.elementScrolled(this.resultsTarget)) {
+      this.fetchResults(event)
+    }
+  }
 
   // User presses keys
   dispatch(event) {
@@ -517,9 +517,9 @@ export default class extends ApplicationController {
 
       let ourUrl = this.normalizedUrl
       let pageSize = this.pageSizeValue
-      if (this.searchInputTarget.value.length >= 2) {
-        ourUrl.searchParams.append("term", this.searchInputTarget.value)
-      }
+      // if (this.searchInputTarget.value.length >= 2) {
+      //   ourUrl.searchParams.append("term", this.searchInputTarget.value)
+      // }
       ourUrl.searchParams.append("page", this.currentPage)
       ourUrl.searchParams.append("page_size", pageSize)
       if (this.needsExactMatchValue) {
