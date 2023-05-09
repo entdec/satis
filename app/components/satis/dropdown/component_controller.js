@@ -160,11 +160,11 @@ export default class extends ApplicationController {
   }
 
   // Called when scrolling in the resultsTarget
-  scroll(event) {
-    if (this.elementScrolled(this.resultsTarget)) {
-      this.fetchResults(event)
-    }
-  }
+  // scroll(event) {
+  //   if (this.elementScrolled(this.resultsTarget)) {
+  //     this.fetchResults(event)
+  //   }
+  // }
 
   // User presses keys
   dispatch(event) {
