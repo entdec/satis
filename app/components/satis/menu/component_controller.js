@@ -73,6 +73,11 @@ export default class extends ApplicationController {
     }
 
     if (this.hasToggleugTarget) {
+      let ungroupElements  = document.getElementsByClassName('ungroup-icon')
+      Array.from(ungroupElements).forEach(function (element) {
+        element.classList.add('hidden')
+      });
+
       if ((event.currentTarget != this.toggleugTarget && this.toggleugTarget.classList.contains("hidden")) ||
           (event.currentTarget == this.toggleugTarget && !this.toggleugTarget.classList.contains("hidden")) ) {
         this.toggleugTarget.classList.toggle("hidden")
