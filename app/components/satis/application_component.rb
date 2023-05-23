@@ -2,7 +2,7 @@
 
 module Satis
   class ApplicationComponent < ViewComponent::Base
-    include ViewComponent::Slotable
+    include ViewComponent::SlotableV2
     include ActionView::Helpers::TranslationHelper
 
     attr_accessor :original_view_context
