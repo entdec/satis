@@ -438,6 +438,7 @@ export default class extends ApplicationController {
       chainToValue = chainTo.value
     }
 
+    let listItems = 0
     this.itemTargets.forEach((item) => {
       let itemChainToValue = item.getAttribute("data-chain")
       let chainMatch = true
@@ -446,11 +447,15 @@ export default class extends ApplicationController {
       }
 
       if (chainMatch) {
+        listItems += 1
         item.classList.remove("hidden")
       } else {
         item.classList.add("hidden")
       }
     })
+    if(listItems == 1) {
+      this.selectItem(this.itemTargets.filter((item) => { return item.classList != 'hidden' })[0])
+    }
   }
 
   localResults(event) {
@@ -531,10 +536,13 @@ export default class extends ApplicationController {
         if (this.hasResults) {
           this.filterResultsChainTo()
           this.highLightSelected()
-          this.showResultsList()
+          if(!this.chainToValue) {
+            this.showResultsList()
+          }
 
           if (
             this.nrOfItems == 1 &&
+            !this.chainToValue &&
             this.itemTargets[0]
               .getAttribute("data-satis-dropdown-item-text")
               .toLowerCase()
