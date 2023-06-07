@@ -132,27 +132,7 @@ export default class extends ApplicationController {
     }
 
     // Put current selection in search field and add pills
-    if (this.hiddenSelectTarget.options.length > 0) {
-      if (this.itemTargets.length == 0) {
-        let ourUrl = this.normalizedUrl
-        ourUrl.searchParams.append(
-          "id",
-          Array.from(this.hiddenSelectTarget.options)
-            .map((opt) => opt.value)
-            .join("|")
-        )
-        ourUrl.searchParams.append("page", this.currentPage)
-        ourUrl.searchParams.append("page_size", this.pageSizeValue)
-
-        this.fetchResultsWith(ourUrl).then(() => {
-          this.setHiddenSelect()
-        })
-      } else {
-        this.setHiddenSelect()
-      }
-    } else {
-      this.pillsTarget.innerHTML = ""
-    }
+    this.setHiddenSelect()
 
     if (!this.searchInputTarget.value && this.freeTextValue && this.hiddenSelectTarget.options.length > 0) {
       this.searchInputTarget.value = this.hiddenSelectTarget.options[0].value
@@ -224,11 +204,13 @@ export default class extends ApplicationController {
     if (this.searchInputTarget.closest(".bg-white").classList.contains("warning") || !this.searchInputTarget.value) {
       if (!this.isMultipleValue) {
         this.hiddenSelectTarget.innerHTML = ""
-        var option = document.createElement("option")
-        option.text = this.freeTextValue ? this.searchInputTarget.value : ""
-        option.value = this.freeTextValue ? this.searchInputTarget.value : ""
+        if (this.freeTextValue && this.searchInputTarget.value) {
+          var option = document.createElement("option")
+          option.text = this.searchInputTarget.value
+          option.value = this.searchInputTarget.value
 
-        this.hiddenSelectTarget.add(option)
+          this.hiddenSelectTarget.add(option)
+        }
       }
     }
   }
@@ -237,11 +219,6 @@ export default class extends ApplicationController {
   reset(event) {
     if (!this.isMultipleValue) {
       this.hiddenSelectTarget.innerHTML = ""
-      var option = document.createElement("option")
-      option.text = ""
-      option.value = ""
-
-      this.hiddenSelectTarget.add(option)
 
       this.hiddenSelectTarget.dispatchEvent(new Event("change"))
     }
@@ -328,12 +305,22 @@ export default class extends ApplicationController {
 
   // --- Helpers
 
-  setHiddenSelect() {
-    const currentItems = this.itemTargets.filter((item) => {
+  async setHiddenSelect() {
+    let currentItems = this.itemTargets.filter((item) => {
       return Array.from(this.hiddenSelectTarget.options)
         .map((opt) => opt.value)
         .includes(item.getAttribute("data-satis-dropdown-item-value"))
     })
+
+    if (this.hiddenSelectTarget.options.length > 0 && currentItems.length != this.hiddenSelectTarget.options.length) {
+      await this.refreshSelectionFromServer()
+
+      currentItems = this.itemTargets.filter((item) => {
+        return Array.from(this.hiddenSelectTarget.options)
+          .map((opt) => opt.value)
+          .includes(item.getAttribute("data-satis-dropdown-item-value"))
+      })
+    }
 
     if (currentItems.length > 0) {
       if (this.isMultipleValue) {
@@ -377,6 +364,8 @@ export default class extends ApplicationController {
       }
     } else {
       if (this.hiddenSelectTarget.options.length == 0) {
+        this.searchInputTarget.value = ""
+        this.pillsTarget.innerHTML = ""
         this.pillsTarget.classList.add("hidden")
       }
     }
@@ -585,6 +574,22 @@ export default class extends ApplicationController {
       })
     })
     return promise
+  }
+
+  async refreshSelectionFromServer() {
+    this.currentPage = 1
+
+    let ourUrl = this.normalizedUrl
+    ourUrl.searchParams.append(
+      "id",
+      Array.from(this.hiddenSelectTarget.options)
+        .map((opt) => opt.value)
+        .join("|")
+    )
+    ourUrl.searchParams.append("page", this.currentPage)
+    ourUrl.searchParams.append("page_size", this.pageSizeValue)
+
+    await this.fetchResultsWith(ourUrl)
   }
 
   get normalizedUrl() {
