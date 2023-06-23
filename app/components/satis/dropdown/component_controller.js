@@ -312,7 +312,7 @@ export default class extends ApplicationController {
         .includes(item.getAttribute("data-satis-dropdown-item-value"))
     })
 
-    if (this.hiddenSelectTarget.options.length > 0 && currentItems.length != this.hiddenSelectTarget.options.length) {
+    if (this.hiddenSelectTarget.options.length > 0 && (this.isMultipleValue ? currentItems.length : 1) !== this.hiddenSelectTarget.options.length) {
       await this.refreshSelectionFromServer()
 
       currentItems = this.itemTargets.filter((item) => {
