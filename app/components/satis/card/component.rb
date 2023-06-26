@@ -9,6 +9,9 @@ module Satis
 
       attr_reader :icon, :title, :description, :menu, :content_padding, :header_background_color, :initial_actions, :key, :custom_tabs_link_html
 
+      def before_render
+        @key = [controller_name, action_name, self.title.downcase, 'tab'].compact.join('_') if @persist
+      end
       def initialize(icon: nil,
                      title: nil,
                      description: nil,
@@ -18,7 +21,8 @@ module Satis
                        dark: 'bg-gray-800', light: 'bg-white'
                      },
                      actions: [],
-                     key: nil)
+                     key: nil,
+                     persist: true)
         super
         @title = title
         @title = @title.reject(&:blank?).compact.join(' ') if @title.is_a?(Array)
@@ -28,7 +32,7 @@ module Satis
         @content_padding = content_padding
         @header_background_color = header_background_color
         @initial_actions = actions
-        @key = key
+        @persist = persist
       end
 
       def custom_tabs_link(&block)
