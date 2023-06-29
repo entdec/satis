@@ -1,690 +1,704 @@
 import ApplicationController from "../../../../frontend/controllers/application_controller"
 
 // FIXME: Is this full path really needed?
-import { debounce, popperSameWidth } from "../../../../frontend/utils"
-import { createPopper } from "@popperjs/core"
+import {debounce, popperSameWidth} from "../../../../frontend/utils"
+import {createPopper} from "@popperjs/core"
 
 export default class extends ApplicationController {
-  static targets = [
-    "results",
-    "items",
-    "item",
-    "searchInput",
-    "resetButton",
-    "toggleButton",
-    "hiddenSelect",
-    "pills",
-    "pillTemplate",
-    "pill",
-  ]
-  static values = {
-    chainTo: String,
-    freeText: Boolean,
-    needsExactMatch: Boolean,
-    pageSize: Number,
-    url: String,
-    urlParams: Object,
-    isMultiple: Boolean,
-  }
 
-  connect() {
-    super.connect()
-
-    this.debouncedFetchResults = debounce(this.fetchResults.bind(this), 250)
-    this.debouncedLocalResults = debounce(this.localResults.bind(this), 250)
-    this.selectedIndex = -1
-
-    this.boundClickedOutside = this.clickedOutside.bind(this)
-    this.boundResetSearchInput = this.resetSearchInput.bind(this)
-    this.boundBlur = this.handleBlur.bind(this)
-
-    // To remember what the current page and last page were, we queried
-    this.currentPage = 1
-    this.lastPage = null
-    this.endPage = null
-
-    // To remember what the last search was we did
-    this.lastSearch = null
-
-    this.display()
-
-    this.popperInstance = createPopper(this.element, this.resultsTarget, {
-      placement: "bottom-start",
-      strategy: "fixed",
-      modifiers: [
-        { name: "offset", options: { offset: [0, 1] } },
-        {
-          name: "flip",
-          options: {
-            boundary: this.element.closest(".sts-card"),
-          },
-        },
-        {
-          name: "preventOverflow",
-          options: {
-            boundary: this.element.closest(".sts-card"),
-          },
-        },
-        popperSameWidth,
-      ],
-    })
-
-    this.searchInputTarget.addEventListener("blur", this.boundBlur)
-    this.toggleButtonTarget.addEventListener("blur", this.boundBlur)
-    this.resultsTarget.addEventListener("blur", this.boundBlur)
-
-    window.addEventListener("click", this.boundClickedOutside)
-
-    setTimeout(() => {
-      this.getScrollParent(this.element)?.addEventListener("scroll", this.boundBlur)
-    }, 500)
-  }
-
-  getScrollParent(node) {
-    if (node == null) {
-      return null
+    static targets = [
+        "results",
+        "items",
+        "item",
+        "searchInput",
+        "resetButton",
+        "toggleButton",
+        "hiddenSelect",
+        "pills",
+        "pillTemplate",
+        "pill",
+    ]
+    static values = {
+        chainTo: String,
+        freeText: Boolean,
+        needsExactMatch: Boolean,
+        pageSize: Number,
+        url: String,
+        urlParams: Object,
+        isMultiple: Boolean,
     }
 
-    let isScrollable = false
-
-    if (node instanceof Element) {
-      const vScrollValue = window.getComputedStyle(node).getPropertyValue("overflow-y")
-
-      isScrollable = vScrollValue == "auto" || vScrollValue == "scroll"
-    }
-
-    if (isScrollable) {
-      return node
-    } else {
-      return node.parentNode == null ? node : this.getScrollParent(node.parentNode)
-    }
-  }
-
-  disconnect() {
-    this.debouncedFetchResults = null
-    this.debouncedLocalResults = null
-    window.removeEventListener("click", this.boundClickedOutside)
-  }
-
-  focus(event) {
-    this.searchInputTarget.focus()
-  }
-
-  blur(event) {
-    this.handleBlur(event)
-  }
-
-  handleBlur(event) {
-    if (!this.element.contains(event.relatedTarget) && this.resultsShown) {
-      this.hideResultsList()
-      if (event.target == this.searchInputTarget) {
-        this.boundResetSearchInput(event)
-      }
-    }
-  }
-
-  // Called on connect
-  // FIXME: Has code duplication with select
-  display(event) {
-    // Ignore if we triggered this change event
-    if (event?.detail?.src == "satis-dropdown") {
-      return
-    }
-
-    // Put current selection in search field and add pills
-    this.setHiddenSelect()
-
-    if (!this.searchInputTarget.value && this.freeTextValue && this.hiddenSelectTarget.options.length > 0) {
-      this.searchInputTarget.value = this.hiddenSelectTarget.options[0].value
-    }
-  }
-
-  // Called when scrolling in the resultsTarget
-  scroll(event) {
-    if (this.elementScrolled(this.resultsTarget)) {
-      this.fetchResults(event)
-    }
-  }
-
-  // User presses keys
-  dispatch(event) {
-    if (event.target.closest('[data-controller="satis-dropdown"]') != this.element) {
-      return
-    }
-
-    this.filterResultsChainTo()
-
-    switch (event.key) {
-      case "ArrowDown":
-        if (this.hasResults) {
-          this.showResultsList(event)
-
-          this.moveDown()
-        }
-        break
-      case "ArrowUp":
-        if (this.hasResults) {
-          this.moveUp()
-        }
-        break
-      case "Enter":
-        event.preventDefault()
-        this.select(event)
-
-        break
-      case "Escape":
-        if (this.resultsShown) {
-          this.hideResultsList(event)
-        } else {
-          this.reset(event)
-        }
-
-        break
-      default:
-        break
-    }
-
-    return true
-  }
-
-  // User enters text in the search field
-  search(event) {
-    if (this.hasUrlValue) {
-      this.debouncedFetchResults(event)
-    } else {
-      this.debouncedLocalResults(event)
-    }
-
-    if (this.searchInputTarget.value) {
-      this.searchInputTarget.closest(".bg-white").classList.add("warning")
-    } else {
-      this.searchInputTarget.closest(".bg-white").classList.remove("warning")
-    }
-
-    if (this.searchInputTarget.closest(".bg-white").classList.contains("warning") || !this.searchInputTarget.value) {
-      if (!this.isMultipleValue) {
-        this.hiddenSelectTarget.innerHTML = ""
-        if (this.freeTextValue && this.searchInputTarget.value) {
-          var option = document.createElement("option")
-          option.text = this.searchInputTarget.value
-          option.value = this.searchInputTarget.value
-
-          this.hiddenSelectTarget.add(option)
-        }
-      }
-    }
-  }
-
-  // User presses reset button
-  reset(event) {
-    if (!this.isMultipleValue) {
-      this.hiddenSelectTarget.innerHTML = ""
-
-      this.hiddenSelectTarget.dispatchEvent(new Event("change"))
-    }
-    this.searchInputTarget.value = null
-    this.lastSearch = null
-    this.lastPage = null
-    this.endPage = null
-
-    if (this.selectedItem) {
-      this.selectedItem.classList.remove("bg-primary-200")
-    }
-    this.selectedIndex = -1
-    if (this.hasUrlValue) {
-      this.itemsTarget.innerHTML = ""
-    }
-    this.hideResultsList()
-    this.itemTargets.forEach((item) => {
-      item.classList.remove("hidden")
-    })
-
-    if (event) {
-      event.preventDefault()
-    }
-
-    if (this.searchInputTarget.closest(".bg-white").classList.contains("warning")) {
-      this.searchInputTarget.closest(".bg-white").classList.remove("warning")
-    }
-
-    return false
-  }
-
-  // User selects an item using mouse
-  select(event) {
-    let dataDiv = event.target.closest('[data-satis-dropdown-target="item"]')
-    if (dataDiv == null) {
-      dataDiv = this.selectedItem
-    }
-
-    if (dataDiv == null) {
-      return
-    }
-
-    this.selectItem(dataDiv)
-
-    event.preventDefault()
-  }
-
-  selectItem(dataDiv) {
-    this.hideResultsList()
-
-    // Copy over data attributes on the item div to the hidden input
-    Array.prototype.slice.call(dataDiv.attributes).forEach((attr) => {
-      if (attr.name.startsWith("data") && !attr.name.startsWith("data-satis") && !attr.name.startsWith("data-action")) {
-        this.hiddenSelectTarget.setAttribute(attr.name, attr.value)
-      }
-    })
-
-    const selectedValue = dataDiv.getAttribute("data-satis-dropdown-item-value")
-    var option = document.createElement("option")
-    option.text = selectedValue
-    option.value = selectedValue
-    option.setAttribute("selected", true)
-
-    if (!this.isMultipleValue) {
-      this.hiddenSelectTarget.innerHTML = ""
-    }
-
-    if (
-      !Array.from(this.hiddenSelectTarget.options)
-        .map((opt) => opt.value)
-        .includes(option.value)
-    ) {
-      this.hiddenSelectTarget.add(option)
-    }
-
-    this.lastSearch = this.searchInputTarget.value
-
-    this.hiddenSelectTarget.dispatchEvent(new Event("change"))
-
-    if (this.searchInputTarget.closest(".bg-white").classList.contains("warning")) {
-      this.searchInputTarget.closest(".bg-white").classList.remove("warning")
-    }
-  }
-
-  // --- Helpers
-
-  async setHiddenSelect() {
-    let currentItems = this.itemTargets.filter((item) => {
-      return Array.from(this.hiddenSelectTarget.options)
-        .map((opt) => opt.value)
-        .includes(item.getAttribute("data-satis-dropdown-item-value"))
-    })
-
-    if (this.hiddenSelectTarget.options.length > 0 && (this.isMultipleValue ? currentItems.length : 1) !== this.hiddenSelectTarget.options.length) {
-      await this.refreshSelectionFromServer()
-
-      currentItems = this.itemTargets.filter((item) => {
-        return Array.from(this.hiddenSelectTarget.options)
-          .map((opt) => opt.value)
-          .includes(item.getAttribute("data-satis-dropdown-item-value"))
-      })
-    }
-
-    if (currentItems.length > 0) {
-      if (this.isMultipleValue) {
-        this.searchInputTarget.value = ""
-        // this.pillsTarget.innerHTML = ""
-        this.pillsTarget.classList.remove("hidden")
-      } else {
-        this.searchInputTarget.value = currentItems[0].getAttribute("data-satis-dropdown-item-text")
-      }
-
-      currentItems.forEach((currentItem) => {
-        if (this.isMultipleValue) {
-          const itemValue = currentItem.getAttribute("data-satis-dropdown-item-value")
-          if (
-            !this.pillTargets
-              .map((pill) => pill.querySelector("button"))
-              .some((button) => button.getAttribute("data-satis-dropdown-id-param") == itemValue)
-          ) {
-            const pillTemplate = this.pillTemplateTarget.content.firstElementChild.cloneNode(true)
-            pillTemplate.prepend(currentItem.getAttribute("data-satis-dropdown-item-text"))
-            pillTemplate
-              .querySelector("button")
-              .setAttribute("data-satis-dropdown-id-param", currentItem.getAttribute("data-satis-dropdown-item-value"))
-            this.pillsTarget.appendChild(pillTemplate)
-          }
-        }
-
-        Array.prototype.slice.call(currentItem.attributes).forEach((attr) => {
-          if (
-            attr.name.startsWith("data") &&
-            !attr.name.startsWith("data-satis") &&
-            !attr.name.startsWith("data-action")
-          ) {
-            this.hiddenSelectTarget.setAttribute(attr.name, attr.value)
-          }
-        })
-      })
-
-      if (!this.hiddenSelectTarget.getAttribute("data-reflex")) {
-        this.hiddenSelectTarget.dispatchEvent(new CustomEvent("change", { detail: { src: "satis-dropdown" } }))
-      }
-    } else {
-      if (this.hiddenSelectTarget.options.length == 0) {
-        this.searchInputTarget.value = ""
-        this.pillsTarget.innerHTML = ""
-        this.pillsTarget.classList.add("hidden")
-      }
-    }
-  }
-
-  removePill(event) {
-    event.preventDefault()
-
-    this.hiddenSelectTarget.removeChild(this.hiddenSelectTarget.querySelector(`option[value="${event.params.id}"]`))
-    this.pillTargets
-      .find((pill) => pill.querySelector("button").getAttribute("data-satis-dropdown-id-param") == event.params.id)
-      ?.remove()
-
-    //this.hiddenSelectTarget.dispatchEvent(new Event("change"))
-  }
-
-  toggleResultsList(event) {
-    if (this.resultsShown) {
-      this.hideResultsList(event)
-
-      // Not sure what the intent is, but this causes Safari not to open a ticket
-      // } else if (this.element.contains(document.activeElement)) {
-    } else {
-      this.filterResultsChainTo()
-      if (this.hasResults) {
-        this.showResultsList(event)
-      } else {
-        this.fetchResults(event)
-      }
-    }
-
-    event.preventDefault()
-    return false
-  }
-
-  showResultsList(event) {
-    this.resultsTarget.classList.remove("hidden")
-    this.resultsTarget.setAttribute("data-show", "")
-    this.popperInstance.update()
-    this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.remove("hidden")
-    this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.add("hidden")
-  }
-
-  hideResultsList(event) {
-    this.resultsTarget.classList.add("hidden")
-    this.resultsTarget.removeAttribute("data-show")
-    this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.add("hidden")
-    this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.remove("hidden")
-  }
-
-  filterResultsChainTo() {
-    if (!this.chainToValue) {
-      return
-    }
-
-    let chainToValue
-    let chainTo = this.hiddenSelectTarget.form.querySelector(`[name="${this.chainToValue}"]`)
-    if (chainTo) {
-      chainToValue = chainTo.value
-    }
-
-    this.itemTargets.forEach((item) => {
-      let itemChainToValue = item.getAttribute("data-chain")
-      let chainMatch = true
-      if (this.chainToValue || itemChainToValue) {
-        chainMatch = chainToValue == itemChainToValue
-      }
-
-      if (chainMatch) {
-        item.classList.remove("hidden")
-      } else {
-        item.classList.add("hidden")
-      }
-    })
-  }
-
-  localResults(event) {
-    if (this.searchInputTarget.value == this.lastSearch) {
-      return
-    }
-
-    if (this.searchInputTarget.value.length < 2) {
-      return
-    }
-
-    this.lastSearch = this.searchInputTarget.value
-
-    this.itemTargets.forEach((item) => {
-      item.classList.remove("hidden")
-    })
-
-    this.filterResultsChainTo()
-
-    let matches = []
-    this.itemTargets.forEach((item) => {
-      let text = item.getAttribute("data-satis-dropdown-item-text").toLowerCase()
-      let value = item.getAttribute("data-satis-dropdown-item-value").toLowerCase()
-
-      if (!item.classList.contains("hidden")) {
-        if (this.needsExactMatchValue && text === this.searchInputTarget.value.toLowerCase()) {
-          matches = matches.concat(item)
-        } else if (!this.needsExactMatchValue && text.indexOf(this.searchInputTarget.value.toLowerCase()) >= 0) {
-          matches = matches.concat(item)
-        } else {
-          item.classList.add("hidden")
-        }
-      }
-    })
-
-    if (
-      matches.length == 1 &&
-      matches[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.lastSearch.toLowerCase()) >= 0
-    ) {
-      this.selectItem(matches[0].closest('[data-satis-dropdown-target="item"]'))
-    } else if (matches.length > 1) {
-      this.showResultsList(event)
-    }
-  }
-
-  // Remote search
-  fetchResults(event) {
-    const promise = new Promise((resolve, reject) => {
-      if (
-        (this.searchInputTarget.value == this.lastSearch &&
-          (this.currentPage == this.lastPage || this.currentPage == this.endPage)) ||
-        !this.hasUrlValue
-      ) {
-        return
-      }
-
-      if (this.searchInputTarget.value != this.lastSearch) {
+    connect() {
+        super.connect()
+
+        this.debouncedFetchResults = debounce(this.fetchResults.bind(this), 250)
+        this.debouncedLocalResults = debounce(this.localResults.bind(this), 250)
+        this.selectedIndex = -1
+
+        this.boundClickedOutside = this.clickedOutside.bind(this)
+        this.boundClickSearchInput = this.clickSearchInput.bind(this)
+        this.boundResetSearchInput = this.resetSearchInput.bind(this)
+        this.boundBlur = this.handleBlur.bind(this)
+
+        // To remember what the current page and last page were, we queried
         this.currentPage = 1
+        this.lastPage = null
         this.endPage = null
-      }
 
-      this.lastSearch = this.searchInputTarget.value
-      this.lastPage = this.currentPage
+        // To remember what the last search was we did
+        this.lastSearch = null
 
-      let ourUrl = this.normalizedUrl
-      let pageSize = this.pageSizeValue
-
-      if (event.type == "input" && this.searchInputTarget.value.length >= 2) {
-        ourUrl.searchParams.append("term", this.searchInputTarget.value)
-      }
-      ourUrl.searchParams.append("page", this.currentPage)
-      ourUrl.searchParams.append("page_size", pageSize)
-      if (this.needsExactMatchValue) {
-        ourUrl.searchParams.append("needs_exact_match", this.needsExactMatchValue)
-      }
-
-      this.fetchResultsWith(ourUrl).then((itemCount) => {
-        if (this.hasResults) {
-          this.filterResultsChainTo()
-          this.highLightSelected()
-          this.showResultsList()
-
-          if (
-            this.nrOfItems == 1 &&
-            this.itemTargets[0]
-              .getAttribute("data-satis-dropdown-item-text")
-              .toLowerCase()
-              .indexOf(this.searchInputTarget.value.toLowerCase()) >= 0
-          ) {
-            this.selectItem(this.itemTargets[0].closest('[data-satis-dropdown-target="item"]'))
-          } else if (this.nrOfItems == 1) {
-            this.moveDown()
-          }
-
-          if (itemCount > 0) {
-            this.currentPage += 1
-          }
-          if (itemCount < pageSize) {
-            this.endPage = this.currentPage
-          }
-
-          resolve()
-        }
-      })
-    })
-    return promise
-  }
-
-  fetchResultsWith(ourUrl) {
-    const promise = new Promise((resolve, reject) => {
-      fetch(ourUrl.href, {}).then((response) => {
-        response.text().then((data) => {
-          let tmpDiv = document.createElement("div")
-          tmpDiv.innerHTML = data
-
-          // Add needed items
-          Array.from(tmpDiv.children).forEach((item) => {
-            item.setAttribute("data-satis-dropdown-target", "item")
-            item.setAttribute("data-action", "click->satis-dropdown#select")
-          })
-
-          if (this.currentPage == 1) {
-            this.itemsTarget.innerHTML = tmpDiv.innerHTML
-          } else {
-            if (tmpDiv.innerHTML.length > 0) {
-              this.itemsTarget.insertAdjacentHTML("beforeend", tmpDiv.innerHTML)
-            }
-          }
-
-          resolve(tmpDiv.children.length)
+        this.popperInstance = createPopper(this.element, this.resultsTarget, {
+            placement: "bottom-start",
+            strategy: "fixed",
+            modifiers: [
+                {name: "offset", options: {offset: [0, 1]}},
+                {
+                    name: "flip",
+                    options: {
+                        boundary: this.element.closest(".sts-card"),
+                    },
+                },
+                {
+                    name: "preventOverflow",
+                    options: {
+                        boundary: this.element.closest(".sts-card"),
+                    },
+                },
+                popperSameWidth,
+            ],
         })
-      })
-    })
-    return promise
-  }
 
-  async refreshSelectionFromServer() {
-    this.currentPage = 1
+        this.searchInputTarget.addEventListener("blur", this.boundBlur)
+        this.searchInputTarget.addEventListener("click", this.boundClickSearchInput)
 
-    let ourUrl = this.normalizedUrl
-    ourUrl.searchParams.append(
-      "id",
-      Array.from(this.hiddenSelectTarget.options)
-        .map((opt) => opt.value)
-        .join("|")
-    )
-    ourUrl.searchParams.append("page", this.currentPage)
-    ourUrl.searchParams.append("page_size", this.pageSizeValue)
+        this.toggleButtonTarget.addEventListener("blur", this.boundBlur)
+        this.resultsTarget.addEventListener("blur", this.boundBlur)
 
-    await this.fetchResultsWith(ourUrl)
-  }
+        window.addEventListener("click", this.boundClickedOutside)
 
-  get normalizedUrl() {
-    let ourUrl
-    try {
-      ourUrl = new URL(this.urlValue)
-    } catch (error) {
-      ourUrl = new URL(this.urlValue, window.location.href)
+        setTimeout(() => {
+            this.getScrollParent(this.element)?.addEventListener("scroll", this.boundBlur)
+        }, 500)
+
+        this.display()
     }
 
-    // Add searchParams based on url_params
-    const form = this.element.closest("form")
-    Object.entries(this.urlParamsValue).forEach((item) => {
-      let elm = form.querySelector(`[name='${item[1]}']`)
-      if (elm) {
-        ourUrl.searchParams.append(item[0], elm.value)
-      } else {
-        ourUrl.searchParams.append(item[0], item[1])
-      }
-    })
+    getScrollParent(node) {
 
-    return ourUrl
-  }
+        if (node == null) {
+            return null
+        }
 
-  get resultsShown() {
-    return this.resultsTarget.hasAttribute("data-show")
-  }
+        let isScrollable = false
 
-  get nrOfItems() {
-    return this.itemTargets.filter((item) => {
-      return !item.classList.contains("hidden")
-    }).length
-  }
+        if (node instanceof Element) {
+            const vScrollValue = window.getComputedStyle(node).getPropertyValue("overflow-y")
 
-  get hasResults() {
-    return this.nrOfItems > 0
-  }
+            isScrollable = vScrollValue == "auto" || vScrollValue == "scroll"
+        }
 
-  increaseSelectedIndex() {
-    this.selectedIndex = this.selectedIndex + 1
-    if (this.selectedIndex >= this.nrOfItems) {
-      this.selectedIndex = this.nrOfItems - 1
+        if (isScrollable) {
+            return node
+        } else {
+            return node.parentNode == null ? node : this.getScrollParent(node.parentNode)
+        }
     }
-  }
 
-  decreaseSelectedIndex() {
-    this.selectedIndex = this.selectedIndex - 1
-    if (this.selectedIndex < 0) {
-      this.selectedIndex = 0
+    disconnect() {
+        this.debouncedFetchResults = null
+        this.debouncedLocalResults = null
+        window.removeEventListener("click", this.boundClickedOutside)
     }
-  }
 
-  get selectedItem() {
-    return this.itemTargets.filter((item) => {
-      return !item.classList.contains("hidden")
-    })[this.selectedIndex]
-  }
-
-  lowLightSelected() {
-    if (this.selectedItem) {
-      this.selectedItem.classList.remove("bg-primary-200")
+    focus(event) {
+        this.searchInputTarget.focus()
     }
-  }
 
-  highLightSelected() {
-    if (this.selectedItem) {
-      this.selectedItem.classList.add("bg-primary-200")
-      this.selectedItem.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })
+    blur(event) {
+        this.handleBlur(event)
     }
-  }
 
-  moveDown() {
-    this.lowLightSelected()
-    this.increaseSelectedIndex()
-    this.highLightSelected()
-  }
-
-  moveUp() {
-    this.lowLightSelected()
-    this.decreaseSelectedIndex()
-    this.highLightSelected()
-  }
-
-  resetSearchInput(event) {
-    this.setHiddenSelect()
-  }
-
-  clickedOutside(event) {
-    if (event.target.tagName == "svg" || event.target.tagName == "path") {
-      return
+    handleBlur(event) {
+        if (!this.element.contains(event.relatedTarget) && this.resultsShown) {
+            this.hideResultsList()
+            if (event.target == this.searchInputTarget) {
+                this.boundResetSearchInput(event)
+            }
+        }
     }
-    if (!this.element.contains(event.target)) {
-      if (this.resultsShown) {
+
+    // Called on connect
+    // FIXME: Has code duplication with select
+    display() {
+        this.refreshSelectionFromServer()
+    }
+
+    // Called when scrolling in the resultsTarget
+    scroll(event) {
+        if (this.elementScrolled(this.resultsTarget)) {
+            this.fetchResults(event)
+        }
+    }
+
+    // User presses keys
+    dispatch(event) {
+        if (event.target.closest('[data-controller="satis-dropdown"]') != this.element) {
+            return
+        }
+
+        this.filterResultsChainTo()
+
+        switch (event.key) {
+            case "ArrowDown":
+                if (this.hasResults) {
+                    this.showResultsList(event)
+
+                    this.moveDown()
+                }
+                break
+            case "ArrowUp":
+                if (this.hasResults) {
+                    this.moveUp()
+                }
+                break
+            case "Enter":
+                event.preventDefault()
+                this.select(event)
+
+                break
+            case "Escape":
+                if (this.resultsShown) {
+                    this.hideResultsList(event)
+                } else {
+                    this.reset(event)
+                }
+
+                break
+            default:
+                break
+        }
+
+        return true
+    }
+
+    // User enters text in the search field
+    search(event) {
+        if (this.hasUrlValue) {
+            this.debouncedFetchResults(event)
+        } else {
+            this.debouncedLocalResults(event)
+        }
+
+        if (this.searchInputTarget.value) {
+            this.searchInputTarget.closest(".bg-white").classList.add("warning")
+        } else {
+            this.searchInputTarget.closest(".bg-white").classList.remove("warning")
+        }
+
+        if (this.searchInputTarget.closest(".bg-white").classList.contains("warning") || !this.searchInputTarget.value) {
+            if (!this.isMultipleValue) {
+                this.hiddenSelectTarget.innerHTML = ""
+
+                if (this.freeTextValue && this.searchInputTarget.value) {
+                    var option = document.createElement("option")
+                    option.text = this.searchInputTarget.value
+                    option.value = this.searchInputTarget.value
+
+                    this.hiddenSelectTarget.add(option)
+                }
+            }
+        }
+    }
+
+    // User presses reset button
+    reset(event) {
+        if (!this.isMultipleValue) {
+            this.hiddenSelectTarget.innerHTML = ""
+
+            this.hiddenSelectTarget.dispatchEvent(new Event("change"))
+        }
+
+        this.searchInputTarget.value = null
+        this.lastSearch = null
+        this.lastPage = null
+        this.endPage = null
+
+        if (this.selectedItem) {
+            this.selectedItem.classList.remove("bg-primary-200")
+        }
+        this.selectedIndex = -1
+        if (this.hasUrlValue) {
+            this.itemsTarget.innerHTML = ""
+        }
         this.hideResultsList()
-      }
+        this.itemTargets.forEach((item) => {
+            item.classList.remove("hidden")
+        })
+
+        if (event) {
+            event.preventDefault()
+        }
+
+        if (this.searchInputTarget.closest(".bg-white").classList.contains("warning")) {
+            this.searchInputTarget.closest(".bg-white").classList.remove("warning")
+        }
+
+        return false
     }
-  }
+
+    // User selects an item using mouse
+    select(event) {
+        let dataDiv = event.target.closest('[data-satis-dropdown-target="item"]')
+        if (dataDiv == null) {
+            dataDiv = this.selectedItem
+        }
+        if (dataDiv == null) return
+
+
+        this.selectItem(dataDiv)
+
+        event.preventDefault()
+    }
+
+    clickSearchInput(event) {
+        if (this.hasResults)
+            this.showResultsList(event)
+    }
+
+    selectItem(dataDiv) {
+        this.hideResultsList()
+
+        // Copy over data attributes on the item div to the hidden input
+        Array.prototype.slice.call(dataDiv.attributes).forEach((attr) => {
+            if (attr.name.startsWith("data") && !attr.name.startsWith("data-satis") && !attr.name.startsWith("data-action")) {
+                this.hiddenSelectTarget.setAttribute(attr.name, attr.value)
+            }
+        })
+
+        const selectedValue = dataDiv.getAttribute("data-satis-dropdown-item-value")
+        const selectedValueText = dataDiv.getAttribute("data-satis-dropdown-item-text")
+        var option = document.createElement("option")
+        option.text = selectedValueText
+        option.value = selectedValue
+        option.setAttribute("selected", true)
+
+        if(this.isMultipleValue) {
+            // add the item in the select if it is not already there
+            if (
+                !Array.from(this.hiddenSelectTarget.options)
+                    .map((opt) => opt.value)
+                    .includes(option.value)
+            ) {
+                this.hiddenSelectTarget.add(option)
+            }
+        } else {
+            // if the selection is empty or the value is different from the current one
+            if(this.hiddenSelectTarget.options.length === 0 || this.hiddenSelectTarget.options[0].value != option.value) {
+                this.hiddenSelectTarget.innerHTML = ""
+
+                this.searchInputTarget.value = this.freeTextValue ? option.text : option.text
+                this.recordLastSearch();
+
+                // add the item in the select
+                this.hiddenSelectTarget.add(option)
+            }
+        }
+
+        this.hiddenSelectTarget.dispatchEvent(new Event("change"))
+
+        if (this.searchInputTarget.closest(".bg-white").classList.contains("warning")) {
+            this.searchInputTarget.closest(".bg-white").classList.remove("warning")
+        }
+    }
+
+    // --- Helpers
+
+    recordLastSearch() {
+        let emptySearch = this.searchInputTarget.value === ""
+        this.lastSearch = emptySearch ? null : this.searchInputTarget.value
+    }
+
+    removePill(event) {
+        event.preventDefault()
+
+        this.hiddenSelectTarget.removeChild(this.hiddenSelectTarget.querySelector(`option[value="${event.params.id}"]`))
+        this.pillTargets
+            .find((pill) => pill.querySelector("button").getAttribute("data-satis-dropdown-id-param") == event.params.id)
+            ?.remove()
+
+        //this.hiddenSelectTarget.dispatchEvent(new Event("change"))
+    }
+
+    toggleResultsList(event) {
+        if (this.resultsShown) {
+            this.hideResultsList(event)
+
+            // Not sure what the intent is, but this causes Safari not to open a ticket
+            // } else if (this.element.contains(document.activeElement)) {
+        } else {
+            this.filterResultsChainTo()
+            if (this.hasResults) {
+                this.showResultsList(event)
+            } else {
+                this.fetchResults(event)
+            }
+        }
+
+        event.preventDefault()
+        return false
+    }
+
+    showResultsList(event) {
+        this.resultsTarget.classList.remove("hidden")
+        this.resultsTarget.setAttribute("data-show", "")
+        this.popperInstance.update()
+        this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.remove("hidden")
+        this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.add("hidden")
+    }
+
+    hideResultsList(event) {
+        this.resultsTarget.classList.add("hidden")
+        this.resultsTarget.removeAttribute("data-show")
+        this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.add("hidden")
+        this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.remove("hidden")
+    }
+
+    filterResultsChainTo() {
+        if (!this.chainToValue) {
+            return
+        }
+
+        let chainToValue
+        let chainTo = this.hiddenSelectTarget.form.querySelector(`[name="${this.chainToValue}"]`)
+        if (chainTo) {
+            chainToValue = chainTo.value
+        }
+
+        this.itemTargets.forEach((item) => {
+            let itemChainToValue = item.getAttribute("data-chain")
+            let chainMatch = true
+            if (this.chainToValue || itemChainToValue) {
+                chainMatch = chainToValue == itemChainToValue
+            }
+
+            if (chainMatch) {
+                item.classList.remove("hidden")
+            } else {
+                item.classList.add("hidden")
+            }
+        })
+    }
+
+    localResults(event) {
+        if (this.searchInputTarget.value == this.lastSearch) {
+            return
+        }
+
+        if (this.searchInputTarget.value.length < 2) {
+            return
+        }
+
+        this.recordLastSearch();
+
+        this.itemTargets.forEach((item) => {
+            item.classList.remove("hidden")
+        })
+
+        this.filterResultsChainTo()
+
+        let matches = []
+        this.itemTargets.forEach((item) => {
+            let text = item.getAttribute("data-satis-dropdown-item-text").toLowerCase()
+            let value = item.getAttribute("data-satis-dropdown-item-value").toLowerCase()
+
+            if (!item.classList.contains("hidden")) {
+                if (this.needsExactMatchValue && text === this.searchInputTarget.value.toLowerCase()) {
+                    matches = matches.concat(item)
+                } else if (!this.needsExactMatchValue && text.indexOf(this.searchInputTarget.value.toLowerCase()) >= 0) {
+                    matches = matches.concat(item)
+                } else {
+                    item.classList.add("hidden")
+                }
+            }
+        })
+
+        if (
+            matches.length == 1 &&
+            matches[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.lastSearch.toLowerCase()) >= 0
+        ) {
+            this.selectItem(matches[0].closest('[data-satis-dropdown-target="item"]'))
+        } else if (matches.length > 1) {
+            this.showResultsList(event)
+        }
+    }
+
+    // Remote search
+    fetchResults(event) {
+        const promise = new Promise((resolve, reject) => {
+            if (
+                (this.searchInputTarget.value == this.lastSearch &&
+                    (this.currentPage == this.lastPage || this.currentPage == this.endPage)) ||
+                !this.hasUrlValue
+            ) {
+                return
+            }
+
+            if (this.searchInputTarget.value != this.lastSearch) {
+                this.currentPage = 1
+                this.endPage = null
+            }
+
+
+            this.lastPage = this.currentPage
+
+            let ourUrl = this.normalizedUrl()
+            let pageSize = this.pageSizeValue
+
+
+            if (event != null && event.type == "input" && this.searchInputTarget.value.length >= 2) {
+                ourUrl.searchParams.append("term", this.searchInputTarget.value)
+                this.recordLastSearch();
+            }
+
+            ourUrl.searchParams.append("page", this.currentPage)
+            ourUrl.searchParams.append("page_size", pageSize)
+            if (this.needsExactMatchValue) {
+                ourUrl.searchParams.append("needs_exact_match", this.needsExactMatchValue)
+            }
+
+            this.fetchResultsWith(ourUrl).then((itemCount) => {
+                if (this.hasResults) {
+                    this.filterResultsChainTo()
+                    this.highLightSelected()
+                    this.showResultsList()
+
+                    if (
+                        this.nrOfItems == 1 &&
+                        this.itemTargets[0]
+                            .getAttribute("data-satis-dropdown-item-text")
+                            .toLowerCase()
+                            .indexOf(this.searchInputTarget.value.toLowerCase()) >= 0
+                    ) {
+                        this.selectItem(this.itemTargets[0].closest('[data-satis-dropdown-target="item"]'))
+                    } else if (this.nrOfItems == 1) {
+                        this.moveDown()
+                    }
+
+                    if (itemCount > 0) {
+                        this.currentPage += 1
+                    }
+                    if (itemCount < pageSize) {
+                        this.endPage = this.currentPage
+                    }
+
+                    resolve()
+                }
+            })
+        })
+        return promise
+    }
+
+    fetchResultsWith(ourUrl) {
+        const promise = new Promise((resolve, reject) => {
+            fetch(ourUrl.href, {}).then((response) => {
+                response.text().then((data) => {
+                    let tmpDiv = document.createElement("div")
+                    tmpDiv.innerHTML = data
+
+                    // Add needed items
+                    Array.from(tmpDiv.children).forEach((item) => {
+                        item.setAttribute("data-satis-dropdown-target", "item")
+                        item.setAttribute("data-action", "click->satis-dropdown#select")
+                    })
+
+                    if (this.currentPage == 1) {
+                        this.itemsTarget.innerHTML = tmpDiv.innerHTML
+                    } else {
+                        if (tmpDiv.innerHTML.length > 0) {
+                            this.itemsTarget.insertAdjacentHTML("beforeend", tmpDiv.innerHTML)
+                        }
+                    }
+
+                    resolve(tmpDiv.children.length)
+                })
+            })
+        })
+        return promise
+    }
+
+
+    refreshSelectionFromServer() {
+        if (!this.hasUrlValue) return null ;
+        return new Promise((res, rej) => {
+            const ourUrl = this.normalizedUrl()
+
+            let selectedIds = Array.from(this.hiddenSelectTarget.options)
+                .map((opt) => opt.value)
+
+            // make sure we get all selected items
+            ourUrl.searchParams.append("page_size", selectedIds.length)
+            // parameters with [] will be converted to an array
+            if (selectedIds.length > 0)
+                selectedIds.forEach((id) => ourUrl.searchParams.append(selectedIds.length === 1 ? "id" : "id[]", id))
+
+            fetch(ourUrl.href, {}).then((response) => {
+                if (response.ok)
+                    response.text().then((data) => {
+                        if (this.hiddenSelectTarget.options.length === 0){
+                                this.searchInputTarget.value = ""
+                                this.pillsTarget.innerHTML = ""
+                                this.pillsTarget.classList.add("hidden")
+                            return;
+                        }
+
+                        let tmpDiv = document.createElement("div")
+                        tmpDiv.innerHTML = data
+
+                        for (let i = 0; i < this.hiddenSelectTarget.options.length; i++) {
+                            let opt = this.hiddenSelectTarget.options[i];
+                            let item = tmpDiv.querySelector('[data-satis-dropdown-item-value="' + opt.value + '"]')
+                            if (!item) {
+                                opt.remove()
+                            } else {
+                                opt.text = item.getAttribute("data-satis-dropdown-item-text")
+
+                                if (this.isMultipleValue) {
+                                    let pillExists = this.pillsTarget.querySelector(`[data-satis-dropdown-target="pill"] > button[data-satis-dropdown-id-param="${opt.value}"]`)
+                                    if (!pillExists) {
+                                        // Add pill to selection
+                                        const pillTemplate = this.pillTemplateTarget.content.firstElementChild.cloneNode(true)
+                                        pillTemplate.prepend(opt.text)
+                                        pillTemplate.querySelector("button").setAttribute("data-satis-dropdown-id-param", opt.value)
+                                        this.pillsTarget.appendChild(pillTemplate)
+                                    }
+                                }
+                            }
+                        }
+
+
+                        // update search input and show selection
+                        if (this.isMultipleValue) {
+                            this.searchInputTarget.value = ""
+                            // this.pillsTarget.innerHTML = ""
+                            this.pillsTarget.classList.remove("hidden")
+                        } else if (!this.searchInputTarget.value && this.hiddenSelectTarget.options.length > 0) {
+                            let option = this.hiddenSelectTarget.options[0]
+                            this.searchInputTarget.value = this.freeTextValue ? option.value : option.text
+                        }
+
+
+                        if (!this.hiddenSelectTarget.getAttribute("data-reflex")) {
+                        //    this.hiddenSelectTarget.dispatchEvent(new CustomEvent("change", {detail: {src: "satis-dropdown"}}))
+                        }
+
+                        res()
+                    })
+            })
+        })
+    }
+
+    normalizedUrl() {
+        let ourUrl
+        try {
+            ourUrl = new URL(this.urlValue)
+        } catch (error) {
+            ourUrl = new URL(this.urlValue, window.location.href)
+        }
+
+        // Add searchParams based on url_params
+        const form = this.element.closest("form")
+        Object.entries(this.urlParamsValue).forEach((item) => {
+            let elm = form.querySelector(`[name='${item[1]}']`)
+            if (elm) {
+                ourUrl.searchParams.append(item[0], elm.value)
+            } else {
+                ourUrl.searchParams.append(item[0], item[1])
+            }
+        })
+
+        return ourUrl
+    }
+
+    get resultsShown() {
+        return this.resultsTarget.hasAttribute("data-show")
+    }
+
+    get nrOfItems() {
+        return this.itemTargets.filter((item) => {
+            return !item.classList.contains("hidden")
+        }).length
+    }
+
+    get hasResults() {
+        return this.nrOfItems > 0
+    }
+
+    increaseSelectedIndex() {
+        this.selectedIndex = this.selectedIndex + 1
+        if (this.selectedIndex >= this.nrOfItems) {
+            this.selectedIndex = this.nrOfItems - 1
+        }
+    }
+
+    decreaseSelectedIndex() {
+        this.selectedIndex = this.selectedIndex - 1
+        if (this.selectedIndex < 0) {
+            this.selectedIndex = 0
+        }
+    }
+
+    get selectedItem() {
+        return this.itemTargets.filter((item) => {
+            return !item.classList.contains("hidden")
+        })[this.selectedIndex]
+    }
+
+    lowLightSelected() {
+        if (this.selectedItem) {
+            this.selectedItem.classList.remove("bg-primary-200", "font-medium")
+        }
+    }
+
+    highLightSelected() {
+        if (this.selectedItem) {
+            this.selectedItem.classList.add("bg-primary-200", "font-medium")
+            this.selectedItem.scrollIntoView({behavior: "smooth", block: "nearest", inline: "start"})
+        }
+    }
+
+    moveDown() {
+        this.lowLightSelected()
+        this.increaseSelectedIndex()
+        this.highLightSelected()
+    }
+
+    moveUp() {
+        this.lowLightSelected()
+        this.decreaseSelectedIndex()
+        this.highLightSelected()
+    }
+
+    // clear search input and hide results
+    resetSearchInput(event) {
+        if (this.multiSelectValue || this.hiddenSelectTarget.options.length === 0) {
+            this.searchInputTarget.value = ""
+            return;
+        }
+
+        this.searchInputTarget.value = this.hiddenSelectTarget.options[0].text
+        this.fetchResults(event)
+        this.hideResultsList(event)
+    }
+
+    clickedOutside(event) {
+        if (event.target.tagName == "svg" || event.target.tagName == "path") {
+            return
+        }
+        if (!this.element.contains(event.target)) {
+            if (this.resultsShown) {
+                this.hideResultsList()
+            }
+        }
+    }
 }

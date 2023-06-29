@@ -19,6 +19,7 @@ module Satis
         @reset_button = options[:reset_button] || options[:include_blank]
 
         options[:input_html] ||= {}
+
         options[:input_html][:value] = hidden_value
 
         options[:input_html][:autofocus] ||= false
@@ -45,7 +46,7 @@ module Satis
         value ||= @options.dig(:input_html, :value)
         value ||= form.object&.send(attribute)
         value = value.id if value.respond_to? :id
-        value = value.second if value.is_a?(Array) && value.size == 2 && value.first.casecmp?(value.second)
+        # value = value.second if value.is_a?(Array) && value.size == 2 && value.first.casecmp?(value.second)
         value
       end
 
