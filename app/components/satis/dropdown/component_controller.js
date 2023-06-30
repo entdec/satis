@@ -81,11 +81,12 @@ export default class extends ApplicationController {
             this.getScrollParent(this.element)?.addEventListener("scroll", this.boundBlur)
         }, 500)
 
-        this.display()
+            this.refreshSelectionFromServer().then((changed) => {
+                this.setHiddenSelect();
+            })
     }
 
     getScrollParent(node) {
-
         if (node == null) {
             return null
         }
@@ -130,8 +131,22 @@ export default class extends ApplicationController {
 
     // Called on connect
     // FIXME: Has code duplication with select
-    display() {
-        this.refreshSelectionFromServer()
+    display(event) {
+        // Ignore if we triggered this change event
+        if (event?.detail?.src == "satis-dropdown") {
+            return
+        }
+
+        this.refreshSelectionFromServer().then((changed) => {
+            this.setHiddenSelect();
+
+            if (!this.searchInputTarget.value && this.freeTextValue && this.hiddenSelectTarget.options.length > 0) {
+                this.searchInputTarget.value = this.hiddenSelectTarget.options[0].value
+            }
+
+            if (!this.hiddenSelectTarget.getAttribute("data-reflex"))
+              this.hiddenSelectTarget.dispatchEvent(new CustomEvent("change", {detail: {src: "satis-dropdown"}}))
+        })
     }
 
     // Called when scrolling in the resultsTarget
@@ -255,7 +270,6 @@ export default class extends ApplicationController {
         }
         if (dataDiv == null) return
 
-
         this.selectItem(dataDiv)
 
         event.preventDefault()
@@ -283,7 +297,7 @@ export default class extends ApplicationController {
         option.value = selectedValue
         option.setAttribute("selected", true)
 
-        if(this.isMultipleValue) {
+        if (this.isMultipleValue) {
             // add the item in the select if it is not already there
             if (
                 !Array.from(this.hiddenSelectTarget.options)
@@ -294,10 +308,10 @@ export default class extends ApplicationController {
             }
         } else {
             // if the selection is empty or the value is different from the current one
-            if(this.hiddenSelectTarget.options.length === 0 || this.hiddenSelectTarget.options[0].value != option.value) {
+            if (this.hiddenSelectTarget.options.length === 0 || this.hiddenSelectTarget.options[0].value != option.value) {
                 this.hiddenSelectTarget.innerHTML = ""
 
-                this.searchInputTarget.value = this.freeTextValue ? option.text : option.text
+                this.searchInputTarget.value = option.text
                 this.recordLastSearch();
 
                 // add the item in the select
@@ -307,8 +321,39 @@ export default class extends ApplicationController {
 
         this.hiddenSelectTarget.dispatchEvent(new Event("change"))
 
+
         if (this.searchInputTarget.closest(".bg-white").classList.contains("warning")) {
             this.searchInputTarget.closest(".bg-white").classList.remove("warning")
+        }
+    }
+
+    setHiddenSelect() {
+        if (this.hiddenSelectTarget.options.length === 0) {
+            this.searchInputTarget.value = ""
+            this.pillsTarget.innerHTML = ""
+            this.pillsTarget.classList.add("hidden")
+            return true;
+        }
+
+
+        if (this.isMultipleValue) {
+            for (let i = 0; i < this.hiddenSelectTarget.options.length; i++) {
+                const opt = this.hiddenSelectTarget.options[i]
+                let pillExists = this.pillsTarget.querySelector(`[data-satis-dropdown-target="pill"] > button[data-satis-dropdown-id-param="${opt.value}"]`)
+                if (!pillExists) {
+                    // Add pill to selection
+                    const pillTemplate = this.pillTemplateTarget.content.firstElementChild.cloneNode(true)
+                    pillTemplate.prepend(opt.text)
+                    pillTemplate.querySelector("button").setAttribute("data-satis-dropdown-id-param", opt.value)
+                    this.pillsTarget.appendChild(pillTemplate)
+                }
+            }
+
+            this.searchInputTarget.value = ""
+            this.pillsTarget.classList.remove("hidden")
+        } else {
+            const opt = this.hiddenSelectTarget.options[0];
+            this.searchInputTarget.value = opt.text
         }
     }
 
@@ -527,10 +572,22 @@ export default class extends ApplicationController {
         return promise
     }
 
-
     refreshSelectionFromServer() {
-        if (!this.hasUrlValue) return null ;
-        return new Promise((res, rej) => {
+        let updated = 0;
+        for (let i = 0; i < this.hiddenSelectTarget.options.length; i++) {
+            let opt = this.hiddenSelectTarget.options[i];
+            let item = this.itemsTarget.querySelector('[data-satis-dropdown-item-value="' + opt.value + '"]');
+            if (item) {
+                opt.text = item.getAttribute("data-satis-dropdown-item-text");
+            }
+            updated++;
+        }
+
+        if (!this.hasUrlValue || this.hiddenSelectTarget.options.length === updated) return Promise.resolve(false);
+
+        const promise = new Promise((resolve, reject) => {
+            //  if (!this.hasUrlValue) return;
+
             const ourUrl = this.normalizedUrl()
 
             let selectedIds = Array.from(this.hiddenSelectTarget.options)
@@ -545,13 +602,7 @@ export default class extends ApplicationController {
             fetch(ourUrl.href, {}).then((response) => {
                 if (response.ok)
                     response.text().then((data) => {
-                        if (this.hiddenSelectTarget.options.length === 0){
-                                this.searchInputTarget.value = ""
-                                this.pillsTarget.innerHTML = ""
-                                this.pillsTarget.classList.add("hidden")
-                            return;
-                        }
-
+                        let changed = false;
                         let tmpDiv = document.createElement("div")
                         tmpDiv.innerHTML = data
 
@@ -560,42 +611,33 @@ export default class extends ApplicationController {
                             let item = tmpDiv.querySelector('[data-satis-dropdown-item-value="' + opt.value + '"]')
                             if (!item) {
                                 opt.remove()
+                                changed = true;
                             } else {
-                                opt.text = item.getAttribute("data-satis-dropdown-item-text")
+                                let text = item.getAttribute("data-satis-dropdown-item-text")
 
-                                if (this.isMultipleValue) {
-                                    let pillExists = this.pillsTarget.querySelector(`[data-satis-dropdown-target="pill"] > button[data-satis-dropdown-id-param="${opt.value}"]`)
-                                    if (!pillExists) {
-                                        // Add pill to selection
-                                        const pillTemplate = this.pillTemplateTarget.content.firstElementChild.cloneNode(true)
-                                        pillTemplate.prepend(opt.text)
-                                        pillTemplate.querySelector("button").setAttribute("data-satis-dropdown-id-param", opt.value)
-                                        this.pillsTarget.appendChild(pillTemplate)
-                                    }
+                                if (opt.text != text) {
+                                    if(text === "")
+                                        opt.text = opt.id
+                                    else
+                                        opt.text = text
+
+                                    changed = true;
                                 }
+
+                                // Copy over data attributes on the item div to the hidden input
+                                Array.prototype.slice.call(item.attributes).forEach((attr) => {
+                                    if (attr.name.startsWith("data") && !attr.name.startsWith("data-satis") && !attr.name.startsWith("data-action")) {
+                                        this.hiddenSelectTarget.setAttribute(attr.name, attr.value)
+                                    }
+                                })
                             }
                         }
 
-
-                        // update search input and show selection
-                        if (this.isMultipleValue) {
-                            this.searchInputTarget.value = ""
-                            // this.pillsTarget.innerHTML = ""
-                            this.pillsTarget.classList.remove("hidden")
-                        } else if (!this.searchInputTarget.value && this.hiddenSelectTarget.options.length > 0) {
-                            let option = this.hiddenSelectTarget.options[0]
-                            this.searchInputTarget.value = this.freeTextValue ? option.value : option.text
-                        }
-
-
-                        if (!this.hiddenSelectTarget.getAttribute("data-reflex")) {
-                        //    this.hiddenSelectTarget.dispatchEvent(new CustomEvent("change", {detail: {src: "satis-dropdown"}}))
-                        }
-
-                        res()
+                        resolve(changed)
                     })
             })
         })
+        return promise
     }
 
     normalizedUrl() {
