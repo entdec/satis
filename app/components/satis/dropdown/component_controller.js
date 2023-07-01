@@ -579,8 +579,8 @@ export default class extends ApplicationController {
             let item = this.itemsTarget.querySelector('[data-satis-dropdown-item-value="' + opt.value + '"]');
             if (item) {
                 opt.text = item.getAttribute("data-satis-dropdown-item-text");
+                updated++;
             }
-            updated++;
         }
 
         if (!this.hasUrlValue || this.hiddenSelectTarget.options.length === updated) return Promise.resolve(false);
