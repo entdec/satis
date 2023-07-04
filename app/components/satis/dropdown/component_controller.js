@@ -231,6 +231,11 @@ export default class extends ApplicationController {
         if (!this.isMultipleValue) {
             this.hiddenSelectTarget.innerHTML = ""
 
+            var option = document.createElement("option")
+            option.text = ""
+            option.value = ""
+
+            this.hiddenSelectTarget.add(option)
             this.hiddenSelectTarget.dispatchEvent(new Event("change"))
         }
 
