@@ -76,15 +76,15 @@ export default class extends ApplicationController {
     this.resultsTarget.addEventListener("blur", this.boundBlur)
 
     window.addEventListener("click", this.boundClickedOutside)
+    this.refreshSelectionFromServer().then((changed) => {
+      this.setHiddenSelect();
+    })
 
     setTimeout(() => {
       this.getScrollParent(this.element)?.addEventListener("scroll", this.boundBlur)
     }, 500)
 
-    this.refreshSelectionFromServer().then((changed) => {
-      this.setHiddenSelect();
-      this.fetchResults();
-    })
+
   }
 
   getScrollParent(node) {
@@ -367,7 +367,7 @@ export default class extends ApplicationController {
 
   recordLastSearch() {
     let emptySearch = this.searchInputTarget.value === ""
-    this.lastSearch = emptySearch ? null : this.searchInputTarget.value
+    this.lastSearch = emptySearch ? "" : this.searchInputTarget.value
   }
 
   removePill(event) {
@@ -509,8 +509,8 @@ export default class extends ApplicationController {
 
       if (event != null && event.type == "input" && this.searchInputTarget.value.length >= 2) {
         ourUrl.searchParams.append("term", this.searchInputTarget.value)
-        this.recordLastSearch();
       }
+      this.recordLastSearch();
 
       ourUrl.searchParams.append("page", this.currentPage)
       ourUrl.searchParams.append("page_size", pageSize)
