@@ -16,7 +16,7 @@ You can use satis helpers in your own helpers:
 
 ```ruby
 def mycard(&block)
-  sts.card(icon: 'fad fa-user', title: "Profile", &block)
+  sts.card(:profile, icon: 'fad fa-user', title: "Profile", &block)
 end
 ```
 
