@@ -24,6 +24,11 @@ module Satis
                      key: nil,
                      persist: true)
         super
+
+        if id.blank?
+          ActiveSupport::Deprecation.warn('Calling sts.card with the id parameter will become mandatory')
+        end
+
         @id = id
         @title = title
         @title = @title.reject(&:blank?).compact.join(' ') if @title.is_a?(Array)
