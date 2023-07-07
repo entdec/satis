@@ -10,7 +10,7 @@ module Satis
       attr_reader :id, :icon, :description, :menu, :content_padding, :header_background_color, :initial_actions, :custom_tabs_link_html
       attr_writer :scope
 
-      def initialize(id,
+      def initialize(id: nil,
                      icon: nil,
                      title: nil,
                      description: nil,
@@ -42,6 +42,9 @@ module Satis
         return unless @persist
 
         @key ||= id
+        @title = strip_tags(@title)
+        @key ||= @title.downcase.parameterize.underscore
+
         [controller_name, action_name, params[:id], @key, 'tab'].compact.join('_')
       end
 
