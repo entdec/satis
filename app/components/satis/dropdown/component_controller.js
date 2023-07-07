@@ -1,10 +1,11 @@
 import ApplicationController from "../../../../frontend/controllers/application_controller"
 
 // FIXME: Is this full path really needed?
-import { debounce, popperSameWidth } from "../../../../frontend/utils"
-import { createPopper } from "@popperjs/core"
+import {debounce, popperSameWidth} from "../../../../frontend/utils"
+import {createPopper} from "@popperjs/core"
 
 export default class extends ApplicationController {
+
   static targets = [
     "results",
     "items",
@@ -35,6 +36,7 @@ export default class extends ApplicationController {
     this.selectedIndex = -1
 
     this.boundClickedOutside = this.clickedOutside.bind(this)
+    this.boundClickSearchInput = this.clickSearchInput.bind(this)
     this.boundResetSearchInput = this.resetSearchInput.bind(this)
     this.boundBlur = this.handleBlur.bind(this)
 
@@ -46,13 +48,11 @@ export default class extends ApplicationController {
     // To remember what the last search was we did
     this.lastSearch = null
 
-    this.display()
-
     this.popperInstance = createPopper(this.element, this.resultsTarget, {
       placement: "bottom-start",
       strategy: "fixed",
       modifiers: [
-        { name: "offset", options: { offset: [0, 1] } },
+        {name: "offset", options: {offset: [0, 1]}},
         {
           name: "flip",
           options: {
@@ -70,14 +70,21 @@ export default class extends ApplicationController {
     })
 
     this.searchInputTarget.addEventListener("blur", this.boundBlur)
+    this.searchInputTarget.addEventListener("click", this.boundClickSearchInput)
+
     this.toggleButtonTarget.addEventListener("blur", this.boundBlur)
     this.resultsTarget.addEventListener("blur", this.boundBlur)
 
     window.addEventListener("click", this.boundClickedOutside)
+    this.refreshSelectionFromServer().then((changed) => {
+      this.setHiddenSelect();
+    })
 
     setTimeout(() => {
       this.getScrollParent(this.element)?.addEventListener("scroll", this.boundBlur)
     }, 500)
+
+
   }
 
   getScrollParent(node) {
@@ -131,12 +138,16 @@ export default class extends ApplicationController {
       return
     }
 
-    // Put current selection in search field and add pills
-    this.setHiddenSelect()
+    this.refreshSelectionFromServer().then((changed) => {
+      this.setHiddenSelect();
 
-    if (!this.searchInputTarget.value && this.freeTextValue && this.hiddenSelectTarget.options.length > 0) {
-      this.searchInputTarget.value = this.hiddenSelectTarget.options[0].value
-    }
+      if (!this.searchInputTarget.value && this.freeTextValue && this.hiddenSelectTarget.options.length > 0) {
+        this.searchInputTarget.value = this.hiddenSelectTarget.options[0].value
+      }
+
+      if (!this.hiddenSelectTarget.getAttribute("data-reflex"))
+        this.hiddenSelectTarget.dispatchEvent(new CustomEvent("change", {detail: {src: "satis-dropdown"}}))
+    })
   }
 
   // Called when scrolling in the resultsTarget
@@ -204,6 +215,7 @@ export default class extends ApplicationController {
     if (this.searchInputTarget.closest(".bg-white").classList.contains("warning") || !this.searchInputTarget.value) {
       if (!this.isMultipleValue) {
         this.hiddenSelectTarget.innerHTML = ""
+
         if (this.freeTextValue && this.searchInputTarget.value) {
           var option = document.createElement("option")
           option.text = this.searchInputTarget.value
@@ -220,8 +232,14 @@ export default class extends ApplicationController {
     if (!this.isMultipleValue) {
       this.hiddenSelectTarget.innerHTML = ""
 
+      var option = document.createElement("option")
+      option.text = ""
+      option.value = ""
+
+      this.hiddenSelectTarget.add(option)
       this.hiddenSelectTarget.dispatchEvent(new Event("change"))
     }
+
     this.searchInputTarget.value = null
     this.lastSearch = null
     this.lastPage = null
@@ -256,14 +274,16 @@ export default class extends ApplicationController {
     if (dataDiv == null) {
       dataDiv = this.selectedItem
     }
-
-    if (dataDiv == null) {
-      return
-    }
+    if (dataDiv == null) return
 
     this.selectItem(dataDiv)
 
     event.preventDefault()
+  }
+
+  clickSearchInput(event) {
+    if (this.hasResults)
+      this.showResultsList(event)
   }
 
   selectItem(dataDiv) {
@@ -277,98 +297,77 @@ export default class extends ApplicationController {
     })
 
     const selectedValue = dataDiv.getAttribute("data-satis-dropdown-item-value")
+    const selectedValueText = dataDiv.getAttribute("data-satis-dropdown-item-text")
     var option = document.createElement("option")
-    option.text = selectedValue
+    option.text = selectedValueText
     option.value = selectedValue
     option.setAttribute("selected", true)
 
-    if (!this.isMultipleValue) {
-      this.hiddenSelectTarget.innerHTML = ""
-    }
+    if (this.isMultipleValue) {
+      // add the item in the select if it is not already there
+      if (
+        !Array.from(this.hiddenSelectTarget.options)
+          .map((opt) => opt.value)
+          .includes(option.value)
+      ) {
+        this.hiddenSelectTarget.add(option)
+      }
+    } else {
+      // if the selection is empty or the value is different from the current one
+      if (this.hiddenSelectTarget.options.length === 0 || this.hiddenSelectTarget.options[0].value != option.value) {
+        this.hiddenSelectTarget.innerHTML = ""
 
-    if (
-      !Array.from(this.hiddenSelectTarget.options)
-        .map((opt) => opt.value)
-        .includes(option.value)
-    ) {
-      this.hiddenSelectTarget.add(option)
-    }
+        this.searchInputTarget.value = option.text
+        this.recordLastSearch();
 
-    this.lastSearch = this.searchInputTarget.value
+        // add the item in the select
+        this.hiddenSelectTarget.add(option)
+      }
+    }
 
     this.hiddenSelectTarget.dispatchEvent(new Event("change"))
+
 
     if (this.searchInputTarget.closest(".bg-white").classList.contains("warning")) {
       this.searchInputTarget.closest(".bg-white").classList.remove("warning")
     }
   }
 
+  setHiddenSelect() {
+    if (this.hiddenSelectTarget.options.length === 0) {
+      this.searchInputTarget.value = ""
+      this.pillsTarget.innerHTML = ""
+      this.pillsTarget.classList.add("hidden")
+      return true;
+    }
+
+
+    if (this.isMultipleValue) {
+      for (let i = 0; i < this.hiddenSelectTarget.options.length; i++) {
+        const opt = this.hiddenSelectTarget.options[i]
+        let pillExists = this.pillsTarget.querySelector(`[data-satis-dropdown-target="pill"] > button[data-satis-dropdown-id-param="${opt.value}"]`)
+        if (!pillExists) {
+          // Add pill to selection
+          const pillTemplate = this.pillTemplateTarget.content.firstElementChild.cloneNode(true)
+          pillTemplate.prepend(opt.text)
+          pillTemplate.querySelector("button").setAttribute("data-satis-dropdown-id-param", opt.value)
+          this.pillsTarget.appendChild(pillTemplate)
+        }
+      }
+
+      this.searchInputTarget.value = ""
+      this.pillsTarget.classList.remove("hidden")
+    } else {
+      const opt = this.hiddenSelectTarget.options[0];
+      this.searchInputTarget.value = opt.text
+    }
+  }
+
   // --- Helpers
 
-  async setHiddenSelect() {
-    let currentItems = this.itemTargets.filter((item) => {
-      return Array.from(this.hiddenSelectTarget.options)
-        .map((opt) => opt.value)
-        .includes(item.getAttribute("data-satis-dropdown-item-value"))
-    })
-
-    if (this.hiddenSelectTarget.options.length > 0 && (this.isMultipleValue ? currentItems.length : 1) !== this.hiddenSelectTarget.options.length) {
-      await this.refreshSelectionFromServer()
-
-      currentItems = this.itemTargets.filter((item) => {
-        return Array.from(this.hiddenSelectTarget.options)
-          .map((opt) => opt.value)
-          .includes(item.getAttribute("data-satis-dropdown-item-value"))
-      })
-    }
-
-    if (currentItems.length > 0) {
-      if (this.isMultipleValue) {
-        this.searchInputTarget.value = ""
-        // this.pillsTarget.innerHTML = ""
-        this.pillsTarget.classList.remove("hidden")
-      } else {
-        this.searchInputTarget.value = currentItems[0].getAttribute("data-satis-dropdown-item-text")
-      }
-
-      currentItems.forEach((currentItem) => {
-        if (this.isMultipleValue) {
-          const itemValue = currentItem.getAttribute("data-satis-dropdown-item-value")
-          if (
-            !this.pillTargets
-              .map((pill) => pill.querySelector("button"))
-              .some((button) => button.getAttribute("data-satis-dropdown-id-param") == itemValue)
-          ) {
-            const pillTemplate = this.pillTemplateTarget.content.firstElementChild.cloneNode(true)
-            pillTemplate.prepend(currentItem.getAttribute("data-satis-dropdown-item-text"))
-            pillTemplate
-              .querySelector("button")
-              .setAttribute("data-satis-dropdown-id-param", currentItem.getAttribute("data-satis-dropdown-item-value"))
-            this.pillsTarget.appendChild(pillTemplate)
-          }
-        }
-
-        Array.prototype.slice.call(currentItem.attributes).forEach((attr) => {
-          if (
-            attr.name.startsWith("data") &&
-            !attr.name.startsWith("data-satis") &&
-            !attr.name.startsWith("data-action")
-          ) {
-            this.hiddenSelectTarget.setAttribute(attr.name, attr.value)
-          }
-        })
-      })
-
-      if (!this.hiddenSelectTarget.getAttribute("data-reflex")) {
-        this.hiddenSelectTarget.dispatchEvent(new CustomEvent("change", { detail: { src: "satis-dropdown" } }))
-      }
-    } else {
-      if (this.hiddenSelectTarget.options.length == 0) {
-        this.searchInputTarget.value = ""
-        this.pillsTarget.innerHTML = ""
-        this.pillsTarget.classList.add("hidden")
-      }
-    }
+  recordLastSearch() {
+    let emptySearch = this.searchInputTarget.value === ""
+    this.lastSearch = emptySearch ? "" : this.searchInputTarget.value
   }
 
   removePill(event) {
@@ -451,7 +450,7 @@ export default class extends ApplicationController {
       return
     }
 
-    this.lastSearch = this.searchInputTarget.value
+    this.recordLastSearch();
 
     this.itemTargets.forEach((item) => {
       item.classList.remove("hidden")
@@ -501,15 +500,18 @@ export default class extends ApplicationController {
         this.endPage = null
       }
 
-      this.lastSearch = this.searchInputTarget.value
+
       this.lastPage = this.currentPage
 
-      let ourUrl = this.normalizedUrl
+      let ourUrl = this.normalizedUrl()
       let pageSize = this.pageSizeValue
 
-      if (event.type == "input" && this.searchInputTarget.value.length >= 2) {
+
+      if (event != null && event.type == "input" && this.searchInputTarget.value.length >= 2) {
         ourUrl.searchParams.append("term", this.searchInputTarget.value)
       }
+      this.recordLastSearch();
+
       ourUrl.searchParams.append("page", this.currentPage)
       ourUrl.searchParams.append("page_size", pageSize)
       if (this.needsExactMatchValue) {
@@ -576,23 +578,75 @@ export default class extends ApplicationController {
     return promise
   }
 
-  async refreshSelectionFromServer() {
-    this.currentPage = 1
+  refreshSelectionFromServer() {
+    let updated = 0;
+    for (let i = 0; i < this.hiddenSelectTarget.options.length; i++) {
+      let opt = this.hiddenSelectTarget.options[i];
+      let item = this.itemsTarget.querySelector('[data-satis-dropdown-item-value="' + opt.value + '"]');
+      if (item) {
+        opt.text = item.getAttribute("data-satis-dropdown-item-text");
+        updated++;
+      }
+    }
 
-    let ourUrl = this.normalizedUrl
-    ourUrl.searchParams.append(
-      "id",
-      Array.from(this.hiddenSelectTarget.options)
+    if (!this.hasUrlValue || this.hiddenSelectTarget.options.length === updated) return Promise.resolve(false);
+
+    const promise = new Promise((resolve, reject) => {
+      //  if (!this.hasUrlValue) return;
+
+      const ourUrl = this.normalizedUrl()
+
+      let selectedIds = Array.from(this.hiddenSelectTarget.options)
         .map((opt) => opt.value)
-        .join("|")
-    )
-    ourUrl.searchParams.append("page", this.currentPage)
-    ourUrl.searchParams.append("page_size", this.pageSizeValue)
 
-    await this.fetchResultsWith(ourUrl)
+      // make sure we get all selected items
+      ourUrl.searchParams.append("page_size", selectedIds.length)
+      // parameters with [] will be converted to an array
+      if (selectedIds.length > 0)
+        selectedIds.forEach((id) => ourUrl.searchParams.append(selectedIds.length === 1 ? "id" : "id[]", id))
+
+      fetch(ourUrl.href, {}).then((response) => {
+        if (response.ok)
+          response.text().then((data) => {
+            let changed = false;
+            let tmpDiv = document.createElement("div")
+            tmpDiv.innerHTML = data
+
+            for (let i = 0; i < this.hiddenSelectTarget.options.length; i++) {
+              let opt = this.hiddenSelectTarget.options[i];
+              let item = tmpDiv.querySelector('[data-satis-dropdown-item-value="' + opt.value + '"]')
+              if (!item) {
+                opt.remove()
+                changed = true;
+              } else {
+                let text = item.getAttribute("data-satis-dropdown-item-text")
+
+                if (opt.text != text) {
+                  if (text === "")
+                    opt.text = opt.id
+                  else
+                    opt.text = text
+
+                  changed = true;
+                }
+
+                // Copy over data attributes on the item div to the hidden input
+                Array.prototype.slice.call(item.attributes).forEach((attr) => {
+                  if (attr.name.startsWith("data") && !attr.name.startsWith("data-satis") && !attr.name.startsWith("data-action")) {
+                    this.hiddenSelectTarget.setAttribute(attr.name, attr.value)
+                  }
+                })
+              }
+            }
+
+            resolve(changed)
+          })
+      })
+    })
+    return promise
   }
 
-  get normalizedUrl() {
+  normalizedUrl() {
     let ourUrl
     try {
       ourUrl = new URL(this.urlValue)
@@ -650,14 +704,14 @@ export default class extends ApplicationController {
 
   lowLightSelected() {
     if (this.selectedItem) {
-      this.selectedItem.classList.remove("bg-primary-200")
+      this.selectedItem.classList.remove("bg-primary-200", "font-medium")
     }
   }
 
   highLightSelected() {
     if (this.selectedItem) {
-      this.selectedItem.classList.add("bg-primary-200")
-      this.selectedItem.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })
+      this.selectedItem.classList.add("bg-primary-200", "font-medium")
+      this.selectedItem.scrollIntoView({behavior: "smooth", block: "nearest", inline: "start"})
     }
   }
 
@@ -673,8 +727,16 @@ export default class extends ApplicationController {
     this.highLightSelected()
   }
 
+  // clear search input and hide results
   resetSearchInput(event) {
-    this.setHiddenSelect()
+    if (this.multiSelectValue || this.hiddenSelectTarget.options.length === 0) {
+      this.searchInputTarget.value = ""
+      return;
+    }
+
+    this.searchInputTarget.value = this.hiddenSelectTarget.options[0].text
+    this.fetchResults(event)
+    this.hideResultsList(event)
   }
 
   clickedOutside(event) {

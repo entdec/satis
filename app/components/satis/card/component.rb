@@ -7,12 +7,11 @@ module Satis
       renders_many :tabs, Tab::Component
       renders_one :footer
 
-      attr_reader :icon, :title, :description, :menu, :content_padding, :header_background_color, :initial_actions, :key, :custom_tabs_link_html
+      attr_reader :id, :icon, :description, :menu, :content_padding, :header_background_color, :initial_actions, :custom_tabs_link_html
+      attr_writer :scope
 
-      def before_render
-        @key = [controller_name, action_name, self.title.downcase, 'tab'].compact.join('_') if @persist
-      end
-      def initialize(icon: nil,
+      def initialize(id = nil,
+                     icon: nil,
                      title: nil,
                      description: nil,
                      menu: nil,
@@ -20,10 +19,17 @@ module Satis
                      header_background_color: {
                        dark: 'bg-gray-800', light: 'bg-white'
                      },
+                     scope: [],
                      actions: [],
                      key: nil,
                      persist: true)
         super
+
+        if id.blank?
+          ActiveSupport::Deprecation.warn('Calling sts.card with the id parameter will become mandatory')
+        end
+
+        @id = id
         @title = title
         @title = @title.reject(&:blank?).compact.join(' ') if @title.is_a?(Array)
         @description = description
@@ -33,6 +39,24 @@ module Satis
         @header_background_color = header_background_color
         @initial_actions = actions
         @persist = persist
+        @key = key
+        @scope = scope
+      end
+
+      def key
+        return unless @persist
+
+        @key ||= id.to_s.parameterize.underscore if id.present?
+        @title = strip_tags(@title)
+        @key ||= @title.parameterize.underscore
+
+        [controller_name, action_name, params[:id], @key, 'tab'].compact.join('_')
+      end
+
+      def title
+        return @title if @title
+
+        @title ||= I18n.t(id, scope: [:card] + @scope, default: id.to_s.humanize)
       end
 
       def custom_tabs_link(&block)
