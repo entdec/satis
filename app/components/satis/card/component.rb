@@ -10,7 +10,7 @@ module Satis
       attr_reader :id, :icon, :description, :menu, :content_padding, :header_background_color, :initial_actions, :custom_tabs_link_html
       attr_writer :scope
 
-      def initialize(id: nil,
+      def initialize(id = nil,
                      icon: nil,
                      title: nil,
                      description: nil,
