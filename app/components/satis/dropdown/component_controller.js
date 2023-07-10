@@ -230,8 +230,8 @@ export default class extends ApplicationController {
   // User presses reset button
   reset(event) {
     if (!this.isMultipleValue) {
-      this.hiddenSelectTarget.innerHTML = ""
-
+      this.hiddenSelectTarget.options[this.hiddenSelectTarget.selectedIndex].text = ""
+      this.hiddenSelectTarget.options[this.hiddenSelectTarget.selectedIndex].value = ""
       var option = document.createElement("option")
       option.text = ""
       option.value = ""
