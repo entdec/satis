@@ -729,12 +729,13 @@ export default class extends ApplicationController {
 
   // clear search input and hide results
   resetSearchInput(event) {
-    if (this.multiSelectValue || this.hiddenSelectTarget.options.length === 0) {
+    if (this.multiSelectValue) {
       this.searchInputTarget.value = ""
       return;
     }
 
-    this.searchInputTarget.value = this.hiddenSelectTarget.options[0].text
+    if(this.hiddenSelectTarget.selectedIndex > -1)
+      this.searchInputTarget.value = this.hiddenSelectTarget.options[this.hiddenSelectTarget.selectedIndex].text
     this.fetchResults(event)
     this.hideResultsList(event)
   }
