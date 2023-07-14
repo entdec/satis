@@ -48,7 +48,7 @@ module Satis
 
         @key ||= id.to_s.parameterize.underscore if id.present?
         @title = strip_tags(@title)
-        @key ||= @title.parameterize.underscore
+        @key ||= @title&.parameterize&.underscore
 
         [controller_name, action_name, params[:id], @key, 'tab'].compact.join('_')
       end
