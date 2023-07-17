@@ -30,7 +30,6 @@ export default class extends ApplicationController {
 
   connect() {
     super.connect()
-
     this.debouncedFetchResults = debounce(this.fetchResults.bind(this), 250)
     this.debouncedLocalResults = debounce(this.localResults.bind(this), 250)
     this.selectedIndex = -1
@@ -77,6 +76,7 @@ export default class extends ApplicationController {
 
     window.addEventListener("click", this.boundClickedOutside)
     this.refreshSelectionFromServer().then((changed) => {
+      this.filterResultsChainTo();
       this.setHiddenSelect();
     })
 
@@ -163,13 +163,12 @@ export default class extends ApplicationController {
       return
     }
 
-    this.filterResultsChainTo()
+    //this.filterResultsChainTo()
 
     switch (event.key) {
       case "ArrowDown":
         if (this.hasResults) {
           this.showResultsList(event)
-
           this.moveDown()
         }
         break
@@ -298,6 +297,7 @@ export default class extends ApplicationController {
 
     const selectedValue = dataDiv.getAttribute("data-satis-dropdown-item-value")
     const selectedValueText = dataDiv.getAttribute("data-satis-dropdown-item-text")
+
     var option = document.createElement("option")
     option.text = selectedValueText
     option.value = selectedValue
@@ -316,7 +316,6 @@ export default class extends ApplicationController {
       // if the selection is empty or the value is different from the current one
       if (this.hiddenSelectTarget.options.length === 0 || this.hiddenSelectTarget.options[0].value != option.value) {
         this.hiddenSelectTarget.innerHTML = ""
-
         this.searchInputTarget.value = option.text
         this.recordLastSearch();
 
@@ -343,8 +342,7 @@ export default class extends ApplicationController {
 
 
     if (this.isMultipleValue) {
-      for (let i = 0; i < this.hiddenSelectTarget.options.length; i++) {
-        const opt = this.hiddenSelectTarget.options[i]
+      Array.from(this.hiddenSelectTarget.options).forEach((opt) => {
         let pillExists = this.pillsTarget.querySelector(`[data-satis-dropdown-target="pill"] > button[data-satis-dropdown-id-param="${opt.value}"]`)
         if (!pillExists) {
           // Add pill to selection
@@ -353,7 +351,7 @@ export default class extends ApplicationController {
           pillTemplate.querySelector("button").setAttribute("data-satis-dropdown-id-param", opt.value)
           this.pillsTarget.appendChild(pillTemplate)
         }
-      }
+      })
 
       this.searchInputTarget.value = ""
       this.pillsTarget.classList.remove("hidden")
@@ -366,7 +364,7 @@ export default class extends ApplicationController {
   // --- Helpers
 
   recordLastSearch() {
-    let emptySearch = this.searchInputTarget.value === ""
+    let emptySearch = !this.searchInputTarget.value
     this.lastSearch = emptySearch ? "" : this.searchInputTarget.value
   }
 
@@ -510,6 +508,7 @@ export default class extends ApplicationController {
       if (event != null && event.type == "input" && this.searchInputTarget.value.length >= 2) {
         ourUrl.searchParams.append("term", this.searchInputTarget.value)
       }
+
       this.recordLastSearch();
 
       ourUrl.searchParams.append("page", this.currentPage)
@@ -580,14 +579,14 @@ export default class extends ApplicationController {
 
   refreshSelectionFromServer() {
     let updated = 0;
-    for (let i = 0; i < this.hiddenSelectTarget.options.length; i++) {
-      let opt = this.hiddenSelectTarget.options[i];
+    Array.from(this.hiddenSelectTarget.options).forEach((opt) => {
+      // try to find the items locally
       let item = this.itemsTarget.querySelector('[data-satis-dropdown-item-value="' + opt.value + '"]');
       if (item) {
         opt.text = item.getAttribute("data-satis-dropdown-item-text");
         updated++;
       }
-    }
+    });
 
     if (!this.hasUrlValue || this.hiddenSelectTarget.options.length === updated) return Promise.resolve(false);
 
