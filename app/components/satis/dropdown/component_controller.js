@@ -38,6 +38,7 @@ export default class extends ApplicationController {
     this.boundClickSearchInput = this.clickSearchInput.bind(this)
     this.boundResetSearchInput = this.resetSearchInput.bind(this)
     this.boundBlur = this.handleBlur.bind(this)
+    this.boundChainToChanged = this.chainToChanged.bind(this)
 
     // To remember what the current page and last page were, we queried
     this.currentPage = 1
@@ -82,9 +83,11 @@ export default class extends ApplicationController {
 
     setTimeout(() => {
       this.getScrollParent(this.element)?.addEventListener("scroll", this.boundBlur)
+
+      if (this.chainToValue) {
+        this.getChainToElement()?.addEventListener("change", this.boundChainToChanged)
+      }
     }, 500)
-
-
   }
 
   getScrollParent(node) {
@@ -107,10 +110,16 @@ export default class extends ApplicationController {
     }
   }
 
+  chainToChanged(event){
+    this.lastSearch = null
+    this.search(event);
+  }
+
   disconnect() {
     this.debouncedFetchResults = null
     this.debouncedLocalResults = null
     window.removeEventListener("click", this.boundClickedOutside)
+    this.getChainToElement()?.removeEventListener("change", this.boundChainToChanged)
   }
 
   focus(event) {
@@ -163,7 +172,7 @@ export default class extends ApplicationController {
       return
     }
 
-    //this.filterResultsChainTo()
+    // this.filterResultsChainTo()
 
     switch (event.key) {
       case "ArrowDown":
@@ -229,12 +238,13 @@ export default class extends ApplicationController {
   // User presses reset button
   reset(event) {
     if (!this.isMultipleValue) {
-      if (!this.hiddenSelectTarget.options[this.hiddenSelectTarget.selectedIndex]){
+      let currentOption = this.hiddenSelectTarget.options[this.hiddenSelectTarget.selectedIndex]
+      if(currentOption) {
+        currentOption.text = ""
+        currentOption.value = ""
+      } else
         event.preventDefault()
-      }
-      
-      this.hiddenSelectTarget.options[this.hiddenSelectTarget.selectedIndex].text = ""
-      this.hiddenSelectTarget.options[this.hiddenSelectTarget.selectedIndex].value = ""
+
       var option = document.createElement("option")
       option.text = ""
       option.value = ""
@@ -255,10 +265,13 @@ export default class extends ApplicationController {
     if (this.hasUrlValue) {
       this.itemsTarget.innerHTML = ""
     }
+
+    // hide all results and reset
     this.hideResultsList()
     this.itemTargets.forEach((item) => {
       item.classList.remove("hidden")
     })
+    this.filterResultsChainTo()
 
     if (event) {
       event.preventDefault()
@@ -417,13 +430,17 @@ export default class extends ApplicationController {
     this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.remove("hidden")
   }
 
+  getChainToElement(){
+    return this.hiddenSelectTarget?.form?.querySelector(`[name="${this.chainToValue}"]`)
+  }
+
   filterResultsChainTo() {
     if (!this.chainToValue) {
       return
     }
 
     let chainToValue
-    let chainTo = this.hiddenSelectTarget.form.querySelector(`[name="${this.chainToValue}"]`)
+    let chainTo = this.getChainToElement();
     if (chainTo) {
       chainToValue = chainTo.value
     }
@@ -447,8 +464,7 @@ export default class extends ApplicationController {
     if (this.searchInputTarget.value == this.lastSearch) {
       return
     }
-
-    if (this.searchInputTarget.value.length < 2) {
+    if (this.searchInputTarget.value.length < 2 && !this.lastSearch) {
       return
     }
 
@@ -509,7 +525,7 @@ export default class extends ApplicationController {
       let pageSize = this.pageSizeValue
 
 
-      if (event != null && event.type == "input" && this.searchInputTarget.value.length >= 2) {
+      if (event != null && event.type == "input" && (this.searchInputTarget.value.length >= 2 || this.lastSearch )) {
         ourUrl.searchParams.append("term", this.searchInputTarget.value)
       }
 
