@@ -401,7 +401,7 @@ export default class extends ApplicationController {
     })
 
     if (refreshInputs != false) {
-      if ((!this.rangeValue && this.selectedValue.length == 1) || (this.rangeValue && this.selectedValue.length == 2)) {
+      if (this.rangeValue && this.selectedValue.length == 2) {
         this.refreshInputs()
       } else {
         this.refreshInputs(false)
