@@ -249,8 +249,8 @@ export default class extends ApplicationController {
       }
     }
 
-    this.searchInputTarget.value = null
-    this.recordLastSearch()
+    this.searchInputTarget.value = ""
+    this.lastSearch = null
     this.lastPage = null
     this.endPage = null
 
