@@ -16,7 +16,7 @@ export default class extends ApplicationController {
     "hiddenSelect",
     "pills",
     "pillTemplate",
-    "pill",
+    "pill"
   ]
   static values = {
     chainTo: String,
@@ -238,16 +238,10 @@ export default class extends ApplicationController {
   // User presses reset button
   reset(event) {
     if (!this.isMultipleValue) {
-
-      let currentOption = this.hiddenSelectTarget.options[this.hiddenSelectTarget.selectedIndex]
-      if (currentOption) {
-        currentOption.text = ""
-        currentOption.value = ""
-        currentOption.removeAttribute("selected");
-      } else {
-        this.hiddenSelectTarget.options.add(this.createOption())
-      }
+      this.hiddenSelectTarget.innerHTML = ""
+      this.hiddenSelectTarget.options.add(this.createOption())
     }
+
 
     this.searchInputTarget.value = ""
     this.lastSearch = null
@@ -527,7 +521,6 @@ export default class extends ApplicationController {
       let ourUrl = this.normalizedUrl()
       let pageSize = this.pageSizeValue
 
-
       if (event != null && event.type == "input" && (this.searchInputTarget.value.length >= 2 || this.lastSearch)) {
         ourUrl.searchParams.append("term", this.searchInputTarget.value)
       }
@@ -624,7 +617,7 @@ export default class extends ApplicationController {
     if (!this.hasUrlValue || this.hiddenSelectTarget.options.length === updated) return Promise.resolve();
 
     const promise = new Promise((resolve, reject) => {
-      //  if (!this.hasUrlValue) return;
+      if (!this.hasUrlValue) return;
 
       const ourUrl = this.normalizedUrl()
 
@@ -632,6 +625,7 @@ export default class extends ApplicationController {
         .map((opt) => opt.value)
 
       // make sure we get all selected items
+      ourUrl.searchParams.append("page", 1)
       ourUrl.searchParams.append("page_size", selectedIds.length)
       // parameters with [] will be converted to an array
       if (selectedIds.length > 0)
@@ -693,12 +687,22 @@ export default class extends ApplicationController {
     const form = this.element.closest("form")
     Object.entries(this.urlParamsValue).forEach((item) => {
       let elm = form.querySelector(`[name='${item[1]}']`)
+
       if (elm) {
         ourUrl.searchParams.append(item[0], elm.value)
       } else {
         ourUrl.searchParams.append(item[0], item[1])
       }
     })
+
+    let chainTo =  this.getChainToElement();
+    if(chainTo) {
+      let chainToParam =  chainTo.getAttribute("name").substring(
+        chainTo.getAttribute("name").lastIndexOf("[") + 1,
+        chainTo.getAttribute("name").lastIndexOf("]")
+      );
+      ourUrl.searchParams.append(chainToParam, chainTo.value)
+    }
 
     return ourUrl
   }
