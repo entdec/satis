@@ -539,16 +539,8 @@ export default class extends ApplicationController {
           this.highLightSelected()
           this.showResultsList()
 
-          if (
-            this.nrOfItems == 1 &&
-            this.itemTargets[0]
-              .getAttribute("data-satis-dropdown-item-text")
-              .toLowerCase()
-              .indexOf(this.searchInputTarget.value.toLowerCase()) >= 0
-          ) {
+          if (this.nrOfItems == 1) {
             this.selectItem(this.itemTargets[0].closest('[data-satis-dropdown-target="item"]'))
-          } else if (this.nrOfItems == 1) {
-            this.moveDown()
           }
 
           if (itemCount > 0) {
