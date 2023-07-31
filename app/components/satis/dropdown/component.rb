@@ -37,7 +37,7 @@ module Satis
                                     "data-action" => actions)
 
         @block = block
-        @page_size = options[:page_size] || 10
+        @page_size = options[:page_size] || 25
       end
 
       # Deal with context
@@ -46,7 +46,7 @@ module Satis
         value ||= @options.dig(:input_html, :value)
         value ||= form.object&.send(attribute)
 
-        #value = value.id if value.respond_to?(:id)
+        value = value.id if value.respond_to?(:id)
 
         value = value.second if value.is_a?(Array) && value.size == 2 && value.first.casecmp?(value.second)
         value
