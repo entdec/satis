@@ -78,10 +78,6 @@ export default class extends ApplicationController {
     this.resultsTarget.addEventListener("blur", this.boundBlur)
 
     window.addEventListener("click", this.boundClickedOutside)
-    this.refreshSelectionFromServer().then((changed) => {
-      this.filterResultsChainTo();
-      this.setHiddenSelect();
-    })
 
     setTimeout(() => {
       this.getScrollParent(this.element)?.addEventListener("scroll", this.boundBlur)
@@ -90,6 +86,17 @@ export default class extends ApplicationController {
     if (this.chainToValue) {
       this.getChainToElement()?.addEventListener("change", this.boundChainToChanged)
     }
+
+    this.refreshSelectionFromServer().then((changed) => {
+      this.filterResultsChainTo();
+      this.setHiddenSelect();
+
+      if (!this.hiddenSelectTarget.getAttribute("data-reflex")) {
+        let event = new Event("change")
+        event.detail = {src: "satis-dropdown"}
+        this.hiddenSelectTarget.dispatchEvent(event)
+      }
+    })
   }
 
   getScrollParent(node) {
@@ -113,6 +120,11 @@ export default class extends ApplicationController {
   }
 
   chainToChanged(event) {
+    // Ignore if we triggered this change event
+    if (event?.detail?.src == "satis-dropdown") {
+      return
+    }
+
     this.reset(event);
   }
 
@@ -309,6 +321,8 @@ export default class extends ApplicationController {
     let option = this.createOption(
       {text: selectedValueText, value: selectedValue}
     )
+    // Copy over data attributes on the item div to the option
+    this.copyItemAttributes(dataDiv, option)
 
     if (this.isMultipleValue) {
       // add the item in the select if it is not already there
@@ -609,8 +623,12 @@ export default class extends ApplicationController {
       let item = this.itemsTarget.querySelector('[data-satis-dropdown-item-value="' + opt.value + '"]');
       if (item) {
         opt.text = item.getAttribute("data-satis-dropdown-item-text");
+
+        // Copy over data attributes on the item div to the option
+        this.copyItemAttributes(item, opt)
         updated++;
       }
+
       this.lastServerRefreshOptions.add(opt.value)
     });
 
@@ -653,12 +671,8 @@ export default class extends ApplicationController {
                     opt.text = text
                 }
 
-                // Copy over data attributes on the item div to the hidden input
-                Array.prototype.slice.call(item.attributes).forEach((attr) => {
-                  if (attr.name.startsWith("data") && !attr.name.startsWith("data-satis") && !attr.name.startsWith("data-action")) {
-                    this.hiddenSelectTarget.setAttribute(attr.name, attr.value)
-                  }
-                })
+                // Copy over data attributes on the item div to the option
+                this.copyItemAttributes(item, opt)
               }
             }
 
@@ -789,6 +803,14 @@ export default class extends ApplicationController {
         this.hideResultsList()
       }
     }
+  }
+
+  copyItemAttributes(item, dest) {
+    Array.prototype.slice.call(item.attributes).forEach((attr) => {
+      if (attr.name.startsWith("data") && !attr.name.startsWith("data-satis") && !attr.name.startsWith("data-action")) {
+        dest.setAttribute(attr.name, attr.value)
+      }
+    })
   }
 
   createOption(options) {
