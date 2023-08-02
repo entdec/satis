@@ -72,7 +72,8 @@ export default class extends ApplicationController {
 
     this.searchInputTarget.addEventListener("blur", this.boundBlur)
 
-    this.toggleButtonTarget.addEventListener("blur", this.boundBlur)
+    if(this.hasToggleButtonTarget)
+      this.toggleButtonTarget.addEventListener("blur", this.boundBlur)
     this.resultsTarget.addEventListener("blur", this.boundBlur)
 
     window.addEventListener("click", this.boundClickedOutside)
@@ -80,6 +81,7 @@ export default class extends ApplicationController {
     setTimeout(() => {
       this.getScrollParent(this.element)?.addEventListener("scroll", this.boundBlur)
     }, 500)
+
 
     if (this.chainToValue) {
       this.getChainToElement()?.addEventListener("change", this.boundChainToChanged)
@@ -91,7 +93,7 @@ export default class extends ApplicationController {
 
       if (!this.hiddenSelectTarget.getAttribute("data-reflex")) {
         let event = new Event("change")
-        event.detail = {src: "satis-dropdown"}
+        event.detail = { src: "satis-dropdown" }
         this.hiddenSelectTarget.dispatchEvent(event)
       }
     })
@@ -119,9 +121,7 @@ export default class extends ApplicationController {
 
   chainToChanged(event) {
     // Ignore if we triggered this change event
-    if (event?.detail?.src == "satis-dropdown") {
-      return
-    }
+
 
     this.reset(event);
   }
@@ -131,6 +131,9 @@ export default class extends ApplicationController {
     this.debouncedLocalResults = null
     window.removeEventListener("click", this.boundClickedOutside)
     this.getChainToElement()?.removeEventListener("change", this.boundChainToChanged)
+    if(this.hasToggleButtonTarget)
+      this.toggleButtonTarget.removeEventListener("blur", this.boundBlur)
+    this.resultsTarget.removeEventListener("blur", this.boundBlur)
   }
 
   focus(event) {
@@ -421,15 +424,19 @@ export default class extends ApplicationController {
     this.resultsTarget.classList.remove("hidden")
     this.resultsTarget.setAttribute("data-show", "")
     this.popperInstance.update()
-    this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.remove("hidden")
-    this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.add("hidden")
+    if(this.hasToggleButtonTarget) {
+      this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.remove("hidden")
+      this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.add("hidden")
+    }
   }
 
   hideResultsList(event) {
     this.resultsTarget.classList.add("hidden")
     this.resultsTarget.removeAttribute("data-show")
-    this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.add("hidden")
-    this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.remove("hidden")
+    if(this.hasToggleButtonTarget) {
+      this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.add("hidden")
+      this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.remove("hidden")
+    }
   }
 
   getChainToElement() {

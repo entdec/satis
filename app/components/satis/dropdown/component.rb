@@ -17,6 +17,7 @@ module Satis
         @free_text = options[:free_text]
         @needs_exact_match = options[:needs_exact_match]
         @reset_button = options[:reset_button] || options[:include_blank]
+        @toggle_button = options[:toggle_button] != false
 
         options[:input_html] ||= {}
 
