@@ -35,7 +35,6 @@ export default class extends ApplicationController {
     this.selectedIndex = -1
 
     this.boundClickedOutside = this.clickedOutside.bind(this)
-    this.boundClickSearchInput = this.clickSearchInput.bind(this)
     this.boundResetSearchInput = this.resetSearchInput.bind(this)
     this.boundBlur = this.handleBlur.bind(this)
     this.boundChainToChanged = this.chainToChanged.bind(this)
@@ -72,7 +71,6 @@ export default class extends ApplicationController {
     })
 
     this.searchInputTarget.addEventListener("blur", this.boundBlur)
-    this.searchInputTarget.addEventListener("click", this.boundClickSearchInput)
 
     this.toggleButtonTarget.addEventListener("blur", this.boundBlur)
     this.resultsTarget.addEventListener("blur", this.boundBlur)
@@ -279,11 +277,12 @@ export default class extends ApplicationController {
     if (this.searchInputTarget.closest(".bg-white").classList.contains("warning")) {
       this.searchInputTarget.closest(".bg-white").classList.remove("warning")
     }
-    this.hiddenSelectTarget.dispatchEvent(new Event("change"))
 
     if (event) {
       event.preventDefault()
     }
+
+    this.hiddenSelectTarget.dispatchEvent(new Event("change"))
     return false
   }
 
@@ -298,11 +297,6 @@ export default class extends ApplicationController {
     this.selectItem(dataDiv)
 
     event.preventDefault()
-  }
-
-  clickSearchInput(event) {
-    if (this.hasResults)
-      this.showResultsList(event)
   }
 
   selectItem(dataDiv) {
