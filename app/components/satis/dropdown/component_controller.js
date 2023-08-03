@@ -121,7 +121,9 @@ export default class extends ApplicationController {
 
   chainToChanged(event) {
     // Ignore if we triggered this change event
-
+    if (event?.detail?.src == "satis-dropdown") {
+      return
+    }
 
     this.reset(event);
   }
