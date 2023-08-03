@@ -35,7 +35,6 @@ export default class extends ApplicationController {
     this.selectedIndex = -1
 
     this.boundClickedOutside = this.clickedOutside.bind(this)
-    this.boundClickSearchInput = this.clickSearchInput.bind(this)
     this.boundResetSearchInput = this.resetSearchInput.bind(this)
     this.boundBlur = this.handleBlur.bind(this)
     this.boundChainToChanged = this.chainToChanged.bind(this)
@@ -72,24 +71,32 @@ export default class extends ApplicationController {
     })
 
     this.searchInputTarget.addEventListener("blur", this.boundBlur)
-    this.searchInputTarget.addEventListener("click", this.boundClickSearchInput)
 
-    this.toggleButtonTarget.addEventListener("blur", this.boundBlur)
+    if(this.hasToggleButtonTarget)
+      this.toggleButtonTarget.addEventListener("blur", this.boundBlur)
     this.resultsTarget.addEventListener("blur", this.boundBlur)
 
     window.addEventListener("click", this.boundClickedOutside)
-    this.refreshSelectionFromServer().then((changed) => {
-      this.filterResultsChainTo();
-      this.setHiddenSelect();
-    })
 
     setTimeout(() => {
       this.getScrollParent(this.element)?.addEventListener("scroll", this.boundBlur)
     }, 500)
 
+
     if (this.chainToValue) {
       this.getChainToElement()?.addEventListener("change", this.boundChainToChanged)
     }
+
+    this.refreshSelectionFromServer().then((changed) => {
+      this.filterResultsChainTo();
+      this.setHiddenSelect();
+
+      if (!this.hiddenSelectTarget.getAttribute("data-reflex")) {
+        let event = new Event("change")
+        event.detail = { src: "satis-dropdown" }
+        this.hiddenSelectTarget.dispatchEvent(event)
+      }
+    })
   }
 
   getScrollParent(node) {
@@ -113,6 +120,9 @@ export default class extends ApplicationController {
   }
 
   chainToChanged(event) {
+    // Ignore if we triggered this change event
+
+
     this.reset(event);
   }
 
@@ -121,6 +131,9 @@ export default class extends ApplicationController {
     this.debouncedLocalResults = null
     window.removeEventListener("click", this.boundClickedOutside)
     this.getChainToElement()?.removeEventListener("change", this.boundChainToChanged)
+    if(this.hasToggleButtonTarget)
+      this.toggleButtonTarget.removeEventListener("blur", this.boundBlur)
+    this.resultsTarget.removeEventListener("blur", this.boundBlur)
   }
 
   focus(event) {
@@ -267,11 +280,12 @@ export default class extends ApplicationController {
     if (this.searchInputTarget.closest(".bg-white").classList.contains("warning")) {
       this.searchInputTarget.closest(".bg-white").classList.remove("warning")
     }
-    this.hiddenSelectTarget.dispatchEvent(new Event("change"))
 
     if (event) {
       event.preventDefault()
     }
+
+    this.hiddenSelectTarget.dispatchEvent(new Event("change"))
     return false
   }
 
@@ -286,11 +300,6 @@ export default class extends ApplicationController {
     this.selectItem(dataDiv)
 
     event.preventDefault()
-  }
-
-  clickSearchInput(event) {
-    if (this.hasResults)
-      this.showResultsList(event)
   }
 
   selectItem(dataDiv) {
@@ -309,6 +318,8 @@ export default class extends ApplicationController {
     let option = this.createOption(
       {text: selectedValueText, value: selectedValue}
     )
+    // Copy over data attributes on the item div to the option
+    this.copyItemAttributes(dataDiv, option)
 
     if (this.isMultipleValue) {
       // add the item in the select if it is not already there
@@ -413,15 +424,19 @@ export default class extends ApplicationController {
     this.resultsTarget.classList.remove("hidden")
     this.resultsTarget.setAttribute("data-show", "")
     this.popperInstance.update()
-    this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.remove("hidden")
-    this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.add("hidden")
+    if(this.hasToggleButtonTarget) {
+      this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.remove("hidden")
+      this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.add("hidden")
+    }
   }
 
   hideResultsList(event) {
     this.resultsTarget.classList.add("hidden")
     this.resultsTarget.removeAttribute("data-show")
-    this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.add("hidden")
-    this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.remove("hidden")
+    if(this.hasToggleButtonTarget) {
+      this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.add("hidden")
+      this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.remove("hidden")
+    }
   }
 
   getChainToElement() {
@@ -609,8 +624,12 @@ export default class extends ApplicationController {
       let item = this.itemsTarget.querySelector('[data-satis-dropdown-item-value="' + opt.value + '"]');
       if (item) {
         opt.text = item.getAttribute("data-satis-dropdown-item-text");
+
+        // Copy over data attributes on the item div to the option
+        this.copyItemAttributes(item, opt)
         updated++;
       }
+
       this.lastServerRefreshOptions.add(opt.value)
     });
 
@@ -653,12 +672,8 @@ export default class extends ApplicationController {
                     opt.text = text
                 }
 
-                // Copy over data attributes on the item div to the hidden input
-                Array.prototype.slice.call(item.attributes).forEach((attr) => {
-                  if (attr.name.startsWith("data") && !attr.name.startsWith("data-satis") && !attr.name.startsWith("data-action")) {
-                    this.hiddenSelectTarget.setAttribute(attr.name, attr.value)
-                  }
-                })
+                // Copy over data attributes on the item div to the option
+                this.copyItemAttributes(item, opt)
               }
             }
 
@@ -789,6 +804,14 @@ export default class extends ApplicationController {
         this.hideResultsList()
       }
     }
+  }
+
+  copyItemAttributes(item, dest) {
+    Array.prototype.slice.call(item.attributes).forEach((attr) => {
+      if (attr.name.startsWith("data") && !attr.name.startsWith("data-satis") && !attr.name.startsWith("data-action")) {
+        dest.setAttribute(attr.name, attr.value)
+      }
+    })
   }
 
   createOption(options) {
