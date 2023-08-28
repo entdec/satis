@@ -15,12 +15,12 @@ div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controlle
           div
             / Reset button
             - unless @reset_button == false
-              button.cursor-pointer.w-6.h-full.flex.items-center.text-gray-400.outline-none.focus:outline-none data-satis-dropdown-target="resetButton" data-action="click->satis-dropdown#reset" tabindex="-1"
+              button.cursor-pointer.w-6.h-full.flex.items-center.text-gray-400.outline-none.focus:outline-none type="button" data-satis-dropdown-target="resetButton" data-action="click->satis-dropdown#reset focus->satis-dropdown#focus" tabindex="-1"
                 i.fas.fa-xmark
           - unless @toggle_button == false
             .text-gray-300.w-8.py-1.pl-2.pr-1.border-l.flex.items-center.border-gray-200.dark:border-gray-700
               / Up/down chevrons
-              button.cursor-pointer.w-6.h-6.text-gray-600.outline-none.focus:outline-none data-action="click->satis-dropdown#toggleResultsList" data-satis-dropdown-target="toggleButton" tabindex="-1"
+              button.cursor-pointer.w-6.h-6.text-gray-600.outline-none.focus:outline-none type="button" data-action="click->satis-dropdown#toggleResultsList focus->satis-dropdown#focus" data-satis-dropdown-target="toggleButton" tabindex="-1"
                 i.hidden.fas.fa-chevron-up
                 i.fas.fa-chevron-down
 
