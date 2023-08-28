@@ -138,6 +138,7 @@ export default class extends ApplicationController {
     if (this.hasToggleButtonTarget)
       this.toggleButtonTarget.removeEventListener("blur", this.boundBlur)
     this.resultsTarget.removeEventListener("blur", this.boundBlur)
+    this.searchInputTarget.removeEventListener("blur", this.boundBlur)
   }
 
   focus(event) {
