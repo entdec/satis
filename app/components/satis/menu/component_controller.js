@@ -19,14 +19,18 @@ export default class extends ApplicationController {
             name: "flip",
             enabled: true,
             options: {
-              //fallbackPlacements: ["top", "right"],
+              fallbackPlacements: ["top", "right"],
               boundary: this.element.closest(".sts-card"),
+              rootBoundary: this.element.closest(".sts-card")
             },
           },
           {
             name: "preventOverflow",
             options: {
+              altAxis: true,
+              altBoundary: true,
               boundary: this.element.closest(".sts-card"),
+              rootBoundary: this.element.closest(".sts-card")
             },
           },
         ],
