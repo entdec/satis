@@ -133,9 +133,9 @@ export default class extends ApplicationController {
 
       let today = new Date()
       this.displayValue = new Date(today.getFullYear(), today.getMonth(), 1)
-      this.hiddenInputTarget.value = ""
       this.hiddenInputTarget.dispatchEvent(new Event("change"))
       this.refreshCalendar()
+      this.hiddenInputTarget.value = ""
       this.inputTarget.value = ""
     }
     event.preventDefault()

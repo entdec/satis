@@ -31,6 +31,7 @@ import "codemirror/mode/ruby/ruby"
 import "codemirror/mode/xml/xml"
 import "codemirror/mode/yaml/yaml"
 import "codemirror/mode/yaml-frontmatter/yaml-frontmatter"
+import "codemirror/mode/sieve/sieve"
 
 import "codemirror-liquid"
 
