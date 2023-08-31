@@ -4,7 +4,7 @@ import { debounce } from "../../../../frontend/utils"
 import { createPopper } from "@popperjs/core"
 
 export default class extends ApplicationController {
-  static targets = ["submenu", "toggle"]
+  static targets = ["submenu", "toggle", "toggleug"]
 
   connect() {
     super.connect()
@@ -31,6 +31,13 @@ export default class extends ApplicationController {
           },
         ],
       })
+    }
+
+    if(this.hasToggleugTarget) {
+      let groupByData = JSON.parse(this.toggleugTarget.dataset.show_params)
+      if(this.toggleugTarget.id == "group_by_"+groupByData.current_view+"_"+groupByData.group_by_column) {
+        this.toggleugTarget.classList.toggle("hidden")
+      }
     }
   }
 
@@ -62,6 +69,18 @@ export default class extends ApplicationController {
         this.hide(event)
       } else {
         this.show(event)
+      }
+    }
+
+    if (this.hasToggleugTarget) {
+      let ungroupElements  = document.getElementsByClassName('ungroup-icon')
+      Array.from(ungroupElements).forEach(function (element) {
+        element.classList.add('hidden')
+      });
+
+      if ((event.currentTarget != this.toggleugTarget && this.toggleugTarget.classList.contains("hidden")) ||
+          (event.currentTarget == this.toggleugTarget && !this.toggleugTarget.classList.contains("hidden")) ) {
+        this.toggleugTarget.classList.toggle("hidden")
       }
     }
   }
