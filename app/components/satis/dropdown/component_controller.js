@@ -572,8 +572,6 @@ export default class extends ApplicationController {
               .indexOf(this.searchInputTarget.value.toLowerCase()) >= 0
           ) {
             this.selectItem(this.itemTargets[0].closest('[data-satis-dropdown-target="item"]'))
-          } else if (this.nrOfItems == 1) {
-            this.moveDown()
           }
 
           if (itemCount > 0) {
