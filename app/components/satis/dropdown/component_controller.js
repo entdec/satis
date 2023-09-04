@@ -242,8 +242,8 @@ export default class extends ApplicationController {
     if (this.searchInputTarget.closest(".bg-white").classList.contains("warning") || !this.searchInputTarget.value) {
       if (!this.isMultipleValue) {
         // set the freetext value as the selected value
-        this.hiddenSelectTarget.innerHTML = ""
         if (this.freeTextValue && this.searchInputTarget.value) {
+          this.hiddenSelectTarget.innerHTML = ""
           var option = this.createOption(
             {text: this.searchInputTarget.value, value: this.searchInputTarget.value}
           )
@@ -306,8 +306,6 @@ export default class extends ApplicationController {
   }
 
   selectItem(dataDiv) {
-    this.hideResultsList()
-
     const selectedValue = dataDiv.getAttribute("data-satis-dropdown-item-value")
     const selectedValueText = dataDiv.getAttribute("data-satis-dropdown-item-text")
     this.copyItemAttributes(dataDiv, this.hiddenSelectTarget) // FIXME: we are now supporting multiple values; is this needed? We copy the attributes to options
@@ -321,7 +319,9 @@ export default class extends ApplicationController {
     if (optionExists) {
       if (!this.resultsShown) this.showResultsList()
       return
-    }
+    } else
+      this.hideResultsList()
+
 
     // clear the search input if we are not in multi select mode
     if (!this.isMultipleValue) {
@@ -557,13 +557,7 @@ export default class extends ApplicationController {
             this.showResultsList()
 
           // auto
-          if (
-            this.nrOfItems == 1 && !this.freeTextValue &&
-            this.itemTargets[0]
-              .getAttribute("data-satis-dropdown-item-text")
-              .toLowerCase()
-              .indexOf(this.searchInputTarget.value.toLowerCase()) >= 0
-          ) {
+          if (this.nrOfItems == 1 && !this.freeTextValue) {
             this.selectItem(this.itemTargets[0].closest('[data-satis-dropdown-target="item"]'))
           } else if (!this.freeTextValue) {
             if (this.nrOfItems == 1)
