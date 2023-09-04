@@ -438,6 +438,7 @@ export default class extends ApplicationController {
       chainToValue = chainTo.value
     }
 
+    let listItems = 0
     this.itemTargets.forEach((item) => {
       let itemChainToValue = item.getAttribute("data-chain")
       let chainMatch = true
@@ -446,12 +447,16 @@ export default class extends ApplicationController {
       }
 
       if (chainMatch) {
+        listItems += 1
         item.classList.remove("hidden")
       } else {
         item.classList.add("hidden")
         item.classList.remove("bg-primary-200", "font-medium") // we should also remove highlighting
       }
     })
+    if(listItems == 1) {
+      this.selectItem(this.itemTargets.filter((item) => { return item.classList != 'hidden' })[0])
+    }
   }
 
   localResults(event) {
@@ -553,9 +558,10 @@ export default class extends ApplicationController {
         if (this.hasResults) {
           this.filterResultsChainTo()
           this.highLightSelected()
-          if (!this.resultsShown)
+          if (!this.resultsShown && !this.chainToValue) {
             this.showResultsList()
-
+          }
+          
           // auto
           if (this.nrOfItems == 1 && !this.freeTextValue) {
             this.selectItem(this.itemTargets[0].closest('[data-satis-dropdown-target="item"]'))
