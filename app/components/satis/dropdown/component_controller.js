@@ -47,6 +47,8 @@ export default class extends ApplicationController {
     // To remember what the last search was we did
     this.lastSearch = null
 
+    // To remember what the last options were we got from the server to prevent unnecessary refreshes
+    // and unexpected events
     this.lastServerRefreshOptions = new Set()
 
     this.popperInstance = createPopper(this.element, this.resultsTarget, {
@@ -72,7 +74,7 @@ export default class extends ApplicationController {
 
     this.searchInputTarget.addEventListener("blur", this.boundBlur)
 
-    if(this.hasToggleButtonTarget)
+    if (this.hasToggleButtonTarget)
       this.toggleButtonTarget.addEventListener("blur", this.boundBlur)
     this.resultsTarget.addEventListener("blur", this.boundBlur)
 
@@ -93,7 +95,7 @@ export default class extends ApplicationController {
 
       if (!this.hiddenSelectTarget.getAttribute("data-reflex")) {
         let event = new Event("change")
-        event.detail = { src: "satis-dropdown" }
+        event.detail = {src: "satis-dropdown"}
         this.hiddenSelectTarget.dispatchEvent(event)
       }
     })
@@ -133,9 +135,10 @@ export default class extends ApplicationController {
     this.debouncedLocalResults = null
     window.removeEventListener("click", this.boundClickedOutside)
     this.getChainToElement()?.removeEventListener("change", this.boundChainToChanged)
-    if(this.hasToggleButtonTarget)
+    if (this.hasToggleButtonTarget)
       this.toggleButtonTarget.removeEventListener("blur", this.boundBlur)
     this.resultsTarget.removeEventListener("blur", this.boundBlur)
+    this.searchInputTarget.removeEventListener("blur", this.boundBlur)
   }
 
   focus(event) {
@@ -192,18 +195,25 @@ export default class extends ApplicationController {
     switch (event.key) {
       case "ArrowDown":
         if (this.hasResults) {
-          this.showResultsList(event)
+          if(!this.resultsShown)
+            this.showResultsList(event)
           this.moveDown()
         }
+        // prevent the cursor from jumping to the beginning of the input and scrolling in some cases
+        event.preventDefault()
         break
       case "ArrowUp":
         if (this.hasResults) {
           this.moveUp()
         }
+        // prevent the cursor from jumping to the beginning of the input and scrolling in some cases
+        event.preventDefault()
         break
       case "Enter":
         event.preventDefault()
         this.select(event)
+        // expect the dropdown to hide when its a freetext value
+        if(this.selectedIndex ===-1 && this.freeTextValue) this.hideResultsList(event)
 
         break
       case "Escape":
@@ -229,18 +239,11 @@ export default class extends ApplicationController {
       this.debouncedLocalResults(event)
     }
 
-    if (this.searchInputTarget.value) {
-      this.searchInputTarget.closest(".bg-white").classList.add("warning")
-    } else {
-      this.searchInputTarget.closest(".bg-white").classList.remove("warning")
-    }
-
     if (this.searchInputTarget.closest(".bg-white").classList.contains("warning") || !this.searchInputTarget.value) {
       if (!this.isMultipleValue) {
-        this.hiddenSelectTarget.innerHTML = ""
-
+        // set the freetext value as the selected value
         if (this.freeTextValue && this.searchInputTarget.value) {
-          // not sure about this?
+          this.hiddenSelectTarget.innerHTML = ""
           var option = this.createOption(
             {text: this.searchInputTarget.value, value: this.searchInputTarget.value}
           )
@@ -279,9 +282,7 @@ export default class extends ApplicationController {
     // hide all results and reset
     this.hideResultsList()
 
-    if (this.searchInputTarget.closest(".bg-white").classList.contains("warning")) {
-      this.searchInputTarget.closest(".bg-white").classList.remove("warning")
-    }
+    this.searchInputTarget.closest(".bg-white").classList.toggle("warning", false)
 
     if (event) {
       event.preventDefault()
@@ -305,55 +306,36 @@ export default class extends ApplicationController {
   }
 
   selectItem(dataDiv) {
-    this.hideResultsList()
-
-    // Copy over data attributes on the item div to the hidden input
-    Array.prototype.slice.call(dataDiv.attributes).forEach((attr) => {
-      if (attr.name.startsWith("data") && !attr.name.startsWith("data-satis") && !attr.name.startsWith("data-action")) {
-        this.hiddenSelectTarget.setAttribute(attr.name, attr.value)
-      }
-    })
-
     const selectedValue = dataDiv.getAttribute("data-satis-dropdown-item-value")
     const selectedValueText = dataDiv.getAttribute("data-satis-dropdown-item-text")
+    this.copyItemAttributes(dataDiv, this.hiddenSelectTarget) // FIXME: we are now supporting multiple values; is this needed? We copy the attributes to options
 
-    let option = this.createOption(
-      {text: selectedValueText, value: selectedValue}
-    )
-    // Copy over data attributes on the item div to the option
+    const option = this.createOption({text: selectedValueText, value: selectedValue})
     this.copyItemAttributes(dataDiv, option)
+    const optionExists = Array.from(this.hiddenSelectTarget.options)
+      .some((opt) => opt.value === option.value && this.dataAttributesAreEqual(opt, option))
 
-    if (this.isMultipleValue) {
-      // add the item in the select if it is not already there
-      if (
-        !Array.from(this.hiddenSelectTarget.options)
-          .map((opt) => opt.value)
-          .includes(option.value)
-      ) {
-        this.hiddenSelectTarget.add(option)
-        this.lastServerRefreshOptions.add(option.value)
-      }
-    } else {
-      // if the selection is empty or the value is different from the current one
-      if (this.hiddenSelectTarget.options.length === 0 || this.hiddenSelectTarget.options[0].value != option.value) {
-        this.hiddenSelectTarget.innerHTML = ""
-        this.searchInputTarget.value = option.text
-        this.recordLastSearch();
+    // we dont select items that already have been selected, open list
+    if (optionExists) {
+      if (!this.resultsShown) this.showResultsList()
+      return
+    } else
+      this.hideResultsList()
 
-        // add the item in the select
-        this.hiddenSelectTarget.add(option)
 
-        this.lastServerRefreshOptions.clear()
-        this.hiddenSelectTarget.add(option)
-      }
+    // clear the search input if we are not in multi select mode
+    if (!this.isMultipleValue) {
+      this.lastServerRefreshOptions.clear()
+      this.hiddenSelectTarget.innerHTML = ""
+      this.searchInputTarget.value = selectedValueText
+      this.recordLastSearch()
     }
+
+    this.hiddenSelectTarget.add(option)
+    this.lastServerRefreshOptions.add(selectedValue)
 
     this.hiddenSelectTarget.dispatchEvent(new Event("change"))
-
-
-    if (this.searchInputTarget.closest(".bg-white").classList.contains("warning")) {
-      this.searchInputTarget.closest(".bg-white").classList.remove("warning")
-    }
+    this.searchInputTarget.closest(".bg-white").classList.toggle("warning", false)
   }
 
   setHiddenSelect() {
@@ -367,11 +349,11 @@ export default class extends ApplicationController {
 
     if (this.isMultipleValue) {
       Array.from(this.hiddenSelectTarget.options).forEach((opt) => {
-        let pillExists = this.pillsTarget.querySelector(`[data-satis-dropdown-target="pill"] > button[data-satis-dropdown-id-param="${opt.value}"]`)
+        const pillExists = this.pillsTarget.querySelector(`[data-satis-dropdown-target="pill"] > button[data-satis-dropdown-id-param="${opt.value}"]`)
         if (!pillExists) {
           // Add pill to selection
           const pillTemplate = this.pillTemplateTarget.content.firstElementChild.cloneNode(true)
-          pillTemplate.prepend(opt.text)
+          pillTemplate.prepend(opt.text || opt.value)
           pillTemplate.querySelector("button").setAttribute("data-satis-dropdown-id-param", opt.value)
           this.pillsTarget.appendChild(pillTemplate)
         }
@@ -381,7 +363,7 @@ export default class extends ApplicationController {
       this.pillsTarget.classList.remove("hidden")
     } else if (this.hiddenSelectTarget.options.length == 1) {
       const opt = this.hiddenSelectTarget.options[0];
-      this.searchInputTarget.value = opt.text
+      this.searchInputTarget.value = opt.text || opt.value
     }
   }
 
@@ -396,6 +378,8 @@ export default class extends ApplicationController {
     event.preventDefault()
 
     this.hiddenSelectTarget.removeChild(this.hiddenSelectTarget.querySelector(`option[value="${event.params.id}"]`))
+    this.lastServerRefreshOptions.delete(event.params.id)
+
     this.pillTargets
       .find((pill) => pill.querySelector("button").getAttribute("data-satis-dropdown-id-param") == event.params.id)
       ?.remove()
@@ -417,8 +401,6 @@ export default class extends ApplicationController {
         this.fetchResults(event)
       }
     }
-
-    event.preventDefault()
     return false
   }
 
@@ -426,7 +408,7 @@ export default class extends ApplicationController {
     this.resultsTarget.classList.remove("hidden")
     this.resultsTarget.setAttribute("data-show", "")
     this.popperInstance.update()
-    if(this.hasToggleButtonTarget) {
+    if (this.hasToggleButtonTarget) {
       this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.remove("hidden")
       this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.add("hidden")
     }
@@ -435,7 +417,7 @@ export default class extends ApplicationController {
   hideResultsList(event) {
     this.resultsTarget.classList.add("hidden")
     this.resultsTarget.removeAttribute("data-show")
-    if(this.hasToggleButtonTarget) {
+    if (this.hasToggleButtonTarget) {
       this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.add("hidden")
       this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.remove("hidden")
     }
@@ -483,41 +465,58 @@ export default class extends ApplicationController {
     }
 
     if (this.searchInputTarget.value.length < 2 && !this.lastSearch) {
+      // show warning when characters are less than 2
+      if (!this.freeTextValue)
+        this.searchInputTarget.closest(".bg-white").classList.toggle("warning", true)
       return
     }
 
     this.recordLastSearch();
 
     this.itemTargets.forEach((item) => {
-      item.classList.remove("hidden")
+      item.classList.toggle("hidden", false)
     })
 
     this.filterResultsChainTo()
 
+    const searchValue = this.searchInputTarget.value.toLowerCase();
+    // FIXME: We don't need to store all matches in an array
     let matches = []
     this.itemTargets.forEach((item) => {
-      let text = item.getAttribute("data-satis-dropdown-item-text").toLowerCase()
-      let value = item.getAttribute("data-satis-dropdown-item-value").toLowerCase()
+      const text = item.getAttribute("data-satis-dropdown-item-text").toLowerCase()
+      const isHidden = item.classList.contains("hidden");
 
-      if (!item.classList.contains("hidden")) {
-        if (this.needsExactMatchValue && text === this.searchInputTarget.value.toLowerCase()) {
-          matches = matches.concat(item)
-        } else if (!this.needsExactMatchValue && text.indexOf(this.searchInputTarget.value.toLowerCase()) >= 0) {
-          matches = matches.concat(item)
+      if (!isHidden) {
+        if (this.needsExactMatchValue && text === searchValue) {
+          matches.push(item);
+        } else if (!this.needsExactMatchValue && text.indexOf(searchValue) >= 0) {
+          matches.push(item);
         } else {
-          item.classList.add("hidden")
-          item.classList.remove("bg-primary-200", "font-medium") // we should also remove highlighting
+          item.classList.toggle("hidden", true);
+          item.classList.toggle("bg-primary-200", false);
+          item.classList.toggle("font-medium", false);
         }
       }
     })
 
+    // don't show results
+    if(matches.length > 0)
+      this.showResultsList(event)
+    else if(this.resultsShown)
+      this.hideResultsList(event)
+
+    // auto select if there is only one match and we are not in freetext mode
     if (
-      matches.length == 1 &&
+      matches.length == 1 && !this.freeTextValue &&
       matches[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.lastSearch.toLowerCase()) >= 0
     ) {
       this.selectItem(matches[0].closest('[data-satis-dropdown-target="item"]'))
-    } else if (matches.length > 1) {
-      this.showResultsList(event)
+    } else {
+      if(!this.freeTextValue) {
+        if (matches.length === 1)
+          this.moveDown()
+        this.searchInputTarget.closest(".bg-white").classList.toggle("warning", this.searchInputTarget.value.length > 0)
+      }
     }
   }
 
@@ -543,7 +542,7 @@ export default class extends ApplicationController {
       let ourUrl = this.normalizedUrl()
       let pageSize = this.pageSizeValue
 
-      if (event != null && event.type == "input" && (this.searchInputTarget.value.length >= 2 || this.lastSearch)) {
+      if (event != null && (this.searchInputTarget.value.length >= 2 || this.lastSearch)) {
         ourUrl.searchParams.append("term", this.searchInputTarget.value)
       }
 
@@ -559,12 +558,17 @@ export default class extends ApplicationController {
         if (this.hasResults) {
           this.filterResultsChainTo()
           this.highLightSelected()
-          if(!this.chainToValue) {
+          if (!this.resultsShown && !this.chainToValue) {
             this.showResultsList()
           }
-
-          if (this.nrOfItems == 1 ) {
+          
+          // auto
+          if (this.nrOfItems == 1 && !this.freeTextValue) {
             this.selectItem(this.itemTargets[0].closest('[data-satis-dropdown-target="item"]'))
+          } else if (!this.freeTextValue) {
+            if (this.nrOfItems == 1)
+              this.moveDown()
+            this.searchInputTarget.closest(".bg-white").classList.toggle("warning", this.searchInputTarget.value.length > 0)
           }
 
           if (itemCount > 0) {
@@ -577,7 +581,8 @@ export default class extends ApplicationController {
           }
 
           resolve()
-        }
+        } else
+          this.searchInputTarget.closest(".bg-white").classList.toggle("warning", this.searchInputTarget.value.length > 0)
       })
     })
     return promise
@@ -660,7 +665,7 @@ export default class extends ApplicationController {
             for (let i = 0; i < this.hiddenSelectTarget.options.length; i++) {
               let opt = this.hiddenSelectTarget.options[i];
               let item = tmpDiv.querySelector('[data-satis-dropdown-item-value="' + opt.value + '"]')
-              if (!item) {
+              if (!item && !this.freeTextValue) {
                 opt.remove()
                 this.lastServerRefreshOptions.delete(opt.value)
               } else {
@@ -711,9 +716,9 @@ export default class extends ApplicationController {
       }
     })
 
-    let chainTo =  this.getChainToElement();
-    if(chainTo) {
-      let chainToParam =  chainTo.getAttribute("name").substring(
+    let chainTo = this.getChainToElement();
+    if (chainTo) {
+      let chainToParam = chainTo.getAttribute("name").substring(
         chainTo.getAttribute("name").lastIndexOf("[") + 1,
         chainTo.getAttribute("name").lastIndexOf("]")
       );
@@ -785,13 +790,17 @@ export default class extends ApplicationController {
 
   // clear search input and hide results
   resetSearchInput(event) {
+    this.searchInputTarget.closest(".bg-white").classList.toggle("warning", false)
+
     if (this.multiSelectValue) {
       this.searchInputTarget.value = ""
       return;
     }
 
-    if (this.hiddenSelectTarget.selectedIndex > -1)
-      this.searchInputTarget.value = this.hiddenSelectTarget.options[this.hiddenSelectTarget.selectedIndex].text
+    if (this.hiddenSelectTarget.selectedIndex > -1) {
+      const option = this.hiddenSelectTarget.options[this.hiddenSelectTarget.selectedIndex]
+      this.searchInputTarget.value = option.text || option.value // the value in case text is not available (free text values)
+    }
     this.fetchResults(event)
     this.hideResultsList(event)
   }
@@ -816,7 +825,7 @@ export default class extends ApplicationController {
   }
 
   createOption(options) {
-    options = Object.assign( {text: "", value: "", selected: true}, options)
+    options = Object.assign({text: "", value: "", selected: true}, options)
 
     let option = document.createElement("option")
     option.text = options.text
@@ -824,4 +833,18 @@ export default class extends ApplicationController {
     option.setAttribute("selected", options.selected);
     return option;
   }
+
+  dataAttributesAreEqual(el1, el2) {
+    const keys1 = Object.keys(el1.dataset);
+    const keys2 = Object.keys(el2.dataset);
+    if (keys1.length !== keys2.length) return false;
+
+    for (const key of keys1) {
+      if (el1.dataset[key] !== el2.dataset[key]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
 }
