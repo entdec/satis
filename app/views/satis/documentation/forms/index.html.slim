@@ -7,6 +7,8 @@ pre
         .col-span-12
           = f.input :name
         .col-span-12
+          = f.input :name, collection: ['test', 'test2'], as: :dropdown
+        .col-span-12
           = f.input :created_at
         .col-span-12
           = f.submit
@@ -16,7 +18,53 @@ pre
     .col-span-12
       = f.input :name
     .col-span-12
+      = f.input :name, collection: ['test', 'test2'], as: :dropdown
+    .col-span-12
       = f.input :created_at
     .col-span-12
       = f.submit
 
+h1 Dropdowns
+
+h2 Dropdowns can come from local-view data
+
+pre
+  | = sts.form_for(@user, url: documentation_index_path) do |f|
+      .grid.grid-cols-12.gap-4
+        .col-span-12
+          = f.input :name, collection: ['test', 'test2'], as: :dropdown
+
+= sts.form_for(@user, url: documentation_index_path) do |f|
+  .grid.grid-cols-12.gap-4
+    .col-span-12
+      = f.input :name, collection: ['test', 'test2'], as: :dropdown
+
+h2 Dropdowns can come from remote data
+
+p
+  pre
+    | = sts.form_for(@user, url: documentation_index_path) do |f|
+        .grid.grid-cols-12.gap-4
+          .col-span-12
+            = f.input :name, url: select_documentation_forms_url, as: :dropdown
+
+p To allow you full control over how the dropdown should look, you will need to implement a bit of view:
+
+pre
+  | - @users.each do |user|
+      div data-satis-dropdown-item-value=user data-satis-dropdown-item-text=user
+        .cursor-pointer.w-full.border-gray-100.rounded-t.border-b.hover:bg-blue-200
+          .flex.w-full.items-center.p-2.pl-2.border-transparent.border-l-2.hover:border-teal-100
+            .w-full.items-center.flex
+              .mx-2.-mt-1
+                span = user
+
+
+= sts.form_for(@user, url: documentation_index_path) do |f|
+  .grid.grid-cols-12.gap-4
+    .col-span-12
+      = f.input :name, url: select_documentation_forms_url, as: :dropdown
+
+p
+br
+br

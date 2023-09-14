@@ -30,4 +30,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "auxilium", "~> 3"
   spec.add_development_dependency "slim-rails", "~> 3"
+  spec.add_development_dependency "faker"
+
 end
