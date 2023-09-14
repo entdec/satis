@@ -46,29 +46,7 @@ export default class extends ApplicationController {
       this.multipleValue = false
     }
 
-    this.selectedValue = []
-    let startDate = new Date()
-    if (this.hiddenInputTarget.value) {
-      this.hiddenInputTarget.value.split(/;| - |\s/).forEach((value) => {
-        this.selectedValue.push(new Date(Date.parse(value)))
-      })
-    }
-
-    if (this.selectedValue.length == 0) {
-      this.selectedValue.push(
-        new Date(
-          startDate.getFullYear(),
-          startDate.getMonth(),
-          startDate.getDate(),
-          startDate.getHours(),
-          startDate.getMinutes(),
-          0
-        )
-      )
-    }
-
-    this.displayValue = new Date(this.selectedValue[0].getFullYear(), this.selectedValue[0].getMonth(), 1)
-    this.currentSelectNr = this.selectedValue.length
+    this.prepareSelection()
 
     if (!this.inlineValue) {
       this.popperInstance = createPopper(this.element, this.calendarViewTarget, {
@@ -79,7 +57,7 @@ export default class extends ApplicationController {
             name: "flip",
             enabled: true,
             options: {
-              boundary: this.element.closest(".satis-card"),
+              boundary: this.element.closest(".sts-card"),
             },
           },
           {
@@ -112,6 +90,32 @@ export default class extends ApplicationController {
     }
   }
 
+  prepareSelection() {
+    this.selectedValue = []
+    let startDate = new Date()
+    if (this.hiddenInputTarget.value) {
+      this.hiddenInputTarget.value.split(/;| - |\s/).forEach((value) => {
+        this.selectedValue.push(new Date(Date.parse(value)))
+      })
+    }
+
+    if (this.selectedValue.length == 0) {
+      this.selectedValue.push(
+        new Date(
+          startDate.getFullYear(),
+          startDate.getMonth(),
+          startDate.getDate(),
+          startDate.getHours(),
+          startDate.getMinutes(),
+          0
+        )
+      )
+    }
+
+    this.displayValue = new Date(this.selectedValue[0].getFullYear(), this.selectedValue[0].getMonth(), 1)
+    this.currentSelectNr = this.selectedValue.length
+  }
+
   disconnect() {
     window.removeEventListener("click", this.boundClickedOutside)
     window.removeEventListener("keyup", this.boundKeyUp)
@@ -129,9 +133,9 @@ export default class extends ApplicationController {
 
       let today = new Date()
       this.displayValue = new Date(today.getFullYear(), today.getMonth(), 1)
-      this.hiddenInputTarget.value = ""
       this.hiddenInputTarget.dispatchEvent(new Event("change"))
       this.refreshCalendar()
+      this.hiddenInputTarget.value = ""
       this.inputTarget.value = ""
     }
     event.preventDefault()
@@ -219,6 +223,12 @@ export default class extends ApplicationController {
     }
   }
 
+  hiddenInputChanged(event) {
+    this.prepareSelection()
+    this.refreshCalendar(false)
+    this.refreshInputs(false)
+  }
+
   dateTimeEntered(event) {
     return
 
@@ -284,7 +294,7 @@ export default class extends ApplicationController {
   }
 
   // Refreshes the hidden and visible input values
-  refreshInputs() {
+  refreshInputs(dispatchEvent = true) {
     let joinChar = ";"
     if (this.rangeValue) {
       joinChar = " - "
@@ -300,7 +310,9 @@ export default class extends ApplicationController {
 
     if (inputValue.split(joinChar).length >= this.maxSelectNr) {
       this.hiddenInputTarget.value = inputValue
-      this.hiddenInputTarget.dispatchEvent(new Event("change"))
+      if (dispatchEvent) {
+        this.hiddenInputTarget.dispatchEvent(new Event("change"))
+      }
     }
 
     let format = this.formatValue
@@ -389,7 +401,11 @@ export default class extends ApplicationController {
     })
 
     if (refreshInputs != false) {
-      this.refreshInputs()
+      if (this.rangeValue && this.selectedValue.length == 2) {
+        this.refreshInputs()
+      } else {
+        this.refreshInputs(false)
+      }
     }
   }
 

@@ -19,6 +19,7 @@ export default class extends ApplicationController {
       preferredCountries: ["nl", "de", "gb", "fr", "us", "es", "be", "se"],
       nationalMode: false,
       utilsScript: intlTelInputUtilsUrl,
+      dropdownContainer: document.body,
     })
   }
 

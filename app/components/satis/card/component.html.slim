@@ -21,7 +21,7 @@
                 = action
 
         - if menu
-          .ml-4.mt-4.flex-shrink-0
+          .ml-4.mt-2.flex-shrink-0
             = render(Satis::Menu::Component.new(menu))
 
   - if tabs?
@@ -35,23 +35,29 @@
         nav.-mb-px.flex.space-x-4.overflow-x-auto aria-label="Tabs"
           - tabs.each_with_index do |tab, index|
             - id = tab.id.present? ? tab.id : tab.name
-            .flex.tab class="#{index == (tab.selected_tab_index) ? 'selected' : ''}" data-satis-tabs-target="tab" data-action="click->satis-tabs#select" id="#{id}" href="#" aria-current="#{tab.selected? ? "page" : ''}"
-              a
+            .flex.tab class="#{index == (tab.selected_tab_index) ? 'selected' : ''}" data-satis-tabs-target="tab" data-action="click->satis-tabs#select" id=id href="#" aria-current="#{tab.selected? ? "page" : ''}"
+              a.relative
                 - if tab.icon
                   i.mr-2 class=tab.icon
-                span id="tab_label_#{tab.id}" class="#{tab.dirty? ? 'italic' : ''}"
+                  span.flex.absolute.h-2.w-2.top-0.left-0 id="tab_changed_#{tab.id}" class="mt-0.5 ml-2.5"
+                    - if tab.dirty?
+                      span.relative.inline-flex.rounded-full.h-2.w-2.bg-blue-500
+                span id="tab_label_#{tab.id}"
                   = t(tab.name, scope: [:tabs], default: tab.title || tab.name)
                 i.fal.fa-triangle-exclamation.ml-2.hidden
                 - if tab.badge
                   span.badge id="tab_badge_#{tab.id}"
                     = tab.badge
                 - if tab.tab_menu
-                  = render(Satis::Menu::Component.new(tab.tab_menu, icon: 'fa-thin fa-chevron-down'))
+                  .inline-flex id="menu_update_#{tab.id}"
+                    - if tab.tab_menu.items.present?
+                      = render(Satis::Menu::Component.new(tab.tab_menu, icon: 'fa-thin fa-chevron-down'))
           - if custom_tabs_link_html.present?
             = custom_tabs_link_html
 
     - tabs.each_with_index do |tab, index|
-      div id="#{tab.name}-content" class="tab-content #{tab.options[:padding] == true ? 'px-6 py-6' : ''} #{index == (tab.selected_tab_index) ? 'selected' : ''}" data-satis-tabs-target="content"
+      - id = "#{tab.id.present? ? tab.id : tab.name}-content"
+      div id=id class="tab-content #{tab.options[:padding] == true ? 'px-6 py-6' : ''} #{index == (tab.selected_tab_index) ? 'selected' : ''}" data-satis-tabs-target="content"
         = tab.to_s
 
   - else

@@ -17,24 +17,28 @@ module Satis
         @free_text = options[:free_text]
         @needs_exact_match = options[:needs_exact_match]
         @reset_button = options[:reset_button] || options[:include_blank]
+        @toggle_button = options[:toggle_button] != false
 
         options[:input_html] ||= {}
+
         options[:input_html][:value] = hidden_value
 
         options[:input_html][:autofocus] ||= false
         if options[:input_html][:autofocus]
-          options[:autofocus] = 'autofocus'
+          options[:autofocus] = "autofocus"
           options[:input_html].delete(:autofocus)
         end
 
-        actions =  [options[:input_html]['data-action'], 'change->satis-dropdown#display',
-                   'focus->satis-dropdown#focus'].join(' ') unless options[:input_html]['data-reflex']
+        unless options[:input_html]["data-reflex"]
+          actions = [options[:input_html]["data-action"], "change->satis-dropdown#display",
+                     "focus->satis-dropdown#focus"].join(" ")
+        end
 
-        options[:input_html].merge!('data-satis-dropdown-target' => 'hiddenInput',
-                                    'data-action' => actions)
+        options[:input_html].merge!("data-satis-dropdown-target" => "hiddenSelect",
+                                    "data-action" => actions)
 
         @block = block
-        @page_size = options[:page_size] || 10
+        @page_size = options[:page_size] || 25
       end
 
       # Deal with context
@@ -42,9 +46,31 @@ module Satis
         value = @options[:selected]
         value ||= @options.dig(:input_html, :value)
         value ||= form.object&.send(attribute)
-        value = value.id if value.respond_to? :id
+
+        value = value.id if value.respond_to?(:id)
+
         value = value.second if value.is_a?(Array) && value.size == 2 && value.first.casecmp?(value.second)
         value
+      end
+
+      def options_array(obj)
+        return [[]] unless obj
+
+        if obj.is_a?(Array)
+          obj.filter_map {|item| option_value(item) }
+        else
+          [option_value(obj)]
+        end
+      end
+
+      def option_value(item)
+        if item.respond_to?(:id)
+          [nil, item.id, {selected: true}]
+        elsif item.is_a?(Array)
+          [item.second , item.first, {selected: true}]
+        elsif item.is_a?(String)
+          [nil, item, {selected: true}]
+        end
       end
 
       def placeholder

@@ -24,11 +24,23 @@
       a {
         @apply text-primary-600;
       }
+
+      .sts-menu {
+        &__button {
+          span {
+            @apply block;
+          }
+        }
+      }
     }
 
     .sts-menu {
       &__button {
         @apply h-0 w-0 pl-4;
+
+        span {
+          @apply hidden;
+        }
       }
     }
 

@@ -28,8 +28,6 @@ module Satis
           @content.to_s.humanize
         when ActiveSupport::SafeBuffer
           @content
-        when String
-          @content.humanize
         when nil
           @placeholder
         else
