@@ -1,0 +1,22 @@
+h1 Forms
+p Similarly to for example simple forms Satis allows for rich forms
+
+pre
+  | = sts.form_for(@user, url: documentation_index_path) do |f|
+      .grid.grid-cols-12.gap-4
+        .col-span-12
+          = f.input :name
+        .col-span-12
+          = f.input :created_at
+        .col-span-12
+          = f.submit
+
+= sts.form_for(@user, url: documentation_index_path) do |f|
+  .grid.grid-cols-12.gap-4
+    .col-span-12
+      = f.input :name
+    .col-span-12
+      = f.input :created_at
+    .col-span-12
+      = f.submit
+

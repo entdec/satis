@@ -1,0 +1,39 @@
+.grid.grid-cols-4.gap-4
+  .col-span-4
+    h1 Avatars
+    p Allow you to display avatars
+
+  .col-span-4
+    = sts.card(:simplest_case, title: t('.simplest_case')) do |card|
+      p
+        | Avatars will by default show the first two capitalized letters of a name.
+      pre
+        | = sts.avatar name: 'User Name'
+
+      p = sts.avatar name: 'User Name'
+      pre
+        | = sts.avatar name: 'User Test Name'
+
+      p = sts.avatar name: 'User Test Name'
+
+
+  .col-span-4
+    = sts.card(:gravatar, title: t('.gravatar')) do |card|
+      p
+        | Avatars will use gravatar when you provide an email
+      p
+        pre
+          | = sts.avatar name: 'User Name', email: 'test1@example.com'
+
+      p = sts.avatar name: 'User Name', email: 'test1@example.com'
+
+  .col-span-4
+    = sts.card(:active_storage, title: t('.active_storage')) do |card|
+      p
+        | Avatars can also use active-storage attachments.
+        | In the below sample the user object has one-attached avatar
+      p
+        pre
+          | = sts.avatar name: 'User Name', photo: user.avatar
+
+      p = sts.avatar name: 'User Name', email: 'test1@example.com'
