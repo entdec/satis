@@ -1,0 +1,14 @@
+h1 Avatars
+p Allow you to display avatars
+
+= sts.card(:simplest_case, title: t('.simplest_case')) do |card|
+
+  pre
+    | = sts.avatar name: 'User Name'
+
+  p = sts.avatar name: 'User Name'
+
+p
+  pre
+    | = sts.avatar name: 'User Name', email: 'test1@example.com'
+p = sts.avatar name: 'User Name', email: 'test1@example.com'
