@@ -53,3 +53,20 @@ pre
   - c.action
     button.button Save
   | Content here
+
+p Cards can have tabs
+
+pre
+  | = sts.card :your_profile, title: 'Your profile' do |c|
+      - c.tab :first
+        | Tabs don't have padding by default
+      - c.tab :second, padding: true
+        | But padding can be added by adding
+        pre padding: true
+
+= sts.card :your_profile, title: 'Your profile' do |c|
+  - c.tab :first
+    | Tabs don't have padding by default
+  - c.tab :second, padding: true
+    | But padding can be added by adding
+    pre padding: true
