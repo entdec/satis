@@ -6,7 +6,7 @@ git_source(:entdec) { |repo_name| "git@github.com:entdec/#{repo_name}.git" }
 gemspec
 
 group :development do
-  gem "sqlite3"
+  gem "pg", ">= 0.18", "< 2.0"
 end
 
 group :test do
@@ -25,4 +25,5 @@ group :development, :test do
   gem "ruby-lsp", require: false
   gem "standard", require: false
   gem "rubocop-rails", require: false
+  gem "strong_migrations"
 end
