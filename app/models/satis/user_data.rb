@@ -1,5 +1,7 @@
 module Satis
   class UserData < ApplicationRecord
+    include ArDocStore::Model
+
     belongs_to :user, optional: true
 
     validates :key, presence: true, uniqueness: { scope: :user_id, allow_nil: true }
