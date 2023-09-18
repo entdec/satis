@@ -36,7 +36,7 @@ export default class extends ApplicationController {
 
     this.boundClickedOutside = this.clickedOutside.bind(this)
     this.boundResetSearchInput = this.resetSearchInput.bind(this)
-    this.boundBlur = this.handleBlur.bind(this)
+    this.boundBlur = this.blur.bind(this)
     this.boundChainToChanged = this.chainToChanged.bind(this)
 
     // To remember what the current page and last page were, we queried
@@ -72,10 +72,10 @@ export default class extends ApplicationController {
       ],
     })
 
-    this.searchInputTarget.addEventListener("blur", this.boundBlur)
 
     if (this.hasToggleButtonTarget)
       this.toggleButtonTarget.addEventListener("blur", this.boundBlur)
+    this.searchInputTarget.addEventListener("blur", this.boundBlur)
     this.resultsTarget.addEventListener("blur", this.boundBlur)
 
     window.addEventListener("click", this.boundClickedOutside)
@@ -146,15 +146,15 @@ export default class extends ApplicationController {
   }
 
   blur(event) {
-    this.handleBlur(event)
-  }
+    let target = event.relatedTarget
+    if (target == null) {
+      target = document.target
+    }
 
-  handleBlur(event) {
-    if (!this.element.contains(event.relatedTarget) && this.resultsShown) {
-      this.hideResultsList()
-      if (event.target == this.searchInputTarget) {
-        this.boundResetSearchInput(event)
-      }
+    if (!this.element.contains(target)) {
+      if(this.resultsShown)
+        this.hideResultsList()
+      this.boundResetSearchInput(event)
     }
   }
 
@@ -213,7 +213,8 @@ export default class extends ApplicationController {
         event.preventDefault()
         this.select(event)
         // expect the dropdown to hide when its a freetext value
-        if(this.selectedIndex ===-1 && this.freeTextValue) this.hideResultsList(event)
+        if(this.selectedIndex ===-1 && this.freeTextValue)
+          this.hideResultsList(event)
 
         break
       case "Escape":
@@ -300,12 +301,12 @@ export default class extends ApplicationController {
     }
     if (dataDiv == null) return
 
-    this.selectItem(dataDiv)
+    this.selectItem(dataDiv, true)
 
     event.preventDefault()
   }
 
-  selectItem(dataDiv) {
+  selectItem(dataDiv, force = false) {
     const selectedValue = dataDiv.getAttribute("data-satis-dropdown-item-value")
     const selectedValueText = dataDiv.getAttribute("data-satis-dropdown-item-text")
     this.copyItemAttributes(dataDiv, this.hiddenSelectTarget) // FIXME: we are now supporting multiple values; is this needed? We copy the attributes to options
@@ -316,12 +317,12 @@ export default class extends ApplicationController {
       .some((opt) => opt.value === option.value && this.dataAttributesAreEqual(opt, option))
 
     // we dont select items that already have been selected, open list
-    if (optionExists) {
-      if (!this.resultsShown) this.showResultsList()
-      return
-    } else
-      this.hideResultsList()
-
+    if (!force) {
+      if (optionExists) {
+        if (!this.resultsShown) this.showResultsList()
+        return
+      }
+    }
 
     // clear the search input if we are not in multi select mode
     if (!this.isMultipleValue) {
@@ -336,6 +337,7 @@ export default class extends ApplicationController {
 
     this.hiddenSelectTarget.dispatchEvent(new Event("change"))
     this.searchInputTarget.closest(".bg-white").classList.toggle("warning", false)
+    this.hideResultsList()
   }
 
   setHiddenSelect() {
@@ -466,8 +468,9 @@ export default class extends ApplicationController {
 
     if (this.searchInputTarget.value.length < 2 && !this.lastSearch) {
       // show warning when characters are less than 2
-      if (!this.freeTextValue)
+      if (!this.freeTextValue) {
         this.searchInputTarget.closest(".bg-white").classList.toggle("warning", true)
+      }
       return
     }
 
@@ -475,6 +478,8 @@ export default class extends ApplicationController {
 
     this.itemTargets.forEach((item) => {
       item.classList.toggle("hidden", false)
+      item.classList.toggle("bg-primary-200", false);
+      item.classList.toggle("font-medium", false);
     })
 
     this.filterResultsChainTo()
@@ -493,8 +498,6 @@ export default class extends ApplicationController {
           matches.push(item);
         } else {
           item.classList.toggle("hidden", true);
-          item.classList.toggle("bg-primary-200", false);
-          item.classList.toggle("font-medium", false);
         }
       }
     })
@@ -502,20 +505,30 @@ export default class extends ApplicationController {
     // don't show results
     if(matches.length > 0)
       this.showResultsList(event)
-    else if(this.resultsShown)
-      this.hideResultsList(event)
+    else if(this.resultsShown) {
+      if(!this.showSelectedItem())
+        this.hideResultsList(event)
+    }
 
     // auto select if there is only one match and we are not in freetext mode
     if (
       matches.length == 1 && !this.freeTextValue &&
       matches[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.lastSearch.toLowerCase()) >= 0
     ) {
-      this.selectItem(matches[0].closest('[data-satis-dropdown-target="item"]'))
+      const dataDiv = matches[0].closest('[data-satis-dropdown-target="item"]')
+      const selectedValueText = dataDiv.getAttribute("data-satis-dropdown-item-text")
+      this.selectItem(dataDiv)
+
+      this.selectedIndex = -1
+      this.moveDown()
     } else {
       if(!this.freeTextValue) {
-        if (matches.length === 1)
+        if (matches.length === 1) {
+          this.selectedIndex = -1
           this.moveDown()
-        this.searchInputTarget.closest(".bg-white").classList.toggle("warning", this.searchInputTarget.value.length > 0)
+        }
+        const showWarning = this.searchInputTarget.value.length > 0
+        this.searchInputTarget.closest(".bg-white").classList.toggle("warning", showWarning)
       }
     }
   }
@@ -564,11 +577,19 @@ export default class extends ApplicationController {
           
           // auto
           if (this.nrOfItems == 1 && !this.freeTextValue) {
-            this.selectItem(this.itemTargets[0].closest('[data-satis-dropdown-target="item"]'))
+            const dataDiv = this.itemTargets[0].closest('[data-satis-dropdown-target="item"]')
+            const selectedValueText = dataDiv.getAttribute("data-satis-dropdown-item-text")
+            this.selectItem(dataDiv)
+
+            this.selectedIndex = -1
+            this.moveDown()
           } else if (!this.freeTextValue) {
-            if (this.nrOfItems == 1)
+            if (this.nrOfItems == 1) {
+              this.selectedIndex = -1
               this.moveDown()
-            this.searchInputTarget.closest(".bg-white").classList.toggle("warning", this.searchInputTarget.value.length > 0)
+            }
+            const showWarning = this.searchInputTarget.value.length > 0
+            this.searchInputTarget.closest(".bg-white").classList.toggle("warning", showWarning)
           }
 
           if (itemCount > 0) {
@@ -581,8 +602,11 @@ export default class extends ApplicationController {
           }
 
           resolve()
-        } else
-          this.searchInputTarget.closest(".bg-white").classList.toggle("warning", this.searchInputTarget.value.length > 0)
+        } else {
+          const showWarning = this.searchInputTarget.value.length > 0
+          this.searchInputTarget.closest(".bg-white").classList.toggle("warning", showWarning)
+          this.showSelectedItem()
+        }
       })
     })
     return promise
@@ -794,13 +818,13 @@ export default class extends ApplicationController {
 
     if (this.multiSelectValue) {
       this.searchInputTarget.value = ""
-      return;
+    } else {
+      if (this.hiddenSelectTarget.options.length > 0) {
+        const option = this.hiddenSelectTarget.options[0]
+        this.searchInputTarget.value = option.text || option.value // the value in case text is not available (free text values)
+      }
     }
 
-    if (this.hiddenSelectTarget.selectedIndex > -1) {
-      const option = this.hiddenSelectTarget.options[this.hiddenSelectTarget.selectedIndex]
-      this.searchInputTarget.value = option.text || option.value // the value in case text is not available (free text values)
-    }
     this.fetchResults(event)
     this.hideResultsList(event)
   }
@@ -846,5 +870,35 @@ export default class extends ApplicationController {
     }
     return true;
   }
+
+  showSelectedItem(){
+    if(this.isMultipleValue
+      || this.freeTextValue
+      || this.hiddenSelectTarget.options.length === 0
+    ) return false;
+
+      Array.from(this.hiddenSelectTarget.options).forEach((option) => {
+        let item = this.itemsTarget.querySelector(`[data-satis-dropdown-item-value="${option.value}"]`)
+        if (!item) {
+          item = document.createElement("div")
+          item.setAttribute("data-satis-dropdown-target", "item")
+          item.setAttribute("data-action", "click->satis-dropdown#select")
+          item.setAttribute("data-satis-dropdown-item-value", option.value)
+          item.setAttribute("data-satis-dropdown-item-text", option.text)
+          item.classList.add("cursor-pointer", "px-4", "py-2", "hover:bg-primary-200", "hover:font-medium", "text-sm")
+          item.innerHTML = option.text
+          this.itemsTarget.appendChild(item)
+          this.copyItemAttributes(option, item)
+        }
+        item.classList.toggle("hidden", false)
+        this.selectedIndex = 0
+        this.highLightSelected()
+        if(!this.resultsShown)
+          this.showResultsList()
+      })
+    return true;
+  }
+
+
 
 }
