@@ -503,9 +503,9 @@ export default class extends ApplicationController {
     })
 
     // don't show results
-    if(matches.length > 0)
+    if(matches.length > 0) {
       this.showResultsList(event)
-    else if(this.resultsShown) {
+    }else {
       if(!this.showSelectedItem())
         this.hideResultsList(event)
     }
@@ -875,7 +875,8 @@ export default class extends ApplicationController {
     if(this.isMultipleValue
       || this.freeTextValue
       || this.hiddenSelectTarget.options.length === 0
-    ) return false;
+      || this.element.querySelector(":focus") === null
+  ) return false;
 
       Array.from(this.hiddenSelectTarget.options).forEach((option) => {
         let item = this.itemsTarget.querySelector(`[data-satis-dropdown-item-value="${option.value}"]`)
@@ -893,7 +894,7 @@ export default class extends ApplicationController {
         item.classList.toggle("hidden", false)
         this.selectedIndex = 0
         this.highLightSelected()
-        if(!this.resultsShown)
+        if(!this.resultsShown )
           this.showResultsList()
       })
     return true;
