@@ -397,7 +397,7 @@ export default class extends ApplicationController {
       // } else if (this.element.contains(document.activeElement)) {
     } else {
       this.filterResultsChainTo()
-      if (this.hasResults && this.searchInputTarget.value === this.lastSearch) {
+      if (this.hasResults) {
         this.showResultsList(event)
       } else {
         this.fetchResults(event)
