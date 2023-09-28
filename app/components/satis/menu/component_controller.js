@@ -20,8 +20,8 @@ export default class extends ApplicationController {
             enabled: true,
             options: {
               fallbackPlacements: ["top", "right"],
-              boundary: this.element.closest(".sts-card"),
-              rootBoundary: this.element.closest(".sts-card")
+              boundary: this.element.closest(".table-wrp"),
+              rootBoundary: this.element.closest(".table-wrp")
             },
           },
           {
@@ -29,8 +29,8 @@ export default class extends ApplicationController {
             options: {
               altAxis: true,
               altBoundary: true,
-              boundary: this.element.closest(".sts-card"),
-              rootBoundary: this.element.closest(".sts-card")
+              boundary: this.element.closest(".table-wrp"),
+              rootBoundary: this.element.closest(".table-wrp")
             },
           },
         ],

@@ -397,7 +397,7 @@ export default class extends ApplicationController {
       // } else if (this.element.contains(document.activeElement)) {
     } else {
       this.filterResultsChainTo()
-      if (this.hasResults) {
+      if (this.hasResults && this.searchInputTarget.value === this.lastSearch) {
         this.showResultsList(event)
       } else {
         this.fetchResults(event)
@@ -503,9 +503,9 @@ export default class extends ApplicationController {
     })
 
     // don't show results
-    if(matches.length > 0)
+    if(matches.length > 0) {
       this.showResultsList(event)
-    else if(this.resultsShown) {
+    }else {
       if(!this.showSelectedItem())
         this.hideResultsList(event)
     }
@@ -825,8 +825,9 @@ export default class extends ApplicationController {
       }
     }
 
-    this.fetchResults(event)
-    this.hideResultsList(event)
+    if (this.resultsShown) {
+      this.hideResultsList(event)
+    }
   }
 
   clickedOutside(event) {
@@ -875,25 +876,33 @@ export default class extends ApplicationController {
     if(this.isMultipleValue
       || this.freeTextValue
       || this.hiddenSelectTarget.options.length === 0
-    ) return false;
+      || this.element.querySelector(":focus") === null
+  ) return false;
 
       Array.from(this.hiddenSelectTarget.options).forEach((option) => {
         let item = this.itemsTarget.querySelector(`[data-satis-dropdown-item-value="${option.value}"]`)
         if (!item) {
           item = document.createElement("div")
-          item.setAttribute("data-satis-dropdown-target", "item")
-          item.setAttribute("data-action", "click->satis-dropdown#select")
-          item.setAttribute("data-satis-dropdown-item-value", option.value)
-          item.setAttribute("data-satis-dropdown-item-text", option.text)
-          item.classList.add("cursor-pointer", "px-4", "py-2", "hover:bg-primary-200", "hover:font-medium", "text-sm")
-          item.innerHTML = option.text
+          item.innerHTML = `
+            <div class="cursor-pointer w-full dark:border-gray-700 border-gray-100 border-b hover:bg-primary-200">
+              <div class="flex w-full items-center p-2 pl-2 border-transparent border-l-2 hover:border-teal-100">
+                <div class="w-full items-center flex">
+                  <div class="mx-2 -mt-1">${option.text}</div>
+                </div>
+              </div>
+            </div>
+          `;
+          item.setAttribute("data-satis-dropdown-target", "item");
+          item.setAttribute("data-action", "click->satis-dropdown#select");
+          item.setAttribute("data-satis-dropdown-item-value", option.value);
+          item.setAttribute("data-satis-dropdown-item-text", option.text);
           this.itemsTarget.appendChild(item)
           this.copyItemAttributes(option, item)
         }
         item.classList.toggle("hidden", false)
         this.selectedIndex = 0
         this.highLightSelected()
-        if(!this.resultsShown)
+        if(!this.resultsShown )
           this.showResultsList()
       })
     return true;
