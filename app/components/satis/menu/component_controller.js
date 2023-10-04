@@ -11,26 +11,21 @@ export default class extends ApplicationController {
 
     if (this.hasSubmenuTarget) {
       this.popperInstance = createPopper(this.element, this.submenuTarget, {
-        placement: this.submenuTarget.getAttribute("data-satis-menu-submenu-placement") || "auto",
-        strategy: this.submenuTarget.getAttribute("data-satis-menu-submenu-strategy") || "fixed",
+        placement:  "auto",
+        strategy: "absolute",
         modifiers: [
           { name: "offset", options: { offset: [0, 0] } },
           {
             name: "flip",
             enabled: true,
             options: {
-              fallbackPlacements: ["top", "right"],
               boundary: this.element.closest(".table-wrp"),
-              rootBoundary: this.element.closest(".table-wrp")
             },
           },
           {
             name: "preventOverflow",
             options: {
-              altAxis: true,
-              altBoundary: true,
               boundary: this.element.closest(".table-wrp"),
-              rootBoundary: this.element.closest(".table-wrp")
             },
           },
         ],
@@ -50,6 +45,7 @@ export default class extends ApplicationController {
       this.submenuTarget.classList.remove("hidden")
       this.submenuTarget.setAttribute("data-show", "")
       this.popperInstance.update()
+      this.element.closest(".table-wrp").style.minHeight = "150px"
     }
     event.stopPropagation()
   }
@@ -58,6 +54,7 @@ export default class extends ApplicationController {
     if (this.hasSubmenuTarget) {
       this.submenuTarget.classList.add("hidden")
       this.submenuTarget.removeAttribute("data-show")
+      this.element.closest(".table-wrp").style.minHeight = null
     }
     event.stopPropagation()
   }
