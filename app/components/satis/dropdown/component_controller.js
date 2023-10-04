@@ -470,8 +470,11 @@ export default class extends ApplicationController {
 
   localResults(event) {
     if (this.searchInputTarget.value == this.lastSearch) {
-      if(this.hasResults && !this.resultsShown)
-        this.showResultsList(event)
+      if(!this.resultsShown) {
+        if (this.hasResults)
+          this.showResultsList(event)
+        else this.showSelectedItem()
+      }
       return
     }
 
@@ -550,8 +553,11 @@ export default class extends ApplicationController {
           (this.currentPage == this.lastPage || this.currentPage == this.endPage)) ||
         !this.hasUrlValue
       ) {
-        if(this.hasResults && !this.resultsShown)
-          this.showResultsList(event)
+        if(!this.resultsShown) {
+          if (this.hasResults)
+            this.showResultsList(event)
+          else this.showSelectedItem()
+        }
         return
       }
 
@@ -905,15 +911,15 @@ export default class extends ApplicationController {
     } else {
       item = this.selectedItemsTemplateTarget.content.querySelector(`[data-satis-dropdown-item-value="${option.value}"]`)
       if (item) {
-        const clone = item.cloneNode(true)
-        clone.classList.remove("hidden")
-        this.itemsTarget.appendChild(clone)
+        item = item.cloneNode(true)
+        item.classList.remove("hidden")
+        this.itemsTarget.append(item)
       }
     }
 
     if(item) {
-      this.selectedIndex = 0
-      this.highLightSelected()
+      this.selectedIndex = -1
+      this.moveDown()
       if (!this.resultsShown)
         this.showResultsList()
     }
