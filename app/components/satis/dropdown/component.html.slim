@@ -1,5 +1,5 @@
 div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controller="satis-dropdown" data-satis-dropdown-page-size-value=@page_size data-satis-dropdown-url-value=url data-satis-dropdown-url-params-value=(options[:url_params]||{}).to_json data-satis-dropdown-chain-to-value=@chain_to data-satis-dropdown-free-text-value=@free_text data-satis-dropdown-needs-exact-match-value="#{@needs_exact_match ? 'true' : 'false'}" data-satis-dropdown-is-multiple-value="#{options[:input_html][:multiple] || false}"
-  - selection = [nil]
+  - selection = []
   - if options[:input_html][:value].present?
     - selection = options_for_select(options_array(options[:input_html][:value]))
   = form.select(attribute, selection, {}, options[:input_html].except(:multiple).reverse_merge(class: 'hidden', multiple: options[:input_html][:multiple] || false))
@@ -23,6 +23,8 @@ div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controlle
               button.cursor-pointer.w-6.h-6.text-gray-600.outline-none.focus:outline-none type="button" data-action="click->satis-dropdown#toggleResultsList focus->satis-dropdown#focus" data-satis-dropdown-target="toggleButton" tabindex="-1"
                 i.hidden.fas.fa-chevron-up
                 i.fas.fa-chevron-down
+
+    template data-satis-dropdown-target="selectedItemsTemplate"
 
     / Container for results
     .hidden.container.shadow.bg-white.border.border-gray-300.dark:bg-gray-800.dark:border-gray-700.z-10.rounded.max-h-select.overflow-y-auto.w-full data-satis-dropdown-target="results" data-action="scroll->satis-dropdown#scroll" tabindex="-1"
