@@ -45,7 +45,11 @@ export default class extends ApplicationController {
       this.submenuTarget.classList.remove("hidden")
       this.submenuTarget.setAttribute("data-show", "")
       this.popperInstance.update()
-      this.element.closest(".table-wrp").style.minHeight = "150px"
+      const tableWrap = this.element.closest(".table-wrp")
+      const popperHeight = this.popperInstance.state.elements.popper.clientHeight + 20
+      this._tableWrpHeight ||= tableWrap.style.minHeight
+      tableWrap.style.minHeight = `${popperHeight}px`
+      this.popperInstance.state.elements.popper.querySelector('form input:not([type=hidden])').focus()
     }
     event.stopPropagation()
   }
@@ -54,7 +58,8 @@ export default class extends ApplicationController {
     if (this.hasSubmenuTarget) {
       this.submenuTarget.classList.add("hidden")
       this.submenuTarget.removeAttribute("data-show")
-      this.element.closest(".table-wrp").style.minHeight = null
+      this.element.closest(".table-wrp").style.minHeight = this._tableWrpHeight
+      this._tableWrpHeight = null
     }
     event.stopPropagation()
   }
