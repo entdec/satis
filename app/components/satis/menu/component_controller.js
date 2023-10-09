@@ -49,7 +49,10 @@ export default class extends ApplicationController {
       const popperHeight = this.popperInstance.state.elements.popper.clientHeight + 20
       this._tableWrpHeight ||= tableWrap.style.minHeight
       tableWrap.style.minHeight = `${popperHeight}px`
-      this.popperInstance.state.elements.popper.querySelector('form input:not([type=hidden])').focus()
+      const firstInputEle = this.popperInstance.state.elements.popper.querySelector('form input:not([class=hidden])')
+      const length = firstInputEle.value.length;
+      firstInputEle?.setSelectionRange(length, length);
+      firstInputEle?.focus()
     }
     event.stopPropagation()
   }
