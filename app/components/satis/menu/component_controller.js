@@ -19,13 +19,14 @@ export default class extends ApplicationController {
             name: "flip",
             enabled: true,
             options: {
-              boundary: this.element.closest(".table-wrp"),
+              fallbackPlacements: ["bottom", "right"],
+              boundary: this.element.closest(".table-wrp") || this.element.closest(".sts-card"),
             },
           },
           {
             name: "preventOverflow",
             options: {
-              boundary: this.element.closest(".table-wrp"),
+              boundary: this.element.closest(".table-wrp") || this.element.closest(".sts-card"),
             },
           },
         ],
@@ -47,10 +48,12 @@ export default class extends ApplicationController {
       this.popperInstance.update()
       const tableWrap = this.element.closest(".table-wrp")
       const popperHeight = this.popperInstance.state.elements.popper.clientHeight + 20
-      this._tableWrpHeight ||= tableWrap.style.minHeight
-      tableWrap.style.minHeight = `${popperHeight}px`
+      if (tableWrap) {
+        this._tableWrpHeight ||= tableWrap?.style.minHeight
+        tableWrap.style.minHeight = `${popperHeight}px`
+      }
       const firstInputEle = this.popperInstance.state.elements.popper.querySelector('form input:not([class=hidden])')
-      const length = firstInputEle.value.length;
+      const length = firstInputEle?.value.length;
       firstInputEle?.setSelectionRange(length, length);
       firstInputEle?.focus()
     }
@@ -61,8 +64,10 @@ export default class extends ApplicationController {
     if (this.hasSubmenuTarget) {
       this.submenuTarget.classList.add("hidden")
       this.submenuTarget.removeAttribute("data-show")
-      this.element.closest(".table-wrp").style.minHeight = this._tableWrpHeight
-      this._tableWrpHeight = null
+      if (this.element.closest(".table-wrp")){
+        this.element.closest(".table-wrp").style.minHeight = this._tableWrpHeight
+        this._tableWrpHeight = null
+      }
     }
     event.stopPropagation()
   }
