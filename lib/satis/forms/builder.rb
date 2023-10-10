@@ -245,13 +245,21 @@ module Satis
 
       # Inputs and helpers
       def string_input(method, options = {})
-        form_group(method, options) do
+        orig_data = options.fetch(:data, {}).merge(controller: 'satis-input')
+        scrollable = options.fetch(:scrollable, false)
+        
+        css_class = ["form-control"]
+        css_class << "is-invalid" if has_error?(method)
+        css_class << "noscroll" unless scrollable
+
+        data = options[:input_html].fetch(:data, {})
+        data = data.merge('satis-input-target' => 'input')
+        options[:input_html] = options[:input_html].merge(data: data)
+
+        form_group(method, options.merge(data: orig_data)) do
           safe_join [
             (custom_label(method, options[:label], options) unless options[:label] == false),
-            string_field(method,
-                         merge_input_options({ as: options[:as], class: "form-control #{if has_error?(method)
-                                                                                          'is-invalid'
-                                                                                        end}" }, options[:input_html]))
+            string_field(method, merge_input_options({ as: options[:as], class: "#{css_class.join(' ')}" },  options[:input_html]))
           ]
         end
       end
