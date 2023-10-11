@@ -902,7 +902,6 @@ export default class extends ApplicationController {
     const activeElement = document.activeElement;
     if (activeElement === this.element ||
       this.element.contains(activeElement) ||
-      activeElement.matches(':focus') ||
       this.element.querySelector(':focus') !== null) {
       return true;
     }
