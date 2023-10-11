@@ -235,6 +235,11 @@ export default class extends ApplicationController {
 
   // User enters text in the search field
   search(event) {
+    if(this.searchInputTarget.value === "" && !this.isMultipleValue){
+      this.hiddenSelectTarget.innerHTML = ""
+      this.hiddenSelectTarget.add(this.createOption())
+    }
+
     if (this.hasUrlValue) {
       this.debouncedFetchResults(event)
     } else {
@@ -893,15 +898,24 @@ export default class extends ApplicationController {
     return true;
   }
 
-  hasFocus() {
-    return this.element.querySelector(":focus") !== null
+  get hasFocus() {
+    const activeElement = document.activeElement;
+    if (activeElement === this.element ||
+      this.element.contains(activeElement) ||
+      activeElement.matches(':focus') ||
+      this.element.querySelector(':focus') !== null) {
+      return true;
+    }
+    return false;
   }
 
+  // Selected items are being cached in selectItemsTemplate. Sometimes we want to show the selected item in the results list
+  // As the selected item may not be in the results list, we cache the item in the template and re-add it when needed.
   showSelectedItem() {
     if (this.isMultipleValue
       || this.freeTextValue
       || this.hiddenSelectTarget.options.length === 0
-      || !this.hasFocus()
+      || !this.hasFocus
     ) return false;
 
     const option = this.hiddenSelectTarget.options[0]
@@ -913,7 +927,9 @@ export default class extends ApplicationController {
       if (item) {
         item = item.cloneNode(true)
         item.classList.remove("hidden")
-        this.itemsTarget.append(item)
+        item.setAttribute("data-satis-dropdown-target", "item")
+        item.setAttribute("data-action", "click->satis-dropdown#select")
+        this.itemsTarget.appendChild(item)
       }
     }
 
