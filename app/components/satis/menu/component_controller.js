@@ -31,6 +31,13 @@ export default class extends ApplicationController {
           },
         ],
       })
+
+      this.mutationObserver = new MutationObserver((mutationsList, observer) => {
+        mutationsList.forEach(mutation => {
+          this.updateBoundary()
+        });
+      });
+      this.mutationObserver.observe(this.popperInstance.state.elements.popper, {  childList: true, subtree: true, attributes: true });
     }
 
     if(this.hasToggleugTarget) {
@@ -41,17 +48,20 @@ export default class extends ApplicationController {
     }
   }
 
+  disconnect() {
+    super.disconnect()
+    if (this.hasSubmenuTarget) {
+      this.popperInstance.destroy()
+    }
+    this.mutationObserver.disconnect()
+  }
+
   show(event) {
     if (this.hasSubmenuTarget && (!this.hasToggleTarget || (this.hasToggleTarget && this.toggledOn))) {
       this.submenuTarget.classList.remove("hidden")
       this.submenuTarget.setAttribute("data-show", "")
       this.popperInstance.update()
-      const tableWrap = this.element.closest(".table-wrp")
-      const popperHeight = this.popperInstance.state.elements.popper.clientHeight + 20
-      if (tableWrap) {
-        this._tableWrpHeight ||= tableWrap?.style.minHeight
-        tableWrap.style.minHeight = `${popperHeight}px`
-      }
+
       const firstInputEle = this.popperInstance.state.elements.popper.querySelector('form input:not([class=hidden])')
       const length = firstInputEle?.value.length;
       firstInputEle?.setSelectionRange(length, length);
@@ -64,9 +74,10 @@ export default class extends ApplicationController {
     if (this.hasSubmenuTarget) {
       this.submenuTarget.classList.add("hidden")
       this.submenuTarget.removeAttribute("data-show")
-      if (this.element.closest(".table-wrp")){
-        this.element.closest(".table-wrp").style.minHeight = this._tableWrpHeight
-        this._tableWrpHeight = null
+
+      const boundary = this.element.closest(".table-wrp")
+      if (boundary){
+        boundary.style.minHeight = null;
       }
     }
     event.stopPropagation()
@@ -98,6 +109,20 @@ export default class extends ApplicationController {
       }
     }
   }
+
+
+  updateBoundary(){
+    const boundary = this.element.closest(".table-wrp")
+    if(!boundary) return
+
+    const maxHeight = parseInt(window.getComputedStyle(boundary).maxHeight.replace("px", ""))
+    const popperElement = this.popperInstance.state.elements.popper
+    if (boundary.clientHeight < Math.min(boundary.scrollHeight, maxHeight)) {
+      boundary.style.minHeight = `${Math.min(boundary.scrollHeight + 20, maxHeight)}px`;
+      popperElement.update()
+    }
+  }
+
 
   get toggledOn() {
     return !this.toggleTarget.classList.contains("hidden")
