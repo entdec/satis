@@ -11,8 +11,8 @@ export default class extends ApplicationController {
 
     if (this.hasSubmenuTarget) {
       this.popperInstance = createPopper(this.element, this.submenuTarget, {
-        placement:  "auto",
-        strategy: "absolute",
+        placement:  this.submenuTarget.getAttribute("data-satis-menu-submenu-placement") || "auto",
+        strategy: this.submenuTarget.getAttribute("data-satis-menu-submenu-strategy") || "fixed",
         modifiers: [
           { name: "offset", options: { offset: [0, 0] } },
           {
@@ -61,11 +61,10 @@ export default class extends ApplicationController {
       this.submenuTarget.classList.remove("hidden")
       this.submenuTarget.setAttribute("data-show", "")
       this.popperInstance.update()
-
-      const firstInputEle = this.popperInstance.state.elements.popper.querySelector('form input:not([class=hidden])')
-      const length = firstInputEle?.value.length;
-      firstInputEle?.setSelectionRange(length, length);
-      firstInputEle?.focus()
+      const firstInputElement = this.popperInstance.state.elements.popper.querySelector('form input:not([class=hidden])')
+      const length = firstInputElement?.value.length;
+      firstInputElement?.setSelectionRange(length, length);
+      firstInputElement?.focus()
     }
     event.stopPropagation()
   }

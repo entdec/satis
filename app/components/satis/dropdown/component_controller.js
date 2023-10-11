@@ -59,6 +59,7 @@ export default class extends ApplicationController {
         {
           name: "flip",
           options: {
+            fallbackPlacements: ["bottom"],
             boundary: this.element.closest(".sts-card"),
           },
         },
