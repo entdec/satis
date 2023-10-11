@@ -113,11 +113,10 @@ export default class extends ApplicationController {
   updateBoundary(){
     const boundary = this.element.closest(".table-wrp")
     if(!boundary) return
-
     const maxHeight = parseInt(window.getComputedStyle(boundary).maxHeight.replace("px", ""))
     const popperElement = this.popperInstance.state.elements.popper
-    if (boundary.clientHeight < Math.min(boundary.scrollHeight, maxHeight)) {
-      boundary.style.minHeight = `${Math.min(boundary.scrollHeight + 20, maxHeight)}px`;
+    if (boundary.clientHeight < Math.min(popperElement.scrollHeight, maxHeight)) {
+      boundary.style.minHeight = `${Math.min(popperElement.scrollHeight + 20, maxHeight)}px`;
       popperElement.update()
     }
   }
