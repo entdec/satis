@@ -64,7 +64,7 @@ module Satis
       end
 
       def option_value(item)
-        if item.respond_to?(:id)
+        if item.respond_to?(value_method)
           text = item.send(text_method)
           value = item.send(value_method)
           [text, value, {selected: true}]
