@@ -115,9 +115,8 @@ export default class extends ApplicationController {
     if(!boundary) return
     const maxHeight = parseInt(window.getComputedStyle(boundary).maxHeight.replace("px", ""))
     const popperElement = this.popperInstance.state.elements.popper
-    if (boundary.clientHeight < Math.min(popperElement.scrollHeight, maxHeight)) {
+    if (boundary.offsetHeight < Math.min(popperElement.scrollHeight + 20, maxHeight)) {
       boundary.style.minHeight = `${Math.min(popperElement.scrollHeight + 20, maxHeight)}px`;
-      popperElement.update()
     }
   }
 
