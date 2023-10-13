@@ -4,7 +4,7 @@ import { debounce } from "../../../../frontend/utils"
 import { createPopper } from "@popperjs/core"
 
 export default class extends ApplicationController {
-  static targets = ["submenu", "toggle", "toggleug"]
+  static targets = ["submenu", "toggle", "clear"]
 
   connect() {
     super.connect()
@@ -37,10 +37,9 @@ export default class extends ApplicationController {
       })
     }
 
-    if(this.hasToggleugTarget) {
-      let groupByData = JSON.parse(this.toggleugTarget.dataset.show_params)
-      if(this.toggleugTarget.id == "group_by_"+groupByData.current_view+"_"+groupByData.group_by_column) {
-        this.toggleugTarget.classList.toggle("hidden")
+    if(this.hasClearTarget) {
+      if (this.clearTarget.id == this.clearTarget.dataset.clear_id) {
+        this.clearTarget.classList.toggle("hidden")
       }
     }
   }
@@ -76,15 +75,15 @@ export default class extends ApplicationController {
       }
     }
 
-    if (this.hasToggleugTarget) {
-      let ungroupElements  = document.getElementsByClassName('ungroup-icon')
-      Array.from(ungroupElements).forEach(function (element) {
+    if (this.hasClearTarget) {
+      let elements  = document.getElementsByClassName('clear-icon')
+      Array.from(elements).forEach(function (element) {
         element.classList.add('hidden')
       });
 
-      if ((event.currentTarget != this.toggleugTarget && this.toggleugTarget.classList.contains("hidden")) ||
-          (event.currentTarget == this.toggleugTarget && !this.toggleugTarget.classList.contains("hidden")) ) {
-        this.toggleugTarget.classList.toggle("hidden")
+      if ((event.currentTarget != this.clearTarget && this.clearTarget.classList.contains("hidden")) ||
+          (event.currentTarget == this.clearTarget && !this.clearTarget.classList.contains("hidden")) ) {
+        this.clearTarget.classList.toggle("hidden")
       }
     }
   }
