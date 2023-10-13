@@ -38,8 +38,7 @@ export default class extends ApplicationController {
     }
 
     if(this.hasClearTarget) {
-      let data = JSON.parse(this.clearTarget.dataset.show_params)
-      if (this.clearTarget.id == "group_" + data.current_view + "_" + data.group_by_column) {
+      if (this.clearTarget.id == this.clearTarget.dataset.clear_id) {
         this.clearTarget.classList.toggle("hidden")
       }
     }
