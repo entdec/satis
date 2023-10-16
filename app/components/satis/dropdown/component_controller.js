@@ -674,8 +674,8 @@ export default class extends ApplicationController {
         .map((opt) => opt.value)
 
       // make sure we get all selected items
-      ourUrl.searchParams.append("page", 1)
-      ourUrl.searchParams.append("page_size", selectedIds.length)
+      //ourUrl.searchParams.append("page", 1)
+      //ourUrl.searchParams.append("page_size", selectedIds.length)
       // parameters with [] will be converted to an array
       if (selectedIds.length > 0)
         selectedIds.forEach((id) => ourUrl.searchParams.append(selectedIds.length === 1 ? "id" : "id[]", id))
