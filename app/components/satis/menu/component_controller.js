@@ -11,7 +11,7 @@ export default class extends ApplicationController {
 
     if (this.hasSubmenuTarget) {
       this.popperInstance = createPopper(this.element, this.submenuTarget, {
-        placement: this.submenuTarget.getAttribute("data-satis-menu-submenu-placement") || "auto",
+        placement:  this.submenuTarget.getAttribute("data-satis-menu-submenu-placement") || "auto",
         strategy: this.submenuTarget.getAttribute("data-satis-menu-submenu-strategy") || "fixed",
         modifiers: [
           { name: "offset", options: { offset: [0, 0] } },
@@ -19,22 +19,25 @@ export default class extends ApplicationController {
             name: "flip",
             enabled: true,
             options: {
-              fallbackPlacements: ["top", "right"],
-              boundary: this.element.closest(".table-wrp"),
-              rootBoundary: this.element.closest(".table-wrp")
+              fallbackPlacements: ["bottom", "right"],
+              boundary: this.element.closest(".table-wrp") || this.element.closest(".sts-card"),
             },
           },
           {
             name: "preventOverflow",
             options: {
-              altAxis: true,
-              altBoundary: true,
-              boundary: this.element.closest(".table-wrp"),
-              rootBoundary: this.element.closest(".table-wrp")
+              boundary: this.element.closest(".table-wrp") || this.element.closest(".sts-card"),
             },
           },
         ],
       })
+
+      this.mutationObserver = new MutationObserver((mutationsList, observer) => {
+        mutationsList.forEach(mutation => {
+          this.updateBoundary()
+        });
+      });
+      this.mutationObserver.observe(this.popperInstance.state.elements.popper, {  childList: true, subtree: true, attributes: true });
     }
 
     if(this.hasClearTarget) {
@@ -44,11 +47,23 @@ export default class extends ApplicationController {
     }
   }
 
+  disconnect() {
+    super.disconnect()
+    if (this.hasSubmenuTarget) {
+      this.popperInstance.destroy()
+    }
+    this.mutationObserver.disconnect()
+  }
+
   show(event) {
     if (this.hasSubmenuTarget && (!this.hasToggleTarget || (this.hasToggleTarget && this.toggledOn))) {
       this.submenuTarget.classList.remove("hidden")
       this.submenuTarget.setAttribute("data-show", "")
       this.popperInstance.update()
+      const firstInputElement = this.popperInstance.state.elements.popper.querySelector('form input:not([class=hidden])')
+      const length = firstInputElement?.value.length;
+      firstInputElement?.setSelectionRange(length, length);
+      firstInputElement?.focus()
     }
     event.stopPropagation()
   }
@@ -57,6 +72,11 @@ export default class extends ApplicationController {
     if (this.hasSubmenuTarget) {
       this.submenuTarget.classList.add("hidden")
       this.submenuTarget.removeAttribute("data-show")
+
+      const boundary = this.element.closest(".table-wrp")
+      if (boundary){
+        boundary.style.minHeight = null;
+      }
     }
     event.stopPropagation()
   }
@@ -87,6 +107,18 @@ export default class extends ApplicationController {
       }
     }
   }
+
+
+  updateBoundary(){
+    const boundary = this.element.closest(".table-wrp")
+    if(!boundary) return
+    const maxHeight = parseInt(window.getComputedStyle(boundary).maxHeight.replace("px", ""))
+    const popperElement = this.popperInstance.state.elements.popper
+    if (boundary.offsetHeight < Math.min(popperElement.scrollHeight + 20, maxHeight)) {
+      boundary.style.minHeight = `${Math.min(popperElement.scrollHeight + 20, maxHeight)}px`;
+    }
+  }
+
 
   get toggledOn() {
     return !this.toggleTarget.classList.contains("hidden")
