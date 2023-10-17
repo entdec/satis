@@ -1,7 +1,9 @@
 div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controller="satis-dropdown" data-satis-dropdown-page-size-value=@page_size data-satis-dropdown-url-value=url data-satis-dropdown-url-params-value=(options[:url_params]||{}).to_json data-satis-dropdown-chain-to-value=@chain_to data-satis-dropdown-free-text-value=@free_text data-satis-dropdown-needs-exact-match-value="#{@needs_exact_match ? 'true' : 'false'}" data-satis-dropdown-is-multiple-value="#{options[:input_html][:multiple] || false}"
   - selection = []
   - if options[:input_html][:value].present?
-    - selection = options_for_select(options_array(options[:input_html][:value]))
+    - selection = selection + options_for_select(options_array(options[:input_html][:value]))
+  - selection << nil if selection.empty?
+
   = form.select(attribute, selection, {}, options[:input_html].except(:multiple).reverse_merge(class: 'hidden', multiple: options[:input_html][:multiple] || false))
 
   .flex.flex-col
