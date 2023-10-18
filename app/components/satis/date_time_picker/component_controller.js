@@ -225,7 +225,7 @@ export default class extends ApplicationController {
   hiddenInputChanged(event) {
     this.prepareSelection()
     this.refreshCalendar(false)
-    if(event.detail.src != "satis-date-time-picker") {
+    if(event?.detail?.src !== "satis-date-time-picker") {
       this.refreshInputs(false)
     }
   }
