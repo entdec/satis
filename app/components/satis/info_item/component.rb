@@ -34,6 +34,16 @@ module Satis
           @content
         end
       end
+
+      def class_name
+        "satis-info-item #{group}-info-item #{css_class_for_name}-info-item #{options[:class]}"
+      end
+
+      private
+
+      def css_class_for_name
+        name.to_s.dasherize
+      end
     end
   end
 end
