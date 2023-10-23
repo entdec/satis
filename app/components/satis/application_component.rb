@@ -22,20 +22,21 @@ module Satis
     # It'll then try and find a translation with scope: en.admin.spaces.edit.tabs.main.admin_versions
     #
     def ct(key = nil, **options)
-      scope = Array.wrap(options.delete(:scope))
-
-      scope = if scope
-                scope.unshift(i18n_scope)
-              else
-                [i18n_scope]
-              end
-
-      scope = original_i18n_scope.concat(scope)
-
-      key = key&.to_s unless key.is_a?(String)
-      key = "#{scope.join('.')}#{key}" if key.start_with?('.')
+      key = "#{full_i18n_scope(options).join('.')}#{key}" if key.start_with?('.')
 
       original_view_context.t(key, **options)
+    end
+
+    def full_i18n_scope(options = {})
+      return @full_i18n_scope if @full_i18n_scope
+
+      @full_i18n_scope = original_i18n_scope
+      @full_i18n_scope += Array.wrap(i18n_scope)
+      @full_i18n_scope += Array.wrap(options.delete(:scope))
+      @full_i18n_scope += Array.wrap(@scope) if @scope
+      @full_i18n_scope.flatten.compact!
+
+      @full_i18n_scope
     end
 
     def original_virtual_path
