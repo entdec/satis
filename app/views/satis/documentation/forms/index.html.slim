@@ -37,7 +37,7 @@ pre
 = sts.form_for(@user, url: documentation_index_path) do |f|
   .grid.grid-cols-12.gap-4
     .col-span-12
-      = f.input :name, collection: ['test', 'test2'], as: :dropdown
+      = f.input :name, collection: ['test', 'test2'], as: :dropdown, input_html:{ id: "dropdown_local" }
 
 h2 Dropdowns can come from remote data
 
@@ -63,7 +63,46 @@ pre
 = sts.form_for(@user, url: documentation_index_path) do |f|
   .grid.grid-cols-12.gap-4
     .col-span-12
-      = f.input :name, url: select_documentation_forms_url, as: :dropdown
+      = f.input :name, url: select_documentation_forms_url, as: :dropdown, input_html:{ id: "dropdown_remote" }
+
+h2 Dropdown search exact match
+
+pre
+  | = sts.form_for(@user, url: documentation_index_path) do |f|
+      .grid.grid-cols-12.gap-4
+        .col-span-12
+          = f.input :name, collection: ['test', 'test2'], as: :dropdown, needs_exact_match: true
+
+= sts.form_for(@user, url: documentation_index_path) do |f|
+  .grid.grid-cols-12.gap-4
+    .col-span-12
+      = f.input :name, collection: ['test', 'test2'], as: :dropdown, input_html:{ id: "dropdown_local_exact" }, needs_exact_match: true
+
+h2 Dropdown with free text & pre selected value
+
+pre
+  | = sts.form_for(@user, url: documentation_index_path) do |f|
+      .grid.grid-cols-12.gap-4
+        .col-span-12
+          = f.input :name, collection: ['test', 'test2'], as: :dropdown, free_text: true, selected: "test3"
+
+= sts.form_for(@user, url: documentation_index_path) do |f|
+  .grid.grid-cols-12.gap-4
+    .col-span-12
+      = f.input :name, collection: ['test', 'test2'], as: :dropdown, input_html:{ id: "dropdown_local_free_text" }, free_text: true, selected: "test3"
+
+h2 Dropdown with multiple selection
+
+pre
+  | = sts.form_for(@user, url: documentation_index_path) do |f|
+      .grid.grid-cols-12.gap-4
+        .col-span-12
+          = f.input :name, collection: ['test1', 'test2', 'test3', 'test4'], as: :dropdown, input_html:{ multiple: true }
+
+= sts.form_for(@user, url: documentation_index_path) do |f|
+  .grid.grid-cols-12.gap-4
+    .col-span-12
+      = f.input :name, collection: ['test1', 'test2', 'test3', 'test4'], as: :dropdown, input_html:{ id: "dropdown_local_multiple", multiple: true }
 
 p
 br

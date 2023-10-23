@@ -1,11 +1,10 @@
 import ApplicationController from "../../../../frontend/controllers/application_controller"
 
 // FIXME: Is this full path really needed?
-import {debounce, popperSameWidth} from "../../../../frontend/utils"
-import {createPopper} from "@popperjs/core"
+import { debounce, popperSameWidth } from "../../../../frontend/utils"
+import { createPopper } from "@popperjs/core"
 
 export default class extends ApplicationController {
-
   static targets = [
     "results",
     "items",
@@ -26,7 +25,7 @@ export default class extends ApplicationController {
     pageSize: Number,
     url: String,
     urlParams: Object,
-    isMultiple: Boolean
+    isMultiple: Boolean,
   }
 
   connect() {
@@ -56,10 +55,11 @@ export default class extends ApplicationController {
       placement: "bottom-start",
       strategy: "fixed",
       modifiers: [
-        {name: "offset", options: {offset: [0, 1]}},
+        { name: "offset", options: { offset: [0, 1] } },
         {
           name: "flip",
           options: {
+            fallbackPlacements: ["bottom"],
             boundary: this.element.closest(".sts-card"),
           },
         },
@@ -73,9 +73,7 @@ export default class extends ApplicationController {
       ],
     })
 
-
-    if (this.hasToggleButtonTarget)
-      this.toggleButtonTarget.addEventListener("blur", this.boundBlur)
+    if (this.hasToggleButtonTarget) this.toggleButtonTarget.addEventListener("blur", this.boundBlur)
     this.searchInputTarget.addEventListener("blur", this.boundBlur)
     this.resultsTarget.addEventListener("blur", this.boundBlur)
 
@@ -85,18 +83,17 @@ export default class extends ApplicationController {
       this.getScrollParent(this.element)?.addEventListener("scroll", this.boundBlur)
     }, 500)
 
-
     if (this.chainToValue) {
       this.getChainToElement()?.addEventListener("change", this.boundChainToChanged)
     }
 
     this.refreshSelectionFromServer().then((changed) => {
-      this.filterResultsChainTo();
-      this.setHiddenSelect();
+      this.filterResultsChainTo()
+      this.setHiddenSelect()
 
       if (!this.hiddenSelectTarget.getAttribute("data-reflex")) {
         let event = new Event("change")
-        event.detail = {src: "satis-dropdown"}
+        event.detail = { src: "satis-dropdown" }
         this.hiddenSelectTarget.dispatchEvent(event)
       }
     })
@@ -128,7 +125,7 @@ export default class extends ApplicationController {
       return
     }
 
-    this.reset(event);
+    this.reset(event)
   }
 
   disconnect() {
@@ -136,8 +133,7 @@ export default class extends ApplicationController {
     this.debouncedLocalResults = null
     window.removeEventListener("click", this.boundClickedOutside)
     this.getChainToElement()?.removeEventListener("change", this.boundChainToChanged)
-    if (this.hasToggleButtonTarget)
-      this.toggleButtonTarget.removeEventListener("blur", this.boundBlur)
+    if (this.hasToggleButtonTarget) this.toggleButtonTarget.removeEventListener("blur", this.boundBlur)
     this.resultsTarget.removeEventListener("blur", this.boundBlur)
     this.searchInputTarget.removeEventListener("blur", this.boundBlur)
   }
@@ -167,17 +163,17 @@ export default class extends ApplicationController {
       return
     }
 
-    this.refreshSelectionFromServer().then(
-      () => { // resolved
-        this.setHiddenSelect();
+    this.refreshSelectionFromServer().then(() => {
+      // resolved
+      this.setHiddenSelect()
 
-        if (!this.searchInputTarget.value && this.freeTextValue && this.hiddenSelectTarget.options.length > 0) {
-          this.searchInputTarget.value = this.hiddenSelectTarget.options[0].value
-        }
+      if (!this.searchInputTarget.value && this.freeTextValue && this.hiddenSelectTarget.options.length > 0) {
+        this.searchInputTarget.value = this.hiddenSelectTarget.options[0].value
+      }
 
-        if (!this.hiddenSelectTarget.getAttribute("data-reflex"))
-          this.hiddenSelectTarget.dispatchEvent(new CustomEvent("change", {detail: {src: "satis-dropdown"}}))
-      });
+      if (!this.hiddenSelectTarget.getAttribute("data-reflex"))
+        this.hiddenSelectTarget.dispatchEvent(new CustomEvent("change", { detail: { src: "satis-dropdown" } }))
+    })
   }
 
   // Called when scrolling in the resultsTarget
@@ -246,16 +242,12 @@ export default class extends ApplicationController {
       this.debouncedLocalResults(event)
     }
 
-    if (this.searchInputTarget.closest(".bg-white").classList.contains("warning") || !this.searchInputTarget.value) {
-      if (!this.isMultipleValue) {
-        // set the freetext value as the selected value
-        if (this.freeTextValue && this.searchInputTarget.value) {
-          this.hiddenSelectTarget.innerHTML = ""
-          var option = this.createOption(
-            {text: this.searchInputTarget.value, value: this.searchInputTarget.value}
-          )
-          this.hiddenSelectTarget.add(option)
-        }
+    if (!this.isMultipleValue) {
+      // set the freetext value as the selected value
+      if (this.freeTextValue && this.searchInputTarget.value) {
+        this.hiddenSelectTarget.innerHTML = ""
+        var option = this.createOption({ text: this.searchInputTarget.value, value: this.searchInputTarget.value })
+        this.hiddenSelectTarget.add(option)
       }
     }
   }
@@ -268,7 +260,6 @@ export default class extends ApplicationController {
       this.selectedItemsTemplateTarget.innerHTML = ""
       this.hiddenSelectTarget.options.add(this.createOption())
     }
-
 
     this.searchInputTarget.value = ""
     this.lastSearch = null
@@ -319,10 +310,11 @@ export default class extends ApplicationController {
     const selectedValueText = dataDiv.getAttribute("data-satis-dropdown-item-text")
     this.copyItemAttributes(dataDiv, this.hiddenSelectTarget) // FIXME: we are now supporting multiple values; is this needed? We copy the attributes to options
 
-    const option = this.createOption({text: selectedValueText, value: selectedValue})
+    const option = this.createOption({ text: selectedValueText, value: selectedValue })
     this.copyItemAttributes(dataDiv, option)
-    const optionExists = Array.from(this.hiddenSelectTarget.options)
-      .some((opt) => opt.value === option.value && this.dataAttributesAreEqual(opt, option))
+    const optionExists = Array.from(this.hiddenSelectTarget.options).some(
+      (opt) => opt.value === option.value && this.dataAttributesAreEqual(opt, option)
+    )
 
     // we dont select items that already have been selected, open list
     if (!force) {
@@ -356,13 +348,15 @@ export default class extends ApplicationController {
       this.searchInputTarget.value = ""
       this.pillsTarget.innerHTML = ""
       this.pillsTarget.classList.add("hidden")
-      return true;
+      return true
     }
-
 
     if (this.isMultipleValue) {
       Array.from(this.hiddenSelectTarget.options).forEach((opt) => {
-        const pillExists = this.pillsTarget.querySelector(`[data-satis-dropdown-target="pill"] > button[data-satis-dropdown-id-param="${opt.value}"]`)
+        if (!opt.value) return
+        const pillExists = this.pillsTarget.querySelector(
+          `[data-satis-dropdown-target="pill"] > button[data-satis-dropdown-id-param="${opt.value}"]`
+        )
         if (!pillExists) {
           // Add pill to selection
           const pillTemplate = this.pillTemplateTarget.content.firstElementChild.cloneNode(true)
@@ -375,7 +369,7 @@ export default class extends ApplicationController {
       this.searchInputTarget.value = ""
       this.pillsTarget.classList.remove("hidden")
     } else if (this.hiddenSelectTarget.options.length == 1) {
-      const opt = this.hiddenSelectTarget.options[0];
+      const opt = this.hiddenSelectTarget.options[0]
       this.searchInputTarget.value = opt.text || opt.value
     }
   }
@@ -445,7 +439,7 @@ export default class extends ApplicationController {
     }
 
     let chainToValue
-    let chainTo = this.getChainToElement();
+    let chainTo = this.getChainToElement()
     if (chainTo) {
       chainToValue = chainTo.value
     }
@@ -491,30 +485,30 @@ export default class extends ApplicationController {
       return
     }
 
-    this.recordLastSearch();
+    this.recordLastSearch()
 
     this.itemTargets.forEach((item) => {
       item.classList.toggle("hidden", false)
-      item.classList.toggle("bg-primary-200", false);
-      item.classList.toggle("font-medium", false);
+      item.classList.toggle("bg-primary-200", false)
+      item.classList.toggle("font-medium", false)
     })
 
     this.filterResultsChainTo()
 
-    const searchValue = this.searchInputTarget.value.toLowerCase();
+    const searchValue = this.searchInputTarget.value.toLowerCase()
     // FIXME: We don't need to store all matches in an array
     let matches = []
     this.itemTargets.forEach((item) => {
       const text = item.getAttribute("data-satis-dropdown-item-text").toLowerCase()
-      const isHidden = item.classList.contains("hidden");
+      const isHidden = item.classList.contains("hidden")
 
       if (!isHidden) {
         if (this.needsExactMatchValue && text === searchValue) {
-          matches.push(item);
+          matches.push(item)
         } else if (!this.needsExactMatchValue && text.indexOf(searchValue) >= 0) {
-          matches.push(item);
+          matches.push(item)
         } else {
-          item.classList.toggle("hidden", true);
+          item.classList.toggle("hidden", true)
         }
       }
     })
@@ -529,7 +523,8 @@ export default class extends ApplicationController {
 
     // auto select if there is only one match and we are not in freetext mode
     if (
-      matches.length == 1 && !this.freeTextValue &&
+      matches.length == 1 &&
+      !this.freeTextValue &&
       matches[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.lastSearch.toLowerCase()) >= 0
     ) {
       const dataDiv = matches[0].closest('[data-satis-dropdown-target="item"]')
@@ -571,7 +566,6 @@ export default class extends ApplicationController {
         this.endPage = null
       }
 
-
       this.lastPage = this.currentPage
 
       let ourUrl = this.normalizedUrl()
@@ -581,7 +575,7 @@ export default class extends ApplicationController {
         ourUrl.searchParams.append("term", this.searchInputTarget.value)
       }
 
-      this.recordLastSearch();
+      this.recordLastSearch()
 
       ourUrl.searchParams.append("page", this.currentPage)
       ourUrl.searchParams.append("page_size", pageSize)
@@ -663,41 +657,42 @@ export default class extends ApplicationController {
   }
 
   get selectionChangedSinceLastRefresh() {
-    return this.hiddenSelectTarget.options.length !== this.lastServerRefreshOptions.size ||
+    return (
+      this.hiddenSelectTarget.options.length !== this.lastServerRefreshOptions.size ||
       !Array.from(this.hiddenSelectTarget.options).every((option) => this.lastServerRefreshOptions.has(option.value))
+    )
   }
 
   refreshSelectionFromServer() {
-    if (!this.selectionChangedSinceLastRefresh) return Promise.resolve();
+    if (!this.selectionChangedSinceLastRefresh) return Promise.resolve()
 
-    let updated = 0;
+    let updated = 0
     Array.from(this.hiddenSelectTarget.options).forEach((opt) => {
       // try to find the items locally
-      let item = this.itemsTarget.querySelector('[data-satis-dropdown-item-value="' + opt.value + '"]');
+      let item = this.itemsTarget.querySelector('[data-satis-dropdown-item-value="' + opt.value + '"]')
       if (item) {
-        opt.text = item.getAttribute("data-satis-dropdown-item-text");
+        opt.text = item.getAttribute("data-satis-dropdown-item-text")
 
         // Copy over data attributes on the item div to the option
         this.copyItemAttributes(item, opt)
-        updated++;
+        updated++
       }
 
       this.lastServerRefreshOptions.add(opt.value)
-    });
+    })
 
-    if (!this.hasUrlValue || this.hiddenSelectTarget.options.length === updated) return Promise.resolve();
+    if (!this.hasUrlValue || this.hiddenSelectTarget.options.length === updated) return Promise.resolve()
 
     const promise = new Promise((resolve, reject) => {
-      if (!this.hasUrlValue) return;
+      if (!this.hasUrlValue) return
 
       const ourUrl = this.normalizedUrl()
 
-      let selectedIds = Array.from(this.hiddenSelectTarget.options)
-        .map((opt) => opt.value)
+      let selectedIds = Array.from(this.hiddenSelectTarget.options).map((opt) => opt.value)
 
       // make sure we get all selected items
-      ourUrl.searchParams.append("page", 1)
-      ourUrl.searchParams.append("page_size", selectedIds.length)
+      //ourUrl.searchParams.append("page", 1)
+      //ourUrl.searchParams.append("page_size", selectedIds.length)
       // parameters with [] will be converted to an array
       if (selectedIds.length > 0)
         selectedIds.forEach((id) => ourUrl.searchParams.append(selectedIds.length === 1 ? "id" : "id[]", id))
@@ -709,7 +704,7 @@ export default class extends ApplicationController {
             tmpDiv.innerHTML = data
 
             for (let i = 0; i < this.hiddenSelectTarget.options.length; i++) {
-              let opt = this.hiddenSelectTarget.options[i];
+              let opt = this.hiddenSelectTarget.options[i]
               let item = tmpDiv.querySelector('[data-satis-dropdown-item-value="' + opt.value + '"]')
               if (!item && !this.freeTextValue) {
                 this.selectedItemsTemplateTarget.content.querySelector(`[data-satis-dropdown-item-value="${opt.value}"]`)?.remove()
@@ -719,10 +714,8 @@ export default class extends ApplicationController {
                 let text = item.getAttribute("data-satis-dropdown-item-text")
 
                 if (opt.text != text) {
-                  if (text === "")
-                    opt.text = opt.id
-                  else
-                    opt.text = text
+                  if (text === "") opt.text = opt.id
+                  else opt.text = text
                 }
 
                 // Copy over data attributes on the item div to the option
@@ -734,7 +727,7 @@ export default class extends ApplicationController {
             // blank option
             if (this.hiddenSelectTarget.options.length === 0) {
               let option = this.createOption()
-              this.hiddenSelectTarget.options.add(option);
+              this.hiddenSelectTarget.options.add(option)
               this.lastServerRefreshOptions.add(option.value)
             }
 
@@ -765,12 +758,11 @@ export default class extends ApplicationController {
       }
     })
 
-    let chainTo = this.getChainToElement();
+    let chainTo = this.getChainToElement()
     if (chainTo) {
-      let chainToParam = chainTo.getAttribute("name").substring(
-        chainTo.getAttribute("name").lastIndexOf("[") + 1,
-        chainTo.getAttribute("name").lastIndexOf("]")
-      );
+      let chainToParam = chainTo
+        .getAttribute("name")
+        .substring(chainTo.getAttribute("name").lastIndexOf("[") + 1, chainTo.getAttribute("name").lastIndexOf("]"))
       ourUrl.searchParams.append(chainToParam, chainTo.value)
     }
 
@@ -821,7 +813,7 @@ export default class extends ApplicationController {
   highLightSelected() {
     if (this.selectedItem) {
       this.selectedItem.classList.add("bg-primary-200", "font-medium")
-      this.selectedItem.scrollIntoView({behavior: "smooth", block: "nearest", inline: "start"})
+      this.selectedItem.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })
     }
   }
 
@@ -876,26 +868,26 @@ export default class extends ApplicationController {
   }
 
   createOption(options) {
-    options = Object.assign({text: "", value: "", selected: true}, options)
+    options = Object.assign({ text: "", value: "", selected: true }, options)
 
     let option = document.createElement("option")
     option.text = options.text
     option.value = options.value
-    option.setAttribute("selected", options.selected);
-    return option;
+    option.setAttribute("selected", options.selected)
+    return option
   }
 
   dataAttributesAreEqual(el1, el2) {
-    const keys1 = Object.keys(el1.dataset);
-    const keys2 = Object.keys(el2.dataset);
-    if (keys1.length !== keys2.length) return false;
+    const keys1 = Object.keys(el1.dataset)
+    const keys2 = Object.keys(el2.dataset)
+    if (keys1.length !== keys2.length) return false
 
     for (const key of keys1) {
       if (el1.dataset[key] !== el2.dataset[key]) {
-        return false;
+        return false
       }
     }
-    return true;
+    return true
   }
 
   get hasFocus() {
@@ -941,7 +933,4 @@ export default class extends ApplicationController {
 
     return item != null;
   }
-
-
-
 }

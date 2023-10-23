@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    satis (1.0.112)
+    satis (1.0.114)
       ar_doc_store (~> 2.1)
       browser
       diffy
