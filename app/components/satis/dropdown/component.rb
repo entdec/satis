@@ -64,10 +64,12 @@ module Satis
       end
 
       def option_value(item)
-        if item.respond_to?(:id)
-          [nil, item.id, {selected: true}]
+        if item.respond_to?(value_method)
+          text = item.send(text_method)
+          value = item.send(value_method)
+          [text, value, {selected: true}]
         elsif item.is_a?(Array)
-          [item.second , item.first, {selected: true}]
+          [item.second, item.first, {selected: true}]
         elsif item.is_a?(String)
           [nil, item, {selected: true}]
         end
