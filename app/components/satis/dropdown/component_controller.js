@@ -370,7 +370,7 @@ export default class extends ApplicationController {
       this.pillsTarget.classList.remove("hidden")
     } else if (this.hiddenSelectTarget.options.length == 1) {
       const opt = this.hiddenSelectTarget.options[0]
-      this.searchInputTarget.value = opt.text || opt.value
+      this.searchInputTarget.value = opt.text
     }
   }
 
@@ -838,8 +838,7 @@ export default class extends ApplicationController {
     } else {
       if (this.hiddenSelectTarget.options.length > 0) {
         const option = this.hiddenSelectTarget.options[0]
-        const value = option.text || option.value
-        this.searchInputTarget.value = value // the value in case text is not available (free text values)
+        this.searchInputTarget.value = option.text
       }
     }
 
