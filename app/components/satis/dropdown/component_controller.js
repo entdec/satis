@@ -16,6 +16,7 @@ export default class extends ApplicationController {
     "pills",
     "pillTemplate",
     "pill",
+    "selectedItemsTemplate"
   ]
   static values = {
     chainTo: String,
@@ -147,8 +148,9 @@ export default class extends ApplicationController {
       target = document.target
     }
 
-    if (!this.element.contains(target)) {
-      if (this.resultsShown) this.hideResultsList()
+    if (event.type != "scroll" && !this.element.contains(target)) {
+      if (this.resultsShown)
+        this.hideResultsList()
       this.boundResetSearchInput(event)
     }
   }
@@ -190,7 +192,8 @@ export default class extends ApplicationController {
     switch (event.key) {
       case "ArrowDown":
         if (this.hasResults) {
-          if (!this.resultsShown) this.showResultsList(event)
+          if (!this.resultsShown)
+            this.showResultsList(event)
           this.moveDown()
         }
         // prevent the cursor from jumping to the beginning of the input and scrolling in some cases
@@ -207,7 +210,8 @@ export default class extends ApplicationController {
         event.preventDefault()
         this.select(event)
         // expect the dropdown to hide when its a freetext value
-        if (this.selectedIndex === -1 && this.freeTextValue) this.hideResultsList(event)
+        if (this.selectedIndex === -1 && this.freeTextValue)
+          this.hideResultsList(event)
 
         break
       case "Escape":
@@ -227,6 +231,11 @@ export default class extends ApplicationController {
 
   // User enters text in the search field
   search(event) {
+    if(this.searchInputTarget.value === "" && !this.isMultipleValue){
+      this.hiddenSelectTarget.innerHTML = ""
+      this.hiddenSelectTarget.add(this.createOption())
+    }
+
     if (this.hasUrlValue) {
       this.debouncedFetchResults(event)
     } else {
@@ -247,6 +256,8 @@ export default class extends ApplicationController {
   reset(event) {
     if (!this.isMultipleValue) {
       this.hiddenSelectTarget.innerHTML = ""
+      this.lastServerRefreshOptions.clear()
+      this.selectedItemsTemplateTarget.innerHTML = ""
       this.hiddenSelectTarget.options.add(this.createOption())
     }
 
@@ -317,12 +328,15 @@ export default class extends ApplicationController {
     if (!this.isMultipleValue) {
       this.lastServerRefreshOptions.clear()
       this.hiddenSelectTarget.innerHTML = ""
-      this.searchInputTarget.value = selectedValueText
-      this.recordLastSearch()
-    }
+      this.selectedItemsTemplateTarget.innerHTML = ""
+    } else
+      this.selectedItemsTemplateTarget.content.querySelector(`[data-satis-dropdown-item-value="${selectedValue}"]`)?.remove()
 
     this.hiddenSelectTarget.add(option)
     this.lastServerRefreshOptions.add(selectedValue)
+    if (this.hasUrlValue) {
+      this.selectedItemsTemplateTarget.content.appendChild(dataDiv.cloneNode(true))
+    }
 
     this.hiddenSelectTarget.dispatchEvent(new Event("change"))
     this.searchInputTarget.closest(".bg-white").classList.toggle("warning", false)
@@ -388,11 +402,10 @@ export default class extends ApplicationController {
       // } else if (this.element.contains(document.activeElement)) {
     } else {
       this.filterResultsChainTo()
-      if (this.hasResults) {
-        this.showResultsList(event)
-      } else {
+      if(this.hasUrlValue)
         this.fetchResults(event)
-      }
+      else
+        this.localResults(event)
     }
     return false
   }
@@ -448,20 +461,23 @@ export default class extends ApplicationController {
       }
     })
     if (listItems == 1) {
-      this.selectItem(
-        this.itemTargets.filter((item) => {
-          return item.classList != "hidden"
-        })[0]
-      )
+      this.selectItem(this.itemTargets.filter((item) => {
+        return item.classList != 'hidden'
+      })[0])
     }
   }
 
   localResults(event) {
     if (this.searchInputTarget.value == this.lastSearch) {
+      if(!this.resultsShown) {
+        if (this.hasResults)
+          this.showResultsList(event)
+        else this.showSelectedItem()
+      }
       return
     }
 
-    if (this.searchInputTarget.value.length < 2 && !this.lastSearch) {
+    if (this.searchInputTarget.value.length > 0 && this.searchInputTarget.value.length < 2 && !this.lastSearch) {
       // show warning when characters are less than 2
       if (!this.freeTextValue) {
         this.searchInputTarget.closest(".bg-white").classList.toggle("warning", true)
@@ -501,7 +517,8 @@ export default class extends ApplicationController {
     if (matches.length > 0) {
       this.showResultsList(event)
     } else {
-      if (!this.showSelectedItem()) this.hideResultsList(event)
+      if (!this.showSelectedItem())
+        this.hideResultsList(event)
     }
 
     // auto select if there is only one match and we are not in freetext mode
@@ -536,6 +553,11 @@ export default class extends ApplicationController {
           (this.currentPage == this.lastPage || this.currentPage == this.endPage)) ||
         !this.hasUrlValue
       ) {
+        if(!this.resultsShown) {
+          if (this.hasResults)
+            this.showResultsList(event)
+          else this.showSelectedItem()
+        }
         return
       }
 
@@ -685,6 +707,7 @@ export default class extends ApplicationController {
               let opt = this.hiddenSelectTarget.options[i]
               let item = tmpDiv.querySelector('[data-satis-dropdown-item-value="' + opt.value + '"]')
               if (!item && !this.freeTextValue) {
+                this.selectedItemsTemplateTarget.content.querySelector(`[data-satis-dropdown-item-value="${opt.value}"]`)?.remove()
                 opt.remove()
                 this.lastServerRefreshOptions.delete(opt.value)
               } else {
@@ -697,9 +720,11 @@ export default class extends ApplicationController {
 
                 // Copy over data attributes on the item div to the option
                 this.copyItemAttributes(item, opt)
+                this.selectedItemsTemplateTarget.content.appendChild(item.cloneNode(true))
               }
             }
 
+            // blank option
             if (this.hiddenSelectTarget.options.length === 0) {
               let option = this.createOption()
               this.hiddenSelectTarget.options.add(option)
@@ -864,40 +889,47 @@ export default class extends ApplicationController {
     return true
   }
 
-  showSelectedItem() {
-    if (
-      this.isMultipleValue ||
-      this.freeTextValue ||
-      this.hiddenSelectTarget.options.length === 0 ||
-      this.element.querySelector(":focus") === null
-    )
-      return false
+  get hasFocus() {
+    const activeElement = document.activeElement;
+    if (activeElement === this.element ||
+      this.element.contains(activeElement) ||
+      this.element.querySelector(':focus') !== null) {
+      return true;
+    }
+    return false;
+  }
 
-    Array.from(this.hiddenSelectTarget.options).forEach((option) => {
-      let item = this.itemsTarget.querySelector(`[data-satis-dropdown-item-value="${option.value}"]`)
-      if (!item) {
-        item = document.createElement("div")
-        item.innerHTML = `
-            <div class="cursor-pointer w-full dark:border-gray-700 border-gray-100 border-b hover:bg-primary-200">
-              <div class="flex w-full items-center p-2 pl-2 border-transparent border-l-2 hover:border-teal-100">
-                <div class="w-full items-center flex">
-                  <div class="mx-2 -mt-1">${option.text}</div>
-                </div>
-              </div>
-            </div>
-          `
+  // Selected items are being cached in selectItemsTemplate. Sometimes we want to show the selected item in the results list
+  // As the selected item may not be in the results list, we cache the item in the template and re-add it when needed.
+  showSelectedItem() {
+    if (this.isMultipleValue
+      || this.freeTextValue
+      || this.hiddenSelectTarget.options.length === 0
+      || !this.hasFocus
+    ) return false;
+
+    const option = this.hiddenSelectTarget.options[0]
+    let item = this.itemsTarget.querySelector(`[data-satis-dropdown-item-value="${option.value}"]`)
+    if (item) {
+      item.classList.remove("hidden")
+    } else {
+      item = this.selectedItemsTemplateTarget.content.querySelector(`[data-satis-dropdown-item-value="${option.value}"]`)
+      if (item) {
+        item = item.cloneNode(true)
+        item.classList.remove("hidden")
         item.setAttribute("data-satis-dropdown-target", "item")
         item.setAttribute("data-action", "click->satis-dropdown#select")
-        item.setAttribute("data-satis-dropdown-item-value", option.value)
-        item.setAttribute("data-satis-dropdown-item-text", option.text)
         this.itemsTarget.appendChild(item)
-        this.copyItemAttributes(option, item)
       }
-      item.classList.toggle("hidden", false)
-      this.selectedIndex = 0
-      this.highLightSelected()
-      if (!this.resultsShown) this.showResultsList()
-    })
-    return true
+    }
+
+    if(item) {
+      this.selectedIndex = -1
+      this.moveDown()
+      if (!this.resultsShown)
+        this.showResultsList()
+    }
+
+    return item != null;
   }
 }
