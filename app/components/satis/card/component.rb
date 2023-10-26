@@ -40,7 +40,7 @@ module Satis
         @initial_actions = actions
         @persist = persist
         @key = key
-        @scope = scope
+        @scope = scope.present? ? scope : id
       end
 
       def key
@@ -55,11 +55,12 @@ module Satis
       def title
         return @title if @title
 
-        @title ||= I18n.t(id, scope: [:card] + @scope, default: id.to_s.humanize)
+        @title ||= ct('.title')
       end
 
       def custom_tabs_link(&block)
         return unless block_given?
+
         @custom_tabs_link_html = block.call.html_safe
       end
 

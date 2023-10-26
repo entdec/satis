@@ -1,5 +1,5 @@
 - if content.present? || options[:content].present? || options[:show_always]
-  div class=options[:class]
+  div class=class_name
     dt.text-xs.uppercase.text-gray-400 = ct(".#{name}", default: name.to_s.humanize, scope: group)
     dd.text-sm.text-gray-900.dark:text-gray-300
       - if options[:icon]
