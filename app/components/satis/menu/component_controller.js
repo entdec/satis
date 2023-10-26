@@ -37,7 +37,7 @@ export default class extends ApplicationController {
           this.updateBoundary()
         });
       });
-      this.mutationObserver.observe(this.popperInstance.state.elements.popper, {  childList: true, subtree: true, attributes: true });
+      this.mutationObserver?.observe(this.popperInstance.state.elements.popper, {  childList: true, subtree: true, attributes: true });
     }
 
     if(this.hasClearTarget) {
@@ -52,7 +52,7 @@ export default class extends ApplicationController {
     if (this.hasSubmenuTarget) {
       this.popperInstance.destroy()
     }
-    this.mutationObserver.disconnect()
+    this.mutationObserver?.disconnect()
   }
 
   show(event) {
@@ -60,7 +60,7 @@ export default class extends ApplicationController {
       this.submenuTarget.classList.remove("hidden")
       this.submenuTarget.setAttribute("data-show", "")
       this.popperInstance.update()
-      const firstInputElement = this.popperInstance.state.elements.popper.querySelector('form input:not([class=hidden])')
+      const firstInputElement = this.popperInstance.state.elements.popper.querySelector('form input:not([type="hidden"])')
       const length = firstInputElement?.value.length;
       firstInputElement?.setSelectionRange(length, length);
       firstInputElement?.focus()
