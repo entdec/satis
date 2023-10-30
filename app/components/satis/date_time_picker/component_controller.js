@@ -155,12 +155,12 @@ export default class extends ApplicationController {
 
   previousMonth(event) {
     this.displayValue = new Date(new Date(this.displayValue).setMonth(this.displayValue.getMonth() - 1))
-    this.refreshCalendar()
+    this.refreshCalendar(false)
   }
 
   nextMonth(event) {
     this.displayValue = new Date(new Date(this.displayValue).setMonth(this.displayValue.getMonth() + 1))
-    this.refreshCalendar()
+    this.refreshCalendar(false)
   }
 
   clickedOutside(event) {
