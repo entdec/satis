@@ -175,6 +175,8 @@ export default class extends ApplicationController {
 
       if (!this.hiddenSelectTarget.getAttribute("data-reflex"))
         this.hiddenSelectTarget.dispatchEvent(new CustomEvent("change", { detail: { src: "satis-dropdown" } }))
+
+      this.validateSearchQuery()
     })
   }
 
@@ -343,8 +345,8 @@ export default class extends ApplicationController {
 
     this.hiddenSelectTarget.dispatchEvent(new Event("change"))
     this.setSelectedItem(selectedValue)
-    this.validateSearchQuery()
     this.hideResultsList()
+    this.validateSearchQuery()
   }
 
   setHiddenSelect() {
