@@ -73,7 +73,7 @@ module Satis
                  end
           [text, value, {selected: true}]
         elsif item.is_a?(Array)
-          [item.second, item.first, {selected: true}]
+          [item.first, item.second, {selected: true}]
         elsif item.is_a?(String)
           [nil, item, {selected: true}]
         end
