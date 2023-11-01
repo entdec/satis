@@ -72,6 +72,7 @@ export default class extends ApplicationController {
         popperSameWidth,
       ],
     })
+    this.popperInstance.state.elements.popper.popperInstance = () => this.popperInstance
 
     if (this.hasToggleButtonTarget) this.toggleButtonTarget.addEventListener("blur", this.boundBlur)
     this.searchInputTarget.addEventListener("blur", this.boundBlur)
