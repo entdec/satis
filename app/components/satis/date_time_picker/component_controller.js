@@ -66,6 +66,7 @@ export default class extends ApplicationController {
           },
         ],
       })
+      this.popperInstance.state.elements.popper.popperInstance = () => this.popperInstance
     }
 
     this.boundClickedOutside = this.clickedOutside.bind(this)
