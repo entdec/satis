@@ -313,8 +313,8 @@ export default class extends ApplicationController {
   }
 
   selectItem(dataDiv, force = false) {
-    const selectedValue = dataDiv.getAttribute("data-satis-dropdown-item-value")
-    const selectedValueText = dataDiv.getAttribute("data-satis-dropdown-item-text")
+    const selectedValue = dataDiv.getAttribute("data-satis-dropdown-item-value") || ""
+    const selectedValueText = dataDiv.getAttribute("data-satis-dropdown-item-text") || ""
     this.copyItemAttributes(dataDiv, this.hiddenSelectTarget) // FIXME: we are now supporting multiple values; is this needed? We copy the attributes to options
 
     const option = this.createOption({ text: selectedValueText, value: selectedValue })
