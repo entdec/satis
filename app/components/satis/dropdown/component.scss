@@ -6,7 +6,6 @@
 
   input {
     @apply dark:text-gray-300;
-    
   }
   
   .warning
@@ -16,5 +15,10 @@
       @apply text-gray-400;
       
     }
+  }
+
+  .highlighted {
+    @apply bg-primary-200;
+    @apply font-bold;
   }
 }
