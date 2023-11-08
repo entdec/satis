@@ -64,15 +64,24 @@ module Satis
       end
 
       def option_value(item)
-        if item.respond_to?(value_method)
-          text = item.send(text_method)
-          value = item.send(value_method)
-          [text, value, {selected: true}]
+        text = value = ""
+
+        if item.respond_to?(:id)
+          value = item.send(:id)
+          text = if item.respond_to?(:name)
+                    item.send(:name)
+                 else
+                    ""
+                 end
         elsif item.is_a?(Array)
-          [item.second, item.first, {selected: true}]
+          value = item.first
+          text = item.second
         elsif item.is_a?(String)
-          [nil, item, {selected: true}]
+          text = value = item
         end
+
+        return nil if value.blank?
+        [text, item, {selected: true}]
       end
 
       def placeholder

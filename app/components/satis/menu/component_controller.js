@@ -31,6 +31,7 @@ export default class extends ApplicationController {
           },
         ],
       })
+      this.popperInstance.state.elements.popper.popperInstance = () => this.popperInstance
 
       this.mutationObserver = new MutationObserver((mutationsList, observer) => {
         mutationsList.forEach(mutation => {
@@ -60,6 +61,12 @@ export default class extends ApplicationController {
       this.submenuTarget.classList.remove("hidden")
       this.submenuTarget.setAttribute("data-show", "")
       this.popperInstance.update()
+      this.element.querySelectorAll("[data-popper-reference-hidden]").forEach(element => {
+        if(element.hasOwnProperty("popperInstance")) {
+          element.popperInstance().update()
+        }
+      })
+
       const firstInputElement = this.popperInstance.state.elements.popper.querySelector('form input:not([type="hidden"])')
       const length = firstInputElement?.value.length;
       firstInputElement?.setSelectionRange(length, length);
