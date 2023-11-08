@@ -501,19 +501,20 @@ export default class extends ApplicationController {
 
     this.recordLastSearch()
 
-    let hiddenItemsCount = 0
+    // show all items again and count those that were already visible (previously matched)
+    let previouslyVisibleItemsCount = 0
     this.itemTargets.forEach((item) => {
       if (item.classList.contains('hidden')) {
         item.classList.remove('hidden')
       } else {
-        hiddenItemsCount++
+        previouslyVisibleItemsCount++
       }
     });
 
     this.filterResultsChainTo()
 
+    // hide all items that don't match the search query
     const searchValue = this.searchInputTarget.value
-    // FIXME: We don't need to store all matches in an array
     let matches = []
     this.itemTargets.forEach((item) => {
       const text = item.getAttribute("data-satis-dropdown-item-text")
@@ -522,7 +523,6 @@ export default class extends ApplicationController {
         new RegExp(searchValue, "i").test(text)
 
       const isHidden = item.classList.contains("hidden")
-
       if (!isHidden) {
         if (matched) {
           matches.push(item)
@@ -547,12 +547,14 @@ export default class extends ApplicationController {
           matches[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.lastSearch.toLowerCase()) >= 0) {
           const dataDiv = matches[0].closest('[data-satis-dropdown-target="item"]')
           this.selectItem(dataDiv)
+          //
           this.setSelectedItem(dataDiv.getAttribute("data-satis-dropdown-item-value"))
         } else {
           this.showSelectedItem()
         }
-      }else if(hiddenItemsCount === 1 && matches.length > 1) {
-        this.lowLightSelected()
+        // the selected item if there was only 1 item visible before
+      } else if(previouslyVisibleItemsCount === 1 && matches.length > 1) {
+        this.setSelectedItem()
       }
     }
 
@@ -828,8 +830,16 @@ export default class extends ApplicationController {
     }
   }
 
+  /*
+    * Set the selected item base on an the items 'data-satis-dropdown-item-value' attribute
+    * @param {string} value - The value to match the item against
+   */
   setSelectedItem(value) {
     this.lowLightSelected()
+    if (!value) {
+      this.selectedIndex = -1
+      return
+    }
     const itemTargets = this.itemTargets;
     const visibleItems = itemTargets.filter(item => !item.classList.contains("hidden"));
     this.selectedIndex = visibleItems.findIndex(item => item.getAttribute("data-satis-dropdown-item-value") === value);
