@@ -5,6 +5,7 @@ import { debounce, popperSameWidth } from "../../../../frontend/utils"
 import { createPopper } from "@popperjs/core"
 
 export default class extends ApplicationController {
+
   static targets = [
     "results",
     "items",
@@ -18,6 +19,7 @@ export default class extends ApplicationController {
     "pill",
     "selectedItemsTemplate"
   ]
+
   static values = {
     chainTo: String,
     freeText: Boolean,
@@ -25,7 +27,7 @@ export default class extends ApplicationController {
     pageSize: Number,
     url: String,
     urlParams: Object,
-    isMultiple: Boolean,
+    isMultiple: Boolean
   }
 
   connect() {
@@ -45,7 +47,9 @@ export default class extends ApplicationController {
     this.endPage = null
 
     // To remember what the last search was we did
+    this.searchQueryValue = null
     this.lastSearch = null
+    this.minSearchQueryLength = 2
 
     // To remember what the last options were we got from the server to prevent unnecessary refreshes
     // and unexpected events
@@ -72,6 +76,7 @@ export default class extends ApplicationController {
         popperSameWidth,
       ],
     })
+    this.popperInstance.state.elements.popper.popperInstance = () => this.popperInstance
 
     if (this.hasToggleButtonTarget) this.toggleButtonTarget.addEventListener("blur", this.boundBlur)
     this.searchInputTarget.addEventListener("blur", this.boundBlur)
@@ -173,6 +178,8 @@ export default class extends ApplicationController {
 
       if (!this.hiddenSelectTarget.getAttribute("data-reflex"))
         this.hiddenSelectTarget.dispatchEvent(new CustomEvent("change", { detail: { src: "satis-dropdown" } }))
+
+      this.validateSearchQuery()
     })
   }
 
@@ -231,7 +238,10 @@ export default class extends ApplicationController {
 
   // User enters text in the search field
   search(event) {
-    if(this.searchInputTarget.value === "" && !this.isMultipleValue){
+    this.searchQueryValue = this.searchInputTarget.value
+
+    if(this.searchInputTarget.value.length === 0 && !this.isMultipleValue){
+      if(this.nrOfItems === 1) this.lowLightSelected();
       this.hiddenSelectTarget.innerHTML = ""
       this.hiddenSelectTarget.add(this.createOption())
     }
@@ -262,14 +272,15 @@ export default class extends ApplicationController {
     }
 
     this.searchInputTarget.value = ""
+    this.searchQueryValue = null
+    this.currentPage = 1
     this.lastSearch = null
     this.lastPage = null
     this.endPage = null
 
-    if (this.selectedItem) {
-      this.selectedItem.classList.remove("bg-primary-200")
-    }
+    this.lowLightSelected();
     this.selectedIndex = -1
+
     if (this.hasUrlValue) {
       this.itemsTarget.innerHTML = ""
     }
@@ -282,7 +293,7 @@ export default class extends ApplicationController {
     // hide all results and reset
     this.hideResultsList()
 
-    this.searchInputTarget.closest(".bg-white").classList.toggle("warning", false)
+    this.validateSearchQuery()
 
     if (event) {
       event.preventDefault()
@@ -306,8 +317,8 @@ export default class extends ApplicationController {
   }
 
   selectItem(dataDiv, force = false) {
-    const selectedValue = dataDiv.getAttribute("data-satis-dropdown-item-value")
-    const selectedValueText = dataDiv.getAttribute("data-satis-dropdown-item-text")
+    const selectedValue = dataDiv.getAttribute("data-satis-dropdown-item-value") || ""
+    const selectedValueText = dataDiv.getAttribute("data-satis-dropdown-item-text") || ""
     this.copyItemAttributes(dataDiv, this.hiddenSelectTarget) // FIXME: we are now supporting multiple values; is this needed? We copy the attributes to options
 
     const option = this.createOption({ text: selectedValueText, value: selectedValue })
@@ -334,13 +345,12 @@ export default class extends ApplicationController {
 
     this.hiddenSelectTarget.add(option)
     this.lastServerRefreshOptions.add(selectedValue)
-    if (this.hasUrlValue) {
-      this.selectedItemsTemplateTarget.content.appendChild(dataDiv.cloneNode(true))
-    }
+    this.selectedItemsTemplateTarget.content.appendChild(dataDiv.cloneNode(true))
 
     this.hiddenSelectTarget.dispatchEvent(new Event("change"))
-    this.searchInputTarget.closest(".bg-white").classList.toggle("warning", false)
+    this.setSelectedItem(selectedValue)
     this.hideResultsList()
+    this.validateSearchQuery()
   }
 
   setHiddenSelect() {
@@ -377,8 +387,14 @@ export default class extends ApplicationController {
   // --- Helpers
 
   recordLastSearch() {
-    let emptySearch = !this.searchInputTarget.value
-    this.lastSearch = emptySearch ? "" : this.searchInputTarget.value
+    this.lastSearch = this.searchInputTarget.value ? this.searchInputTarget.value : ""
+  }
+
+  get searchQueryChanged() {
+    const searchQueryValue = this.filteredSearchQuery ? this.filteredSearchQuery : ""
+    const lastSearch = this.lastSearch ? this.lastSearch : ""
+    return searchQueryValue.length !== lastSearch.length ||
+      searchQueryValue.localeCompare(lastSearch, undefined, { sensitivity: "base" }) !== 0
   }
 
   removePill(event) {
@@ -402,10 +418,15 @@ export default class extends ApplicationController {
       // } else if (this.element.contains(document.activeElement)) {
     } else {
       this.filterResultsChainTo()
-      if(this.hasUrlValue)
-        this.fetchResults(event)
-      else
-        this.localResults(event)
+
+      if(this.hasResults){
+        this.showResultsList(event)
+      }else {
+        if (this.hasUrlValue)
+          this.fetchResults(event)
+        else
+          this.localResults(event)
+      }
     }
     return false
   }
@@ -457,7 +478,7 @@ export default class extends ApplicationController {
         item.classList.remove("hidden")
       } else {
         item.classList.add("hidden")
-        item.classList.remove("bg-primary-200", "font-medium") // we should also remove highlighting
+        item.classList.remove("highlighted")
       }
     })
     if (listItems == 1) {
@@ -468,44 +489,42 @@ export default class extends ApplicationController {
   }
 
   localResults(event) {
-    if (this.searchInputTarget.value == this.lastSearch) {
+    if (!this.searchQueryChanged) {
       if(!this.resultsShown) {
         if (this.hasResults)
           this.showResultsList(event)
         else this.showSelectedItem()
       }
-      return
-    }
-
-    if (this.searchInputTarget.value.length > 0 && this.searchInputTarget.value.length < 2 && !this.lastSearch) {
-      // show warning when characters are less than 2
-      if (!this.freeTextValue) {
-        this.searchInputTarget.closest(".bg-white").classList.toggle("warning", true)
-      }
+      this.validateSearchQuery()
       return
     }
 
     this.recordLastSearch()
 
+    // show all items again and count those that were already visible (previously matched)
+    let previouslyVisibleItemsCount = 0
     this.itemTargets.forEach((item) => {
-      item.classList.toggle("hidden", false)
-      item.classList.toggle("bg-primary-200", false)
-      item.classList.toggle("font-medium", false)
-    })
+      if (item.classList.contains('hidden')) {
+        item.classList.remove('hidden')
+      } else {
+        previouslyVisibleItemsCount++
+      }
+    });
 
     this.filterResultsChainTo()
 
-    const searchValue = this.searchInputTarget.value.toLowerCase()
-    // FIXME: We don't need to store all matches in an array
+    // hide all items that don't match the search query
+    const searchValue = this.searchInputTarget.value
     let matches = []
     this.itemTargets.forEach((item) => {
-      const text = item.getAttribute("data-satis-dropdown-item-text").toLowerCase()
-      const isHidden = item.classList.contains("hidden")
+      const text = item.getAttribute("data-satis-dropdown-item-text")
+      const matched = this.needsExactMatchValue ?
+        searchValue.localeCompare(text, undefined, {sensitivity: 'base'}) === 0:
+        new RegExp(searchValue, "i").test(text)
 
+      const isHidden = item.classList.contains("hidden")
       if (!isHidden) {
-        if (this.needsExactMatchValue && text === searchValue) {
-          matches.push(item)
-        } else if (!this.needsExactMatchValue && text.indexOf(searchValue) >= 0) {
+        if (matched) {
           matches.push(item)
         } else {
           item.classList.toggle("hidden", true)
@@ -522,34 +541,31 @@ export default class extends ApplicationController {
     }
 
     // auto select if there is only one match and we are not in freetext mode
-    if (
-      matches.length == 1 &&
-      !this.freeTextValue &&
-      matches[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.lastSearch.toLowerCase()) >= 0
-    ) {
-      const dataDiv = matches[0].closest('[data-satis-dropdown-target="item"]')
-      const selectedValueText = dataDiv.getAttribute("data-satis-dropdown-item-text")
-      this.selectItem(dataDiv)
-
-      this.selectedIndex = -1
-      this.moveDown()
-    } else {
-      if (!this.freeTextValue) {
-        if (matches.length === 1) {
-          this.selectedIndex = -1
-          this.moveDown()
+    if(!this.freeTextValue) {
+      if (matches.length === 1) {
+        if (this.filteredSearchQuery.length >= this.minSearchQueryLength &&
+          matches[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.lastSearch.toLowerCase()) >= 0) {
+          const dataDiv = matches[0].closest('[data-satis-dropdown-target="item"]')
+          this.selectItem(dataDiv)
+          //
+          this.setSelectedItem(dataDiv.getAttribute("data-satis-dropdown-item-value"))
+        } else {
+          this.showSelectedItem()
         }
-        const showWarning = this.searchInputTarget.value.length > 0
-        this.searchInputTarget.closest(".bg-white").classList.toggle("warning", showWarning)
+        // the selected item if there was only 1 item visible before
+      } else if(previouslyVisibleItemsCount === 1 && matches.length > 1) {
+        this.setSelectedItem()
       }
     }
+
+    this.validateSearchQuery()
   }
 
   // Remote search
   fetchResults(event) {
     const promise = new Promise((resolve, reject) => {
       if (
-        (this.searchInputTarget.value == this.lastSearch &&
+        (!this.searchQueryChanged &&
           (this.currentPage == this.lastPage || this.currentPage == this.endPage)) ||
         !this.hasUrlValue
       ) {
@@ -561,9 +577,10 @@ export default class extends ApplicationController {
         return
       }
 
-      if (this.searchInputTarget.value != this.lastSearch) {
+      if (this.searchQueryChanged) {
         this.currentPage = 1
         this.endPage = null
+        this.recordLastSearch()
       }
 
       this.lastPage = this.currentPage
@@ -571,11 +588,10 @@ export default class extends ApplicationController {
       let ourUrl = this.normalizedUrl()
       let pageSize = this.pageSizeValue
 
-      if (event != null && (this.searchInputTarget.value.length >= 2 || this.lastSearch)) {
-        ourUrl.searchParams.append("term", this.searchInputTarget.value)
+      if (event != null && (this.filteredSearchQuery >= 2 || this.lastSearch)) {
+        ourUrl.searchParams.append("term", this.searchQueryValue)
       }
 
-      this.recordLastSearch()
 
       ourUrl.searchParams.append("page", this.currentPage)
       ourUrl.searchParams.append("page_size", pageSize)
@@ -586,26 +602,16 @@ export default class extends ApplicationController {
       this.fetchResultsWith(ourUrl).then((itemCount) => {
         if (this.hasResults) {
           this.filterResultsChainTo()
-          this.highLightSelected()
+
           if (!this.resultsShown && !this.chainToValue) {
             this.showResultsList()
           }
 
-          // auto
-          if (this.nrOfItems == 1 && !this.freeTextValue) {
+          // auto select when there is only 1 value
+          if (this.filteredSearchQuery.length >= this.minSearchQueryLength && this.nrOfItems === 1 && !this.freeTextValue) {
             const dataDiv = this.itemTargets[0].closest('[data-satis-dropdown-target="item"]')
-            const selectedValueText = dataDiv.getAttribute("data-satis-dropdown-item-text")
             this.selectItem(dataDiv)
-
-            this.selectedIndex = -1
-            this.moveDown()
-          } else if (!this.freeTextValue) {
-            if (this.nrOfItems == 1) {
-              this.selectedIndex = -1
-              this.moveDown()
-            }
-            const showWarning = this.searchInputTarget.value.length > 0
-            this.searchInputTarget.closest(".bg-white").classList.toggle("warning", showWarning)
+            this.setSelectedItem(dataDiv.getAttribute("data-satis-dropdown-item-value"))
           }
 
           if (itemCount > 0) {
@@ -619,10 +625,10 @@ export default class extends ApplicationController {
 
           resolve()
         } else {
-          const showWarning = this.searchInputTarget.value.length > 0
-          this.searchInputTarget.closest(".bg-white").classList.toggle("warning", showWarning)
           this.showSelectedItem()
         }
+
+        this.validateSearchQuery()
       })
     })
     return promise
@@ -656,6 +662,11 @@ export default class extends ApplicationController {
     return promise
   }
 
+  get filteredSearchQuery(){
+    if(this.searchQueryValue < this.minSearchQueryLength) return ""
+    return this.searchQueryValue
+  }
+
   get selectionChangedSinceLastRefresh() {
     return (
       this.hiddenSelectTarget.options.length !== this.lastServerRefreshOptions.size ||
@@ -675,6 +686,7 @@ export default class extends ApplicationController {
 
         // Copy over data attributes on the item div to the option
         this.copyItemAttributes(item, opt)
+        this.selectedItemsTemplateTarget.content.appendChild(item.cloneNode(true))
         updated++
       }
 
@@ -805,16 +817,33 @@ export default class extends ApplicationController {
   }
 
   lowLightSelected() {
-    if (this.selectedItem) {
-      this.selectedItem.classList.remove("bg-primary-200", "font-medium")
-    }
+    this.itemsTarget.querySelectorAll('.highlighted[data-satis-dropdown-target="item"]').forEach((item) => {
+      item.classList.toggle("highlighted")
+    })
   }
 
   highLightSelected() {
-    if (this.selectedItem) {
-      this.selectedItem.classList.add("bg-primary-200", "font-medium")
-      this.selectedItem.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })
+    const selectedItem = this.selectedItem
+    if (selectedItem) {
+      selectedItem.classList.toggle("highlighted", true)
+      selectedItem.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "start" })
     }
+  }
+
+  /*
+    * Set the selected item base on an the items 'data-satis-dropdown-item-value' attribute
+    * @param {string} value - The value to match the item against
+   */
+  setSelectedItem(value) {
+    this.lowLightSelected()
+    if (!value) {
+      this.selectedIndex = -1
+      return
+    }
+    const itemTargets = this.itemTargets;
+    const visibleItems = itemTargets.filter(item => !item.classList.contains("hidden"));
+    this.selectedIndex = visibleItems.findIndex(item => item.getAttribute("data-satis-dropdown-item-value") === value);
+    this.highLightSelected()
   }
 
   moveDown() {
@@ -828,11 +857,17 @@ export default class extends ApplicationController {
     this.decreaseSelectedIndex()
     this.highLightSelected()
   }
+  validateSearchQuery() {
+    const selected = this.selectedItemsTemplateTarget.content.querySelector(`[data-satis-dropdown-item-text="${this.searchInputTarget.value}"]`)
+    if (!selected && this.searchInputTarget.value.length > 0 && !this.freeTextValue) {
+      this.searchInputTarget.closest(".bg-white").classList.toggle("warning", true)
+    } else {
+      this.searchInputTarget.closest(".bg-white").classList.toggle("warning", false)
+    }
+  }
 
   // clear search input and hide results
   resetSearchInput(event) {
-    this.searchInputTarget.closest(".bg-white").classList.toggle("warning", false)
-
     if (this.multiSelectValue) {
       this.searchInputTarget.value = ""
     } else {
@@ -845,6 +880,8 @@ export default class extends ApplicationController {
     if (this.resultsShown) {
       this.hideResultsList(event)
     }
+
+    this.validateSearchQuery()
   }
 
   clickedOutside(event) {
@@ -924,10 +961,9 @@ export default class extends ApplicationController {
     }
 
     if(item) {
-      this.selectedIndex = -1
-      this.moveDown()
       if (!this.resultsShown)
         this.showResultsList()
+      this.setSelectedItem(option.value)
     }
 
     return item != null;
