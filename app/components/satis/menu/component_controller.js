@@ -19,14 +19,14 @@ export default class extends ApplicationController {
             name: "flip",
             enabled: true,
             options: {
-              fallbackPlacements: ["bottom", "right"],
-              boundary: this.element.closest(".table-wrp") || this.element.closest(".sts-card"),
+              fallbackPlacements: ["bottom"],
+              boundary: this.element.closest(".tbdy") || this.element.closest(".sts-card"),
             },
           },
           {
             name: "preventOverflow",
             options: {
-              boundary: this.element.closest(".table-wrp") || this.element.closest(".sts-card"),
+              boundary: this.element.closest(".tbdy") || this.element.closest(".sts-card"),
             },
           },
         ],
@@ -121,8 +121,8 @@ export default class extends ApplicationController {
     if(!boundary) return
     const maxHeight = parseInt(window.getComputedStyle(boundary).maxHeight.replace("px", ""))
     const popperElement = this.popperInstance.state.elements.popper
-    if (boundary.offsetHeight < Math.min(popperElement.scrollHeight + 20, maxHeight)) {
-      boundary.style.minHeight = `${Math.min(popperElement.scrollHeight + 20, maxHeight)}px`;
+    if (boundary.offsetHeight < Math.min(popperElement.scrollHeight + 50, maxHeight)) {
+      boundary.style.minHeight = `${Math.min(popperElement.scrollHeight + 50, maxHeight)}px`;
     }
   }
 

@@ -340,6 +340,7 @@ export default class extends ApplicationController {
       this.lastServerRefreshOptions.clear()
       this.hiddenSelectTarget.innerHTML = ""
       this.selectedItemsTemplateTarget.innerHTML = ""
+      this.searchInputTarget.value = selectedValueText
     } else
       this.selectedItemsTemplateTarget.content.querySelector(`[data-satis-dropdown-item-value="${selectedValue}"]`)?.remove()
 
@@ -419,7 +420,7 @@ export default class extends ApplicationController {
     } else {
       this.filterResultsChainTo()
 
-      if(this.hasResults){
+      if(this.hasResults && !this.searchQueryChanged){
         this.showResultsList(event)
       }else {
         if (this.hasUrlValue)
@@ -514,7 +515,7 @@ export default class extends ApplicationController {
     this.filterResultsChainTo()
 
     // hide all items that don't match the search query
-    const searchValue = this.searchInputTarget.value
+    const searchValue = this.searchQueryValue
     let matches = []
     this.itemTargets.forEach((item) => {
       const text = item.getAttribute("data-satis-dropdown-item-text")
@@ -547,8 +548,8 @@ export default class extends ApplicationController {
           matches[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.lastSearch.toLowerCase()) >= 0) {
           const dataDiv = matches[0].closest('[data-satis-dropdown-target="item"]')
           this.selectItem(dataDiv)
-          //
           this.setSelectedItem(dataDiv.getAttribute("data-satis-dropdown-item-value"))
+          this.searchQueryValue = ""
         } else {
           this.showSelectedItem()
         }
@@ -612,6 +613,7 @@ export default class extends ApplicationController {
             const dataDiv = this.itemTargets[0].closest('[data-satis-dropdown-target="item"]')
             this.selectItem(dataDiv)
             this.setSelectedItem(dataDiv.getAttribute("data-satis-dropdown-item-value"))
+            this.searchQueryValue = ""
           }
 
           if (itemCount > 0) {
