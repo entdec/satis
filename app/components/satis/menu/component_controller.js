@@ -19,7 +19,7 @@ export default class extends ApplicationController {
             name: "flip",
             enabled: true,
             options: {
-              fallbackPlacements: ["bottom", "right"],
+              fallbackPlacements: ["bottom"],
               boundary: this.element.closest(".tbdy") || this.element.closest(".sts-card"),
             },
           },
