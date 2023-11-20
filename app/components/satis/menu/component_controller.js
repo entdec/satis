@@ -1,22 +1,13 @@
 import ApplicationController from "../../../../frontend/controllers/application_controller"
 // FIXME: Is this full path really needed?
 import {createPopper} from "@popperjs/core"
-import {isPointInsideElement} from "../../../../frontend/utils"
 
 
 export default class extends ApplicationController {
   static targets = ["submenu", "toggle", "clear"]
 
-  static values = {
-    closeOn: String
-  }
-
   connect() {
     super.connect()
-    const closeOnOptions = ["click", "mouseleave"]
-    if (!closeOnOptions.includes(this.closeOnValue)) {
-      this.closeOnValue = "mouseleave"
-    }
 
     if (this.hasSubmenuTarget) {
       this.popperInstance = createPopper(this.element, this.submenuTarget, {
@@ -62,10 +53,8 @@ export default class extends ApplicationController {
     this.boundClickOutside = this.clickOutside.bind(this)
     document.addEventListener("click", this.boundClickOutside)
 
-    if(this.closeOnValue === "mouseleave") {
-      this.boundMouseleave = this.hide.bind(this)
-      this.element.addEventListener("mouseleave", this.boundMouseleave)
-    }
+    this.boundMouseleave = this.hide.bind(this)
+    this.element.addEventListener("mouseleave", this.boundMouseleave)
   }
 
   disconnect() {
@@ -73,7 +62,7 @@ export default class extends ApplicationController {
     if (this.hasSubmenuTarget) {
       this.popperInstance.destroy()
       document.removeEventListener("click", this.boundClickOutside)
-      if(this.boundMouseleave) this.element.removeEventListener("mouseleave", this.boundMouseleave)
+      this.element.removeEventListener("mouseleave", this.boundMouseleave)
     }
     this.mutationObserver?.disconnect()
   }
@@ -172,28 +161,6 @@ export default class extends ApplicationController {
   clickOutside(event) {
     if (!this.element.contains(event.target)) {
       this.hide(event)
-    }
-  }
-
-  closeOnValueChanged(value, previousValue) {
-    // In case of a click outside, we want to always hide the menu
-
-    switch (previousValue) {
-      case "mouseleave":
-        this.element.removeEventListener("mouseleave", this.boundMouseleave)
-        break
-      default:
-        this.element.removeEventListener("mouseleave", this.boundMouseleave)
-        break
-    }
-
-    switch (value) {
-      case "mouseleave":
-        this.element.addEventListener("mouseleave", this.boundMouseleave)
-        break
-      default:
-        this.element.addEventListener("mouseleave", this.boundMouseleave)
-        break
     }
   }
 
