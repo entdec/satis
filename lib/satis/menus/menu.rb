@@ -3,14 +3,15 @@
 module Satis
   module Menus
     class Menu
-      attr_reader :items, :level, :event, :show_scroll
+      attr_reader :items, :level, :event, :show_scroll, :close_on
       def initialize(*args, **kwargs)
         @options = args.extract_options!
         @items = []
         @scope = Array.wrap(args.first)
         @level = kwargs[:level] || 0
-        @event = kwargs[:event] || 'mouseover'
+        @event = kwargs[:event] || "mouseover"
         @show_scroll = kwargs[:show_scroll] || false
+        @close_on = kwargs[:close_on] || "mouseleave"
         yield self if block_given?
       end
 

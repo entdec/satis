@@ -7,8 +7,16 @@ import {isPointInsideElement} from "../../../../frontend/utils"
 export default class extends ApplicationController {
   static targets = ["submenu", "toggle", "clear"]
 
+  static values = {
+    closeOn: String
+  }
+
   connect() {
     super.connect()
+    const closeOnOptions = ["click", "mouseleave"]
+    if (!closeOnOptions.includes(this.closeOnValue)) {
+      this.closeOnValue = "mouseleave"
+    }
 
     if (this.hasSubmenuTarget) {
       this.popperInstance = createPopper(this.element, this.submenuTarget, {
@@ -43,18 +51,6 @@ export default class extends ApplicationController {
         attributes: true
       });
 
-      this.boundClickOutside = this.clickOutside.bind(this)
-      this.boundMenuShow = this.menuShow.bind(this)
-      this.boundMenuHide = this.menuHide.bind(this)
-      this.boundMousemove = this.onMouseEvent.bind(this)
-
-      document.addEventListener("mousedown", this.boundClickOutside)
-      document.addEventListener("satis-menu:show", this.boundMenuShow)
-      document.addEventListener("satis-menu:hide", this.boundMenuHide)
-
-      this.submenuTarget.addEventListener("mouseover", this.boundMousemove)
-      this.submenuTarget.addEventListener("mouseleave", this.boundMousemove)
-      this.submenuTarget.addEventListener("mouseenter", this.boundMousemove)
     }
 
     if (this.hasClearTarget) {
@@ -63,22 +59,21 @@ export default class extends ApplicationController {
       }
     }
 
-    this.element.addEventListener("mouseleave", this.boundMousemove)
+    this.boundClickOutside = this.clickOutside.bind(this)
+    document.addEventListener("click", this.boundClickOutside)
+
+    if(this.closeOnValue === "mouseleave") {
+      this.boundMouseleave = this.hide.bind(this)
+      this.element.addEventListener("mouseleave", this.boundMouseleave)
+    }
   }
 
   disconnect() {
     super.disconnect()
     if (this.hasSubmenuTarget) {
       this.popperInstance.destroy()
-      document.removeEventListener("mousedown", this.boundClickOutside)
-      document.removeEventListener("satis-menu:show", this.boundMenuShow)
-      document.removeEventListener("satis-menu:hide", this.boundMenuHide)
-
-      this.submenuTarget.removeEventListener("mouseover", this.boundMousemove)
-      this.submenuTarget.removeEventListener("mouseleave", this.boundMousemove)
-      this.submenuTarget.removeEventListener("mouseenter", this.boundMousemove)
-
-      this.element.removeEventListener("mouseleave", this.boundMousemove)
+      document.removeEventListener("click", this.boundClickOutside)
+      if(this.boundMouseleave) this.element.removeEventListener("mouseleave", this.boundMouseleave)
     }
     this.mutationObserver?.disconnect()
   }
@@ -94,22 +89,22 @@ export default class extends ApplicationController {
           }
         })
 
-      this.previousMouseX = event.clientX
-      this.previousMouseY = event.clientY
         const firstInputElement = this.popperInstance.state.elements.popper.querySelector('form input:not([type="hidden"])')
         const length = firstInputElement?.value.length;
         firstInputElement?.setSelectionRange(length, length);
         firstInputElement?.focus()
-
-        document.dispatchEvent( new CustomEvent("satis-menu:show", {detail:{ src: this.submenuTarget }}))
-
-
       }
     event.stopPropagation()
   }
 
   hide(event) {
-    if (this.hasSubmenuTarget) {
+    if(event && event.type === "mouseleave" &&
+      (event.target.getAttribute("data-act-table-target") === "loadingOverlay" ||
+      event.relatedTarget.getAttribute("data-act-table-target") === "loadingOverlay")){
+      return
+    }
+
+    if (this.hasSubmenuTarget && this.submenuTarget.hasAttribute("data-show")) {
       this.submenuTarget.classList.add("hidden")
       this.submenuTarget.removeAttribute("data-show")
 
@@ -118,7 +113,7 @@ export default class extends ApplicationController {
         boundary.style.minHeight = null;
       }
     }
-    event.stopPropagation()
+    event?.stopPropagation()
   }
 
   toggle(event) {
@@ -174,60 +169,32 @@ export default class extends ApplicationController {
     return !this.toggleTarget.classList.contains("hidden")
   }
 
-   isMouseInsideBounds(mouseX, mouseY, options = null) {
-    if (!this.hasSubmenuTarget || !this.submenuTarget.hasAttribute("data-show")) return false
-    const popperElement = this.popperInstance.state.elements.popper
-    if (!popperElement) return false
-
-    return isPointInsideElement(this.element, mouseX, mouseY, options) ||
-      isPointInsideElement(popperElement, mouseX, mouseY, options)
-  }
-
-  menuShow(event){
-    if (!this.element.contains(event.detail.src)) {
-      this.hide(event)
-    }
-  }
-
-  menuHide(event){
-    if (this.element.contains(event.detail.src) || this.submenuTarget.contains(event.detail.src)) {
-      if (!this.isMouseInsideBounds(event.clientX, event.clientY,{bufferSize: 3})) {
-        this.hide(event)
-        console.log("hide", event.detail.src)
-      }
-    }
-  }
-
-  onMouseEvent(event) {
-    if (!event?.clientX || !event?.clientY) {
-      return
-    }
-
-    const previousMouseX = this.previousMouseX
-    const previousMouseY = this.previousMouseY
-
-    if (!this.hasSubmenuTarget || !this.submenuTarget.hasAttribute("data-show")) return
-
-    const popperElement = this.popperInstance.state.elements.popper
-    const wasInside = this.isMouseInsideBounds(previousMouseX, previousMouseY)
-    const isInside = isPointInsideElement(popperElement, event.clientX, event.clientY)
-
-    if (wasInside && !isInside) {
-      this.hide(event)
-      this.triggerEvent(document, "satis-menu:hide", { src: this.element, clientX: event.clientX, clientY: event.clientY })
-    }
-
-    this.previousMouseX = event.clientX
-    this.previousMouseY = event.clientY
-  }
-
   clickOutside(event) {
-    if (!this.hasSubmenuTarget || !this.submenuTarget.hasAttribute("data-show")) return
-    const popperElement = this.popperInstance.state.elements.popper
-    if (!popperElement) return
-
-    if(!this.isMouseInsideBounds(event.clientX, event.clientY)) {
+    if (!this.element.contains(event.target)) {
       this.hide(event)
     }
   }
+
+  closeOnValueChanged(value, previousValue) {
+    // In case of a click outside, we want to always hide the menu
+
+    switch (previousValue) {
+      case "mouseleave":
+        this.element.removeEventListener("mouseleave", this.boundMouseleave)
+        break
+      default:
+        this.element.removeEventListener("mouseleave", this.boundMouseleave)
+        break
+    }
+
+    switch (value) {
+      case "mouseleave":
+        this.element.addEventListener("mouseleave", this.boundMouseleave)
+        break
+      default:
+        this.element.addEventListener("mouseleave", this.boundMouseleave)
+        break
+    }
+  }
+
 }
