@@ -99,8 +99,8 @@ export default class extends ApplicationController {
 
   hide(event) {
     if(event && event.type === "mouseleave" &&
-      (event.target.getAttribute("data-act-table-target") === "loadingOverlay" ||
-      event.relatedTarget.getAttribute("data-act-table-target") === "loadingOverlay")){
+      (event.target?.getAttribute("data-act-table-target") === "loadingOverlay" ||
+      event.relatedTarget?.getAttribute("data-act-table-target") === "loadingOverlay")){
       return
     }
 
