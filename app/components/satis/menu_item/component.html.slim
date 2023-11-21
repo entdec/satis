@@ -1,4 +1,4 @@
-li.rounded-sm.px-3.py-1.hover:bg-gray-100.dark:hover:bg-gray-200.flex.items-center data-controller="satis-menu" data-action="mouseover->satis-menu#show mouseleave->satis-menu#hide"
+li.rounded-sm.px-3.py-1.hover:bg-gray-100.dark:hover:bg-gray-200.flex.items-center data-controller="satis-menu" data-action="mouseenter->satis-menu#show"
   a.cursor-pointer.py-1.w-full.text-left.flex.items-center.outline-none.focus:outline-none href=item.link *item.link_attributes
     - if item.type == :custom
       = render(partial: item.link_attributes[:data][:path], locals: item.link_attributes[:data][:parameters])
@@ -19,5 +19,3 @@ li.rounded-sm.px-3.py-1.hover:bg-gray-100.dark:hover:bg-gray-200.flex.items-cent
     ul.hidden.bg-white.border.rounded-md.shadow-lg data-satis-menu-target="submenu" data-satis-menu-submenu-placement="left"
       - item.menu.items.each do |sub_item|
         = render(Satis::MenuItem::Component.new(item: sub_item))
-
-

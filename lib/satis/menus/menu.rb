@@ -9,7 +9,7 @@ module Satis
         @items = []
         @scope = Array.wrap(args.first)
         @level = kwargs[:level] || 0
-        @event = kwargs[:event] || 'mouseover'
+        @event = kwargs[:event] || "mouseover"
         @show_scroll = kwargs[:show_scroll] || false
         yield self if block_given?
       end
