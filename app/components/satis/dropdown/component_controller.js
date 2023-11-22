@@ -860,7 +860,9 @@ export default class extends ApplicationController {
     this.highLightSelected()
   }
   validateSearchQuery() {
-    const selected = this.selectedItemsTemplateTarget.content.querySelector(`[data-satis-dropdown-item-text="${this.searchInputTarget.value}"]`)
+    const trimmedValue = this.searchInputTarget.value.trim();
+    const elements = this.selectedItemsTemplateTarget.content.querySelectorAll(`[data-satis-dropdown-item-text*="${trimmedValue}"]`);
+    const selected = Array.from(elements).find(element => element.getAttribute('data-satis-dropdown-item-text').trim() === trimmedValue);
     if (!selected && this.searchInputTarget.value.length > 0 && !this.freeTextValue) {
       this.searchInputTarget.closest(".bg-white").classList.toggle("warning", true)
     } else {
