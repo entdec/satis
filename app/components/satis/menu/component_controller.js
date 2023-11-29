@@ -102,7 +102,7 @@ export default class extends ApplicationController {
         boundary.style.minHeight = null;
       }
     }
-    event?.stopPropagation()
+    //event?.stopPropagation() //commented to fix issue with date picker not auto closing on clicking outside
   }
 
   toggle(event) {
