@@ -51,7 +51,6 @@ export default class extends ApplicationController {
     }
 
     this.boundClickOutside = this.clickOutside.bind(this)
-    document.addEventListener("click", this.boundClickOutside)
 
     this.boundMouseleave = this.hide.bind(this)
     this.element.addEventListener("mouseleave", this.boundMouseleave)
@@ -82,6 +81,8 @@ export default class extends ApplicationController {
         const length = firstInputElement?.value.length;
         firstInputElement?.setSelectionRange(length, length);
         firstInputElement?.focus()
+
+        document.addEventListener("click", this.boundClickOutside)
       }
     event.stopPropagation()
   }
@@ -101,8 +102,10 @@ export default class extends ApplicationController {
       if (boundary) {
         boundary.style.minHeight = null;
       }
+
+      document.removeEventListener("click", this.boundClickOutside)
     }
-    //event?.stopPropagation() //commented to fix issue with date picker not auto closing on clicking outside
+    //event?.stopPropagation()
   }
 
   toggle(event) {
@@ -163,5 +166,4 @@ export default class extends ApplicationController {
       this.hide(event)
     }
   }
-
 }
