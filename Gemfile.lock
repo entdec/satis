@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    satis (1.0.116)
+    satis (1.0.126)
       ar_doc_store (~> 2.1)
       browser
       diffy
@@ -96,7 +96,7 @@ GEM
     concurrent-ruby (1.2.2)
     connection_pool (2.3.0)
     crass (1.0.6)
-    date (3.3.3)
+    date (3.3.4)
     diff-lcs (1.5.0)
     diffy (3.4.2)
     e2mmap (0.1.0)
@@ -127,16 +127,16 @@ GEM
     mini_mime (1.1.5)
     mini_portile2 (2.8.4)
     minitest (5.20.0)
-    net-imap (0.4.1)
+    net-imap (0.4.7)
       date
       net-protocol
     net-pop (0.1.2)
       net-protocol
-    net-protocol (0.2.1)
+    net-protocol (0.2.2)
       timeout
     net-smtp (0.4.0)
       net-protocol
-    nio4r (2.5.9)
+    nio4r (2.6.1)
     nokogiri (1.15.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
@@ -260,11 +260,11 @@ GEM
     temple (0.8.2)
     thor (1.2.2)
     tilt (2.0.11)
-    timeout (0.4.0)
+    timeout (0.4.1)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     unicode-display_width (2.3.0)
-    view_component (3.6.0)
+    view_component (3.8.0)
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
