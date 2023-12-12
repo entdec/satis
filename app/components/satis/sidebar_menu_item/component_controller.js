@@ -11,6 +11,13 @@ export default class extends ApplicationController {
     // Primitive, yes
     Array.from(this.element.querySelectorAll('[data-satis-sidebar-menu-item-target="link"]')).forEach((el) => {
       if (el.href.length > 0 && window.location.href.indexOf(el.href) >= 0) {
+        let sidebar = el.closest('[aria-label="Sidebar"]')
+        if(sidebar.querySelectorAll('.active').length > 0){
+          sidebar.querySelectorAll('.active').forEach((ele) => {
+            ele.classList.remove("active")
+            ele.classList.remove("focus")
+          })
+        }
         el.classList.add("active")
       }
     })
@@ -21,6 +28,9 @@ export default class extends ApplicationController {
       if (this.hasSubmenuTarget) {
         this.submenuTarget.classList.remove("hidden")
         this.indicatorTarget.setAttribute("data-fa-transform", "rotate-90")
+        if (this.linkTarget){
+          this.linkTarget.classList.add("focus")
+        }
       } else {
         this.linkTarget.classList.add("focus")
       }
