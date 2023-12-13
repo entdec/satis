@@ -11,7 +11,7 @@ export default class extends ApplicationController {
     // Primitive, yes
     Array.from(this.element.querySelectorAll('[data-satis-sidebar-menu-item-target="link"]')).forEach((el) => {
       if (el.href.length > 0 && window.location.href.indexOf(el.href) >= 0) {
-        let sidebar = el.closest('[aria-label="Sidebar"]')
+        let sidebar = el.closest("nav.sidebar")
         if(sidebar.querySelectorAll('.active').length > 0){
           sidebar.querySelectorAll('.active').forEach((ele) => {
             ele.classList.remove("active")
