@@ -29,7 +29,6 @@ export default class extends ApplicationController {
               boundary: this.element.closest(".table-wrp") || this.element.closest(".sts-card"),
               tetherOffset: ({ popper, reference, placement }) => {
                 // always touch full side of the boundary
-                console.log(popper, reference, placement)
                 switch (placement) {
                   case 'left':
                   case 'right':
