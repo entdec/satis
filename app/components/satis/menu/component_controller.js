@@ -27,6 +27,19 @@ export default class extends ApplicationController {
             name: "preventOverflow",
             options: {
               boundary: this.element.closest(".table-wrp") || this.element.closest(".sts-card"),
+              tetherOffset: ({ popper, reference, placement }) => {
+                // always touch full side of the boundary
+                switch (placement) {
+                  case 'left':
+                  case 'right':
+                    return reference.height
+                  case 'top':
+                  case 'bottom':
+                    return reference.width
+                  default:
+                    return 0;
+                }
+              }
             },
           },
         ],
