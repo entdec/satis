@@ -238,7 +238,7 @@ module Satis
         text = if options[:help].present?
                  options[:help]
                else
-                 Satis.config.default_help_text(@template, @object, method,
+                 Satis.config.default_help_text.call(@template, @object, method,
                                                 @options[:help_scope] || options[:help_scope])
                end
 

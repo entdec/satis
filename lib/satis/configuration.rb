@@ -1,42 +1,52 @@
 # frozen_string_literal: true
+# frozen_string_literal: true
 
 module Satis
+  module Options
+    module ClassMethods
+      def option(name, default: nil)
+        attr_accessor(name)
+        schema[name] = default
+      end
+
+      def schema
+        @schema ||= {}
+      end
+    end
+
+    def set_defaults!
+      self.class.schema.each do |name, default|
+        instance_variable_set("@#{name}", default)
+      end
+    end
+
+    def self.included(cls)
+      cls.extend(ClassMethods)
+    end
+  end
+
   class Configuration
-    attr_accessor :submit_on_enter, :confirm_before_leave
-    attr_writer :default_help_text, :current_user
-    attr_writer :logger
+    include Options
+
+    option :logger, default: Rails.logger
+    option :submit_on_enter, default: true
+    option :confirm_before_leave, default: false
+    option :current_user, default: lambda {}
+
+    option(:default_help_text, default: lambda do |template, object, key, additional_scope|
+      scope = help_scope(template, object, additional_scope)
+
+      value = I18n.t((["help"] + scope + [key.to_s]).join("."))
+
+      if /translation missing: (.+)/.match?(value)
+        nil
+      else
+        value
+      end
+    end)
 
     def initialize
-      @logger = Logger.new(STDOUT)
-      @submit_on_enter = true
-      @confirm_before_leave = false
-      @current_user = -> {}
-
-      @default_help_text = lambda do |_template, _object, key, _additional_scope|
-        scope = help_scope(template, object, additional_scope)
-
-        value = I18n.t((["help"] + scope + [key.to_s]).join("."))
-
-        if /translation missing: (.+)/.match?(value)
-          nil
-        else
-          value
-        end
-      end
-    end
-
-    # Config: logger [Object].
-    def logger
-      @logger.is_a?(Proc) ? instance_exec(&@logger) : @logger
-    end
-
-    def default_help_text(template, object, method, additional_scope)
-      if @default_help_text.is_a?(Proc)
-        instance_exec(template, object, method, additional_scope,
-          &@default_help_text)
-      else
-        @default_help_text
-      end
+      set_defaults!
     end
 
     # Maybe not the right place?
@@ -58,11 +68,22 @@ module Satis
 
       actions.map { |action| help_scope(template, object, additional_scope, action: action) }
     end
+  end
 
-    def current_user
-      raise 'current_user should be a Proc' unless @current_user.is_a? Proc
+  module Configurable
+    attr_writer :config
 
-      instance_exec(&@current_user)
+    def config
+      @config ||= Configuration.new
+    end
+
+    def configure
+      yield(config)
+    end
+    alias setup configure
+
+    def reset_config!
+      @config = Configuration.new
     end
   end
 end
