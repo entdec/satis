@@ -23,6 +23,7 @@ module Satis
     #
     def ct(key = nil, **options)
       key = "#{full_i18n_scope(options).join('.')}#{key}" if key.start_with?('.')
+      Rails.logger.warn("key: #{key}")
 
       original_view_context.t(key, **options)
     end
@@ -32,9 +33,10 @@ module Satis
 
       @full_i18n_scope = original_i18n_scope
       @full_i18n_scope += Array.wrap(i18n_scope)
-      @full_i18n_scope += Array.wrap(options.delete(:scope))
       @full_i18n_scope += Array.wrap(@scope) if @scope
+      @full_i18n_scope += Array.wrap(options.delete(:scope))
       @full_i18n_scope.flatten.compact!
+
 
       @full_i18n_scope
     end

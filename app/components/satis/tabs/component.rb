@@ -11,6 +11,7 @@ module Satis
         @group = group
         @persist = persist
         @key = key
+        @scope = group
       end
     end
   end
