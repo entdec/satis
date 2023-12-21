@@ -11,13 +11,9 @@ require 'ar_doc_store'
 Browser::Base.include(Browser::Aliases)
 
 module Satis
-  class << self
-    attr_reader :config
+  extend Configurable
 
-    def setup
-      @config = Configuration.new
-      yield config
-    end
+  class << self
 
     def confirm_before_leave?
       return false if config.nil?
