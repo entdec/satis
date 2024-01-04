@@ -98,6 +98,13 @@ export default class extends ApplicationController {
   disconnect() {}
 
   tabToOpen() {
+    var params = new URLSearchParams(window.location.search)
+    var openTab = params.get("open_tab")
+    
+    if (openTab != null) {
+      return openTab * 1
+    }
+
     let urlValue = this.getUrlVar(this.context.scope.element.id + "Tab")
 
     if (typeof urlValue !== "undefined") {
