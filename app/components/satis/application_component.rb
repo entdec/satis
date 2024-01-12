@@ -39,7 +39,7 @@ module Satis
       end
     end
 
-    def respond_to_missing?(method_name)
+    def respond_to_missing?(method_name, include_all)
       respond_to?("with_#{method_name}")
     end
 
