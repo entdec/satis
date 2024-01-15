@@ -8,7 +8,7 @@
       .nested-fields.template.py-2
         = nested_form.input :id, as: :hidden
         = nested_form.input :_destroy, as: :hidden
-        .grid.grid-cols-12.gap-4
+        .grid.grid-cols-12.gap-4.dark:grid-cols-2
           .col-span-11.fields
             = yield(nested_form)
           .col-span-1.flex.justify-center.items-center.association
