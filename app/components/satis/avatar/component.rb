@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'net/http'
 
 module Satis
   module Avatar

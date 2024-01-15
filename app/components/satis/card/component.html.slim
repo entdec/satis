@@ -30,7 +30,7 @@
         label.sr-only for="tabs" Select a tab
         select#tabs.block.w-full.pl-3.pr-10.py-2.text-base.border-gray-300.focus:outline-none.focus:ring-primary-500.focus:border-primary-500.sm:text-sm.rounded-md name="tabs" data-action="change->satis-tabs#select" data-satis-tabs-target="select"
           - tabs.each do |tab|
-            option selected=tab.selected? = t(tab.name, scope: [:tabs])
+            option selected=tab.selected? = ct(".#{tab.name}", scope: :tab)
       .hidden.sm:block
         nav.-mb-px.flex.space-x-4.overflow-x-auto aria-label="Tabs"
           - tabs.each_with_index do |tab, index|
@@ -43,7 +43,7 @@
                     - if tab.dirty?
                       span.relative.inline-flex.rounded-full.h-2.w-2.bg-blue-500
                 span id="tab_label_#{tab.id}"
-                  = t(tab.name, scope: [:tabs], default: tab.title || tab.name)
+                  = ct(".#{tab.name}", scope: :tab)
                 i.fal.fa-triangle-exclamation.ml-2.hidden
                 - if tab.badge
                   span.badge id="tab_badge_#{tab.id}"

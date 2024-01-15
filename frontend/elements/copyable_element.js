@@ -14,7 +14,7 @@ export default class SatisCopyable extends HTMLElement {
 
     this.input = document.createElement("input")
     this.input.style.position = "fixed"
-    this.input.style.top = 0
+    this.input.style.bottom = 0
     this.input.style.left = 0
     this.input.style.width = "1px"
     this.input.style.height = "1px"

@@ -66,6 +66,7 @@ export default class extends ApplicationController {
           },
         ],
       })
+      this.popperInstance.state.elements.popper.popperInstance = () => this.popperInstance
     }
 
     this.boundClickedOutside = this.clickedOutside.bind(this)
@@ -132,11 +133,10 @@ export default class extends ApplicationController {
       this.currentSelectNr = 1
 
       let today = new Date()
-      this.displayValue = new Date(today.getFullYear(), today.getMonth(), 1)
+       this.displayValue = new Date(today.getFullYear(), today.getMonth(), 1)
       this.hiddenInputTarget.value = ""
-      this.hiddenInputTarget.dispatchEvent(new Event("change"))
-      this.refreshCalendar()
       this.inputTarget.value = ""
+      this.hiddenInputTarget.dispatchEvent(new CustomEvent("change",{ detail: { src: "satis-date-time-picker" } }))
     }
     event.preventDefault()
   }
@@ -156,12 +156,12 @@ export default class extends ApplicationController {
 
   previousMonth(event) {
     this.displayValue = new Date(new Date(this.displayValue).setMonth(this.displayValue.getMonth() - 1))
-    this.refreshCalendar()
+    this.refreshCalendar(false)
   }
 
   nextMonth(event) {
     this.displayValue = new Date(new Date(this.displayValue).setMonth(this.displayValue.getMonth() + 1))
-    this.refreshCalendar()
+    this.refreshCalendar(false)
   }
 
   clickedOutside(event) {
@@ -226,7 +226,9 @@ export default class extends ApplicationController {
   hiddenInputChanged(event) {
     this.prepareSelection()
     this.refreshCalendar(false)
-    this.refreshInputs(false)
+    if(event?.detail?.src !== "satis-date-time-picker") {
+      this.refreshInputs(false)
+    }
   }
 
   dateTimeEntered(event) {
@@ -401,7 +403,11 @@ export default class extends ApplicationController {
     })
 
     if (refreshInputs != false) {
-      this.refreshInputs(false)
+      if (this.rangeValue && this.selectedValue.length == 2) {
+        this.refreshInputs()
+      } else {
+        this.refreshInputs(false)
+      }
     }
   }
 

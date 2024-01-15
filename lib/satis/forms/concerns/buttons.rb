@@ -30,9 +30,9 @@ module Satis
           # A continue button
           def continue(value = nil, options = {}, &block)
             value ||= if !@object.persisted?
-                        t('.create_continue', default: 'Create and continue editing')
+                        ct('create_continue')
                       else
-                        t('.update_continue', default: 'Update and continue editing')
+                        ct('update_continue')
                       end
             button_button(value, options.reverse_merge(name: 'commit', value: 'continue', class: 'button secondary'),
                           &block)

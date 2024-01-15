@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'satis/concerns/contextual_translations'
 require 'satis/forms/concerns/buttons'
 require 'satis/forms/concerns/file'
 require 'satis/forms/concerns/required'
@@ -19,6 +20,12 @@ module Satis
       include Concerns::Required
       include Concerns::Buttons
 
+      include Satis::Concerns::ContextualTranslations
+
+      def original_view_context
+        @template
+      end
+
       # Regular input
       def input(method, options = {}, &block)
         @form_options = options
@@ -29,11 +36,12 @@ module Satis
         send(input_type_for(method, options), method, options, &block)
       end
 
-      def input_array(method, options = {}, &block)
-        @form_options = options
-
-        input_array(method, options, &block)
-      end
+      # NOTE: TDG - seems to be overwritten below
+      # def input_array(method, options = {}, &block)
+      #   @form_options = options
+      #
+      #   input_array(method, options, &block)
+      # end
 
       # A codemirror editor, backed by a text-area
       def editor(method, options = {}, &block)
@@ -112,9 +120,9 @@ module Satis
                                        class: 'invalid-feedback')
           end
           safe_join [
-            invalid_feedback,
-            rails_fields_for(*args, options, &block)
-          ].compact
+                      invalid_feedback,
+                      rails_fields_for(*args, options, &block)
+                    ].compact
         end
       end
 
@@ -122,9 +130,9 @@ module Satis
         options = args.extract_options!
         form_group(*args, options) do
           safe_join [
-            (custom_label(*args, options[:label]) unless options[:label] == false),
-            rich_text_area(*args, options)
-          ]
+                      (custom_label(*args, options[:label]) unless options[:label] == false),
+                      rich_text_area(*args, options)
+                    ]
         end
       end
 
@@ -165,12 +173,12 @@ module Satis
       end
 
       def form_group(method, options = {}, &block)
-        tag.div(class: "form-group form-group-#{method}", data: options[:data]) do
+        tag.div(class: "form-group form-group-#{method}", data: options.delete(:data)) do
           safe_join [
-            block.call,
-            hint_text(options[:hint]),
-            error_text(method)
-          ].compact
+                      block.call,
+                      hint_text(options[:hint]),
+                      error_text(method)
+                    ].compact
         end
       end
 
@@ -212,11 +220,11 @@ module Satis
         all_classes = "#{options[:class]} form-label".strip
         label(method, title, class: all_classes, data: options[:data]) do |translation|
           safe_join [
-            tag.span(title || translation, class: required?(method) ? 'required' : ''),
-            ' ',
-            required(method, options),
-            help(method, options)
-          ]
+                      tag.span(title || translation, class: required?(method) ? 'required' : ''),
+                      ' ',
+                      required(method, options),
+                      help(method, options)
+                    ]
         end
       end
 
@@ -230,7 +238,7 @@ module Satis
         text = if options[:help].present?
                  options[:help]
                else
-                 Satis.config.default_help_text(@template, @object, method,
+                 Satis.config.default_help_text.call(@template, @object, method,
                                                 @options[:help_scope] || options[:help_scope])
                end
 
@@ -245,72 +253,83 @@ module Satis
 
       # Inputs and helpers
       def string_input(method, options = {})
-        form_group(method, options) do
+        orig_data = options.fetch(:data, {}).merge(controller: 'satis-input')
+        scrollable = options.fetch(:scrollable, false)
+
+        css_class = ["form-control"]
+        css_class << "is-invalid" if has_error?(method)
+        css_class << "noscroll" unless scrollable
+
+        data = options[:input_html].fetch(:data, {})
+        data = data.merge('satis-input-target' => 'input')
+        options[:input_html] = options[:input_html].merge(data: data)
+
+        form_group(method, options.merge(data: orig_data)) do
           safe_join [
-            (custom_label(method, options[:label], options) unless options[:label] == false),
-            string_field(method,
-                         merge_input_options({ as: options[:as], class: "form-control #{if has_error?(method)
-                                                                                          'is-invalid'
-                                                                                        end}" }, options[:input_html]))
-          ]
+                      (custom_label(method, options[:label], options) unless options[:label] == false),
+                      string_field(method, merge_input_options({ as: options[:as], class: "#{css_class.join(' ')}" }, options[:input_html]))
+                    ]
         end
       end
 
       def number_input(method, options = {})
         form_group(method, options) do
           safe_join [
-            (custom_label(method, options[:label], options) unless options[:label] == false),
-            number_field(method,
-                         merge_input_options({ class: "form-control #{if has_error?(method)
-                                                                        'is-invalid'
-                                                                      end}" }, options[:input_html]))
-          ]
+                      (custom_label(method, options[:label], options) unless options[:label] == false),
+                      number_field(method,
+                                   merge_input_options({ class: "form-control #{
+                                     if has_error?(method)
+                                       'is-invalid'
+                                     end}" }, options[:input_html]))
+                    ]
         end
       end
 
       def text_input(method, options = {})
         form_group(method, options) do
           safe_join [
-            (custom_label(method, options[:label], options) unless options[:label] == false),
-            text_area(method,
-                      merge_input_options({ class: "form-control #{if has_error?(method)
-                                                                     'is-invalid'
-                                                                   end}" }, options[:input_html]))
-          ]
+                      (custom_label(method, options[:label], options) unless options[:label] == false),
+                      text_area(method,
+                                merge_input_options({ class: "form-control #{
+                                  if has_error?(method)
+                                    'is-invalid'
+                                  end}" }, options[:input_html]))
+                    ]
         end
       end
 
       def input_array(method, options = {})
         form_group(method, options) do
           safe_join [
-            (custom_label(method, options[:label], options) unless options[:label] == false),
-            render(Satis::InputArray::Component.new(form: self, attribute: method, **options))
-          ]
+                      (custom_label(method, options[:label], options) unless options[:label] == false),
+                      render(Satis::InputArray::Component.new(form: self, attribute: method, **options))
+                    ]
         end
       end
 
       def editor_input(method, options = {})
         form_group(method, options) do
           safe_join [
-            (custom_label(method, options[:label], options) unless options[:label] == false),
-            tag.div(text_area(method,
-                              merge_input_options({
-                                                    class: 'form-control',
-                                                    data: {
-                                                      controller: 'satis-editor',
-                                                      'satis-editor-target' => 'textarea',
-                                                      'satis-editor-read-only-value' => options.delete(:read_only) || false,
-                                                      'satis-editor-mode-value' => options.delete(:mode) || 'text/html',
-                                                      'satis-editor-height-value' => options.delete(:height) || '200px',
-                                                      'satis-editor-color-scheme-value' => options.delete(:color_scheme),
-                                                      'satis-editor-color-scheme-dark-value' => options.delete(:color_scheme_dark) || 'lucario'
-                                                    }
+                      (custom_label(method, options[:label], options) unless options[:label] == false),
+                      tag.div(text_area(method,
+                                        merge_input_options({
+                                                              class: 'form-control',
+                                                              data: {
+                                                                controller: 'satis-editor',
+                                                                'satis-editor-target' => 'textarea',
+                                                                'satis-editor-read-only-value' => options.delete(:read_only) || false,
+                                                                'satis-editor-mode-value' => options.delete(:mode) || 'text/html',
+                                                                'satis-editor-height-value' => options.delete(:height) || '200px',
+                                                                'satis-editor-color-scheme-value' => options.delete(:color_scheme),
+                                                                'satis-editor-color-scheme-dark-value' => options.delete(:color_scheme_dark) || 'lucario'
+                                                              }
 
-                                                  }, options[:input_html])), class: "editor #{if has_error?(method)
-                                                                                                'is-invalid'
-                                                                                              end}"),
-            hint_text(options[:hint] || '⌘-F/⌃-f: search; ⌥-g: goto line, ⌃-space: autocomplete')
-          ]
+                                                            }, options[:input_html])), class: "editor #{
+                        if has_error?(method)
+                          'is-invalid'
+                        end}"),
+                      hint_text(options[:hint] || '⌘-F/⌃-f: search; ⌥-g: goto line, ⌃-space: autocomplete')
+                    ]
         end
       end
 
@@ -318,9 +337,9 @@ module Satis
         form_group(method, options) do
           tag.div(class: 'custom-control custom-checkbox') do
             safe_join [
-              check_box(method, merge_input_options({ class: 'custom-control-input' }, options[:input_html])),
-              label(method, options[:label], class: 'custom-control-label')
-            ]
+                        check_box(method, merge_input_options({ class: 'custom-control-input' }, options[:input_html])),
+                        label(method, options[:label], class: 'custom-control-label')
+                      ]
           end
         end
       end
@@ -330,7 +349,7 @@ module Satis
       def switch_input(method, options = {}, &block)
         form_group(method, options) do
           render(Satis::Switch::Component.new(form: self, attribute: method, title: options[:label], **options,
-&block))
+                                              &block))
         end
       end
 
@@ -344,10 +363,10 @@ module Satis
         end
         form_group(method, options) do
           safe_join [
-            (custom_label(method, options[:label], options) unless options[:label] == false),
-            render(Satis::DateTimePicker::Component.new(form: self, attribute: method, title: options[:label], **options,
-    &block))
-          ]
+                      (custom_label(method, options[:label], options) unless options[:label] == false),
+                      render(Satis::DateTimePicker::Component.new(form: self, attribute: method, title: options[:label], **options,
+                                                                  &block))
+                    ]
         end
       end
 
@@ -360,14 +379,15 @@ module Satis
 
         tag.div('data-controller' => 'phone-number') do
           safe_join [
-            hidden_field(method,
-                         merge_input_options({ class: 'form-control', 'data-phone-number-target': 'hiddenInput' },
-                                             options[:input_html])),
-            @template.text_field_tag('dummy', @object.try(method), class: "form-control #{if has_error?(method)
-                                                                                            'is-invalid'
-                                                                                          end}", 'data-phone-number-target': 'input',
-                                                                   'data-action': 'input->phone-number#change')
-          ]
+                      hidden_field(method,
+                                   merge_input_options({ class: 'form-control', 'data-phone-number-target': 'hiddenInput' },
+                                                       options[:input_html])),
+                      @template.text_field_tag('dummy', @object.try(method), class: "form-control #{
+                        if has_error?(method)
+                          'is-invalid'
+                        end}", 'data-phone-number-target': 'input',
+                                               'data-action': 'input->phone-number#change')
+                    ]
         end
       end
 
@@ -380,21 +400,21 @@ module Satis
                                                                   else raise 'Invalid input_type for collection_of, valid input_types are ":radio_buttons", ":check_boxes"'
                                                                   end
         options[:value_method] ||= :last
-        options[:text_method]  ||= options[:label_method] || :first
+        options[:text_method] ||= options[:label_method] || :first
         form_group(method, options) do
           safe_join [
-            label(method, options[:label]),
-            tag.br,
-            (send(form_builder_method, method, options[:collection], options[:value_method],
-                  options[:text_method]) do |b|
-               tag.div(class: "custom-control #{custom_class}") do
-                 safe_join [
-                   b.send(input_builder_method, options.fetch(:input_html, {}).merge(class: 'custom-control-input')),
-                   b.label(class: 'custom-control-label')
-                 ]
-               end
-             end)
-          ]
+                      label(method, options[:label]),
+                      tag.br,
+                      (send(form_builder_method, method, options[:collection], options[:value_method],
+                            options[:text_method]) do |b|
+                        tag.div(class: "custom-control #{custom_class}") do
+                          safe_join [
+                                      b.send(input_builder_method, options.fetch(:input_html, {}).merge(class: 'custom-control-input')),
+                                      b.label(class: 'custom-control-label')
+                                    ]
+                        end
+                      end)
+                    ]
         end
       end
 
@@ -418,7 +438,7 @@ module Satis
         else
           case method.to_s
           when /password/ then password_field(method, options)
-            # FIXME: Possibly use time_zone_select with dropdown?
+          # FIXME: Possibly use time_zone_select with dropdown?
           when /time_zone/ then time_zone_select(method, options.delete(:priority_zones), options,
                                                  { class: 'custom-select form-control' })
           # FIXME: Possibly use country_select with dropdown?

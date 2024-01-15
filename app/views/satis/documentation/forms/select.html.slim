@@ -1,0 +1,7 @@
+- @users.each do |user|
+  div data-satis-dropdown-item-value=user data-satis-dropdown-item-text=user
+    .cursor-pointer.w-full.border-gray-100.rounded-t.border-b.hover:bg-blue-200
+      .flex.w-full.items-center.p-2.pl-2.border-transparent.border-l-2.hover:border-teal-100
+        .w-full.items-center.flex
+          .mx-2.-mt-1
+            span = user

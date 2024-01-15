@@ -11,7 +11,7 @@ module Satis
         @options = args.extract_options!
         @args = args
         @icon = options[:icon]
-        @id = options[:id]
+        @id = options[:id] || name.to_s.underscore
         @badge = options[:badge]
         @tab_menu = options[:tab_menu]
         @block = block

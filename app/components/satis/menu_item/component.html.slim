@@ -1,4 +1,4 @@
-li.rounded-sm.px-3.py-1.hover:bg-gray-100.flex.items-center.dark:bg-gray-800.dark:border-gray-600.dark:hover:bg-gray-300 data-controller="satis-menu" data-action="mouseover->satis-menu#show mouseleave->satis-menu#hide"
+li.rounded-sm.px-3.py-1.hover:bg-gray-100.flex.items-center.dark:bg-gray-800.dark:border-gray-600.dark:hover:bg-gray-300 data-controller="satis-menu" data-action="mouseenter->satis-menu#show mouseleave->satis-menu#hide"
   a.cursor-pointer.py-1.w-full.text-left.flex.items-center.outline-none.focus:outline-none href=item.link *item.link_attributes
     - if item.type == :custom
       = render(partial: item.link_attributes[:data][:path], locals: item.link_attributes[:data][:parameters])
@@ -11,10 +11,11 @@ li.rounded-sm.px-3.py-1.hover:bg-gray-100.flex.items-center.dark:bg-gray-800.dar
     span.pr-1.flex-shrink-0.w-6
       - if item.type == :toggle
         i.fal.fa-check.hidden data-satis-menu-target="toggle" id="#{item.id}"
+  - if item.type == :group
+    a.clear-icon.cursor-pointer.text-gray-400.hidden data-satis-menu-target="clear" data-clear="true" id="#{item.type}_#{item.link_attributes[:data][:view_id]}_#{item.link_attributes[:data][:column]}" data=item.link_attributes[:data]
+      i.fas.fa-xmark
 
   - if item.menu
     ul.hidden.bg-white.border.rounded-md.shadow-lg data-satis-menu-target="submenu" data-satis-menu-submenu-placement="left"
       - item.menu.items.each do |sub_item|
         = render(Satis::MenuItem::Component.new(item: sub_item))
-
-

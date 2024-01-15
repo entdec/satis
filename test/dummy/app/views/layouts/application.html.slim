@@ -1,0 +1,33 @@
+= sts.page do |page|
+  - page.head
+  title= Satis
+  / meta name="turbo-cache-control" content="no-cache"
+  meta name="viewport" content="width=device-width, initial-scale=1.0"
+  /meta name="theme-color" content="#000000"
+  = javascript_pack_tag 'application', 'data-turbo-track': 'reload', nonce: true
+  = stylesheet_pack_tag 'application', 'data-turbo-track': 'reload', nonce: true
+  = csrf_meta_tags
+  = csp_meta_tag
+  - if content_for?(:head)
+    = yield(:head)
+
+  - page.navbar do |navbar|
+    .flex-1.flex
+
+    #top-bar-menu.ml-4.flex.items-center.md:ml-6.space-x-4
+
+  - page.sidebar_mobile do |sidebar|
+
+  - page.sidebar do |sidebar|
+
+  - page.body
+  = yield
+  - if content_for(:js)
+    = javascript_tag nonce: true
+    | document.addEventListener("turbo:load", _init = function() {
+            document.removeEventListener('turbo:load', _init)
+            #{yield(:js)}
+          });          
+/ = render partial: 'layouts/new_notification'
+
+div class="h-2 w-2 ml-2.5 w-1 h-1"

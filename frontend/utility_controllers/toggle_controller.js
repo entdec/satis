@@ -38,15 +38,40 @@ export default class extends ApplicationController {
     this.inputTarget.removeEventListener("change", this.boundUpdate)
   }
 
-  update() {
-    this.toggle(this.currentValue)
+  update(event) {
+    /* FIXME: There should be a more cleaner way of doing this?
+     * Make sure that the toggle happens after the event bubble so any listeners are able to
+     * process before we overwrite the template nodes that are possibly updated and reinsert new nodes.
+     */
+    setTimeout(()=>{
+      this.toggle(this.currentValue)
+    })
   }
 
   toggle(value) {
-    // FIXME: We should capture the current content and update the template it came from.
+    // Update template nodes before we swap
+    this.toggleableTargets.forEach((target) => {
+      target.content.childNodes.forEach(child => {
+        let targetNodeId = child.getAttribute("data-toggleable-node-id")
+        if (!targetNodeId) return true;
+
+        this.insertionTarget.childNodes.forEach(iNode => {
+          if (iNode.getAttribute("data-toggleable-node-id") == targetNodeId) {
+            child.outerHTML = iNode.outerHTML
+            iNode.remove()
+          }
+        })
+      })
+    })
+
+    // Clear the insertion target
     this.insertionTarget.innerHTML = ""
+
+    // Reinsert elements
     this.toggleableTargets.forEach((element) => {
       if (element.getAttribute("data-toggle-value") == value || (element.getAttribute("data-toggle-not-value") != null && element.getAttribute("data-toggle-not-value") != value)) {
+        element.content.childNodes.forEach(node =>   this.setUniqueId(node))
+
         let toggleContent = document.importNode(element.content, true)
         toggleContent.childNodes.forEach((child) => {
           this.insertionTarget.insertAdjacentHTML("beforeend", child.outerHTML)
@@ -60,9 +85,16 @@ export default class extends ApplicationController {
       return this.inputTarget.checked ? "true" : "false"
     } else if (this.inputTarget.tagName == "SELECT" && this.data.get("attr")) {
       let option = this.inputTarget.options[this.inputTarget.selectedIndex]
-      return option.getAttribute(this.data.get("attr"))
+      return option?.getAttribute(this.data.get("attr"))
     } else {
       return this.inputTarget.value
     }
+  }
+
+  setUniqueId(node)  {
+    if(node.getAttribute("data-toggleable-node-id")) return;
+    const dateString = Date.now().toString(36);
+    const randomness = Math.random().toString(36).substring(2);
+    node.setAttribute("data-toggleable-node-id", dateString + randomness)
   }
 }

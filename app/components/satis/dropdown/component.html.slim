@@ -1,18 +1,10 @@
 div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controller="satis-dropdown" data-satis-dropdown-page-size-value=@page_size data-satis-dropdown-url-value=url data-satis-dropdown-url-params-value=(options[:url_params]||{}).to_json data-satis-dropdown-chain-to-value=@chain_to data-satis-dropdown-free-text-value=@free_text data-satis-dropdown-needs-exact-match-value="#{@needs_exact_match ? 'true' : 'false'}" data-satis-dropdown-is-multiple-value="#{options[:input_html][:multiple] || false}"
-  - selection = []
+  - selection = [nil]
   - if options[:input_html][:value].present?
-      - if options[:input_html][:value].is_a?(Array)
-        - selection = options_for_select(options[:input_html][:value].map{|item| [item, item, {selected: true}]})
-      - else
-        - selection = options_for_select(options[:input_html][:value].to_s.split(",").map{|item| [item, item, {selected: true}]})
-  - elsif form.object.present?
-    - if form.object.send(attribute).is_a?(String)
-      - selection = options_for_select(form.object.send(attribute).split(",").map{|item| [item, item, {selected: true}]})
-    - elsif form.object.send(attribute).is_a?(Array)
-      - selection = options_for_select(form.object.send(attribute).map{|item| [item, item, {selected: true}]})
-    - elsif form.object.respond_to?(:attributes)
-      - selection = options_for_select((form.object.attributes[attribute].nil? ? "" : form.object.attributes[attribute].send(value_method)).split(",").map{|item| [item, item, {selected: true}]})
+    - selection = options_for_select(options_array(options[:input_html][:value]))
+
   = form.select(attribute, selection, {}, options[:input_html].except(:multiple).reverse_merge(class: 'hidden', multiple: options[:input_html][:multiple] || false))
+
   .flex.flex-col
     div.hidden.py-1 data-satis-dropdown-target="pills"
     .flex.flex-col.items-center
@@ -24,13 +16,16 @@ div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controlle
           div
             / Reset button
             - unless @reset_button == false
-              button.cursor-pointer.w-6.h-full.flex.items-center.text-gray-400.outline-none.focus:outline-none data-satis-dropdown-target="resetButton" data-action="click->satis-dropdown#reset" tabindex="-1"
+              button.cursor-pointer.w-6.h-full.flex.items-center.text-gray-400.outline-none.focus:outline-none type="button" data-satis-dropdown-target="resetButton" data-action="click->satis-dropdown#reset focus->satis-dropdown#focus" tabindex="-1"
                 i.fas.fa-xmark
-          .text-gray-300.w-8.py-1.pl-2.pr-1.border-l.flex.items-center.border-gray-200.dark:border-gray-700
-            / Up/down chevrons
-            button.cursor-pointer.w-6.h-6.text-gray-600.outline-none.focus:outline-none data-action="click->satis-dropdown#toggleResultsList" data-satis-dropdown-target="toggleButton" tabindex="-1"
-              i.hidden.fas.fa-chevron-up
-              i.fas.fa-chevron-down
+          - unless @toggle_button == false
+            .text-gray-300.w-8.py-1.pl-2.pr-1.border-l.flex.items-center.border-gray-200.dark:border-gray-700
+              / Up/down chevrons
+              button.cursor-pointer.w-6.h-6.text-gray-600.outline-none.focus:outline-none type="button" data-action="click->satis-dropdown#toggleResultsList focus->satis-dropdown#focus" data-satis-dropdown-target="toggleButton" tabindex="-1"
+                i.hidden.fas.fa-chevron-up
+                i.fas.fa-chevron-down
+
+    template data-satis-dropdown-target="selectedItemsTemplate"
 
     / Container for results
     .hidden.container.shadow.bg-white.border.border-gray-300.dark:bg-gray-800.dark:border-gray-700.z-10.rounded.max-h-select.overflow-y-auto.w-full data-satis-dropdown-target="results" data-action="scroll->satis-dropdown#scroll" tabindex="-1"
