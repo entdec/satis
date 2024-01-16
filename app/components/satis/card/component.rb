@@ -55,7 +55,7 @@ module Satis
       def title
         return @title if @title
 
-        @title ||= ct('.title', default: id.to_s.humanize)
+        @title ||= ct('.title')
       end
 
       def custom_tabs_link(&block)

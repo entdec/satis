@@ -23,7 +23,7 @@ module Satis
       def label
         return @label if @label
 
-        @label ||= I18n.t(id, scope: [:menu] + @scope, default: id.to_s.humanize)
+        @label ||= I18n.t(id, scope: [:menu] + @scope)
       end
 
       def active?
