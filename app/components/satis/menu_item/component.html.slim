@@ -1,4 +1,4 @@
-li.rounded-sm.px-3.py-1.hover:bg-gray-100.flex.items-center.dark:bg-gray-900.dark:border-gray-700.dark:hover:bg-gray-300 data-controller="satis-menu" data-action="mouseover->satis-menu#show mouseleave->satis-menu#hide"
+li.rounded-sm.px-3.py-1.hover:bg-gray-100.flex.items-center.dark:bg-gray-900.dark:border-gray-700.dark:hover:bg-gray-700 data-controller="satis-menu" data-action="mouseover->satis-menu#show mouseleave->satis-menu#hide"
   a.cursor-pointer.py-1.w-full.text-left.flex.items-center.outline-none.focus:outline-none href=item.link *item.link_attributes
     - if item.type == :custom
       = render(partial: item.link_attributes[:data][:path], locals: item.link_attributes[:data][:parameters])
