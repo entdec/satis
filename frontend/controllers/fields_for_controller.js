@@ -7,6 +7,8 @@ export default class extends ApplicationController {
     super.connect()
 
     this.boundMonitorChanges = this.monitorChanges.bind(this)
+    this.boundMouseMove = this.mouseMove.bind(this)
+
     this.addNewLine()
   }
 
@@ -20,12 +22,27 @@ export default class extends ApplicationController {
     })
 
     let tmpNode = event.target.closest(".nested-fields")
+
+    this.setupNewChild(tmpNode)
+
+    this.addNewLine()
+
+    window.scrollBy(0, this.element.querySelector(".nested-fields").clientHeight)
+  }
+
+  setupNewChild(tmpNode) {
     tmpNode.classList.remove("template")
     tmpNode.querySelectorAll(".association").forEach((item) => {
       if (item.classList.contains("hidden")) {
-        item.classList.remove("hidden")
+        if (!item.querySelector("a[data-action='click->satis-fields-for#cloneAssociation']")) {
+          item.classList.remove("hidden")
+        }
       } else {
-        item.remove()
+        if (!item.querySelector("a[data-action='click->satis-fields-for#cloneAssociation']")) {
+          item.remove()
+        } else {
+          item.classList.add("hidden")
+        }
       }
     })
 
@@ -41,9 +58,29 @@ export default class extends ApplicationController {
       node.innerHTML = node.innerHTML.replace(/TEMPLATE/g, id)
     })
 
-    this.addNewLine()
+    tmpNode.addEventListener("mousemove", this.boundMouseMove)
+  }
 
-    window.scrollBy(0, this.element.querySelector(".nested-fields").clientHeight)
+  cloneAssociation(event) {
+    event.preventDefault()
+
+    let item = event.target.closest(".nested-fields")
+    let templateId = item.querySelector("span.temp-id").getAttribute("temp_id")
+
+    let clonedItem = item.cloneNode(true)
+
+    clonedItem.querySelectorAll("*").forEach((node) => {
+      for (let attribute of node.attributes) {
+        attribute.value = attribute.value.replaceAll(templateId, "TEMPLATE")
+      }
+    })
+
+    //this.insertionPointTarget.appendChild(clonedItem)
+    this.insertionPointTarget.insertBefore(
+      clonedItem,
+      this.insertionPointTarget.childNodes[this.insertionPointTarget.childNodes.length - 1]
+    )
+    this.setupNewChild(clonedItem)
   }
 
   addNewLine() {
@@ -54,6 +91,26 @@ export default class extends ApplicationController {
     templateElement.querySelectorAll("input,select").forEach((input) => {
       input.addEventListener("change", this.boundMonitorChanges)
     })
+  }
+
+  mouseMove(event) {
+    let item = event.target.closest(".nested-fields")
+
+    if (event.altKey) {
+      item
+        .querySelector("a[data-action='click->satis-fields-for#removeAssociation']")
+        .parentElement.classList.add("hidden")
+      item
+        .querySelector("a[data-action='click->satis-fields-for#cloneAssociation']")
+        .parentElement.classList.remove("hidden")
+    } else {
+      item
+        .querySelector("a[data-action='click->satis-fields-for#removeAssociation']")
+        .parentElement.classList.remove("hidden")
+      item
+        .querySelector("a[data-action='click->satis-fields-for#cloneAssociation']")
+        .parentElement.classList.add("hidden")
+    }
   }
 
   monitorChanges(event) {
