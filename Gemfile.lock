@@ -6,7 +6,6 @@ PATH
       browser
       diffy
       rails (>= 6)
-      strong_migrations (~> 1.4)
       view_component
 
 GEM
