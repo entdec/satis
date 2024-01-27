@@ -1,4 +1,4 @@
-.sts-card.sts-tabs data-controller="satis-tabs" data-satis-tabs-persist-value="false" data-satis-tabs-key-value="#{key}"
+.sts-card.sts-tabs data-controller="satis-tabs" data-satis-tabs-persist-value="false" data-satis-tabs-key-value="#{key}" id=id
   - if header?
     .sts-card__header class="#{tabs? ? '' : 'border-b border-gray-200'} #{header_background_color[:light]} dark:#{header_background_color[:dark]}"
       .-ml-4.-mt-4.flex.justify-between.items-center.flex-wrap.sm:flex-nowrap
@@ -15,9 +15,9 @@
         - if actions.present? || initial_actions.present?
           .ml-4.mt-4.flex-shrink-0
             .grid.grid-flow-row.gap-1.sm:grid-flow-col
-              - for action in initial_actions
+              - initial_actions.each do |action|
                 = action
-              - for action in actions
+              - actions.each do |action|
                 = action
 
         - if menu
