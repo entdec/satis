@@ -12,7 +12,7 @@ export default class extends ApplicationController {
       keys: ["ctrl+1", "ctrl+2", "ctrl+3", "ctrl+4", "ctrl+5", "ctrl+6", "ctrl+7", "ctrl+8", "ctrl+9", "ctrl+0"],
       handler: (event, combo, controller) => {
         let index = -1 + +combo.split("+")[1]
-        if (index == -1) {
+        if (index === -1) {
           index = 10
         }
         controller.open(index)

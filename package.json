@@ -40,5 +40,21 @@
     "codemirror": "^5.48.4",
     "codemirror-liquid": "git+ssh://git@github.com/entdec/codemirror-liquid",
     "tailwindcss": ">=3"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ],
+    "plugins": [
+      "@babel/plugin-transform-class-static-block",
+      "@babel/plugin-transform-class-properties",
+      "@babel/plugin-transform-optional-chaining"
+    ],
+    "targets": {
+      "browsers": [
+        "> 0.25%",
+        "not ie <= 11"
+      ]
+    }
   }
 }

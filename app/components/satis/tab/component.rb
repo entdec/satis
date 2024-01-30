@@ -3,36 +3,60 @@
 module Satis
   module Tab
     class Component < Satis::ApplicationComponent
-      attr_reader :options, :name, :icon, :badge, :id, :tab_menu, :selected_tab_index, :dirty
+      attr_reader :name, :icon, :badge, :id, :tab_menu, :menu,
+                  :selected, :dirty, :padding, :title, :responsive, :options, :selected_tab_index
 
-      def initialize(name, *args, &block)
+      def initialize(name = nil,
+                     icon: nil,
+                     badge: nil,
+                     id: nil,
+                     tab_menu: nil,
+                     menu: nil,
+                     padding: false,
+                     dirty: false,
+                     title: nil,
+                     responsive: false,
+                     options: nil,
+                     selected_tab_index: nil,
+                     selected: false,
+                     &block)
         super
+
         @name = name
-        @options = args.extract_options!
-        @args = args
-        @icon = options[:icon]
-        @id = options[:id] || name.to_s.underscore
-        @badge = options[:badge]
-        @tab_menu = options[:tab_menu]
+        @icon = icon
+        @id = id || name.to_s.underscore
+        @badge = badge
+        @padding = padding
+        @dirty = dirty
+        @title = title
+        @responsive = responsive
+        @selected = selected
+
+        @menu = menu
+        # FIXME: Obsolete these
+        if tab_menu.present?
+          @menu ||= tab_menu
+          ActiveSupport::Deprecation.warn('Calling tab with the tab_menu parameter, use menu instead')
+        end
+
+        if selected_tab_index.present?
+          @selected_tab_index = selected_tab_index # use selected
+          ActiveSupport::Deprecation.warn('Calling tab with the selected_tab_index parameter, use selected instead')
+        end
+
         @block = block
-        @selected_tab_index = options[:selected_tab_index]
-        @dirty = options[:dirty]
       end
 
       def responsive?
-        options[:responsive] == true
+        responsive == true
       end
 
       def selected?
-        options[:selected] == true
+        selected == true
       end
 
       def dirty?
-        options[:dirty] == true
-      end
-
-      def title
-        options[:title]
+        dirty == true
       end
 
       def call

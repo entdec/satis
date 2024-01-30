@@ -8,6 +8,7 @@ Satis::Engine.routes.draw do
       resources :forms do
         get "select", on: :collection
       end
+      resources :tabs
     end
     resources :documentation
   end

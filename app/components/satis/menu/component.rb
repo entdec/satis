@@ -13,6 +13,10 @@ module Satis
         @icon_id = icon_id
         @strategy = strategy
       end
+
+      def render?
+        menu.items.present?
+      end
     end
   end
 end

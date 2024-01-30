@@ -1,6 +1,10 @@
 .sts-tabs {
   &__nav {
-    @apply -mb-px flex space-x-4 overflow-x-auto;
+    @apply -mb-px flex space-x-4 overflow-x-auto bg-primary-100;
+
+    a:first {
+      @apply ml-4 text-primary-600;
+    }
   }
 
   .tab {
