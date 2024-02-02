@@ -6,7 +6,7 @@ require 'satis/active_record_helpers'
 require 'view_component'
 require 'browser'
 require 'browser/aliases'
-require 'ar_doc_store'
+require 'jsonb_accessor'
 
 Browser::Base.include(Browser::Aliases)
 
