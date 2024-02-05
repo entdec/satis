@@ -1,5 +1,6 @@
 import { definitionsFromContext } from "@hotwired/stimulus-webpack-helpers"
 import { Application } from "@hotwired/stimulus"
+import { debounce } from "./utils"
 
 import Mousetrap from "mousetrap"
 
@@ -21,7 +22,7 @@ import "tippy.js/dist/tippy.css" // optional for styling
 require("trix")
 require("@rails/actiontext")
 
-export class Satis {
+class Satis {
   static start(application, configuration = {}) {
     if (!application) {
       application = Application.start()
@@ -167,3 +168,5 @@ export class Satis {
       })
   }
 }
+
+export { Satis, debounce }

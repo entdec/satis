@@ -1,0 +1,31 @@
+h1 Tabs
+
+p Simple tab
+
+pre
+  | = sts.tabs do |t|
+      - t.tab :first
+        | First content
+      - t.tab :second
+        | Second content
+
+= sts.tabs do |t|
+  - t.tab :first
+    | First content
+  - t.tab :second
+    | Second content
+
+p Tab with custom link in navigation
+
+pre
+  | = sts.tabs(custom_link: link_to(content_tag(:i, nil, class: "fa-thin fa-plus") + " New", '#')) do |t|
+      - t.tab :first, icon: 'fal fa-xmark'
+        | First content
+      - t.tab :second
+        | Second content
+
+= sts.tabs(custom_link: link_to(content_tag(:i, nil, class: "fa-thin fa-plus") + " New", '#')) do |t|
+  - t.tab :first, icon: 'fal fa-xmark'
+    | First content
+  - t.tab :second
+    | Second content

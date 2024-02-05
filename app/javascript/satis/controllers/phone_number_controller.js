@@ -1,6 +1,6 @@
 import ApplicationController from "./application_controller"
 import intlTelInput from "intl-tel-input"
-import debounce from "lodash/debounce"
+import { debounce } from "../../../../frontend/utils"
 import intlTelInputUtilsUrl from "intl-tel-input/build/js/utils.js"
 
 export default class extends ApplicationController {

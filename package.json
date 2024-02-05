@@ -1,6 +1,6 @@
 {
   "name": "@entdec/satis",
-  "version": "1.0.136",
+  "version": "1.0.140",
   "description": "",
   "repository": "git@github.com:entdec/satis.git",
   "author": "Tom de Grunt <tom@degrunt.nl>",
@@ -21,7 +21,7 @@
     "@popperjs/core": "^2.11.6",
     "@rails/actiontext": "^6.0.5",
     "element-closest": "^3.0.1",
-    "flag-icon-css": "^3.5.0",
+    "flag-icon-css": "^4.1.7",
     "intl-tel-input": "^17.0.8",
     "leaflet": "^1.7.1",
     "mousetrap": "^1.6.5",

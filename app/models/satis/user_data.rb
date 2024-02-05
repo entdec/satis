@@ -1,6 +1,6 @@
 module Satis
   class UserData < ApplicationRecord
-    include ArDocStore::Model
+    # include ArDocStore::Model
 
     belongs_to :user, optional: true
 

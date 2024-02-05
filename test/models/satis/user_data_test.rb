@@ -1,7 +1,8 @@
 require "test_helper"
 
 class ViewData < Satis::UserData
-  json_attribute :test
+  jsonb_accessor :data,
+                 test: :string
 end
 
 module Satis
