@@ -5,10 +5,12 @@
 - if template_object
   template data-satis-fields-for-target='template'
     = form.rails_fields_for collection, template_object, child_index: 'TEMPLATE' do |nested_form|
+      - items_name_parts = nested_form.object_name.split(']').map{|x| x.gsub('[', '')}
       .nested-fields.template.py-2
         = nested_form.input :id, as: :hidden
         = nested_form.input :_destroy, as: :hidden
-        span.hidden.temp-id temp_id='TEMPLATE'
+        span.hidden.temp-id temp_id=items_name_parts[-1]
+        span.hidden.temp-name temp_name=items_name_parts[-2]
         .grid.grid-cols-12.gap-4 
           .col-span-11.fields
             = yield(nested_form)
@@ -25,10 +27,13 @@
             a.text-primary-600.nested-fields_action href="#" data-action='click->satis-fields-for#removeAssociation'
               i.fal.fa-trash
 
-= form.rails_fields_for collection do |nested_form|
-  .nested-fields.py-2
+= form.fields_for collection do |nested_form|
+  - items_name_parts = nested_form.object_name.split(']').map{|x| x.gsub('[', '')}
+  .nested-fields.py-2 data-action='mousemove->satis-fields-for#mouseMove'
     = nested_form.input :id, as: :hidden
     = nested_form.input :_destroy, as: :hidden
+    span.hidden.temp-id temp_id=items_name_parts[-1]
+    span.hidden.temp-name temp_name=items_name_parts[-2]
     .grid.grid-cols-12.gap-4
       .col-span-11
         = yield(nested_form)

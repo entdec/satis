@@ -47,15 +47,24 @@ export default class extends ApplicationController {
     })
 
     // Simply replace every child node's attributes value, replacing TEMPLATE
-    let id = new Date().valueOf()
+    let templateId = new Date().valueOf()
+    let templateName = tmpNode.querySelector("span.temp-name").getAttribute("temp_name")
+    tmpNode.querySelector("span.temp-id").setAttribute("temp_id", templateId)
+
     tmpNode.querySelectorAll("*").forEach((node) => {
       for (let attribute of node.attributes) {
-        attribute.value = attribute.value.replace(/TEMPLATE/g, id)
+        attribute.value = attribute.value.replace(/TEMPLATE-NAME/g, `[${templateName}][${templateId}]`)
+        attribute.value = attribute.value.replace(/TEMPLATE-ID/g, `${templateName}_${templateId}`)
+
+        attribute.value = attribute.value.replace(/TEMPLATE/g, templateId)
       }
     })
 
     tmpNode.querySelectorAll("template").forEach((node) => {
-      node.innerHTML = node.innerHTML.replace(/TEMPLATE/g, id)
+      node.innerHTML = node.innerHTML.replace(/TEMPLATE-NANE/g, `[${templateName}][${templateId}]`)
+      node.innerHTML = node.innerHTML.replace(/TEMPLATE-ID/g, `${templateName}_${templateId}`)
+
+      node.innerHTML = node.innerHTML.replace(/TEMPLATE/g, templateId)
     })
 
     tmpNode.addEventListener("mousemove", this.boundMouseMove)
@@ -66,12 +75,14 @@ export default class extends ApplicationController {
 
     let item = event.target.closest(".nested-fields")
     let templateId = item.querySelector("span.temp-id").getAttribute("temp_id")
+    let templateName = item.querySelector("span.temp-name").getAttribute("temp_name")
 
     let clonedItem = item.cloneNode(true)
 
     clonedItem.querySelectorAll("*").forEach((node) => {
       for (let attribute of node.attributes) {
-        attribute.value = attribute.value.replaceAll(templateId, "TEMPLATE")
+        attribute.value = attribute.value.replaceAll(`[${templateName}][${templateId}]`, "TEMPLATE-NAME")
+        attribute.value = attribute.value.replaceAll(`${templateName}_${templateId}`, "TEMPLATE-ID")
       }
     })
 
