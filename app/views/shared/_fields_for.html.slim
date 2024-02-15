@@ -12,11 +12,11 @@
           .col-span-11.fields
             = yield(nested_form)
           .col-span-1.flex.justify-center.items-center.association
-            .h-full.w-1.border-r.border-dashed
+            .h-full.w-1.border-r.border-dashed.dark:border-gray-700
             a.text-primary-600.nested-fields_action href="#" data-action='click->satis-fields-for#addAssociation'
               i.fal.fa-plus
           .hidden.col-span-1.flex.justify-center.items-center.association
-            .h-full.w-1.border-r.border-dashed
+            .h-full.w-1.border-r.border-dashed.dark:border-gray-700
             a.text-primary-600.nested-fields_action href="#" data-action='click->satis-fields-for#removeAssociation'
               i.fal.fa-trash
 
@@ -28,7 +28,7 @@
       .col-span-11
         = yield(nested_form)
       .col-span-1.flex.justify-center.items-center
-        .h-full.w-1.border-r.border-dashed
+        .h-full.w-1.border-r.border-dashed.dark:border-gray-700
         a.text-primary-600.nested-fields_action href="#" data-action='click->satis-fields-for#removeAssociation'
           i.fal.fa-trash
 

@@ -119,7 +119,7 @@ form {
   }
 
   .form-text {
-    @apply dark:text-gray-600 text-gray-500;
+    @apply dark:text-gray-300 text-gray-500;
   }
 
   .nested-fields {
@@ -139,6 +139,7 @@ form {
       height: 1rem;
       width: 30%;
       border-bottom: 1px dashed #e5e7eb;
+      @apply dark:border-gray-700;
     }
 
     .nested-fields_action {

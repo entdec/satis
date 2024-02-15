@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# frozen_string_literal: true
 
 module Satis
   module Options
@@ -28,6 +27,7 @@ module Satis
   class Configuration
     include Options
 
+    option :full_width_topbar, default: false
     option :logger, default: Rails.logger
     option :submit_on_enter, default: true
     option :confirm_before_leave, default: false

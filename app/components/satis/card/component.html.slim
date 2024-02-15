@@ -1,4 +1,4 @@
-.sts-card.sts-tabs data-controller="satis-tabs" data-satis-tabs-persist-value="false" data-satis-tabs-key-value="#{key}"
+.sts-card data-controller="satis-tabs" data-satis-tabs-persist-value=persist data-satis-tabs-key-value=key id=identifier
   - if header?
     .sts-card__header class="#{tabs? ? '' : 'border-b border-gray-200'} #{header_background_color[:light]} dark:#{header_background_color[:dark]}"
       .-ml-4.-mt-4.flex.justify-between.items-center.flex-wrap.sm:flex-nowrap
@@ -15,9 +15,9 @@
         - if actions.present? || initial_actions.present?
           .ml-4.mt-4.flex-shrink-0
             .grid.grid-flow-row.gap-1.sm:grid-flow-col
-              - for action in initial_actions
+              - initial_actions.each do |action|
                 = action
-              - for action in actions
+              - actions.each do |action|
                 = action
 
         - if menu
@@ -25,40 +25,10 @@
             = render(Satis::Menu::Component.new(menu))
 
   - if tabs?
-    .sts-card__tabs
-      .sm:hidden
-        label.sr-only for="tabs" Select a tab
-        select#tabs.block.w-full.pl-3.pr-10.py-2.text-base.border-gray-300.focus:outline-none.focus:ring-primary-500.focus:border-primary-500.sm:text-sm.rounded-md name="tabs" data-action="change->satis-tabs#select" data-satis-tabs-target="select"
-          - tabs.each do |tab|
-            option selected=tab.selected? = ct(".#{tab.name}", scope: :tab)
-      .hidden.sm:block
-        nav.-mb-px.flex.space-x-4.overflow-x-auto aria-label="Tabs"
-          - tabs.each_with_index do |tab, index|
-            - id = tab.id.present? ? tab.id : tab.name
-            .flex.tab class="#{index == (tab.selected_tab_index) ? 'selected' : ''}" data-satis-tabs-target="tab" data-action="click->satis-tabs#select" id=id href="#" aria-current="#{tab.selected? ? "page" : ''}"
-              a.relative
-                - if tab.icon
-                  i.mr-2 class=tab.icon
-                  span.flex.absolute.h-2.w-2.top-0.left-0 id="tab_changed_#{tab.id}" class="mt-0.5 ml-2.5"
-                    - if tab.dirty?
-                      span.relative.inline-flex.rounded-full.h-2.w-2.bg-blue-500
-                span id="tab_label_#{tab.id}"
-                  = ct(".#{tab.name}", scope: :tab)
-                i.fal.fa-triangle-exclamation.ml-2.hidden
-                - if tab.badge
-                  span.badge id="tab_badge_#{tab.id}"
-                    = tab.badge
-                - if tab.tab_menu
-                  .inline-flex id="menu_update_#{tab.id}"
-                    - if tab.tab_menu.items.present?
-                      = render(Satis::Menu::Component.new(tab.tab_menu, icon: 'fa-thin fa-chevron-down'))
-          - if custom_tabs_link_html.present?
-            = custom_tabs_link_html
-
-    - tabs.each_with_index do |tab, index|
-      - id = "#{tab.id.present? ? tab.id : tab.name}-content"
-      div id=id class="tab-content #{tab.options[:padding] == true ? 'px-6 py-6' : ''} #{index == (tab.selected_tab_index) ? 'selected' : ''}" data-satis-tabs-target="content"
-        = tab.to_s
+    = render Satis::Tabs::Component.new(custom_link: custom_tabs_link).tap {|c| c.original_view_context = view_context } do |t|
+      - tabs.each_with_index do |ta, i|
+        - t.with_tab ta.name, id: ta.id, icon: ta.icon, padding: ta.padding, badge: ta.badge, menu: ta.menu, dirty: ta.dirty, title: ta.title, responsive: ta.responsive, selected_tab_index: ta.selected_tab_index do
+          = ta
 
   - else
     div class="#{content_padding ? 'px-6 py-6' : ''}"

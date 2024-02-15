@@ -7,10 +7,10 @@ module Satis
       renders_many :tabs, Tab::Component
       renders_one :footer
 
-      attr_reader :id, :icon, :description, :menu, :content_padding, :header_background_color, :initial_actions, :custom_tabs_link_html
+      attr_reader :identifier, :icon, :description, :menu, :content_padding, :header_background_color, :initial_actions, :persist, :key
       attr_writer :scope
 
-      def initialize(id = nil,
+      def initialize(identifier = nil,
                      icon: nil,
                      title: nil,
                      description: nil,
@@ -19,17 +19,18 @@ module Satis
                      header_background_color: {
                        dark: 'bg-gray-800', light: 'bg-white'
                      },
+                     custom_tabs_link: nil,
                      scope: [],
                      actions: [],
                      key: nil,
                      persist: true)
         super
 
-        if id.blank?
+        if identifier.blank?
           ActiveSupport::Deprecation.warn('Calling sts.card with the id parameter will become mandatory')
         end
 
-        @id = id
+        @identifier = identifier
         @title = title
         @title = @title.reject(&:blank?).compact.join(' ') if @title.is_a?(Array)
         @description = description
@@ -40,17 +41,18 @@ module Satis
         @initial_actions = actions
         @persist = persist
         @key = key
-        @scope = scope.present? ? scope : id
+        @custom_tabs_link = custom_tabs_link
+        @scope = scope.present? ? scope : identifier
       end
 
-      def key
-        return unless @persist
-
-        @key ||= id.to_s.parameterize.underscore if id.present?
-        @key ||=  strip_tags(@title)&.parameterize&.underscore
-
-        [controller_name, action_name, params[:id], @key, 'tab'].compact.join('_')
-      end
+      # def key
+      #   return unless @persist
+      #
+      #   @key ||= identifier.to_s.parameterize.underscore if identifier.present?
+      #   @key ||=  strip_tags(@title)&.parameterize&.underscore
+      #
+      #   [controller_name, action_name, params[:id], @key, 'tab'].compact.join('_')
+      # end
 
       def title
         return @title if @title
@@ -59,13 +61,10 @@ module Satis
       end
 
       def custom_tabs_link(&block)
-        return unless block_given?
+        return @custom_tabs_link unless block_given?
 
-        @custom_tabs_link_html = block.call.html_safe
-      end
-
-      def tabs?
-        tabs.present?
+        @custom_tabs_link = block.call
+        # @custom_tabs_link_html = block.call.html_safe
       end
 
       def header?

@@ -39,10 +39,10 @@ module Satis
       end
     end
 
-    def method_missing(method_name, *args, &block)
+    def method_missing(method_name, *args, **kwargs, &block)
       if respond_to?("with_#{method_name}")
         ActiveSupport::Deprecation.warn("ViewComponent setters have changed, replace '#{method_name}' with 'with_#{method_name}'")
-        send("with_#{method_name}", *args, &block)
+        send("with_#{method_name}", *args, **kwargs, &block)
       else
         super
       end

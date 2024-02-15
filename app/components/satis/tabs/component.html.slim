@@ -1,23 +1,37 @@
-.sts-tabs id="#{group}" data-controller="satis-tabs" data-satis-tabs-persist-value="#{persist}" data-satis-tabs-key-value="#{key}"
-  .sm:hidden
+.sts-tabs id=group data-controller="satis-tabs" data-satis-tabs-persist-value=persist data-satis-tabs-key-value=key
+  .sm:hidden.pl-4.pr-6
     label.sr-only for="tabs" Select a tab
-    select#tabs.block.w-full.pl-3.pr-10.py-2.text-base.border-gray-300.focus:outline-none.focus:ring-primary-500.focus:border-primary-500.sm:text-sm.rounded-md name="tabs" data-action="change->satis-tabs#select" data-satis-tabs-target="select"
+    select#tabs.block.w-full.py-2.text-base.border-gray-300.focus:outline-none.focus:ring-primary-500.focus:border-primary-500.sm:text-sm.rounded-md name="tabs" data-action="change->satis-tabs#select" data-satis-tabs-target="select"
       - tabs.each do |tab|
         option selected=tab.selected? = ct(".#{tab.name}", scope: :tab)
   .hidden.sm:block
     .border-b.border-gray-200
       nav.sts-tabs__nav aria-label="Tabs"
-        - tabs.each do |tab|
-          a.tab id="#{tab.name}" href="#" data-satis-tabs-target="tab" data-action="click->satis-tabs#select"
-            - if tab.icon
-              i.mr-2 class=tab.icon
-            = ct(".#{tab.name}", scope: :tab)
-            i.fal.fa-triangle-exclamation.ml-2.hidden
-            - if tab.badge
-              span.badge
-                = tab.badge
+        - tabs.each.with_index do |tab, index|
+          - id = tab.id.present? ? tab.id : tab.name
+          .flex.tab id="#{id}" href="#" class="#{index == (tab.selected_tab_index) ? 'selected' : ''}" data-satis-tabs-target="tab" data-action="click->satis-tabs#select"
+            a.relative
+              - if tab.icon
+                i.mr-2 class=tab.icon
+                span.flex.absolute.h-2.w-2.top-0.left-0 id="tab_changed_#{tab.id}" class="mt-0.5 ml-2.5"
+                  - if tab.dirty?
+                    span.relative.inline-flex.rounded-full.h-2.w-2.bg-blue-500
+              span id="tab_label_#{tab.id}"
+                = ct(".#{tab.name}", scope: :tab)
+              i.fal.fa-triangle-exclamation.ml-2.hidden
+              - if tab.badge
+                span.badge
+                  = tab.badge
+              - if tab.menu
+                / FIXME: fix this id
+                .inline-flex.cursor-pointer id="menu_update_#{tab.id}"
+                  / FIXME: count on render? in menu component
+                  - if tab.menu.items.present?
+                    = render(Satis::Menu::Component.new(tab.menu, icon: 'fa-thin fa-chevron-down'))
+        - if custom_link.present?
+          == custom_link
 
   div
-    - tabs.each do |tab|
-      div id="#{tab.name}-content" aria-current="#{tab.selected? ? "page" : ''}" class="tab-content #{tab.options[:padding] == false ? '' : 'mt-4'}" data-satis-tabs-target="content"
+    - tabs.each.with_index do |tab, index|
+      .tab-content id="#{tab.name}-content" aria-current="#{tab.selected? ? "page" : ''}" class="#{tab.padding == false ? '' : 'px-6 py-6'} #{tab.selected_tab_index == index ? 'selected' : ''}" data-satis-tabs-target="content"
         = tab.to_s
