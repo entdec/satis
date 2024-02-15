@@ -91,6 +91,13 @@ export default class extends ApplicationController {
       clonedItem,
       this.insertionPointTarget.childNodes[this.insertionPointTarget.childNodes.length - 1]
     )
+
+    clonedItem
+      .querySelector("a[data-action='click->satis-fields-for#removeAssociation']")
+      .parentElement.classList.remove("hidden")
+    clonedItem
+      .querySelector("a[data-action='click->satis-fields-for#cloneAssociation']")
+      .parentElement.classList.add("hidden")
     this.setupNewChild(clonedItem)
   }
 
