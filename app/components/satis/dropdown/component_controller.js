@@ -247,7 +247,11 @@ export default class extends ApplicationController {
       this.hiddenSelectTarget.add(this.createOption())
     }
 
-    if (this.hasUrlValue) {
+    if (this.hasUrlValue || this.hasDelayUrlValue){
+      if (this.hasDelayUrlValue) {
+        this.urlValue = this.delayUrlValue
+      }
+
       this.debouncedFetchResults(event)
     } else {
       this.debouncedLocalResults(event)
