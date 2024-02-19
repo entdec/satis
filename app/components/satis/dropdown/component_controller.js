@@ -26,7 +26,6 @@ export default class extends ApplicationController {
     needsExactMatch: Boolean,
     pageSize: Number,
     url: String,
-    delayUrl: String,
     urlParams: Object,
     isMultiple: Boolean
   }
@@ -93,16 +92,19 @@ export default class extends ApplicationController {
       this.getChainToElement()?.addEventListener("change", this.boundChainToChanged)
     }
 
-    this.refreshSelectionFromServer().then((changed) => {
-      this.filterResultsChainTo()
-      this.setHiddenSelect()
+    if (this.chainToValue) {
+      this.refreshSelectionFromServer().then((changed) => {
+        debugger
+        this.filterResultsChainTo()
+        this.setHiddenSelect()
 
-      if (!this.hiddenSelectTarget.getAttribute("data-reflex")) {
-        let event = new Event("change")
-        event.detail = { src: "satis-dropdown" }
-        this.hiddenSelectTarget.dispatchEvent(event)
-      }
-    })
+        if (!this.hiddenSelectTarget.getAttribute("data-reflex")) {
+          let event = new Event("change")
+          event.detail = { src: "satis-dropdown" }
+          this.hiddenSelectTarget.dispatchEvent(event)
+        }
+      })
+    }
   }
 
   getScrollParent(node) {
@@ -247,11 +249,7 @@ export default class extends ApplicationController {
       this.hiddenSelectTarget.add(this.createOption())
     }
 
-    if (this.hasUrlValue || this.hasDelayUrlValue){
-      if (this.hasDelayUrlValue) {
-        this.urlValue = this.delayUrlValue
-      }
-
+    if (this.hasUrlValue) {
       this.debouncedFetchResults(event)
     } else {
       this.debouncedLocalResults(event)
@@ -416,7 +414,7 @@ export default class extends ApplicationController {
     //this.hiddenSelectTarget.dispatchEvent(new Event("change"))
   }
 
-  toggleResultsList(event){
+  toggleResultsList(event) {
     if (this.resultsShown) {
       this.hideResultsList(event)
 
@@ -428,12 +426,8 @@ export default class extends ApplicationController {
       if(this.hasResults && !this.searchQueryChanged){
         this.showResultsList(event)
       }else {
-        if (this.hasUrlValue || this.hasDelayUrlValue){
-          if (this.hasDelayUrlValue) {
-            this.urlValue = this.delayUrlValue
-          }
+        if (this.hasUrlValue)
           this.fetchResults(event)
-        }
         else
           this.localResults(event)
       }

@@ -3,7 +3,7 @@
 module Satis
   module Dropdown
     class Component < ViewComponent::Base
-      attr_reader :url, :form, :attribute, :title, :options, :delay_url
+      attr_reader :url, :form, :attribute, :title, :options
 
       def initialize(form:, attribute:, **options, &block)
         super
@@ -13,7 +13,6 @@ module Satis
         @title = title
         @options = options
         @url = options[:url]
-        @delay_url = options[:delay_url]
         @chain_to = options[:chain_to]
         @free_text = options[:free_text]
         @needs_exact_match = options[:needs_exact_match]
