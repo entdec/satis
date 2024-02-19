@@ -26,6 +26,7 @@ export default class extends ApplicationController {
     needsExactMatch: Boolean,
     pageSize: Number,
     url: String,
+    delayUrl: String,
     urlParams: Object,
     isMultiple: Boolean
   }
@@ -411,7 +412,7 @@ export default class extends ApplicationController {
     //this.hiddenSelectTarget.dispatchEvent(new Event("change"))
   }
 
-  toggleResultsList(event) {
+  toggleResultsList(event){
     if (this.resultsShown) {
       this.hideResultsList(event)
 
@@ -423,8 +424,12 @@ export default class extends ApplicationController {
       if(this.hasResults && !this.searchQueryChanged){
         this.showResultsList(event)
       }else {
-        if (this.hasUrlValue)
+        if (this.hasUrlValue || this.hasDelayUrlValue){
+          if (this.hasDelayUrlValue) {
+            this.urlValue = this.delayUrlValue
+          }
           this.fetchResults(event)
+        }
         else
           this.localResults(event)
       }
