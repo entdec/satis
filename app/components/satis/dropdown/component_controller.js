@@ -94,7 +94,6 @@ export default class extends ApplicationController {
 
     if (this.chainToValue) {
       this.refreshSelectionFromServer().then((changed) => {
-        debugger
         this.filterResultsChainTo()
         this.setHiddenSelect()
 
