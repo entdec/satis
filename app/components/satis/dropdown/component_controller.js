@@ -92,16 +92,18 @@ export default class extends ApplicationController {
       this.getChainToElement()?.addEventListener("change", this.boundChainToChanged)
     }
 
-    this.refreshSelectionFromServer().then((changed) => {
-      this.filterResultsChainTo()
-      this.setHiddenSelect()
+    if (this.hiddenSelectTarget.selectedOptions.length > 0 && this.hiddenSelectTarget.selectedOptions[0].value) {
+      this.refreshSelectionFromServer().then((changed) => {
+        this.filterResultsChainTo()
+        this.setHiddenSelect()
 
-      if (!this.hiddenSelectTarget.getAttribute("data-reflex")) {
-        let event = new Event("change")
-        event.detail = { src: "satis-dropdown" }
-        this.hiddenSelectTarget.dispatchEvent(event)
-      }
-    })
+        if (!this.hiddenSelectTarget.getAttribute("data-reflex")) {
+          let event = new Event("change")
+          event.detail = { src: "satis-dropdown" }
+          this.hiddenSelectTarget.dispatchEvent(event)
+        }
+      })
+    }
   }
 
   getScrollParent(node) {
