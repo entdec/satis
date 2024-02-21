@@ -92,7 +92,7 @@ export default class extends ApplicationController {
       this.getChainToElement()?.addEventListener("change", this.boundChainToChanged)
     }
 
-    if (this.hiddenSelectTarget.selectedOptions[0].value) {
+    if (this.hiddenSelectTarget.selectedOptions.length > 0 && this.hiddenSelectTarget.selectedOptions[0].value) {
       this.refreshSelectionFromServer().then((changed) => {
         this.filterResultsChainTo()
         this.setHiddenSelect()
