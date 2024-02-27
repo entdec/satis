@@ -1,9 +1,9 @@
-import ApplicationController from "../../../../frontend/controllers/application_controller"
+import ApplicationController from "controllers/application_controller"
 
 /*
  * Tabs controller
  */
-export default class extends ApplicationController {
+export default class TabsComponentController extends ApplicationController {
   static targets = ["tab", "content", "select"]
   static values = { persist: Boolean, key: String }
 

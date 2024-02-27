@@ -1,6 +1,6 @@
-import ApplicationController from "../../../../frontend/controllers/application_controller"
+import ApplicationController from "controllers/application_controller"
 
-export default class extends ApplicationController {
+export default class InputComponentController extends ApplicationController {
   static targets = ["input"]
   static values = {}
 

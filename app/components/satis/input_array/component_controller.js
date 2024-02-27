@@ -1,6 +1,6 @@
-import ApplicationController from "../../../../frontend/controllers/application_controller"
+import ApplicationController from "controllers/application_controller"
 
-export default class extends ApplicationController {
+export default class InputArrayComponentController extends ApplicationController {
   static targets = ["rowsContainer", "inputRow", "rowTemplate", "crossButton", "plusButton"]
   static values = { inputName: String }
 

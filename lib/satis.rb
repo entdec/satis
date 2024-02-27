@@ -3,11 +3,6 @@ require 'satis/engine'
 require 'satis/configuration'
 require 'satis/active_record_helpers'
 
-require 'view_component'
-require 'browser'
-require 'browser/aliases'
-require 'jsonb_accessor'
-
 Browser::Base.include(Browser::Aliases)
 
 module Satis

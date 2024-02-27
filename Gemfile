@@ -9,20 +9,18 @@ group :development do
   gem "pg", ">= 0.18", "< 2.0"
 end
 
-group :test do
-  gem "slim"
-end
-
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
 
-gem "pry"
-
 gem "sidekiq"
+gem "puma"
+gem "sprockets-rails"
+gem "pry"
+gem "capybara", "~> 3.40"
+gem "selenium-webdriver", "~> 4.17"
+gem "slim", "~> 5.2"
 
 group :development, :test do
-  gem "solargraph", require: false
-  gem "ruby-lsp", require: false
   gem "standard", require: false
   gem "rubocop-rails", require: false
   gem "strong_migrations"

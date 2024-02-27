@@ -1,0 +1,23 @@
+@import '../../../components/satis/appearance_switcher/component.scss';
+@import '../../../components/satis/breadcrumbs/component.scss';
+@import '../../../components/satis/card/component.scss';
+@import '../../../components/satis/date_time_picker/component.scss';
+@import '../../../components/satis/dropdown/component.scss';
+@import '../../../components/satis/flash_messages/component.scss';
+@import '../../../components/satis/input/component.scss';
+@import '../../../components/satis/input_array/component.scss';
+@import '../../../components/satis/map/component.scss';
+@import '../../../components/satis/menu/component.scss';
+@import '../../../components/satis/sidebar_menu/component.scss';
+@import '../../../components/satis/sidebar_menu_item/component.scss';
+@import '../../../components/satis/tabs/component.scss';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+}
+
+@layer base {
+}

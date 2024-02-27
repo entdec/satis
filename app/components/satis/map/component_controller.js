@@ -1,8 +1,8 @@
 // map_controller.js
-import ApplicationController from "../../../../frontend/controllers/application_controller"
+import ApplicationController from "controllers/application_controller"
 import L from "leaflet"
 
-export default class extends ApplicationController {
+export default class MapComponentController extends ApplicationController {
   static targets = ["container"]
   static values = { urls: String, latitude: Number, longitude: Number, zoomLevel: Number, geoJsonUrl: String }
 

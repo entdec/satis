@@ -1,5 +1,5 @@
-import ApplicationController from "../../../../frontend/controllers/application_controller"
-import { getInitialTheme } from "../../../../frontend/utils"
+import ApplicationController from "controllers/application_controller"
+import { getInitialTheme } from "utils"
 
 /*
  * Theme controller
@@ -9,12 +9,11 @@ import { getInitialTheme } from "../../../../frontend/utils"
  *     i.fal.fa-moon-stars data-satis-appearance-switcher-target="dark"
  *
  */
-export default class extends ApplicationController {
+export default class AppearanceSwitcherComponentController extends ApplicationController {
   static targets = ["light", "dark"]
 
   connect() {
     super.connect()
-
     const theme = getInitialTheme()
     this.rawSetTheme(theme, false)
   }

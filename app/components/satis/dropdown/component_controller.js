@@ -1,10 +1,9 @@
-import ApplicationController from "../../../../frontend/controllers/application_controller"
+import ApplicationController from "controllers/application_controller"
 
-// FIXME: Is this full path really needed?
-import { debounce, popperSameWidth } from "../../../../frontend/utils"
+import { debounce, popperSameWidth } from "utils"
 import { createPopper } from "@popperjs/core"
 
-export default class extends ApplicationController {
+export default class DropdownComponentController extends ApplicationController {
 
   static targets = [
     "results",

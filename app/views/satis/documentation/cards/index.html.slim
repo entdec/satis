@@ -32,12 +32,12 @@ p You can add buttons for actions on the card
 
 pre
   | = sts.card :your_profile, title: 'Your profile', description: 'Edit your profile information' do |c|
-   - c.action
+   - c.with_action
      button.button Save
     | Content here
 
 = sts.card :your_profile, title: 'Your profile', description: 'Edit your profile information' do |c|
-  - c.action
+  - c.with_action
     button.button Save
   | Content here
 
@@ -45,12 +45,12 @@ p An icon can be added before the title
 
 pre
   | = sts.card :your_profile, icon: 'fad fa-truck', title: 'Your profile' do |c|
-   - c.action
+   - c.with_action
      button.button Save
     | Content here
 
 = sts.card :your_profile, icon: 'fad fa-truck', title: 'Your profile' do |c|
-  - c.action
+  - c.with_action
     button.button Save
   | Content here
 
@@ -58,15 +58,15 @@ p Cards can have tabs
 
 pre
   | = sts.card :your_profile, title: 'Your profile' do |c|
-      - c.tab :first
+      - c.with_tab :first
         | Tabs don't have padding by default
-      - c.tab :second, padding: true
+      - c.with_tab :second, padding: true
         | But padding can be added by adding
         pre padding: true
 
 = sts.card :your_profile, title: 'Your profile' do |c|
-  - c.tab :first
+  - c.with_tab :first
     | Tabs don't have padding by default
-  - c.tab :second, padding: true
+  - c.with_tab :second, padding: true
     | But padding can be added by adding
     pre padding: true

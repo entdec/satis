@@ -1,8 +1,8 @@
-import ApplicationController from "../../../../frontend/controllers/application_controller"
+import ApplicationController from "controllers/application_controller"
 import { createPopper } from "@popperjs/core"
-import { debounce } from "../../../../frontend/utils"
+import { debounce } from "utils"
 
-export default class extends ApplicationController {
+export default class DateTimePickerComponentController extends ApplicationController {
   static targets = [
     "input",
     "hiddenInput",

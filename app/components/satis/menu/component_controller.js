@@ -1,9 +1,8 @@
-import ApplicationController from "../../../../frontend/controllers/application_controller"
-// FIXME: Is this full path really needed?
+import ApplicationController from "controllers/application_controller"
 import {createPopper} from "@popperjs/core"
 
 
-export default class extends ApplicationController {
+export default class MenuComponentController extends ApplicationController {
   static targets = ["submenu", "toggle", "clear"]
 
   connect() {
