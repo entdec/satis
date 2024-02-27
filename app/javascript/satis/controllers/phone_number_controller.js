@@ -1,7 +1,7 @@
-import ApplicationController from "./application_controller"
-import intlTelInput from "intl-tel-input"
-import debounce from "lodash/debounce"
-import intlTelInputUtilsUrl from "intl-tel-input/build/js/utils.js"
+import ApplicationController from "controllers/application_controller"
+// import intlTelInput from "intl-tel-input"
+import {debounce} from "utils"
+// import intlTelInputUtilsUrl from "intl-tel-input/build/js/utils.js"
 
 export default class extends ApplicationController {
   static targets = ["input", "hiddenInput"]

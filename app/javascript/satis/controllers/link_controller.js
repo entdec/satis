@@ -1,4 +1,4 @@
-import ApplicationController from "./application_controller"
+import ApplicationController from "controllers/application_controller"
 
 /*
  * Link controller
@@ -6,8 +6,9 @@ import ApplicationController from "./application_controller"
  *   div data-controller="satis-link" href="" data-turbo="false" target="_blank" data-action='click->satis-link#follow'
  *
  */
-export default class extends ApplicationController {
+export default class LinkController extends ApplicationController {
   connect() {
+    console.log("linky")
     super.connect()
   }
 

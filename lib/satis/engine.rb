@@ -16,8 +16,7 @@ module Satis
   class Engine < ::Rails::Engine
     isolate_namespace Satis
 
-    config.autoload_paths << "#{root}/app/components"
-    config.autoload_paths << "#{root}/lib"
+    config.autoload_paths << root.join("lib")
 
     initializer 'satis.assets' do |app|
       app.config.assets.paths << root.join("app/javascript")

@@ -1,8 +1,5 @@
 import { application } from "controllers/application"
 
-// import AddFilterComponentController from 'components/add_filter/component_controller';
-// application.register('mensa-add-filter', AddFilterComponentController)
-
 import AppearanceSwitcherComponentController from "satis/components/appearance_switcher/component_controller";
 application.register("satis-appearance-switcher", AppearanceSwitcherComponentController);
 
@@ -39,9 +36,13 @@ application.register("satis-switch", SwitchComponentController);
 import TabsComponentController from "satis/components/tabs/component_controller";
 application.register("satis-tabs", TabsComponentController);
 
-// Eager load all controllers defined in the import map under controllers/**/*_controller
-import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading"
-eagerLoadControllersFrom("controllers", application)
+import LinkController from "controllers/link_controller";
+application.register("satis-link", LinkController);
+
+
+// // Eager load all controllers defined in the import map under controllers/**/*_controller
+// import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading"
+// eagerLoadControllersFrom("controllers", application)
 
 // Lazy load controllers as they appear in the DOM (remember not to preload controllers in import map!)
 // import { lazyLoadControllersFrom } from "@hotwired/stimulus-loading"

@@ -1,42 +1,42 @@
-import ApplicationController from "../controllers/application_controller"
+import ApplicationController from "controllers/application_controller"
 
-import CodeMirror from "codemirror"
+// import CodeMirror from "codemirror"
+//
+// import "codemirror/addon/edit/closebrackets"
+// import "codemirror/addon/edit/closetag"
+// import "codemirror/addon/edit/matchtags"
+//
+// import "codemirror/addon/selection/active-line"
+//
+// import "codemirror/addon/mode/simple"
+// import "codemirror/addon/mode/multiplex"
+// import "codemirror/addon/dialog/dialog"
+// import "codemirror/addon/search/searchcursor"
+// import "codemirror/addon/search/search"
+// import "codemirror/addon/search/jump-to-line"
+// import "codemirror/addon/edit/matchtags"
+// import "codemirror/addon/hint/html-hint"
+// import "codemirror/addon/display/autorefresh"
+// import "codemirror/addon/hint/show-hint"
+// import "codemirror/addon/fold/foldgutter"
+//
+// import "codemirror/mode/htmlmixed/htmlmixed"
+// import "codemirror/mode/slim/slim"
+// import "codemirror/mode/javascript/javascript"
+// import "codemirror/mode/slim/slim"
+// import "codemirror/mode/css/css"
+// import "codemirror/mode/sass/sass"
+// import "codemirror/mode/markdown/markdown"
+// import "codemirror/mode/ruby/ruby"
+// import "codemirror/mode/xml/xml"
+// import "codemirror/mode/yaml/yaml"
+// import "codemirror/mode/yaml-frontmatter/yaml-frontmatter"
+// import "codemirror/mode/sieve/sieve"
+//
+// import "codemirror-liquid"
 
-import "codemirror/addon/edit/closebrackets"
-import "codemirror/addon/edit/closetag"
-import "codemirror/addon/edit/matchtags"
-
-import "codemirror/addon/selection/active-line"
-
-import "codemirror/addon/mode/simple"
-import "codemirror/addon/mode/multiplex"
-import "codemirror/addon/dialog/dialog"
-import "codemirror/addon/search/searchcursor"
-import "codemirror/addon/search/search"
-import "codemirror/addon/search/jump-to-line"
-import "codemirror/addon/edit/matchtags"
-import "codemirror/addon/hint/html-hint"
-import "codemirror/addon/display/autorefresh"
-import "codemirror/addon/hint/show-hint"
-import "codemirror/addon/fold/foldgutter"
-
-import "codemirror/mode/htmlmixed/htmlmixed"
-import "codemirror/mode/slim/slim"
-import "codemirror/mode/javascript/javascript"
-import "codemirror/mode/slim/slim"
-import "codemirror/mode/css/css"
-import "codemirror/mode/sass/sass"
-import "codemirror/mode/markdown/markdown"
-import "codemirror/mode/ruby/ruby"
-import "codemirror/mode/xml/xml"
-import "codemirror/mode/yaml/yaml"
-import "codemirror/mode/yaml-frontmatter/yaml-frontmatter"
-import "codemirror/mode/sieve/sieve"
-
-import "codemirror-liquid"
-
-const themesContext = require.context("codemirror/theme", false, /\.css$/, "lazy")
-const themes = themesContext.keys().map((fileName) => fileName.slice(2, -4))
+// const themesContext = require.context("codemirror/theme", false, /\.css$/, "lazy")
+// const themes = themesContext.keys().map((fileName) => fileName.slice(2, -4))
 
 // import "codemirror/lib/codemirror.css";
 // import "codemirror/addon/dialog/dialog.css";

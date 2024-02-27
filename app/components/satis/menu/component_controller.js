@@ -6,9 +6,15 @@ export default class MenuComponentController extends ApplicationController {
   static targets = ["submenu", "toggle", "clear"]
 
   connect() {
+    console.log("MENU")
     super.connect()
 
     if (this.hasSubmenuTarget) {
+      window.process = {
+        env: {
+          NODE_ENV: "production"
+        }
+      }
       this.popperInstance = createPopper(this.element, this.submenuTarget, {
         placement: this.submenuTarget.getAttribute("data-satis-menu-submenu-placement") || "auto",
         strategy: this.submenuTarget.getAttribute("data-satis-menu-submenu-strategy") || "fixed",
