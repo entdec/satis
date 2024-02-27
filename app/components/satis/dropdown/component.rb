@@ -21,7 +21,12 @@ module Satis
 
         options[:input_html] ||= {}
 
-        options[:input_html][:value] = hidden_value
+        @hidden_value = hidden_value
+        options[:input_html][:value] = if @hidden_value.respond_to?(:id)
+                                         @hidden_value.id
+                                       else
+                                         @hidden_value
+                                       end
 
         options[:input_html][:autofocus] ||= false
         if options[:input_html][:autofocus]
@@ -46,9 +51,6 @@ module Satis
         value = @options[:selected]
         value ||= @options.dig(:input_html, :value)
         value ||= form.object&.send(attribute)
-
-        value = value.id if value.respond_to?(:id)
-
         value = value.second if value.is_a?(Array) && value.size == 2 && value.first.casecmp?(value.second)
         value
       end
@@ -57,7 +59,7 @@ module Satis
         return [[]] unless obj
 
         if obj.is_a?(Array)
-          obj.filter_map {|item| option_value(item) }
+          obj.filter_map { |item| option_value(item) }
         else
           [option_value(obj)]
         end
@@ -69,9 +71,9 @@ module Satis
         if item.respond_to?(:id)
           value = item.send(:id)
           text = if item.respond_to?(:name)
-                    item.send(:name)
+                   item.send(:name)
                  else
-                    ""
+                   ""
                  end
         elsif item.is_a?(Array)
           value = item.first
@@ -81,7 +83,7 @@ module Satis
         end
 
         return nil if value.blank?
-        [text, item, {selected: true}]
+        [text, value, {selected: true}]
       end
 
       def placeholder

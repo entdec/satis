@@ -1,8 +1,8 @@
 import ApplicationController from "../../../../frontend/controllers/application_controller"
 
 // FIXME: Is this full path really needed?
-import { debounce, popperSameWidth } from "../../../../frontend/utils"
-import { createPopper } from "@popperjs/core"
+import {debounce, popperSameWidth} from "../../../../frontend/utils"
+import {createPopper} from "@popperjs/core"
 
 export default class extends ApplicationController {
 
@@ -242,8 +242,8 @@ export default class extends ApplicationController {
   search(event) {
     this.searchQueryValue = this.searchInputTarget.value
 
-    if(this.searchInputTarget.value.length === 0 && !this.isMultipleValue){
-      if(this.nrOfItems === 1) this.lowLightSelected();
+    if (this.searchInputTarget.value.length === 0 && !this.isMultipleValue) {
+      if (this.nrOfItems === 1) this.lowLightSelected();
       this.hiddenSelectTarget.innerHTML = ""
       this.hiddenSelectTarget.add(this.createOption())
     }
@@ -422,9 +422,9 @@ export default class extends ApplicationController {
     } else {
       this.filterResultsChainTo()
 
-      if(this.hasResults && !this.searchQueryChanged){
+      if (this.hasResults && !this.searchQueryChanged) {
         this.showResultsList(event)
-      }else {
+      } else {
         if (this.hasUrlValue)
           this.fetchResults(event)
         else
@@ -493,7 +493,7 @@ export default class extends ApplicationController {
 
   localResults(event) {
     if (!this.searchQueryChanged) {
-      if(!this.resultsShown) {
+      if (!this.resultsShown) {
         if (this.hasResults)
           this.showResultsList(event)
         else this.showSelectedItem()
@@ -522,7 +522,7 @@ export default class extends ApplicationController {
     this.itemTargets.forEach((item) => {
       const text = item.getAttribute("data-satis-dropdown-item-text")
       const matched = this.needsExactMatchValue ?
-        searchValue.localeCompare(text, undefined, {sensitivity: 'base'}) === 0:
+        searchValue.localeCompare(text, undefined, { sensitivity: 'base' }) === 0 :
         new RegExp(searchValue, "i").test(text)
 
       const isHidden = item.classList.contains("hidden")
@@ -544,7 +544,7 @@ export default class extends ApplicationController {
     }
 
     // auto select if there is only one match and we are not in freetext mode
-    if(!this.freeTextValue) {
+    if (!this.freeTextValue) {
       if (matches.length === 1) {
         if (this.filteredSearchQuery.length >= this.minSearchQueryLength &&
           matches[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.lastSearch.toLowerCase()) >= 0) {
@@ -556,7 +556,7 @@ export default class extends ApplicationController {
           this.showSelectedItem()
         }
         // the selected item if there was only 1 item visible before
-      } else if(previouslyVisibleItemsCount === 1 && matches.length > 1) {
+      } else if (previouslyVisibleItemsCount === 1 && matches.length > 1) {
         this.setSelectedItem()
       }
     }
@@ -572,7 +572,7 @@ export default class extends ApplicationController {
           (this.currentPage == this.lastPage || this.currentPage == this.endPage)) ||
         !this.hasUrlValue
       ) {
-        if(!this.resultsShown) {
+        if (!this.resultsShown) {
           if (this.hasResults)
             this.showResultsList(event)
           else this.showSelectedItem()
@@ -666,8 +666,8 @@ export default class extends ApplicationController {
     return promise
   }
 
-  get filteredSearchQuery(){
-    if(this.searchQueryValue < this.minSearchQueryLength) return ""
+  get filteredSearchQuery() {
+    if (this.searchQueryValue < this.minSearchQueryLength) return ""
     return this.searchQueryValue
   }
 
@@ -861,10 +861,13 @@ export default class extends ApplicationController {
     this.decreaseSelectedIndex()
     this.highLightSelected()
   }
+
   validateSearchQuery() {
     const trimmedValue = this.searchInputTarget.value.trim();
     const elements = this.selectedItemsTemplateTarget.content.querySelectorAll(`[data-satis-dropdown-item-text*="${trimmedValue}"]`);
-    const selected = Array.from(elements).find(element => element.getAttribute('data-satis-dropdown-item-text').trim() === trimmedValue);
+    const selected = Array.from(elements).find(element => element.getAttribute('data-satis-dropdown-item-text').trim() === trimmedValue)
+      || Array.from(this.hiddenSelectTarget.options).find(option => option.text.trim() === trimmedValue);
+
     if (!selected && this.searchInputTarget.value.length > 0 && !this.freeTextValue) {
       this.searchInputTarget.closest(".bg-white").classList.toggle("warning", true)
     } else {
@@ -966,7 +969,7 @@ export default class extends ApplicationController {
       }
     }
 
-    if(item) {
+    if (item) {
       if (!this.resultsShown)
         this.showResultsList()
       this.setSelectedItem(option.value)
