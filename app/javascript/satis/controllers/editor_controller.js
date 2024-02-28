@@ -1,6 +1,8 @@
 import ApplicationController from "satis/controllers/application_controller"
 
-// import CodeMirror from "codemirror"
+import {basicSetup, EditorView} from "codemirror"
+// import {defaultKeymap, history, historyKeymap} from "@codemirror/commands"
+
 //
 // import "codemirror/addon/edit/closebrackets"
 // import "codemirror/addon/edit/closetag"
@@ -50,7 +52,7 @@ import ApplicationController from "satis/controllers/application_controller"
  *
  * Control codemirror
  */
-export default class extends ApplicationController {
+export default class EditorController extends ApplicationController {
   static targets = ["textarea"]
   static values = { readOnly: Boolean, mode: String, height: String, colorScheme: String, colorSchemeDark: String }
 
@@ -70,49 +72,58 @@ export default class extends ApplicationController {
 
     const self = this
 
-    let mode = { name: "liquid", base: CodeMirror.mimeModes[this.modeValue] }
+    // let mode = { name: "liquid", base: CodeMirror.mimeModes[this.modeValue] }
 
-    this.editor = CodeMirror.fromTextArea(this.textareaTarget, {
-      lineNumbers: true,
-      mode: { name: "yaml-frontmatter", base: mode },
-      lineWrapping: true,
-      tabSize: 2,
-      autoRefresh: true,
-      extraKeys: { "Ctrl-Space": "autocomplete", "Ctrl-J": "toMatchingTag" },
-      foldGutter: true,
-      autoCloseBrackets: true,
-      autoCloseTags: true,
-      matchTags: true,
-      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-      indentUnit: 2,
-      indentWithTabs: false,
-      readOnly: this.readOnlyValue,
+    this.editor = new EditorView({
+      doc: this.textareaTarget.value,
+      extensions: [
+        basicSetup
+      ]
+      // lineNumbers: true,
+      // // mode: { name: "yaml-frontmatter", base: mode },
+      // lineWrapping: true,
+      // tabSize: 2,
+      // autoRefresh: true,
+      // extraKeys: { "Ctrl-Space": "autocomplete", "Ctrl-J": "toMatchingTag" },
+      // foldGutter: true,
+      // autoCloseBrackets: true,
+      // autoCloseTags: true,
+      // matchTags: true,
+      // gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+      // indentUnit: 2,
+      // indentWithTabs: false,
+      // readOnly: this.readOnlyValue,
     })
 
     const colorSchemeDark = this.colorSchemeDarkValue
     const colorScheme = this.colorSchemeValue
 
-    this.editor.setSize("100%", this.heightValue)
+    // this.editor.setSize("100%", this.heightValue)
     // Sometimes the editor does not refresh/initialize properly, this prevents that
-    setTimeout(() => {
-      this.editor.refresh()
+    // setTimeout(() => {
+    //   this.editor.refresh()
+    //
+    //   if (colorScheme || colorSchemeDark) {
+    //     if (colorSchemeDark && (window.matchMedia("prefers-color-scheme: dark").matches || document.documentElement.classList.contains("dark"))) {
+    //       this.setTheme(colorSchemeDark)
+    //     } else if (colorScheme) {
+    //       this.setTheme(colorScheme)
+    //     }
+    //   }
+    // }, 100)
+    //
+    // this.editor.on("change", function (editor, evt) {
+    //   let event = new CustomEvent("editor.changed", { bubbles: true, cancelable: true, detail: { textarea: self.textareaTarget, editor: self.editor, dirty: !self.editor.getDoc().isClean() } })
+    //   self.element.dispatchEvent(event)
+    // })
+  }
 
-      if (colorScheme || colorSchemeDark) {
-        if (colorSchemeDark && (window.matchMedia("prefers-color-scheme: dark").matches || document.documentElement.classList.contains("dark"))) {
-          this.setTheme(colorSchemeDark)
-        } else if (colorScheme) {
-          this.setTheme(colorScheme)
-        }
-      }
-    }, 100)
-
-    this.editor.on("change", function (editor, evt) {
-      let event = new CustomEvent("editor.changed", { bubbles: true, cancelable: true, detail: { textarea: self.textareaTarget, editor: self.editor, dirty: !self.editor.getDoc().isClean() } })
-      self.element.dispatchEvent(event)
-    })
+  sync() {
+    this.textareaTarget.value = this.editor.state.doc.toString()
   }
 
   disconnect() {
     this.editor.toTextArea()
   }
+
 }

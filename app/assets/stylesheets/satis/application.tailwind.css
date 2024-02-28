@@ -12,6 +12,57 @@
 @import '../../../components/satis/sidebar_menu_item/component.scss';
 @import '../../../components/satis/tabs/component.scss';
 
+@import 'diffy.scss';
+@import 'form.scss';
+@import "trix/dist/trix.css";
+
+/*@import 'phone-number.scss';*/
+
+/*@import "~flag-icon-css/css/flag-icons";*/
+
+/* Every link without a class or empty class should be underlined */
+a:not([class]),
+a[class=""] {
+    @apply text-primary-600 underline;
+}
+
+.sts-grid {
+    @apply grid grid-cols-1 md:grid-cols-12 gap-4;
+}
+
+.mac {
+    .mac-only {
+        display: inline-block;
+    }
+    .pc-only {
+        display: none;
+    }
+}
+
+.pc {
+    .pc-only {
+        display: inline-block;
+    }
+    .mac-only {
+        display: none;
+    }
+}
+
+/* For the draggable controller */
+.draggable:hover {
+   cursor: pointer;
+}
+
+
+.trix-content {
+    ul {
+        list-style: square !important;
+    }
+    ol {
+        list-style: decimal !important;
+    }
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -21,3 +72,5 @@
 
 @layer base {
 }
+
+

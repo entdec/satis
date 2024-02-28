@@ -39,6 +39,9 @@ application.register("satis-tabs", TabsComponentController);
 import LinkController from "satis/controllers/link_controller";
 application.register("satis-link", LinkController);
 
+import EditorController from "satis/controllers/editor_controller";
+application.register("satis-editor", EditorController);
+
 
 // // Eager load all controllers defined in the import map under controllers/**/*_controller
 // import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading"

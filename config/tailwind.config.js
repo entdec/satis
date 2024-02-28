@@ -5,6 +5,7 @@ module.exports = {
   content: [
     './public/*.html',
     './app/helpers/**/*.rb',
+    './lib/**/*.rb',
     './app/javascript/**/*.js',
     './app/components/**/*.slim',
     './app/views/**/*.{erb,haml,html,slim}'
