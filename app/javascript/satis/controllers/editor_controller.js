@@ -1,7 +1,7 @@
 import ApplicationController from 'satis/controllers/application_controller'
 
 import { basicSetup, EditorView } from 'codemirror'
-// import {defaultKeymap, history, historyKeymap} from "@codemirror/commands"
+import { EditorState } from '@codemirror/state'
 
 /***
  * IDE - Editor controller
@@ -25,15 +25,15 @@ export default class EditorController extends ApplicationController {
 
   connect () {
     super.connect()
-    console.log("hi")
+    console.log('hi')
     const self = this
 
     const fixedHeightEditor = EditorView.theme({
       '&': { height: '8rem', maxHeight: '8rem' },
       '.cm-gutter,.cm-content': { minHeight: '8rem' },
       '.cm-scroller': { overflow: 'auto' },
-      "&.cm-focused": {
-        outline: "none",
+      '&.cm-focused': {
+        outline: 'none',
       },
     })
 
@@ -62,7 +62,6 @@ export default class EditorController extends ApplicationController {
       // indentWithTabs: false,
       // readOnly: this.readOnlyValue,
     })
-
 
     const colorSchemeDark = this.colorSchemeDarkValue
     const colorScheme = this.colorSchemeValue
