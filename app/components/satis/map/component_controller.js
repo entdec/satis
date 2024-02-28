@@ -1,5 +1,5 @@
 // map_controller.js
-import ApplicationController from "controllers/application_controller"
+import ApplicationController from "satis/controllers/application_controller"
 import L from "leaflet"
 
 export default class MapComponentController extends ApplicationController {

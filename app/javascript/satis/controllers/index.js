@@ -1,4 +1,4 @@
-import { application } from "controllers/application"
+import { application } from "satis/controllers/application"
 
 import AppearanceSwitcherComponentController from "satis/components/appearance_switcher/component_controller";
 application.register("satis-appearance-switcher", AppearanceSwitcherComponentController);
@@ -36,7 +36,7 @@ application.register("satis-switch", SwitchComponentController);
 import TabsComponentController from "satis/components/tabs/component_controller";
 application.register("satis-tabs", TabsComponentController);
 
-import LinkController from "controllers/link_controller";
+import LinkController from "satis/controllers/link_controller";
 application.register("satis-link", LinkController);
 
 

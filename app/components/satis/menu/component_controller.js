@@ -1,4 +1,4 @@
-import ApplicationController from "controllers/application_controller"
+import ApplicationController from "satis/controllers/application_controller"
 import {createPopper} from "@popperjs/core"
 
 
@@ -6,7 +6,6 @@ export default class MenuComponentController extends ApplicationController {
   static targets = ["submenu", "toggle", "clear"]
 
   connect() {
-    console.log("MENU")
     super.connect()
 
     if (this.hasSubmenuTarget) {

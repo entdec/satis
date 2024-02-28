@@ -1,4 +1,4 @@
-import ApplicationController from "controllers/application_controller"
+import ApplicationController from "satis/controllers/application_controller"
 // import intlTelInput from "intl-tel-input"
 import {debounce} from "utils"
 // import intlTelInputUtilsUrl from "intl-tel-input/build/js/utils.js"

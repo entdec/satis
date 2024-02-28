@@ -1,4 +1,4 @@
-import ApplicationController from "controllers/application_controller"
+import ApplicationController from "satis/controllers/application_controller"
 
 export default class extends ApplicationController {
   static targets = ["selection", "input"]

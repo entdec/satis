@@ -1,4 +1,4 @@
-import ApplicationController from "controllers/application_controller"
+import ApplicationController from "satis/controllers/application_controller"
 
 /*
  * Link controller
@@ -8,7 +8,6 @@ import ApplicationController from "controllers/application_controller"
  */
 export default class LinkController extends ApplicationController {
   connect() {
-    console.log("linky")
     super.connect()
   }
 

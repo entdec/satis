@@ -1,4 +1,4 @@
-import ApplicationController from "controllers/application_controller"
+import ApplicationController from "satis/controllers/application_controller"
 
 import { debounce, popperSameWidth } from "utils"
 import { createPopper } from "@popperjs/core"

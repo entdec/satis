@@ -1,4 +1,4 @@
 import "@fortawesome/fontawesome-free"
 import "@hotwired/turbo-rails"
-import "controllers"
-import "utility_controllers"
+import "satis/controllers"
+import "satis/utility_controllers"
