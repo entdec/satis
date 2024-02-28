@@ -8,8 +8,10 @@ pin "@hotwired/turbo-rails", to: "turbo.min.js", preload: true
 pin "@hotwired/stimulus", to: "stimulus.min.js", preload: true
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js", preload: true
 pin '@fortawesome/fontawesome-free', to: 'https://ga.jspm.io/npm:@fortawesome/fontawesome-free@6.1.1/js/all.js'
-pin_all_from Satis::Engine.root.join("app/javascript/satis/controllers"), under: "satis/controllers", to: "satis/controllers"
-pin_all_from Satis::Engine.root.join("app/javascript/satis/utility_controllers"), under: "satis/utility_controllers", to: "satis/utility_controllers"
+
+pin_all_from Satis::Engine.root.join("app/javascript/satis/controllers"), under: "satis/controllers", to: "satis/controllers", preload: false
+pin_all_from Satis::Engine.root.join("app/javascript/satis/utility_controllers"), under: "satis/utility_controllers", to: "satis/utility_controllers", preload: false
+
 pin_all_from Satis::Engine.root.join("app/javascript/satis/elements"), under: "satis/elements", to: "satis/elements"
 pin_all_from Satis::Engine.root.join("app/components/satis"), under: "satis/components", to: "satis"
 pin "@rails/request.js", to: "@rails--request.js.js" # @0.0.9

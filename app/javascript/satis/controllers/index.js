@@ -42,6 +42,7 @@ application.register("satis-link", LinkController);
 import EditorController from "satis/controllers/editor_controller";
 application.register("satis-editor", EditorController);
 
+// See: https://github.com/hotwired/stimulus-rails/blob/main/app/assets/javascripts/stimulus-loading.js
 
 // // Eager load all controllers defined in the import map under controllers/**/*_controller
 // import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading"

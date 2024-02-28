@@ -79,7 +79,7 @@ form {
   }
 
   .editor {
-    @apply border border-gray-300 dark:bg-gray-800 rounded;
+    @apply h-32 border border-gray-300 dark:bg-gray-800 rounded overflow-hidden;
 
     .CodeMirror-wrap {
       border-top-right-radius: 3px;

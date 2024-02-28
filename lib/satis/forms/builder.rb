@@ -239,7 +239,7 @@ module Satis
                  options[:help]
                else
                  Satis.config.default_help_text.call(@template, @object, method,
-                                                @options[:help_scope] || options[:help_scope])
+                                                     @options[:help_scope] || options[:help_scope])
                end
 
         return if text.blank?
@@ -313,9 +313,9 @@ module Satis
                       (custom_label(method, options[:label], options) unless options[:label] == false),
                       tag.div(text_area(method,
                                         merge_input_options({
-                                                              class: 'form-control',
+                                                              class: 'form-control hidden',
                                                               data: {
-                                                                controller: 'satis-editor',
+                                                                # controller: 'satis-editor',
                                                                 'satis-editor-target' => 'textarea',
                                                                 'satis-editor-read-only-value' => options.delete(:read_only) || false,
                                                                 'satis-editor-mode-value' => options.delete(:mode) || 'text/html',
@@ -327,7 +327,9 @@ module Satis
                                                             }, options[:input_html])), class: "editor #{
                         if has_error?(method)
                           'is-invalid'
-                        end}"),
+                        end}", data: {
+                        controller: 'satis-editor'
+                      }),
                       hint_text(options[:hint] || '⌘-F/⌃-f: search; ⌥-g: goto line, ⌃-space: autocomplete')
                     ]
         end

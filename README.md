@@ -62,22 +62,11 @@ sts.browser.mobile?
 
 For more information see the [browser gem](https://github.com/fnando/browser)
 
-## Dark
+## TODO
 
-bg-gray-800 - hoofd achtergrond card/sidebar
-bg-gray-700 - highlight card/sidebar / hover
-text-gray-300 - tekst kleur
-bg-gray-600 - body achtergrond kleur
-
-## Known issues
-
-- dropdown results will not overlap the card, they should, just like date-time picker
-- dropdown triggers on-change upon initial population (for attributes), which is different from select's
-- dropdown hoogte van results is niet altijd goed
-- table state is not saved
-- table columns removing is weird, you really need to be on the left part of the screen to drag
-- table filters initially passed should not be editable
-- sidebar has no small / collapsed version
+* [ ] Sidebar has no small / collapsed version
+* [ ] Extend new CM6 editor-controller with 'old' features (based on CM5)
+* [ ] Phonenumber input doesn't work
 
 ## Installation
 
