@@ -1,4 +1,4 @@
-// Allow buttons outside forms
+/* Allow buttons outside forms */
 .button {
   @apply mt-2 inline-flex items-center px-4 py-2 border border-gray-300 dark:border-gray-500 shadow-sm text-sm font-medium rounded-md text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500;
 

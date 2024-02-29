@@ -1,0 +1,76 @@
+@import '../../../components/satis/appearance_switcher/component.css';
+@import '../../../components/satis/breadcrumbs/component.css';
+@import '../../../components/satis/card/component.css';
+@import '../../../components/satis/date_time_picker/component.css';
+@import '../../../components/satis/dropdown/component.css';
+@import '../../../components/satis/flash_messages/component.css';
+@import '../../../components/satis/input/component.css';
+@import '../../../components/satis/input_array/component.css';
+@import '../../../components/satis/map/component.css';
+@import '../../../components/satis/menu/component.css';
+@import '../../../components/satis/sidebar_menu/component.css';
+@import '../../../components/satis/sidebar_menu_item/component.css';
+@import '../../../components/satis/tabs/component.css';
+
+@import 'components/diffy.css';
+/*@import 'form.scss';*/
+/*@import "trix/dist/trix.css";*/
+
+/*@import 'phone-number.scss';*/
+
+/*@import "~flag-icon-css/css/flag-icons";*/
+
+/* Every link without a class or empty class should be underlined */
+a:not([class]),
+a[class=""] {
+    @apply text-primary-600 underline;
+}
+
+.sts-grid {
+    @apply grid grid-cols-1 md:grid-cols-12 gap-4;
+}
+
+.mac {
+    .mac-only {
+        display: inline-block;
+    }
+    .pc-only {
+        display: none;
+    }
+}
+
+.pc {
+    .pc-only {
+        display: inline-block;
+    }
+    .mac-only {
+        display: none;
+    }
+}
+
+/* For the draggable controller */
+.draggable:hover {
+   cursor: pointer;
+}
+
+
+.trix-content {
+    ul {
+        list-style: square !important;
+    }
+    ol {
+        list-style: decimal !important;
+    }
+}
+
+/*@tailwind base;*/
+/*@tailwind components;*/
+/*@tailwind utilities;*/
+
+/*@layer components {*/
+/*}*/
+
+/*@layer base {*/
+/*}*/
+
+

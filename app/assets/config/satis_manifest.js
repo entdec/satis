@@ -1,4 +1,3 @@
-//= link_tree ../builds/ .css
 //= link_directory ../../javascript/satis .js
 //= link_directory ../../javascript/satis/controllers .js
 //= link_directory ../../javascript/satis/elements .js

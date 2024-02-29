@@ -15,10 +15,9 @@ pin_all_from Satis::Engine.root.join("app/javascript/satis/utility_controllers")
 pin_all_from Satis::Engine.root.join("app/javascript/satis/elements"), under: "satis/elements", to: "satis/elements", preload: false
 pin_all_from Satis::Engine.root.join("app/components/satis"), under: "satis/components", to: "satis", preload: false
 
-pin "@rails/request.js", preload: false # @0.0.9
 pin "tippy.js", preload: false # @6.3.7
-pin "@popperjs/core", to: 'popper.js/popper.js', preload: false
-pin "leaflet", to: "leaflet", preload: false
+pin "@popperjs/core", to: 'popper.js.js', preload: false
+pin "leaflet", to: "leaflet.js", preload: false
 pin "sortablejs", to: "sortablejs.js", preload: false # @1.15.2
 pin "codemirror", to: "codemirror.js", preload: false
 pin "@codemirror/autocomplete", to: "@codemirror--autocomplete.js", preload: false # @6.12.0
