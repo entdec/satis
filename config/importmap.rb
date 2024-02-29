@@ -32,3 +32,5 @@ pin "@lezer/highlight", to: "@lezer--highlight.js", preload: false # @1.2.0
 pin "crelt", to: "crelt.js", preload: false # @1.0.6
 pin "style-mod", to: "style-mod.js", preload: false # @4.1.1
 pin "w3c-keyname", to: "w3c-keyname.js", preload: false # @2.2.8
+pin "@rails/actiontext", to: "@rails--actiontext.js" # @7.1.3
+pin "trix" # @2.0.10

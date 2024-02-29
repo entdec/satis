@@ -13,10 +13,10 @@
 @import '../../../components/satis/tabs/component.css';
 
 @import 'components/diffy.css';
-/*@import 'form.scss';*/
-/*@import "trix/dist/trix.css";*/
+@import 'components/form.css';
+@import "trix";
 
-/*@import 'phone-number.scss';*/
+@import 'components/phone-number.css';
 
 /*@import "~flag-icon-css/css/flag-icons";*/
 
@@ -62,15 +62,3 @@ a[class=""] {
         list-style: decimal !important;
     }
 }
-
-/*@tailwind base;*/
-/*@tailwind components;*/
-/*@tailwind utilities;*/
-
-/*@layer components {*/
-/*}*/
-
-/*@layer base {*/
-/*}*/
-
-
