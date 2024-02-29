@@ -1,2 +1,2 @@
 web: bin/rails server
-css: bin/rails app:tailwind_watch
+css: bin/rails app:tailwindcss:watch
