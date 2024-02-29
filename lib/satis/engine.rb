@@ -21,6 +21,7 @@ module Satis
     initializer 'satis.assets' do |app|
       app.config.assets.paths << root.join("app/javascript")
       app.config.assets.paths << root.join("app/components")
+      app.config.assets.paths << Satis::Engine.root.join("vendor/javascript")
       app.config.assets.precompile += %w[satis_manifest]
     end
 
@@ -28,6 +29,7 @@ module Satis
       app.config.importmap.paths << root.join("config/importmap.rb")
       app.config.importmap.cache_sweepers << root.join("app/javascript")
       app.config.importmap.cache_sweepers << root.join("app/components")
+      app.config.importmap.cache_sweepers << Satis::Engine.root.join("vendor/javascript")
     end
 
     initializer 'satis.helper' do
