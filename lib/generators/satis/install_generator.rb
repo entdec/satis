@@ -14,5 +14,13 @@ module Satis
     def copy_migrations
       rake "satis:install:migrations"
     end
+
+    def add_content_to_tailwind_confing
+      inject_into_file "config/tailwind.config.js", before: "],\n  theme: {" do
+        "  // Satis content\n" +
+          %w[/app/views/**/* /app/helpers/**/* /app/controllers/**/* /app/components/**/* /app/javascript/**/*.js /app/assets/**/satis.css].map { |path| "    \"#{Satis::Engine.root}#{path}\"" }.join(",\n") +
+          ",\n  "
+      end
+    end
   end
 end
