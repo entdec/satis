@@ -18,7 +18,7 @@
 
 @import 'components/phone-number.css';
 
-/*@import "~flag-icon-css/css/flag-icons";*/
+@import "components/flag-icons.min.css";
 
 /* Every link without a class or empty class should be underlined */
 a:not([class]),

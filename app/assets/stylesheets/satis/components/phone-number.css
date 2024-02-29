@@ -1,6 +1,6 @@
 /* Int tel phonenumber lib */
 
-@import "intl-tel-input/build/css/intlTelInput";
+@import "intlTelInput.min.css";
 
 .iti input,
 .iti input[type="text"],
@@ -20,11 +20,11 @@
 }
 
 .iti__flag {
-  background-image: url("intl-tel-input/flags.png");
+  background-image: url("../../../images/satis/intl-tel-input/flags.png");
 }
 
 @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
   .iti__flag {
-    background-image: url("intl-tel-input/flags@2x.png");
+    background-image: url("../../../images/satis/intl-tel-input/flags@2x.png");
   }
 }
