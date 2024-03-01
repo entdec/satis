@@ -27,7 +27,7 @@
                 .inline-flex.cursor-pointer id="menu_update_#{tab.id}"
                   / FIXME: count on render? in menu component
                   - if tab.menu.items.present?
-                    = render(Satis::Menu::Component.new(tab.menu, icon: 'fa-thin fa-chevron-down'))
+                    = render(Satis::Menu::Component.new(tab.menu, icon: 'fas fa-chevron-down'))
         - if custom_link.present?
           == custom_link
 

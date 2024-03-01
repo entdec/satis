@@ -1,8 +1,12 @@
-import { Application } from "@hotwired/stimulus"
+import { Application } from '@hotwired/stimulus'
 
-const application = Application.start()
-
-application.debug = false
-window.Stimulus = application
+let application
+if (window.Stimulus) {
+  application = window.Stimulus
+} else {
+  application = Application.start()
+  application.debug = false
+  window.Stimulus = application
+}
 
 export { application }

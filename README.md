@@ -66,7 +66,11 @@ For more information see the [browser gem](https://github.com/fnando/browser)
 
 * [ ] Sidebar has no small / collapsed version
 * [ ] Extend new CM6 editor-controller with 'old' features (based on CM5)
+
+## HIGH PRIO TODO
+
 * [ ] Phonenumber input doesn't work
+* [ ] Tippy.js css missing
 
 ## Installation
 
