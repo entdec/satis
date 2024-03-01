@@ -39,8 +39,8 @@ application.register("satis-tabs", TabsComponentController);
 import LinkController from "satis/controllers/link_controller";
 application.register("satis-link", LinkController);
 
-import EditorController from "satis/controllers/editor_controller";
-application.register("satis-editor", EditorController);
+import EditorComponentController from "satis/components/editor/component_controller";
+application.register("satis-editor", EditorComponentController);
 
 // See: https://github.com/hotwired/stimulus-rails/blob/main/app/assets/javascripts/stimulus-loading.js
 

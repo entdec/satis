@@ -7,6 +7,7 @@ module ApplicationHelper
       m.item :cards, icon: "fa fa-book", link: documentation_cards_path
       m.item :forms, icon: "fa fa-book", link: documentation_forms_path
       m.item :tabs, icon: "fa fa-book", link: documentation_tabs_path
+      m.item :editors, icon: "fa fa-book", link: documentation_editors_path
     end
   end
 end

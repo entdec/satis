@@ -307,32 +307,38 @@ module Satis
         end
       end
 
-      def editor_input(method, options = {})
+      def editor_input(method, options = {}, &block)
         form_group(method, options) do
           safe_join [
                       (custom_label(method, options[:label], options) unless options[:label] == false),
-                      tag.div(text_area(method,
-                                        merge_input_options({
-                                                              class: 'form-control hidden',
-                                                              data: {
-                                                                # controller: 'satis-editor',
-                                                                'satis-editor-target' => 'textarea',
-                                                                'satis-editor-read-only-value' => options.delete(:read_only) || false,
-                                                                'satis-editor-mode-value' => options.delete(:mode) || 'text/html',
-                                                                'satis-editor-height-value' => options.delete(:height) || '200px',
-                                                                'satis-editor-color-scheme-value' => options.delete(:color_scheme),
-                                                                'satis-editor-color-scheme-dark-value' => options.delete(:color_scheme_dark) || 'lucario'
-                                                              }
-
-                                                            }, options[:input_html])), class: "editor #{
-                        if has_error?(method)
-                          'is-invalid'
-                        end}", data: {
-                        controller: 'satis-editor'
-                      }),
-                      hint_text(options[:hint] || '⌘-F/⌃-f: search; ⌥-g: goto line, ⌃-space: autocomplete')
+                      @template.render(Satis::Editor::Component.new(form: self, attribute: method, label: options[:label], &block))
                     ]
         end
+        # form_group(method, options) do
+        #   safe_join [
+        #               (custom_label(method, options[:label], options) unless options[:label] == false),
+        #               tag.div(text_area(method,
+        #                                 merge_input_options({
+        #                                                       class: 'form-control hidden',
+        #                                                       data: {
+        #                                                         # controller: 'satis-editor',
+        #                                                         'satis-editor-target' => 'textarea',
+        #                                                         'satis-editor-read-only-value' => options.delete(:read_only) || false,
+        #                                                         'satis-editor-mode-value' => options.delete(:mode) || 'text/html',
+        #                                                         'satis-editor-height-value' => options.delete(:height) || '200px',
+        #                                                         'satis-editor-color-scheme-value' => options.delete(:color_scheme),
+        #                                                         'satis-editor-color-scheme-dark-value' => options.delete(:color_scheme_dark) || 'lucario'
+        #                                                       }
+        #
+        #                                                     }, options[:input_html])), class: "editor #{
+        #                 if has_error?(method)
+        #                   'is-invalid'
+        #                 end}", data: {
+        #                 controller: 'satis-editor'
+        #               }),
+        #               hint_text(options[:hint] || '⌘-F/⌃-f: search; ⌥-g: goto line, ⌃-space: autocomplete')
+        #             ]
+        # end
       end
 
       def boolean_input(method, options = {})

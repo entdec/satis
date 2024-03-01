@@ -2,17 +2,17 @@ h1 Cards
 
 p A simple card
 
-pre
-  | = sts.card :your_card do |c|
-     | Content here
-
+= sts.editor do
+  | = sts.card :your_card, title: '' do |c|
+      | Content here
+br
 = sts.card :your_card, title: '' do |c|
   | Content here
 
 
 p A simple card
 
-pre
+= sts.editor do
   | = sts.card :your_card_with_title, title: 'Your profile' do |c|
      | Content here
 
@@ -38,7 +38,7 @@ pre
 
 = sts.card :your_card_with_actions, title: 'Your profile', description: 'Edit your profile information' do |c|
   - c.with_action
-    button.button Save
+  button.button Save
   | Content here
 
 p An icon can be added before the title
@@ -51,7 +51,7 @@ pre
 
 = sts.card :your_card_with_icon, icon: 'fa fa-truck', title: 'Your profile' do |c|
   - c.with_action
-    button.button Save
+  button.button Save
   | Content here
 
 p Cards can have tabs
@@ -66,7 +66,7 @@ pre
 
 = sts.card :your_card_with_tabs, title: 'Your profile' do |c|
   - c.with_tab :first
-    | Tabs don't have padding by default
+  | Tabs don't have padding by default
   - c.with_tab :second, padding: true
-    | But padding can be added by adding
-    pre padding: true
+  | But padding can be added by adding
+  pre padding: true

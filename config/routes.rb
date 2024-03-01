@@ -5,6 +5,7 @@ Satis::Engine.routes.draw do
     namespace :documentation do
       resources :avatars
       resources :cards
+      resources :editors
       resources :forms do
         get "select", on: :collection
       end

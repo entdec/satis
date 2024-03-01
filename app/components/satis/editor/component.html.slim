@@ -1,0 +1,5 @@
+.sts-editor data-controller="satis-editor" data-satis-editor-read-only-value=readonly? data-satis-editor-lang-value=lang
+  - if form
+    = form.hidden(attribute, input_html: { data: { 'satis-editor-target' => 'input' } })
+  - else
+    input type="hidden" value=html_escape_once(content) data-satis-editor-target="input"
