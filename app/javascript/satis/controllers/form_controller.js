@@ -1,6 +1,6 @@
 import ApplicationController from "satis/controllers/application_controller"
 
-export default class extends ApplicationController {
+export default class FormController extends ApplicationController {
   static targets = []
   static values = {
     noSubmitOnEnter: Boolean,

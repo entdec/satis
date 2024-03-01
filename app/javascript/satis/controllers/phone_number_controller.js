@@ -3,7 +3,7 @@ import ApplicationController from "satis/controllers/application_controller"
 import {debounce} from "utils"
 // import intlTelInputUtilsUrl from "intl-tel-input/build/js/utils.js"
 
-export default class extends ApplicationController {
+export default class PhoneNumberController extends ApplicationController {
   static targets = ["input", "hiddenInput"]
 
   initialize() {

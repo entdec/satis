@@ -1,6 +1,6 @@
 import ApplicationController from "satis/controllers/application_controller"
 
-export default class extends ApplicationController {
+export default class FieldsForController extends ApplicationController {
   static targets = ["insertionPoint", "template"]
 
   connect() {

@@ -36,11 +36,19 @@ application.register("satis-switch", SwitchComponentController);
 import TabsComponentController from "satis/components/tabs/component_controller";
 application.register("satis-tabs", TabsComponentController);
 
+import EditorComponentController from "satis/components/editor/component_controller";
+application.register("satis-editor", EditorComponentController);
+
+// Controllers
+
 import LinkController from "satis/controllers/link_controller";
 application.register("satis-link", LinkController);
 
-import EditorComponentController from "satis/components/editor/component_controller";
-application.register("satis-editor", EditorComponentController);
+import FieldsForController from "satis/controllers/fields_for_controller";
+application.register("satis-fields-for", FieldsForController);
+
+import FormController from "satis/controllers/form_controller";
+application.register("satis-form", FormController);
 
 // See: https://github.com/hotwired/stimulus-rails/blob/main/app/assets/javascripts/stimulus-loading.js
 
