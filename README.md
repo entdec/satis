@@ -26,6 +26,19 @@ and then in your template:
 = mycard do |card|
 ```
 
+### Fonts
+
+Satis uses font-awesome and includes the free and brand fonts for use in the asset-pipeline:
+
+```slim
+= javascript_include_tag asset_url("fontawesome.js"), defer: true
+= javascript_include_tag asset_url("brands.js"), defer: true
+= javascript_include_tag asset_url("solid.js"), defer: true
+```
+
+When you have the pro fonts, you can add them in your own `assets/fontawesome` folder.
+Only include what you use, this way it's also easily cachable.
+
 ### Components
 
 Each component has it's own documentation in the component folder.
@@ -38,17 +51,17 @@ Satis.add_helper :name, ViewComponent::Class
 ### Forms
 
 ```slim
-  = sts.form_with model: @user, url: profile_url, class: 'mt-2' do |f|
-    = f.input :id, as: :hidden
-    = f.input :first_name
-    = f.input :last_name
-    = f.association :account, collection: policy_scope(Account).with(@user.account_id), as: :dropdown
-    = f.input :location_id, url: select_locations_url(format: :html), as: :dropdown, hint: "The user's main location"
+= sts.form_with model: @user, url: profile_url, class: 'mt-2' do |f|
+  = f.input :id, as: :hidden
+  = f.input :first_name
+  = f.input :last_name
+  = f.association :account, collection: policy_scope(Account).with(@user.account_id), as: :dropdown
+  = f.input :location_id, url: select_locations_url(format: :html), as: :dropdown, hint: "The user's main location"
 
-    = f.button
-    = f.submit
-    = f.reset
-    = f.continue
+  = f.button
+  = f.submit
+  = f.reset
+  = f.continue
 ```
 
 ### Browser detection

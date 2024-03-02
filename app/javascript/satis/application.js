@@ -1,4 +1,4 @@
-import "@fortawesome/fontawesome-free"
+console.log("Satis")
 import "@hotwired/turbo-rails"
 import "satis/controllers"
 import "satis/utility_controllers"
