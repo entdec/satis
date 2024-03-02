@@ -1,5 +1,5 @@
 import ApplicationController from "satis/controllers/application_controller"
-import { getInitialTheme } from "utils"
+import { getInitialTheme } from "satis/utils"
 
 /*
  * Theme controller

@@ -1,5 +1,5 @@
 import ApplicationController from "satis/controllers/application_controller"
-import { debounce } from "utils"
+import { debounce } from "satis/utils"
 
 export default class SidebarMenuItemComponentController extends ApplicationController {
   static targets = ["link", "indicator", "submenu"]

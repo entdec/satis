@@ -3,7 +3,7 @@
 pin "intl-tel-input", to: "./node_modules/intl-tel-input/build/js/intlTelInput.js"
 
 pin "satis", to: "satis/application.js", preload: false
-pin "utils", to: "satis/utils.js", preload: false
+pin "satis/utils", to: "satis/utils.js", preload: false
 pin "@hotwired/turbo-rails", to: "turbo.min.js", preload: true
 pin "@hotwired/stimulus", to: "stimulus.min.js", preload: true
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js", preload: true

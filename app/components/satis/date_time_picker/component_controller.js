@@ -1,6 +1,6 @@
 import ApplicationController from "satis/controllers/application_controller"
 import { createPopper } from "@popperjs/core"
-import { debounce } from "utils"
+import { debounce } from "satis/utils"
 
 export default class DateTimePickerComponentController extends ApplicationController {
   static targets = [
@@ -232,17 +232,15 @@ export default class DateTimePickerComponentController extends ApplicationContro
   }
 
   dateTimeEntered(event) {
-    return
-
     // FIXME: This doesn't work properly yet
-    let newValue
-    try {
-      newValue = new Date(this.inputTarget.value)
-    } catch (error) {}
-    if (!isNaN(newValue.getTime())) {
-      this.selectedValue = [newValue]
-      this.refreshCalendar()
-    }
+    // let newValue
+    // try {
+    //   newValue = new Date(this.inputTarget.value)
+    // } catch (error) {}
+    // if (!isNaN(newValue.getTime())) {
+    //   this.selectedValue = [newValue]
+    //   this.refreshCalendar()
+    // }
   }
 
   selectDay(event) {

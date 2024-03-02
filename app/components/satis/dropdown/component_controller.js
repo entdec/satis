@@ -1,6 +1,6 @@
 import ApplicationController from "satis/controllers/application_controller"
 
-import { debounce, popperSameWidth } from "utils"
+import { debounce, popperSameWidth } from "satis/utils"
 import { createPopper } from "@popperjs/core"
 
 export default class DropdownComponentController extends ApplicationController {
