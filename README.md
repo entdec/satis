@@ -10,6 +10,22 @@ We use:
 - [HotWired](https://hotwired.dev)
 - [BEM](https://cssguidelin.es/#bem-like-naming)
 
+## Installation
+
+Your main app needs to have at least the following config/postcss.config.js:
+```js
+module.exports = {
+  parser: require('postcss-comment'),
+  plugins: {
+    'postcss-mixins': {},
+    'postcss-import': {},
+    'tailwindcss/nesting': {},
+    'tailwindcss': {},
+    'autoprefixer': {}
+  }
+}
+```
+
 ## Usage
 
 You can use satis helpers in your own helpers:
