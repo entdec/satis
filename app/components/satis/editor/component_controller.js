@@ -10,6 +10,7 @@ import {markdown} from "@codemirror/lang-markdown"
 import {javascript} from "@codemirror/lang-javascript"
 import {html} from "@codemirror/lang-html"
 import {css} from "@codemirror/lang-css"
+import {StateEffect} from "@codemirror/state"
 
 /***
  * IDE - Editor controller
@@ -44,13 +45,15 @@ export default class EditorComponentController extends ApplicationController {
         basicSetup,
         EditorView.lineWrapping,
         fixedHeightEditor,
-        language.of(this._getLanguage(this.langValue||'html')),
         EditorState.readOnly.of(this.readOnlyValue),
         EditorView.updateListener.of((view) => {
           if (view.docChanged) { this.sync() }
         })
       ],
       parent: this.element,
+    })
+    this.editor.dispatch({
+      effects: StateEffect.appendConfig.of(language.of(this._getLanguage(this.langValue||'html')))
     })
 
     const colorSchemeDark = this.colorSchemeDarkValue

@@ -311,7 +311,7 @@ module Satis
         form_group(method, options) do
           safe_join [
                       (custom_label(method, options[:label], options) unless options[:label] == false),
-                      @template.render(Satis::Editor::Component.new(form: self, attribute: method, label: options[:label], &block))
+                      @template.render(Satis::Editor::Component.new(form: self, attribute: method, **options, &block))
                     ]
         end
         # form_group(method, options) do
