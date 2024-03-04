@@ -1,5 +1,3 @@
-require 'tailwindcss-rails'
-
 namespace :satis do
   namespace :tailwindcss do
     desc "Configure your Tailwind CSS"
@@ -11,4 +9,5 @@ end
 
 if Rake::Task.task_defined?("tailwindcss:build")
   Rake::Task["tailwindcss:build"].enhance(["satis:tailwindcss:config"])
+  Rake::Task["tailwindcss:watch"].enhance(["satis:tailwindcss:config"])
 end
