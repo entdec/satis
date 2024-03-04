@@ -8,11 +8,11 @@ pin "@hotwired/turbo-rails", to: "turbo.min.js", preload: true
 pin "@hotwired/stimulus", to: "stimulus.min.js", preload: true
 pin "@hotwired/stimulus-loading", to: "stimulus-loading.js", preload: true
 
-pin_all_from Satis::Engine.root.join("app/javascript/satis/controllers"), under: "satis/controllers", to: "satis/controllers", preload: false
-pin_all_from Satis::Engine.root.join("app/javascript/satis/utility_controllers"), under: "satis/utility_controllers", to: "satis/utility_controllers", preload: false
+pin_all_from Satis::Engine.root.join("app/javascript/satis/controllers"), under: "satis/controllers", to: "satis/controllers"
+pin_all_from Satis::Engine.root.join("app/javascript/satis/utility_controllers"), under: "satis/utility_controllers", to: "satis/utility_controllers"
 
-pin_all_from Satis::Engine.root.join("app/javascript/satis/elements"), under: "satis/elements", to: "satis/elements", preload: false
-pin_all_from Satis::Engine.root.join("app/components/satis"), under: "satis/components", to: "satis", preload: false
+pin_all_from Satis::Engine.root.join("app/javascript/satis/elements"), under: "satis/elements", to: "satis/elements"
+pin_all_from Satis::Engine.root.join("app/components/satis"), under: "satis/components", to: "satis"
 
 pin "tippy.js", preload: false # @6.3.7
 pin "@popperjs/core", to: 'popper.js.js', preload: false
