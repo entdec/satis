@@ -17,16 +17,18 @@ export default class MapComponentController extends ApplicationController {
 
     // this.map.setView() etc... as normal.
 
-    // Load layers and setup event handlers, for example:
-    fetch(this.geoJsonUrlValue)
-      .then((response) => response.json())
-      .then((data) => {
-        L.geoJSON(data, {
-          onEachFeature: (feature, layer) => {
-            layer.on("click", () => this.onClick(layer))
-          },
-        }).addTo(this.map)
-      })
+    if(this.geoJsonUrlValue) {
+      // Load layers and setup event handlers, for example:
+      fetch(this.geoJsonUrlValue)
+        .then((response) => response.json())
+        .then((data) => {
+          L.geoJSON(data, {
+            onEachFeature: (feature, layer) => {
+              layer.on("click", () => this.onClick(layer))
+            },
+          }).addTo(this.map)
+        })
+    }
   }
 
   disconnect() {

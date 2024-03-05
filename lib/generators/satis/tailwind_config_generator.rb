@@ -9,7 +9,7 @@ module Satis
       def add_content_to_tailwind_config
         inject_into_file "config/tailwind.config.js", before: "],\n  theme: {" do
           "  // Satis content\n" +
-            %w[/app/views/**/* /app/helpers/**/* /app/controllers/**/* /app/components/**/* /app/javascript/**/*.js /app/assets/**/satis.css].map { |path| "    \"#{Satis::Engine.root}#{path}\"" }.join(",\n") +
+            %w[/app/views/**/* /app/helpers/**/* /app/controllers/**/* /app/components/**/* /app/javascript/**/*.js /app/assets/**/*.css].map { |path| "    \"#{Satis::Engine.root}#{path}\"" }.join(",\n") +
             ",\n  "
         end
       end
