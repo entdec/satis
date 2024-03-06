@@ -51,5 +51,7 @@ export default class SatisCopyable extends HTMLElement {
     }, 1000)
 
     window.getSelection().removeAllRanges()
+    event.preventDefault()
+    return false
   }
 }

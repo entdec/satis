@@ -21,6 +21,8 @@
 
 @import "components/flag-icons.min.css";
 
+@import "components/tippyjs.css";
+
 /* Every link without a class or empty class should be underlined */
 a:not([class]),
 a[class=""] {
