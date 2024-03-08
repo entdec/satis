@@ -26,7 +26,8 @@ module Satis
       def photo_url
         return unless photo&.attached?
 
-        helpers.main_app.url_for(photo)
+        #helpers.main_app.url_for(photo)
+        Rails.application.routes.url_helpers.rails_blob_path(photo, only_path: true)
       end
 
       def gravatar?
