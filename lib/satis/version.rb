@@ -1,3 +1,3 @@
 module Satis
-  VERSION = "1.0.147"
+  VERSION = "2.0.0"
 end
