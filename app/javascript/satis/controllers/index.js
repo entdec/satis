@@ -1,4 +1,4 @@
-import { application } from "satis/controllers/application"
+import { application } from "satis/controllers/application";
 
 import AppearanceSwitcherComponentController from "satis/components/appearance_switcher/component_controller";
 application.register("satis-appearance-switcher", AppearanceSwitcherComponentController);
@@ -49,6 +49,9 @@ application.register("satis-fields-for", FieldsForController);
 
 import FormController from "satis/controllers/form_controller";
 application.register("satis-form", FormController);
+
+import FileController from "satis/controllers/file_controller";
+application.register("satis-file", FileController);
 
 // See: https://github.com/hotwired/stimulus-rails/blob/main/app/assets/javascripts/stimulus-loading.js
 
