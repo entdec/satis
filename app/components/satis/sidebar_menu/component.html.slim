@@ -1,3 +1,2 @@
 nav.sidebar.flex-1.px-2.space-y-1 aria-label="Sidebar"
-  - @menu.items.each do |item|
-    = render(Satis::SidebarMenuItem::Component.new(item: item, menu_options: menu_options))
+  = render(Satis::SidebarMenuItem::Component.with_collection(@menu.items, menu_options: menu_options))

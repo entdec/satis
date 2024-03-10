@@ -3,6 +3,7 @@
 module Satis
   module SidebarMenuItem
     class Component < Satis::ApplicationComponent
+      with_collection_parameter :item
       attr_reader :item, :menu_options
 
       # renders_many :items
