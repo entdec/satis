@@ -6,6 +6,7 @@ module Satis
   class ApplicationComponent < ViewComponent::Base
     include ViewComponent::Slotable
     include ActionView::Helpers::TranslationHelper
+    include Turbo::FramesHelper
 
     attr_accessor :original_view_context
 

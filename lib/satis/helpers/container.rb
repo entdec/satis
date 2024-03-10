@@ -22,6 +22,7 @@ module Satis
         add_helper :tabs, Satis::Tabs::Component
         add_helper :input, Satis::Input::Component
         add_helper :progress_bar, Satis::ProgressBar::Component
+        add_helper :dialog, Satis::Dialog::Component
       end
 
       def copyable(name, scrub: "#")

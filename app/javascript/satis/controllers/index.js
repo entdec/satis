@@ -39,6 +39,9 @@ application.register("satis-tabs", TabsComponentController);
 import EditorComponentController from "satis/components/editor/component_controller";
 application.register("satis-editor", EditorComponentController);
 
+import DialogComponentController from "satis/components/dialog/component_controller";
+application.register("satis-dialog", DialogComponentController);
+
 // Controllers
 
 import LinkController from "satis/controllers/link_controller";

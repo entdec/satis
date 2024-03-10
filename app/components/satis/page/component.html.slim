@@ -3,6 +3,7 @@ html lang="en"
   head
     = head
   body
+    = turbo_frame_tag "dialog"
     .h-screen.flex.overflow-hidden.bg-gray-100.dark:bg-gray-600 data-controller="satis-page"
       / Off-canvas menu for mobile, show/hide based on off-canvas menu state.
       .fixed.inset-0.flex.z-40.md:hidden.hidden aria-modal="true" role="dialog" data-satis-page-target="dialog"
@@ -12,7 +13,7 @@ html lang="en"
         .relative.flex-1.flex.flex-col.max-w-xs.w-full.pt-5.pb-4.bg-white.transform.hidden data-satis-page-target="offCanvasMenu"
 
           .absolute.top-0.right-0.-mr-12.pt-2.hidden data-satis-page-target="closeButton"
-            button.ml-1.flex.items-center.justify-center.h-10.w-10.rounded-full.focus:outline-none.focus:ring-2.focus:ring-inset.focus:ring-white data-action="satis-page#close"
+            button.ml-1.flex.items-center.justify-center.h-10.w-10.rounded-full.focus:outline-none.focus:ring-2.focus:ring-inset.focus:ring-white data-action="click->satis-dialog#close"
               span.sr-only Close sidebar
               i.fal.fa-2x.fa-xmark.text-white aria-hidden="true"
           = sidebar_mobile
