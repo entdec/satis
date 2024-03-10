@@ -53,6 +53,9 @@ application.register("satis-form", FormController);
 import FileController from "satis/controllers/file_controller";
 application.register("satis-file", FileController);
 
+import PhoneNumberController from "satis/controllers/phone_number_controller";
+application.register("phone-number", PhoneNumberController);
+
 // See: https://github.com/hotwired/stimulus-rails/blob/main/app/assets/javascripts/stimulus-loading.js
 
 // // Eager load all controllers defined in the import map under controllers/**/*_controller

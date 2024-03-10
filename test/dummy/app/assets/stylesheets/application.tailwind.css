@@ -1,4 +1,4 @@
-@import '../../../../../app/assets/stylesheets/satis/satis.css';
+@import '../../../../../app/assets/stylesheets/satis/application.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

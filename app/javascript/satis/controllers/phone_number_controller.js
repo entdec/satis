@@ -1,7 +1,7 @@
 import ApplicationController from "satis/controllers/application_controller"
-// import intlTelInput from "intl-tel-input"
 import {debounce} from "satis/utils"
-// import intlTelInputUtilsUrl from "intl-tel-input/build/js/utils.js"
+import * as dummy1 from "intl-tel-input"
+import * as dummy2 from "intl-tel-input-utils"
 
 export default class PhoneNumberController extends ApplicationController {
   static targets = ["input", "hiddenInput"]
@@ -18,7 +18,7 @@ export default class PhoneNumberController extends ApplicationController {
       formatOnInit: true,
       preferredCountries: ["nl", "de", "gb", "fr", "us", "es", "be", "se"],
       nationalMode: false,
-      utilsScript: intlTelInputUtilsUrl,
+      utilsScript: intlTelInputUtils,
       dropdownContainer: document.body,
     })
   }

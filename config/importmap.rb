@@ -47,3 +47,5 @@ pin "@codemirror/lang-json", to: "@codemirror--lang-json.js" # @6.0.1
 pin "@lezer/json", to: "@lezer--json.js" # @1.0.2
 pin "@codemirror/lang-markdown", to: "@codemirror--lang-markdown.js" # @6.2.4
 pin "@lezer/markdown", to: "@lezer--markdown.js" # @1.2.0
+pin "intl-tel-input", to: "intlTelInput.js" # @19.5.6
+pin "intl-tel-input-utils", to: "intlTelInputUtils.js" # @19.5.6
