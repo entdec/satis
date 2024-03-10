@@ -1,0 +1,522 @@
+.lg:flex.lg:h-full.lg:flex-col
+  header.flex.items-center.justify-between.border-b.border-gray-200.px-6.py-4.lg:flex-none
+    h1.text-base.font-semibold.leading-6.text-gray-900
+      time[datetime="2022-01"]
+        | January 2022
+    .flex.items-center
+      .relative.flex.items-center.rounded-md.bg-white.shadow-sm.md:items-stretch
+        button.flex.h-9.w-12.items-center.justify-center.rounded-l-md.border-y.border-l.border-gray-300.pr-1.text-gray-400.hover:text-gray-500.focus:relative.md:w-9.md:pr-0.md:hover:bg-gray-50[type="button"]
+          span.sr-only
+            | Previous month
+          svg.h-5.w-5[viewbox="0 0 20 20" fill="currentColor" aria-hidden="true"]
+            path[fill-rule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clip-rule="evenodd"]
+        button.hidden.border-y.border-gray-300.px-3.5.text-sm.font-semibold.text-gray-900.hover:bg-gray-50.focus:relative.md:block[type="button"]
+          | Today
+        span.relative.-mx-px.h-5.w-px.bg-gray-300.md:hidden
+        button.flex.h-9.w-12.items-center.justify-center.rounded-r-md.border-y.border-r.border-gray-300.pl-1.text-gray-400.hover:text-gray-500.focus:relative.md:w-9.md:pl-0.md:hover:bg-gray-50[type="button"]
+          span.sr-only
+            | Next month
+          svg.h-5.w-5[viewbox="0 0 20 20" fill="currentColor" aria-hidden="true"]
+            path[fill-rule="evenodd" d="M7.21 14.77a.75.75 0 01.02-1.06L11.168 10 7.23 6.29a.75.75 0 111.04-1.08l4.5 4.25a.75.75 0 010 1.08l-4.5 4.25a.75.75 0 01-1.06-.02z" clip-rule="evenodd"]
+      .hidden.md:ml-4.md:flex.md:items-center
+        .relative
+          button#menu-button.flex.items-center.gap-x-1.5.rounded-md.bg-white.px-3.py-2.text-sm.font-semibold.text-gray-900.shadow-sm.ring-1.ring-inset.ring-gray-300.hover:bg-gray-50[type="button" aria-expanded="false" aria-haspopup="true"]
+            |  Month view
+            svg.-mr-1.h-5.w-5.text-gray-400[viewbox="0 0 20 20" fill="currentColor" aria-hidden="true"]
+              path[fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd"]
+          .absolute.right-0.z-10.mt-3.w-36.origin-top-right.overflow-hidden.rounded-md.bg-white.shadow-lg.ring-1.ring-black.ring-opacity-5.focus:outline-none[role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1"]
+            .py-1[role="none"]
+              a#menu-item-0.text-gray-700.block.px-4.py-2.text-sm[href="#" role="menuitem" tabindex="-1"]
+                | Day view
+              a#menu-item-1.text-gray-700.block.px-4.py-2.text-sm[href="#" role="menuitem" tabindex="-1"]
+                | Week view
+              a#menu-item-2.text-gray-700.block.px-4.py-2.text-sm[href="#" role="menuitem" tabindex="-1"]
+                | Month view
+              a#menu-item-3.text-gray-700.block.px-4.py-2.text-sm[href="#" role="menuitem" tabindex="-1"]
+                | Year view
+        .ml-6.h-6.w-px.bg-gray-300
+        button.ml-6.rounded-md.bg-primary-600.px-3.py-2.text-sm.font-semibold.text-white.shadow-sm.hover:bg-primary-500.focus-visible:outline.focus-visible:outline-2.focus-visible:outline-offset-2.focus-visible:outline-primary-500[type="button"]
+          | Add event
+      .relative.ml-6.md:hidden
+        button#menu-0-button.-mx-2.flex.items-center.rounded-full.border.border-transparent.p-2.text-gray-400.hover:text-gray-500[type="button" aria-expanded="false" aria-haspopup="true"]
+          span.sr-only
+            | Open menu
+          svg.h-5.w-5[viewbox="0 0 20 20" fill="currentColor" aria-hidden="true"]
+            path[d="M3 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM8.5 10a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM15.5 8.5a1.5 1.5 0 100 3 1.5 1.5 0 000-3z"]
+        .absolute.right-0.z-10.mt-3.w-36.origin-top-right.divide-y.divide-gray-100.overflow-hidden.rounded-md.bg-white.shadow-lg.ring-1.ring-black.ring-opacity-5.focus:outline-none[role="menu" aria-orientation="vertical" aria-labelledby="menu-0-button" tabindex="-1"]
+          .py-1[role="none"]
+            a#menu-0-item-0.text-gray-700.block.px-4.py-2.text-sm[href="#" role="menuitem" tabindex="-1"]
+              | Create event
+          .py-1[role="none"]
+            a#menu-0-item-1.text-gray-700.block.px-4.py-2.text-sm[href="#" role="menuitem" tabindex="-1"]
+              | Go to today
+          .py-1[role="none"]
+            a#menu-0-item-2.text-gray-700.block.px-4.py-2.text-sm[href="#" role="menuitem" tabindex="-1"]
+              | Day view
+            a#menu-0-item-3.text-gray-700.block.px-4.py-2.text-sm[href="#" role="menuitem" tabindex="-1"]
+              | Week view
+            a#menu-0-item-4.text-gray-700.block.px-4.py-2.text-sm[href="#" role="menuitem" tabindex="-1"]
+              | Month view
+            a#menu-0-item-5.text-gray-700.block.px-4.py-2.text-sm[href="#" role="menuitem" tabindex="-1"]
+              | Year view
+  .shadow.ring-1.ring-black.ring-opacity-5.lg:flex.lg:flex-auto.lg:flex-col
+    .grid.grid-cols-7.gap-px.border-b.border-gray-300.bg-gray-200.text-center.text-xs.font-semibold.leading-6.text-gray-700.lg:flex-none
+      .flex.justify-center.bg-white.py-2
+        span
+          | M
+        span.sr-only.sm:not-sr-only
+          | on
+      .flex.justify-center.bg-white.py-2
+        span
+          | T
+        span.sr-only.sm:not-sr-only
+          | ue
+      .flex.justify-center.bg-white.py-2
+        span
+          | W
+        span.sr-only.sm:not-sr-only
+          | ed
+      .flex.justify-center.bg-white.py-2
+        span
+          | T
+        span.sr-only.sm:not-sr-only
+          | hu
+      .flex.justify-center.bg-white.py-2
+        span
+          | F
+        span.sr-only.sm:not-sr-only
+          | ri
+      .flex.justify-center.bg-white.py-2
+        span
+          | S
+        span.sr-only.sm:not-sr-only
+          | at
+      .flex.justify-center.bg-white.py-2
+        span
+          | S
+        span.sr-only.sm:not-sr-only
+          | un
+    .flex.bg-gray-200.text-xs.leading-6.text-gray-700.lg:flex-auto
+      .hidden.w-full.lg:grid.lg:grid-cols-7.lg:grid-rows-6.lg:gap-px
+        .relative.bg-gray-50.px-3.py-2.text-gray-500
+          time[datetime="2021-12-27"]
+            | 27
+        .relative.bg-gray-50.px-3.py-2.text-gray-500
+          time[datetime="2021-12-28"]
+            | 28
+        .relative.bg-gray-50.px-3.py-2.text-gray-500
+          time[datetime="2021-12-29"]
+            | 29
+        .relative.bg-gray-50.px-3.py-2.text-gray-500
+          time[datetime="2021-12-30"]
+            | 30
+        .relative.bg-gray-50.px-3.py-2.text-gray-500
+          time[datetime="2021-12-31"]
+            | 31
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-01"]
+            | 1
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-01"]
+            | 2
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-03"]
+            | 3
+          ol.mt-2
+            li
+              a.group.flex[href="#"]
+                p.flex-auto.truncate.font-medium.text-gray-900.group-hover:text-primary-600
+                  | Design review
+                time.ml-3.hidden.flex-none.text-gray-500.group-hover:text-primary-600.xl:block[datetime="2022-01-03T10:00"]
+                  | 10AM
+            li
+              a.group.flex[href="#"]
+                p.flex-auto.truncate.font-medium.text-gray-900.group-hover:text-primary-600
+                  | Sales meeting
+                time.ml-3.hidden.flex-none.text-gray-500.group-hover:text-primary-600.xl:block[datetime="2022-01-03T14:00"]
+                  | 2PM
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-04"]
+            | 4
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-05"]
+            | 5
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-06"]
+            | 6
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-07"]
+            | 7
+          ol.mt-2
+            li
+              a.group.flex[href="#"]
+                p.flex-auto.truncate.font-medium.text-gray-900.group-hover:text-primary-600
+                  | Date night
+                time.ml-3.hidden.flex-none.text-gray-500.group-hover:text-primary-600.xl:block[datetime="2022-01-08T18:00"]
+                  | 6PM
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-08"]
+            | 8
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-09"]
+            | 9
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-10"]
+            | 10
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-11"]
+            | 11
+        .relative.bg-white.px-3.py-2
+          time.flex.h-6.w-6.items-center.justify-center.rounded-full.bg-primary-600.font-semibold.text-white[datetime="2022-01-12"]
+            | 12
+          ol.mt-2
+            li
+              a.group.flex[href="#"]
+                p.flex-auto.truncate.font-medium.text-gray-900.group-hover:text-primary-600
+                  | Sam's birthday party
+                time.ml-3.hidden.flex-none.text-gray-500.group-hover:text-primary-600.xl:block[datetime="2022-01-25T14:00"]
+                  | 2PM
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-13"]
+            | 13
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-14"]
+            | 14
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-15"]
+            | 15
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-16"]
+            | 16
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-17"]
+            | 17
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-18"]
+            | 18
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-19"]
+            | 19
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-20"]
+            | 20
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-21"]
+            | 21
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-22"]
+            | 22
+          ol.mt-2
+            li
+              a.group.flex[href="#"]
+                p.flex-auto.truncate.font-medium.text-gray-900.group-hover:text-primary-600
+                  | Maple syrup museum
+                time.ml-3.hidden.flex-none.text-gray-500.group-hover:text-primary-600.xl:block[datetime="2022-01-22T15:00"]
+                  | 3PM
+            li
+              a.group.flex[href="#"]
+                p.flex-auto.truncate.font-medium.text-gray-900.group-hover:text-primary-600
+                  | Hockey game
+                time.ml-3.hidden.flex-none.text-gray-500.group-hover:text-primary-600.xl:block[datetime="2022-01-22T19:00"]
+                  | 7PM
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-23"]
+            | 23
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-24"]
+            | 24
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-25"]
+            | 25
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-26"]
+            | 26
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-27"]
+            | 27
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-28"]
+            | 28
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-29"]
+            | 29
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-30"]
+            | 30
+        .relative.bg-white.px-3.py-2
+          time[datetime="2022-01-31"]
+            | 31
+        .relative.bg-gray-50.px-3.py-2.text-gray-500
+          time[datetime="2022-02-01"]
+            | 1
+        .relative.bg-gray-50.px-3.py-2.text-gray-500
+          time[datetime="2022-02-02"]
+            | 2
+        .relative.bg-gray-50.px-3.py-2.text-gray-500
+          time[datetime="2022-02-03"]
+            | 3
+        .relative.bg-gray-50.px-3.py-2.text-gray-500
+          time[datetime="2022-02-04"]
+            | 4
+          ol.mt-2
+            li
+              a.group.flex[href="#"]
+                p.flex-auto.truncate.font-medium.text-gray-900.group-hover:text-primary-600
+                  | Cinema with friends
+                time.ml-3.hidden.flex-none.text-gray-500.group-hover:text-primary-600.xl:block[datetime="2022-02-04T21:00"]
+                  | 9PM
+        .relative.bg-gray-50.px-3.py-2.text-gray-500
+          time[datetime="2022-02-05"]
+            | 5
+        .relative.bg-gray-50.px-3.py-2.text-gray-500
+          time[datetime="2022-02-06"]
+            | 6
+      .isolate.grid.w-full.grid-cols-7.grid-rows-6.gap-px.lg:hidden
+        button.flex.h-14.flex-col.bg-gray-50.px-3.py-2.text-gray-500.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2021-12-27"]
+            | 27
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-gray-50.px-3.py-2.text-gray-500.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2021-12-28"]
+            | 28
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-gray-50.px-3.py-2.text-gray-500.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2021-12-29"]
+            | 29
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-gray-50.px-3.py-2.text-gray-500.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2021-12-30"]
+            | 30
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-gray-50.px-3.py-2.text-gray-500.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2021-12-31"]
+            | 31
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-01"]
+            | 1
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-02"]
+            | 2
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-03"]
+            | 3
+          span.sr-only
+            | 2 events
+          span.-mx-0.5.mt-auto.flex.flex-wrap-reverse
+            span.mx-0.5.mb-1.h-1.5.w-1.5.rounded-full.bg-gray-400
+            span.mx-0.5.mb-1.h-1.5.w-1.5.rounded-full.bg-gray-400
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-04"]
+            | 4
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-05"]
+            | 5
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-06"]
+            | 6
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-07"]
+            | 7
+          span.sr-only
+            | 1 event
+          span.-mx-0.5.mt-auto.flex.flex-wrap-reverse
+            span.mx-0.5.mb-1.h-1.5.w-1.5.rounded-full.bg-gray-400
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-08"]
+            | 8
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-09"]
+            | 9
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-10"]
+            | 10
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-11"]
+            | 11
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.font-semibold.text-primary-600.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-12"]
+            | 12
+          span.sr-only
+            | 1 event
+          span.-mx-0.5.mt-auto.flex.flex-wrap-reverse
+            span.mx-0.5.mb-1.h-1.5.w-1.5.rounded-full.bg-gray-400
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-13"]
+            | 13
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-14"]
+            | 14
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-15"]
+            | 15
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-16"]
+            | 16
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-17"]
+            | 17
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-18"]
+            | 18
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-19"]
+            | 19
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-20"]
+            | 20
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-21"]
+            | 21
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.font-semibold.text-white.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto.flex.h-6.w-6.items-center.justify-center.rounded-full.bg-gray-900[datetime="2022-01-22"]
+            | 22
+          span.sr-only
+            | 2 events
+          span.-mx-0.5.mt-auto.flex.flex-wrap-reverse
+            span.mx-0.5.mb-1.h-1.5.w-1.5.rounded-full.bg-gray-400
+            span.mx-0.5.mb-1.h-1.5.w-1.5.rounded-full.bg-gray-400
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-23"]
+            | 23
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-24"]
+            | 24
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-25"]
+            | 25
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-26"]
+            | 26
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-27"]
+            | 27
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-28"]
+            | 28
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-29"]
+            | 29
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-30"]
+            | 30
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-white.px-3.py-2.text-gray-900.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-01-31"]
+            | 31
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-gray-50.px-3.py-2.text-gray-500.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-02-01"]
+            | 1
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-gray-50.px-3.py-2.text-gray-500.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-02-02"]
+            | 2
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-gray-50.px-3.py-2.text-gray-500.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-02-03"]
+            | 3
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-gray-50.px-3.py-2.text-gray-500.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-02-04"]
+            | 4
+          span.sr-only
+            | 1 event
+          span.-mx-0.5.mt-auto.flex.flex-wrap-reverse
+            span.mx-0.5.mb-1.h-1.5.w-1.5.rounded-full.bg-gray-400
+        button.flex.h-14.flex-col.bg-gray-50.px-3.py-2.text-gray-500.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-02-05"]
+            | 5
+          span.sr-only
+            | 0 events
+        button.flex.h-14.flex-col.bg-gray-50.px-3.py-2.text-gray-500.hover:bg-gray-100.focus:z-10[type="button"]
+          time.ml-auto[datetime="2022-02-06"]
+            | 6
+          span.sr-only
+            | 0 events
+  .px-4.py-10.sm:px-6.lg:hidden
+    ol.divide-y.divide-gray-100.overflow-hidden.rounded-lg.bg-white.text-sm.shadow.ring-1.ring-black.ring-opacity-5
+      li.group.flex.p-4.pr-6.focus-within:bg-gray-50.hover:bg-gray-50
+        .flex-auto
+          p.font-semibold.text-gray-900
+            | Maple syrup museum
+          time.mt-2.flex.items-center.text-gray-700[datetime="2022-01-15T09:00"]
+            svg.mr-2.h-5.w-5.text-gray-400[viewbox="0 0 20 20" fill="currentColor" aria-hidden="true"]
+              path[fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd"]
+            |  3PM
+        a.ml-6.flex-none.self-center.rounded-md.bg-white.px-3.py-2.font-semibold.text-gray-900.opacity-0.shadow-sm.ring-1.ring-inset.ring-gray-300.hover:ring-gray-400.focus:opacity-100.group-hover:opacity-100[href="#"]
+          | Edit
+          span.sr-only
+            | , Maple syrup museum
+      li.group.flex.p-4.pr-6.focus-within:bg-gray-50.hover:bg-gray-50
+        .flex-auto
+          p.font-semibold.text-gray-900
+            | Hockey game
+          time.mt-2.flex.items-center.text-gray-700[datetime="2022-01-22T19:00"]
+            svg.mr-2.h-5.w-5.text-gray-400[viewbox="0 0 20 20" fill="currentColor" aria-hidden="true"]
+              path[fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm.75-13a.75.75 0 00-1.5 0v5c0 .414.336.75.75.75h4a.75.75 0 000-1.5h-3.25V5z" clip-rule="evenodd"]
+            |  7PM
+        a.ml-6.flex-none.self-center.rounded-md.bg-white.px-3.py-2.font-semibold.text-gray-900.opacity-0.shadow-sm.ring-1.ring-inset.ring-gray-300.hover:ring-gray-400.focus:opacity-100.group-hover:opacity-100[href="#"]
+          | Edit
+          span.sr-only
+            | , Hockey game
