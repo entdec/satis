@@ -1,6 +1,6 @@
 Satis::Engine.routes.draw do
   resources :user_data, only: %i[show update]
-  resources :dialogs, only: %[show]
+  resources :dialogs, only: %[show], constraints: { id: /[A-Za-z0-9\_\-\/]+/ }
 
   unless Rails.env.production?
     namespace :documentation do
@@ -15,3 +15,4 @@ Satis::Engine.routes.draw do
     resources :documentation
   end
 end
+s
