@@ -15,4 +15,3 @@ Satis::Engine.routes.draw do
     resources :documentation
   end
 end
-s
