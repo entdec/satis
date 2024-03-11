@@ -22,4 +22,4 @@ li.rounded-sm.px-3.py-1.hover:bg-gray-100.flex.items-center.dark:bg-gray-900.dar
 
   - if item.menu
     ul.hidden.bg-white.border.rounded-md.shadow-lg data-satis-menu-target="submenu" data-satis-menu-submenu-placement="left"
-      = render(Satis::MenuItem::Component.with_collection(menu.items))
+      = render(Satis::MenuItem::Component.with_collection(item.menu.items))
