@@ -1,7 +1,5 @@
 # pin_all_from File.expand_path("../app/javascript", __dir__)
 
-pin "intl-tel-input", to: "./node_modules/intl-tel-input/build/js/intlTelInput.js"
-
 pin "satis", to: "satis/application.js", preload: false
 pin "satis/utils", to: "satis/utils.js", preload: false
 pin "@hotwired/turbo-rails", to: "turbo.min.js", preload: true
@@ -47,5 +45,5 @@ pin "@codemirror/lang-json", to: "@codemirror--lang-json.js" # @6.0.1
 pin "@lezer/json", to: "@lezer--json.js" # @1.0.2
 pin "@codemirror/lang-markdown", to: "@codemirror--lang-markdown.js" # @6.2.4
 pin "@lezer/markdown", to: "@lezer--markdown.js" # @1.2.0
-pin "intl-tel-input", to: "intlTelInput.js" # @19.5.6
-pin "intl-tel-input-utils", to: "intlTelInputUtils.js" # @19.5.6
+pin "intl-tel-input", to: "intl-tel-input.js" # @19.5.6
+pin "intl-tel-input-utils", to: "intl-tel-input-utils.js" # @19.5.6

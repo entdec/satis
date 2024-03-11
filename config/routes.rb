@@ -1,5 +1,6 @@
 Satis::Engine.routes.draw do
   resources :user_data, only: %i[show update]
+  resources :dialogs, only: %[show]
 
   unless Rails.env.production?
     namespace :documentation do

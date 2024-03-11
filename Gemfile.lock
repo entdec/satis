@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    satis (2.0.1)
+    satis (2.0.2)
       browser
       diffy
       importmap-rails
