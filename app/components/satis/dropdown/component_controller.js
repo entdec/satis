@@ -301,6 +301,7 @@ export default class DropdownComponentController extends ApplicationController {
     }
 
     this.hiddenSelectTarget.dispatchEvent(new Event("change"))
+    this.resetButtonTarget.classList.add("hidden")
     return false
   }
 
@@ -319,6 +320,7 @@ export default class DropdownComponentController extends ApplicationController {
 
   selectItem(dataDiv, force = false) {
     const selectedValue = dataDiv.getAttribute("data-satis-dropdown-item-value") || ""
+    dataDiv.parentElement.parentElement.parentElement.querySelector('[data-satis-dropdown-target="resetButton"]').classList.remove("hidden")
     const selectedValueText = dataDiv.getAttribute("data-satis-dropdown-item-text") || ""
     this.copyItemAttributes(dataDiv, this.hiddenSelectTarget) // FIXME: we are now supporting multiple values; is this needed? We copy the attributes to options
 
@@ -750,6 +752,7 @@ export default class DropdownComponentController extends ApplicationController {
           })
       })
     })
+    debugger
     return promise
   }
 
