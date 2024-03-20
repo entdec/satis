@@ -443,6 +443,9 @@ export default class DropdownComponentController extends ApplicationController {
       this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.remove("hidden")
       this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.add("hidden")
     }
+    if (this.searchInputTarget.value.length === 0 ){
+      this.itemsTarget.firstChild.getElementsByClassName('cursor-pointer')[0].classList.add('highlighted')
+    }
   }
 
   hideResultsList(event) {
@@ -752,7 +755,6 @@ export default class DropdownComponentController extends ApplicationController {
           })
       })
     })
-    debugger
     return promise
   }
 
@@ -975,5 +977,9 @@ export default class DropdownComponentController extends ApplicationController {
     }
 
     return item != null;
+  }
+
+  removehighlight(){
+    this.itemsTargets[0].getElementsByClassName('highlighted')[0]?.classList.remove("highlighted")
   }
 }

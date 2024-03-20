@@ -27,7 +27,7 @@ div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controlle
     template data-satis-dropdown-target="selectedItemsTemplate"
 
     / Container for results
-    .hidden.container.shadow.bg-white.border.border-gray-300.dark:text-gray-300.dark:bg-gray-800.dark:border-gray-700.z-10.rounded.max-h-select.overflow-y-auto.w-full data-satis-dropdown-target="results" data-action="scroll->satis-dropdown#scroll" tabindex="-1"
+    .hidden.container.shadow.bg-white.border.border-gray-300.dark:text-gray-300.dark:bg-gray-800.dark:border-gray-700.z-10.rounded.max-h-select.overflow-y-auto.w-full data-satis-dropdown-target="results" data-action="scroll->satis-dropdown#scroll mouseover->satis-dropdown#removehighlight" tabindex="-1"
       .flex.flex-col.w-full data-satis-dropdown-target="items"
         - options[:collection]&.each do |item|
           - data_attrs = item.try(:third) ? item.third : {}
