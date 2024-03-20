@@ -202,6 +202,8 @@ export default class DropdownComponentController extends ApplicationController {
         if (this.hasResults) {
           if (!this.resultsShown)
             this.showResultsList(event)
+          this.itemsTargets[0].getElementsByClassName('highlighted')[0]?.classList.remove("highlighted")
+
           this.moveDown()
         }
         // prevent the cursor from jumping to the beginning of the input and scrolling in some cases
