@@ -53,6 +53,12 @@ export default class TabsComponentController extends ApplicationController {
         return el.attributes["id"] === clickedTab.attributes["id"]
       })
     }
+
+    //return if tab is already selected
+    if (this.tabTargets[index].classList.contains("selected")) {
+      return
+    }
+
     this.open(index, true)
 
     if (this.keyValue) {
