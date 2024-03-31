@@ -69,7 +69,13 @@ form {
     margin-right: 0.5rem;
 
     &:checked {
-      @apply border border-primary-900  bg-primary-900;
+      @apply border border-primary-600  bg-primary-600;
+    }
+  }
+
+  .custom-checkbox {
+    .custom-control-label {
+      @apply text-sm;
     }
   }
 

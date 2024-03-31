@@ -411,8 +411,7 @@ module Satis
         options[:text_method] ||= options[:label_method] || :first
         form_group(method, options) do
           safe_join [
-                      label(method, options[:label]),
-                      tag.br,
+                      (custom_label(method, options[:label], options) unless options[:label] == false),
                       (send(form_builder_method, method, options[:collection], options[:value_method],
                             options[:text_method]) do |b|
                         tag.div(class: "custom-control #{custom_class}") do
