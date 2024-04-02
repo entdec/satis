@@ -52,7 +52,7 @@
       @apply text-red-600;
 
       .fa-square-xmark {
-        color: #de0202;
+        @apply text-red-400;
         display: inline;
       }
     }
