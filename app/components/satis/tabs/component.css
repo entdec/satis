@@ -51,7 +51,7 @@
     &.is-invalid {
       @apply text-red-600;
 
-      .fa-circle-xmark {
+      .fa-square-xmark {
         color: #de0202;
         display: inline;
       }
