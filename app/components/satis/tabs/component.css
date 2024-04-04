@@ -49,10 +49,14 @@
     }
 
     &.is-invalid {
-      @apply text-red-600;
+      @apply text-red-600 !important;
+
+      a {
+        @apply text-red-600 !important;
+      }
 
       .fa-square-xmark {
-        @apply text-red-400;
+        @apply text-red-400 !important;
         display: inline;
       }
     }
