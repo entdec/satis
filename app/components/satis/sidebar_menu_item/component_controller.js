@@ -44,6 +44,14 @@ export default class SidebarMenuItemComponentController extends ApplicationContr
       }
       event.preventDefault()
     }
+    else {
+        if(!this.hasActiveLinks && !this.linkTarget.href.length > 0 && this.submenuTarget){
+          this.submenuTarget.classList.add("hidden")
+          this.indicatorTarget.setAttribute("data-fa-transform", "rotate-90")
+          event.preventDefault()
+        }
+
+      }
   }
 
   get linkInUrl() {
