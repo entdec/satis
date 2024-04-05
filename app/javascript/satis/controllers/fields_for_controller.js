@@ -51,9 +51,12 @@ export default class FieldsForController extends ApplicationController {
 
     // Find template and add event listeners
     let templateElement = this.insertionPointTarget.querySelector(".template")
-    templateElement.querySelectorAll("input,select").forEach((input) => {
-      input.addEventListener("change", this.boundMonitorChanges)
-    })
+    setTimeout(() => {
+      // add a delay so host can finish dom manipulation and everything is ready
+      templateElement.querySelectorAll("input,select").forEach((input) => {
+        input.addEventListener("change", this.boundMonitorChanges)
+      })
+    }, 500)
   }
 
   monitorChanges(event) {
