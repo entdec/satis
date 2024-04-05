@@ -26,7 +26,9 @@ export default class SidebarMenuItemComponentController extends ApplicationContr
 
       if (this.hasSubmenuTarget) {
         this.submenuTarget.classList.remove("hidden")
-        this.indicatorTarget.setAttribute("data-fa-transform", "rotate-90")
+        if(!this.submenuTarget.classList.contains("hidden") && !this.indicatorTarget.hasAttribute("data-fa-transform")){
+          this.indicatorTarget.setAttribute("data-fa-transform", "rotate-90")
+        }
         if (this.linkTarget){
           this.linkTarget.classList.add("focus")
         }
@@ -43,6 +45,20 @@ export default class SidebarMenuItemComponentController extends ApplicationContr
         this.indicatorTarget.setAttribute("data-fa-transform", "rotate-90")
       }
       event.preventDefault()
+    }
+    else {
+        if(this.linkInUrl || (this.linkTarget.href.length <= 0 && !this.hasActiveLinks)){
+          if (this.hasSubmenuTarget){
+            this.submenuTarget.classList.toggle("hidden")
+            if(!this.submenuTarget.classList.contains("hidden") && !this.indicatorTarget.hasAttribute("data-fa-transform")){
+              this.indicatorTarget.setAttribute("data-fa-transform", "rotate-90")
+            } else{
+              this.indicatorTarget.removeAttribute("data-fa-transform", "rotate-90")
+            }
+            event.preventDefault()
+
+          }
+        }
     }
   }
 
