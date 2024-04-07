@@ -4,7 +4,7 @@ require 'net/http'
 module Satis
   module Avatar
     class Component < Satis::ApplicationComponent
-      attr_reader :name, :photo, :email, :options
+      attr_reader :name, :photo, :email, :options, :color
 
       def initialize(name: nil, email: nil, photo: nil, **options)
         super
@@ -13,6 +13,8 @@ module Satis
         @options = options
         @options[:class] ||= 'w-8 h-8'
         @email = email
+        @background_color = "#6b7280"
+        @color = options.fetch(:color, true)
       end
 
       def initials
@@ -23,10 +25,16 @@ module Satis
         end
       end
 
+      # Returns the hex-background color for the avatar based on the name or email
+      def background_color
+        return unless name || email || color
+
+        @background_color = "##{Digest::MD5.hexdigest(name || email).first(6)}"
+      end
+
       def photo_url
         return unless photo&.attached?
 
-        #helpers.main_app.url_for(photo)
         Rails.application.routes.url_helpers.rails_blob_path(photo, only_path: true)
       end
 
