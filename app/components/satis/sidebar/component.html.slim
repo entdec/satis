@@ -1,0 +1,30 @@
+= stylesheet_link_tag 'component'
+
+.hidden:md
+.sidebar
+  .account-icon
+    - if Current.account.logo.attached?
+      = image_tag url_for(Current.account.logo.variant(resize_to_limit: [nil, 200]).processed)
+    - else
+      = Current.account.name
+  
+  .arrow
+    .fa-solid.fa-compress
+  .icon-link
+    - @menu.items.each do |item|
+      = render Satis::SidebarMenuItem::Component.new(item: item, menu_options: menu_options)
+  img.m-auto.profile-logo src=asset_path('app_icon.png')
+    .span.logo_name
+      | version #{OMS::VERSION}
+      br
+      | Powered by Boxture
+      br
+      br
+
+
+
+  
+
+
+
+
