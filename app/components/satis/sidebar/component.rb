@@ -4,6 +4,8 @@ module Satis
     class Component < Satis::ApplicationComponent
       attr_reader :menu, :menu_options
 
+      renders_one :header
+      renders_one :footer
       renders_many :items
 
       def initialize(menu)
