@@ -1,0 +1,16 @@
+.page_bg {
+    background: #ffffff;
+}
+
+.dark .page_bg {
+    background: rgb(17, 24, 39);
+}
+
+.page_body {
+    margin-left: 260px;
+    overflow-y: scroll;
+    max-width: 87%;
+    background: #fcfcfc;
+    transition: 0.3s ease;
+    transition-delay: 0.1s;
+}
