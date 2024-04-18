@@ -8,7 +8,7 @@ html lang="en"
     = turbo_frame_tag "dialog"
     .h-screen.flex.overflow-hidden data-controller="satis-page"
       / TOPBAR
-      .flex.flex-col.w-0.flex-1.overflow-hidden
+      .flex.flex-col.w-0.flex-1.overflow-hidden.page_bg
         .relative.z-10.flex-shrink-0.flex.topbar.h-16.bg-white.shadow.dark:py-4
           / NAVBAR
           .flex-1.px-4.flex.justify-between
@@ -26,13 +26,28 @@ html lang="en"
 
 / Minimize Sidebar
 javascript:
-  let sidebar = document.querySelector(".sidebar");
-  let topbar = document.querySelector(".topbar");
-  let page_body = document.querySelector(".page_body");
-  let sidebarBtn = document.querySelector(".arrow");
-  sidebarBtn.addEventListener("click", ()=>{
-    sidebar.classList.toggle("close");
-    topbar.classList.toggle("close");
-    page_body.classList.toggle("close");
+  document.addEventListener("DOMContentLoaded", () => {
+    let sidebar_collapse = document.querySelector(".sidebar");
+    let topbar = document.querySelector(".topbar");
+    let page_body = document.querySelector(".page_body");
+    let sidebarBtn = document.querySelector(".arrow");
+
+    // Check stored state and apply it
+    const isClosed = sessionStorage.getItem('sidebarClosed') === 'true';
+    if (isClosed) {
+      sidebar_collapse.classList.add("close");
+      topbar.classList.add("close");
+      page_body.classList.add("close");
+    }
+
+    sidebarBtn.addEventListener("click", () => {
+      sidebar_collapse.classList.toggle("close");
+      topbar.classList.toggle("close");
+      page_body.classList.toggle("close");
+
+      // Save the current state to sessionStorage
+      const currentState = sidebar_collapse.classList.contains("close");
+      sessionStorage.setItem('sidebarClosed', currentState);
+    });
   });
 

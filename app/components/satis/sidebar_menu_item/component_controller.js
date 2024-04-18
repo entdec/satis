@@ -10,7 +10,7 @@ export default class SidebarMenuItemComponentController extends ApplicationContr
   // Primitive, yes
     Array.from(this.element.querySelectorAll('[data-satis-sidebar-menu-item-target="link"]')).forEach((el) => {
       if (el.href.length > 0 && window.location.href.indexOf(el.href) >= 0) {
-        let sidebar = el.closest("nav.sidebar")
+        let sidebar = el.closest(".sidebar")
         if(sidebar.querySelectorAll('.active').length > 0){
           sidebar.querySelectorAll('.active').forEach((ele) => {
             ele.classList.remove("active")
@@ -59,6 +59,7 @@ export default class SidebarMenuItemComponentController extends ApplicationContr
 
           }
         }
+        event.stopPropagation();
     }
   }
 
