@@ -3,7 +3,7 @@
   height: 100%;
   width: 260px;
   box-shadow: 1cm;
-  background: #f9f9f9;
+  background: #ffffff;
   overflow-y: scroll;
   transition: 0.3s ease;
   transition-delay: 0.1s;
@@ -15,10 +15,14 @@
   top: 0;
   left: 0;
   height: 100%;
-  width: 40px;
+  width: 50px;
   overflow-y: scroll;
   transition: 0.3s ease;
   transition-delay: 0.1s;
+}
+
+.sidebar.close .sts-sidebar-menu-item__link {
+  text-indent:-9999px;
 }
 
 .topbar {
@@ -30,8 +34,8 @@
 }
 
 .topbar.close {
-  max-width: 98%;
-  margin-left: 40px;
+  max-width: 97%;
+  margin-left: 50px;
   transition: 0.3s ease;
   transition-delay: 0.1s;
 }
@@ -39,8 +43,8 @@
 
 
 .page_body.close {
-  margin-left: 40px;
-  max-width: 98%;
+  margin-left: 50px;
+  max-width: 97%;
   transition: 0.3s ease;
   transition-delay: 0.1s;
 }
@@ -56,14 +60,23 @@
   color: #fff;
 }
 
-.sidebar .arrow {
-  opacity: 50%;
-  display: block;
-  width: 70px;
-  margin-left: 10px;
+.dark .sidebar .sts-sidebar-menu-item__link.active {
+  color: #FFFFFF;
 }
 
-.sidebar .profile-logo {
+.sidebar .sts-sidebar-menu-item__link.active {
+  color: #2c2c2c;
+}
+
+.sidebar .sts-sidebar-menu-item__link {
+  color: #8c8c8c;
+}
+
+.dark .sidebar .sts-sidebar-menu-item__link{
+  color: #acacac;
+}
+
+.sidebar .boxture-logo {
   height: 52px;
   width: 52px;
   opacity: 50%;
@@ -73,8 +86,6 @@
   color: #fff;
   margin-top: 80px;
   mix-blend-mode: multiply;
-  transition: 0.3s ease;
-  transition-delay: 0.1s;
 }
 
 .sidebar.close .profile-logo {
@@ -88,26 +99,20 @@
   opacity: 50%;
   text-align: center;
   display: block;
-  transition: 0.3s ease;
-  transition-delay: 0.1s;
 }
 
 .sidebar.close .logo_name {
-  transition: 0.3s ease;
   display: none;
-}
-
-.dark * {
-  color: #ffffff;
-  /* the color specification here can be removed to use the standard coloring for all the icons and sidebar text (also navbar icons for example, use this for overall color theme)  */
-  transition: 0.3s ease;
-  transition-delay: 0.1s;
 }
 
 .dark .sidebar {
   background: #222836;
   transition: 0.3s ease;
   transition-delay: 0.1s;
+}
+
+.dark .sidebar .logo_name {
+  color: #edecec;
 }
 
 .dark .topbar {

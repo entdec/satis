@@ -1,5 +1,19 @@
 .page_bg {
-    background: #ffffff;
+    background: #f3f3f3;
+}
+
+.arrow {
+    opacity: 50%;
+    display: block;
+    width: 70px;
+    margin-left: 20px;
+    margin-top: 20px;
+}
+
+.dark .arrow {
+  color: #ffffff;
+  margin-left: 20px;
+  margin-top: 3px;
 }
 
 .dark .page_bg {
@@ -10,7 +24,11 @@
     margin-left: 260px;
     overflow-y: scroll;
     max-width: 87%;
-    background: #fcfcfc;
+    background: #f3f3f3;
     transition: 0.3s ease;
     transition-delay: 0.1s;
+}
+
+.dark .page_body {
+    background: rgb(17, 24, 39);
 }
