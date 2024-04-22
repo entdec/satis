@@ -615,6 +615,32 @@ export default class DropdownComponentController extends ApplicationController {
             this.selectItem(dataDiv)
             this.setSelectedItem(dataDiv.getAttribute("data-satis-dropdown-item-value"))
             this.searchQueryValue = ""
+          } else {
+            // hide all items that don't match the search query
+            const searchValue = this.searchQueryValue
+            let matches = []
+            this.itemTargets.forEach((item) => {
+              const text = item.getAttribute("data-satis-dropdown-item-text")
+              const matched = this.needsExactMatchValue
+                ? searchValue.localeCompare(text, undefined, { sensitivity: "base" }) === 0
+                : new RegExp(searchValue, "i").test(text)
+
+              const isHidden = item.classList.contains("hidden")
+              if (!isHidden) {
+                if (matched) {
+                  matches.push(item)
+                } else {
+                  item.classList.toggle("hidden", true)
+                }
+              }
+            })
+
+            // don't show results
+            if (matches.length > 0) {
+              this.showResultsList(event)
+            } else {
+              if (!this.showSelectedItem()) this.hideResultsList(event)
+            }
           }
 
           if (itemCount > 0) {
