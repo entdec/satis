@@ -32,12 +32,13 @@ export default class SidebarMenuItemComponentController extends ApplicationContr
       const sidebar = this.element.closest('nav.sidebar')
       sidebar.dispatchEvent(new CustomEvent('sts-sidebar-menu-item:open', { detail: { element: this.element } }))
 
-
       if (!this.isSubmenuVisible) {
         this.showSubmenu()
+        event.preventDefault()
       } else {
         this.hideSubmenu()
       }
+
       if (this.linkInUrl()) {
         event.preventDefault()
       }
