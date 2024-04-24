@@ -39,8 +39,10 @@ export default class SidebarMenuItemComponentController extends ApplicationContr
         this.hideSubmenu()
       }
 
-      if (this.linkInUrl()) {
+      if (this.linkTarget.classList.contains("focus")) {
         event.preventDefault()
+      } else {
+        this.linkTarget.classList.toggle("focus", true)
       }
     }
   }
@@ -70,7 +72,10 @@ export default class SidebarMenuItemComponentController extends ApplicationContr
 
   updateFocus(scroll = false) {
     if (!this.hasLinkTarget) return
-    if (this.linkInUrl()) {
+    const focusedItem =  this.element.closest('nav.sidebar').querySelector('a.focus')
+    const linkInUrl = this.linkInUrl()
+    if (linkInUrl && (!focusedItem || linkInUrl > this.linkInUrl(focusedItem))) {
+      focusedItem?.classList.toggle("focus", false)
       this.linkTarget.classList.toggle("focus", true)
       if (scroll) this.linkTarget.scrollIntoView({ behavior: 'instant', block: 'nearest' })
     } else
@@ -78,11 +83,13 @@ export default class SidebarMenuItemComponentController extends ApplicationContr
   }
 
   linkInUrl(target = this.linkTarget) {
-    return target.href.length > 0 &&
-      (target.search.length === 0 || target.search === window.location.search) &&
-      (target.hash.length === 0 || target.hash === window.location.hash) &&
-      target.pathname === window.location.pathname &&
-      target.origin === window.location.origin
+    if(!target || target.href.length === 0  || target.pathname !== window.location.pathname || target.origin !== window.location.origin)
+      return 0
+
+    let c = 1;
+    if(target.hash === window.location.hash) c++
+    window.location.search.split('&').forEach((param) => {if (target.search.includes(param)) c+=2})
+    return c
   }
 
   get isActive() {
