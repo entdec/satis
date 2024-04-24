@@ -615,7 +615,7 @@ export default class DropdownComponentController extends ApplicationController {
             this.selectItem(dataDiv)
             this.setSelectedItem(dataDiv.getAttribute("data-satis-dropdown-item-value"))
             this.searchQueryValue = ""
-          } else {
+          } else if(this.searchQueryValue.length > 0) {
             // hide all items that don't match the search query
             const searchValue = this.searchQueryValue
             let matches = []
