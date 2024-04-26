@@ -106,7 +106,7 @@ module Satis
             options: options
           }
           tag.div(**html_options) do
-            render "shared/fields_for", view_options, &block
+            render "shared/fields_for", view_options, &
           end
 
           # FIXME: You would want to do this:
