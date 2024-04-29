@@ -38,12 +38,6 @@ export default class SidebarMenuItemComponentController extends ApplicationContr
       } else {
         this.hideSubmenu()
       }
-
-      if (this.linkTarget.classList.contains("focus")) {
-        event.preventDefault()
-      } else {
-        this.linkTarget.classList.toggle("focus", true)
-      }
     }
   }
 
