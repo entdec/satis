@@ -27,13 +27,13 @@ module Satis
       end
 
       # Regular input
-      def input(method, options = {}, &)
+      def input(method, options = {}, &block)
         @form_options = options
 
         options[:input_html] ||= {}
         options[:input_html][:disabled] = options.delete(:disabled)
 
-        send(input_type_for(method, options), method, options, &)
+        send(input_type_for(method, options), method, options, &block)
       end
 
       # NOTE: TDG - seems to be overwritten below
@@ -44,14 +44,14 @@ module Satis
       # end
 
       # A codemirror editor, backed by a text-area
-      def editor(method, options = {}, &)
+      def editor(method, options = {}, &block)
         @form_options = options
 
-        editor_input(method, options, &)
+        editor_input(method, options, &block)
       end
 
       # Simple-form like association
-      def association(name, options, &)
+      def association(name, options, &block)
         @form_options = options
 
         @association = name
@@ -59,7 +59,7 @@ module Satis
 
         method = reflection.join_foreign_key
 
-        send(input_type_for(method, options), method, options, &)
+        send(input_type_for(method, options), method, options, &block)
       end
 
       alias_method :rails_fields_for, :fields_for
@@ -73,7 +73,7 @@ module Satis
       #       printers_form.input :name
       #     end
       #   end
-      def fields_for(*args, &)
+      def fields_for(*args, &block)
         options = args.extract_options!
         name = args.first
         template_object = args.second
@@ -106,7 +106,7 @@ module Satis
             options: options
           }
           tag.div(**html_options) do
-            render "shared/fields_for", view_options, &
+            render "shared/fields_for", view_options, &block
           end
 
           # FIXME: You would want to do this:
@@ -121,7 +121,7 @@ module Satis
           end
           safe_join [
             invalid_feedback,
-            rails_fields_for(*args, options, &)
+            rails_fields_for(*args, options, &block)
           ].compact
         end
       end
@@ -137,17 +137,17 @@ module Satis
       end
 
       # A switch backed by a hidden value
-      def switch(method, options = {}, &)
+      def switch(method, options = {}, &block)
         @form_options = options
 
-        switch_input(method, options, &)
+        switch_input(method, options, &block)
       end
 
       # A hidden input
-      def hidden(method, options = {}, &)
+      def hidden(method, options = {}, &block)
         @form_options = options
 
-        hidden_input(method, options, &)
+        hidden_input(method, options, &block)
       end
 
       # Non public
