@@ -36,13 +36,11 @@ export default class SidebarMenuItemComponentController extends ApplicationContr
         this.showSubmenu()
         event.preventDefault()
       } else {
-        this.hideSubmenu()
+        if(!this.hasLink || this.linkInUrl()) this.hideSubmenu()
       }
 
-      if (this.linkTarget.classList.contains("focus")) {
+      if(this.linkInUrl()){
         event.preventDefault()
-      } else {
-        this.linkTarget.classList.toggle("focus", true)
       }
     }
   }
@@ -70,8 +68,12 @@ export default class SidebarMenuItemComponentController extends ApplicationContr
     this.element.classList.toggle("active", false)
   }
 
+  get hasLink(){
+    return this.hasLinkTarget && this.linkTarget.hasAttribute("href")
+  }
+
   updateFocus(scroll = false) {
-    if (!this.hasLinkTarget) return
+    if (!this.hasLink) return
     const focusedItem =  this.element.closest('nav.sidebar').querySelector('a.focus')
     const linkInUrl = this.linkInUrl()
     if (linkInUrl && (!focusedItem || linkInUrl > this.linkInUrl(focusedItem))) {
@@ -83,7 +85,7 @@ export default class SidebarMenuItemComponentController extends ApplicationContr
   }
 
   linkInUrl(target = this.linkTarget) {
-    if(!target || target.href.length === 0  || target.pathname !== window.location.pathname || target.origin !== window.location.origin)
+    if(!target || target.getAttribute('href') === null  || target.pathname !== window.location.pathname || target.origin !== window.location.origin)
       return 0
 
     let c = 1;
