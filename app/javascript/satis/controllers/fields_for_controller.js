@@ -5,7 +5,6 @@ export default class FieldsForController extends ApplicationController {
 
   connect() {
     super.connect()
-
     this.boundMonitorChanges = this.monitorChanges.bind(this)
     this.addNewLine()
   }
@@ -15,30 +14,26 @@ export default class FieldsForController extends ApplicationController {
 
     // Find template and remove event listeners
     let templateElement = this.insertionPointTarget.querySelector(".template")
-    templateElement.querySelectorAll("input,select").forEach((input) => {
+    templateElement.querySelectorAll("input, select").forEach((input) => {
       input.removeEventListener("change", this.boundMonitorChanges)
     })
 
     let tmpNode = event.target.closest(".nested-fields")
     tmpNode.classList.remove("template")
     tmpNode.querySelectorAll(".association").forEach((item) => {
-      if (item.classList.contains("hidden")) {
+      if (item.querySelector(".fa-plus")) {
+        item.classList.add("hidden")
+      } else if (item.querySelector(".fa-trash")) {
         item.classList.remove("hidden")
-      } else {
-        item.remove()
       }
     })
 
-    // Simply replace every child node's attributes value, replacing TEMPLATE
+    // Replace TEMPLATE placeholders with a unique id
     let id = new Date().valueOf()
     tmpNode.querySelectorAll("*").forEach((node) => {
       for (let attribute of node.attributes) {
         attribute.value = attribute.value.replace(/TEMPLATE/g, id)
       }
-    })
-
-    tmpNode.querySelectorAll("template").forEach((node) => {
-      node.innerHTML = node.innerHTML.replace(/TEMPLATE/g, id)
     })
 
     this.addNewLine()
@@ -52,16 +47,14 @@ export default class FieldsForController extends ApplicationController {
     // Find template and add event listeners
     let templateElement = this.insertionPointTarget.querySelector(".template")
     setTimeout(() => {
-      // add a delay so host can finish dom manipulation and everything is ready
-      templateElement.querySelectorAll("input,select").forEach((input) => {
+      templateElement.querySelectorAll("input, select").forEach((input) => {
         input.addEventListener("change", this.boundMonitorChanges)
       })
     }, 500)
   }
 
   monitorChanges(event) {
-    if (event?.detail?.src == "satis-dropdown") {
-      // Skip events caused by the initial load of a satis-dropdown
+    if (event?.detail?.src === "satis-dropdown") {
       return
     }
 
