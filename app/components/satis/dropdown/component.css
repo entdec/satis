@@ -27,6 +27,14 @@
   @apply bg-gray-50 rounded-lg shadow dark:bg-gray-900;
 }
 
+.changelog-menu{
+  @apply dark:bg-gray-900 dark:border-gray-100 dark:shadow-gray-800 divide-y divide-gray-100 dark:divide-gray-800 right-0 z-10 mx-1 w-1/3 rounded-md bg-white text-gray-500 dark:text-gray-100 shadow-lg ring-1 ring-black ring-opacity-5 overflow-y-auto max-h-screen;
+}
+
+.changelog-menu .changelog-menu-item{
+  @apply py-1 hover:bg-gray-50 divide-gray-900 dark:divide-gray-500 dark:hover:bg-gray-700 cursor-pointer;
+}
+
 .satis-dropdown .topbar-dropdown-results{
   overflow-y: scroll;
   @apply bg-gray-50 divide-gray-900 divide-opacity-25 shadow-gray-300 shadow-lg text-gray-900 text-opacity-75 dark:bg-gray-900 dark:shadow-gray-700 dark:shadow-lg dark:bg-opacity-75 dark:divide-gray-50 dark:divide-opacity-25 dark:text-gray-300;
