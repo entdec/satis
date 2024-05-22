@@ -1,87 +1,120 @@
 import ApplicationController from "satis/controllers/application_controller"
-import { debounce } from "satis/utils"
+import {debounce} from "satis/utils"
 
 export default class SidebarMenuItemComponentController extends ApplicationController {
   static targets = ["link", "indicator", "submenu"]
 
   connect() {
     super.connect()
-
-    // Primitive, yes
-    Array.from(this.element.querySelectorAll('[data-satis-sidebar-menu-item-target="link"]')).forEach((el) => {
-      if (el.href.length > 0 && window.location.href.indexOf(el.href) >= 0) {
-        let sidebar = el.closest("nav.sidebar")
-        if(sidebar.querySelectorAll('.active').length > 0){
-          sidebar.querySelectorAll('.active').forEach((ele) => {
-            ele.classList.remove("active")
-            ele.classList.remove("focus")
-          })
-        }
-        el.classList.add("active")
-      }
-    })
-
-    if (this.isActive) {
-      this.linkTarget.classList.add("active")
-
-      if (this.hasSubmenuTarget) {
-        this.submenuTarget.classList.remove("hidden")
-        if(!this.submenuTarget.classList.contains("hidden") && !this.indicatorTarget.hasAttribute("data-fa-transform")){
-          this.indicatorTarget.setAttribute("data-fa-transform", "rotate-90")
-        }
-        if (this.linkTarget){
-          this.linkTarget.classList.add("focus")
-        }
-      } else {
-        this.linkTarget.classList.add("focus")
+    if (this.hasSubmenuTarget) {
+      const active = this.isActive
+      if (active) {
+        this.showSubmenu()
       }
     }
+
+    this.boundUpdateFocus = this.updateFocus.bind(this)
+    this.boundOpenListener = this.openListener.bind(this)
+
+    this.updateFocus(true)
+    this.element.addEventListener('sts-sidebar-menu-item:open', this.boundOpenListener)
+    window.addEventListener('popstate', debounce(this.boundUpdateFocus, 200))
+  }
+
+  disconnect() {
+    super.disconnect()
+    this.element.removeEventListener('sts-sidebar-menu-item:open', this.boundOpenListener)
+    window.removeEventListener('popstate', debounce(this.boundUpdateFocus, 200))
   }
 
   open(event) {
-    if (!this.isActive && this.hasSubmenuTarget) {
-      if (this.hasSubmenuTarget) {
-        this.submenuTarget.classList.remove("hidden")
-        this.indicatorTarget.setAttribute("data-fa-transform", "rotate-90")
-      }
-      event.preventDefault()
-    }
-    else {
-        if(this.linkInUrl || (this.linkTarget.href.length <= 0 && !this.hasActiveLinks)){
-          if (this.hasSubmenuTarget){
-            this.submenuTarget.classList.toggle("hidden")
-            if(!this.submenuTarget.classList.contains("hidden") && !this.indicatorTarget.hasAttribute("data-fa-transform")){
-              this.indicatorTarget.setAttribute("data-fa-transform", "rotate-90")
-            } else{
-              this.indicatorTarget.removeAttribute("data-fa-transform", "rotate-90")
-            }
-            event.preventDefault()
+    if (this.hasSubmenuTarget) {
+      const sidebar = this.element.closest('nav.sidebar')
+      sidebar.dispatchEvent(new CustomEvent('sts-sidebar-menu-item:open', { detail: { element: this.element } }))
 
-          }
-        }
+      if (!this.isSubmenuVisible) {
+        this.showSubmenu()
+        event.preventDefault()
+      } else {
+        if(!this.hasLink || this.linkInUrl()) this.hideSubmenu()
+      }
+
+      if(this.linkInUrl()){
+        event.preventDefault()
+      }
     }
   }
 
-  get linkInUrl() {
-    return this.linkTarget.href.length > 0 && window.location.href.indexOf(this.linkTarget.href) >= 0
+  openListener(event) {
+    if (event.detail.element !== this.element && !this.element.contains(event.detail.element)) {
+      this.hideSubmenu()
+      this.linkTarget.classList.toggle("focus", false)
+    }
+  }
+
+  // This method is used to show the submenu
+  showSubmenu() {
+    if (!this.hasSubmenuTarget || this.isSubmenuVisible) return
+
+    this.submenuTarget.classList.toggle("hidden", false)
+    this.element.classList.toggle("active", true)
+  }
+
+  // This method is used to hide the submenu
+  hideSubmenu() {
+    if (!this.hasSubmenuTarget || !this.isSubmenuVisible) return
+
+    this.submenuTarget.classList.toggle("hidden", true)
+    this.element.classList.toggle("active", false)
+  }
+
+  get hasLink(){
+    return this.hasLinkTarget && this.linkTarget.hasAttribute("href")
+  }
+
+  updateFocus(scroll = false) {
+    if (!this.hasLink) return
+    const focusedItem =  this.element.closest('nav.sidebar').querySelector('a.focus')
+    const linkInUrl = this.linkInUrl()
+    if (linkInUrl && (!focusedItem || linkInUrl > this.linkInUrl(focusedItem))) {
+      focusedItem?.classList.toggle("focus", false)
+      this.linkTarget.classList.toggle("focus", true)
+      if (scroll) this.linkTarget.scrollIntoView({ behavior: 'instant', block: 'nearest' })
+    } else
+      this.linkTarget.classList.toggle("focus", false)
+  }
+
+  linkInUrl(target = this.linkTarget) {
+    if(!target || target.getAttribute('href') === null  || target.pathname !== window.location.pathname || target.origin !== window.location.origin)
+      return 0
+
+    let c = 1;
+    if(target.hash === window.location.hash) c++
+    window.location.search.split('&').forEach((param) => {if (target.search.includes(param)) c+=2})
+    return c
   }
 
   get isActive() {
-    return this.linkInUrl || this.hasOpenSubmenus || this.hasActiveLinks
+    return this.linkInUrl() || this.element.classList.contains("active")
+      || Array.from(this.element.querySelectorAll('a[data-satis-sidebar-menu-item-target="link"]'))
+        .some((link) => link.classList.contains("active") || this.linkInUrl(link))
+  }
+
+  get isSubmenuVisible() {
+    return !this.submenuTarget.classList.contains("hidden")
   }
 
   get hasOpenSubmenus() {
-    return Array.from(this.element.querySelectorAll('[data-satis-sidebar-menu-item-target="submenu"]')).some((el) => {
-      return !el.classList.contains("hidden")
-      // return Array.from(el.querySelectorAll('[data-satis-sidebar-menu-item-target="submenu"]')).some((el) => {
-      //   return !el.classList.contains("hidden")
-      // })
-    })
+    return this.openSubmenus.length > 0
   }
 
-  get hasActiveLinks() {
-    return Array.from(this.element.querySelectorAll('[data-satis-sidebar-menu-item-target="link"]')).some((el) => {
-      return el.classList.contains("active")
-    })
+  /**
+   * Get a list of all open submenus
+   * @returns {NodeListOf<Element>}
+   */
+  get openSubmenus() {
+    // scope to first match. check if there are any submenus that are not hidden
+    return this.element.querySelectorAll('[data-satis-sidebar-menu-item-target="submenu"]:not([class*="hidden"])')
   }
+
 }
