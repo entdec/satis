@@ -1,13 +1,13 @@
 .sts-sidebar-menu-item {
-  @apply pt-1;
-
-  & a.focus {
-    background: rgba(1, 1, 1, 0.1);
-
-    .dark & {
-      background: rgba(255, 255, 255, 0.3);
+    @apply pt-1;
+  
+    & a.focus {
+      background: rgba(1, 1, 1, 0.1);
+  
+      .dark & {
+        background: rgba(255, 255, 255, 0.3);
+      }
     }
-  }
 
   &.active > [data-satis-sidebar-menu-item-target="link"] [data-satis-sidebar-menu-item-target="indicator"] {
     @apply rotate-90;

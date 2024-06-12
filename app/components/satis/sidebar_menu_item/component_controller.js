@@ -29,7 +29,7 @@ export default class SidebarMenuItemComponentController extends ApplicationContr
 
   open(event) {
     if (this.hasSubmenuTarget) {
-      const sidebar = this.element.closest('nav.sidebar')
+      const sidebar = this.element.closest('.sidebar')
       sidebar.dispatchEvent(new CustomEvent('sts-sidebar-menu-item:open', { detail: { element: this.element } }))
 
       if (!this.isSubmenuVisible) {
@@ -43,6 +43,7 @@ export default class SidebarMenuItemComponentController extends ApplicationContr
         event.preventDefault()
       }
     }
+    event.stopPropagation();
   }
 
   openListener(event) {
@@ -74,7 +75,7 @@ export default class SidebarMenuItemComponentController extends ApplicationContr
 
   updateFocus(scroll = false) {
     if (!this.hasLink) return
-    const focusedItem =  this.element.closest('nav.sidebar').querySelector('a.focus')
+    const focusedItem =  this.element.closest('.sidebar').querySelector('a.focus')
     const linkInUrl = this.linkInUrl()
     if (linkInUrl && (!focusedItem || linkInUrl > this.linkInUrl(focusedItem))) {
       focusedItem?.classList.toggle("focus", false)

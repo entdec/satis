@@ -1,0 +1,132 @@
+.sidebar {
+  padding: 10;
+  height: 100%;
+  width: 260px;
+  box-shadow: 1cm;
+  background: #ffffff;
+  overflow-y: scroll;
+  -ms-overflow-style: none; 
+  scrollbar-width: none;
+  transition: 0.3s ease;
+  transition-delay: 0.1s;
+  @apply fixed top-0 left-0;
+}
+
+.sidebar.close {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 50px;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  transition: 0.3s ease;
+  transition-delay: 0.1s;
+}
+
+.sidebar::-webkit-scrollbar { 
+  display: none;
+}
+
+.sidebar.close .sts-sidebar-menu-item__link {
+  text-indent:-9999px;
+}
+
+.topbar {
+  max-width: 87%;
+  margin-left: 258px;
+  background: #fcf9f9;
+  transition: 0.3s ease;
+  transition-delay: 0.1s;
+}
+
+.topbar.close {
+  max-width: 97%;
+  margin-left: 50px;
+  transition: 0.3s ease;
+  transition-delay: 0.1s;
+}
+
+
+
+.page_body.close {
+  margin-left: 50px;
+  max-width: 97%;
+  transition: 0.3s ease;
+  transition-delay: 0.1s;
+}
+
+.account-icon {
+  opacity: 25%;
+  border-radius: 25px;
+  padding: 20px;
+}
+
+.sidebar.close .account-icon {
+  opacity: 0;
+}
+
+.sidebar .icon-link {
+  font-size: 30px;
+  color: #fff;
+}
+
+.dark .sidebar .sts-sidebar-menu-item__link.active {
+  color: #FFFFFF;
+}
+
+.sidebar .sts-sidebar-menu-item__link.active {
+  color: #2c2c2c;
+}
+
+.sidebar .sts-sidebar-menu-item__link {
+  color: #8c8c8c;
+}
+
+.dark .sidebar .sts-sidebar-menu-item__link{
+  color: #acacac;
+}
+
+.sidebar .boxture-logo {
+  height: 52px;
+  width: 52px;
+  opacity: 50%;
+  object-fit: cover;
+  border-radius: 16px;
+  font-size: 30px;
+  color: #fff;
+  margin-top: 80px;
+  mix-blend-mode: multiply;
+}
+
+.sidebar.close .profile-logo {
+  display: none;
+}
+
+
+
+.sidebar .logo_name {
+  font-size: 10px;
+  opacity: 50%;
+  text-align: center;
+  display: block;
+}
+
+.sidebar.close .logo_name {
+  display: none;
+}
+
+.dark .sidebar {
+  background: #222836;
+  transition: 0.3s ease;
+  transition-delay: 0.1s;
+}
+
+.dark .sidebar .logo_name {
+  color: #edecec;
+}
+
+.dark .topbar {
+  background: #222836;
+}

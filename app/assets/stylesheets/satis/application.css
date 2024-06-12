@@ -10,9 +10,12 @@
 @import '../../../components/satis/input_array/component.css';
 @import '../../../components/satis/map/component.css';
 @import '../../../components/satis/menu/component.css';
+@import '../../../components/satis/page/component.css';
+@import '../../../components/satis/sidebar/component.css';
 @import '../../../components/satis/sidebar_menu/component.css';
 @import '../../../components/satis/sidebar_menu_item/component.css';
 @import '../../../components/satis/tabs/component.css';
+
 
 @import 'components/diffy.css';
 @import 'components/form.css';
@@ -38,6 +41,7 @@ a[class=""] {
     .mac-only {
         display: inline-block;
     }
+
     .pc-only {
         display: none;
     }
@@ -47,6 +51,7 @@ a[class=""] {
     .pc-only {
         display: inline-block;
     }
+
     .mac-only {
         display: none;
     }
@@ -54,7 +59,7 @@ a[class=""] {
 
 /* For the draggable controller */
 .draggable:hover {
-   cursor: pointer;
+    cursor: pointer;
 }
 
 
@@ -62,6 +67,7 @@ a[class=""] {
     ul {
         list-style: square !important;
     }
+
     ol {
         list-style: decimal !important;
     }
