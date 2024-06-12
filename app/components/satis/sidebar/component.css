@@ -5,6 +5,7 @@
   box-shadow: 1cm;
   background: #ffffff;
   overflow-y: scroll;
+  overflow-y: hidden;
   transition: 0.3s ease;
   transition-delay: 0.1s;
   @apply fixed top-0 left-0;
@@ -17,6 +18,7 @@
   height: 100%;
   width: 50px;
   overflow-y: scroll;
+  overflow-y: hidden;
   transition: 0.3s ease;
   transition-delay: 0.1s;
 }
@@ -53,6 +55,10 @@
   opacity: 25%;
   border-radius: 25px;
   padding: 20px;
+}
+
+.sidebar.close .account-icon {
+  opacity: 0;
 }
 
 .sidebar .icon-link {

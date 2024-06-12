@@ -42,8 +42,8 @@ export default class SidebarMenuItemComponentController extends ApplicationContr
       if(this.linkInUrl()){
         event.preventDefault()
       }
-      event.stopPropagation();
     }
+    event.stopPropagation();
   }
 
   openListener(event) {
@@ -75,7 +75,7 @@ export default class SidebarMenuItemComponentController extends ApplicationContr
 
   updateFocus(scroll = false) {
     if (!this.hasLink) return
-    const focusedItem =  this.element.closest('nav.sidebar').querySelector('a.focus')
+    const focusedItem =  this.element.closest('.sidebar').querySelector('a.focus')
     const linkInUrl = this.linkInUrl()
     if (linkInUrl && (!focusedItem || linkInUrl > this.linkInUrl(focusedItem))) {
       focusedItem?.classList.toggle("focus", false)
