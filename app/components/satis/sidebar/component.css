@@ -5,7 +5,8 @@
   box-shadow: 1cm;
   background: #ffffff;
   overflow-y: scroll;
-  overflow-y: hidden;
+  -ms-overflow-style: none; 
+  scrollbar-width: none;
   transition: 0.3s ease;
   transition-delay: 0.1s;
   @apply fixed top-0 left-0;
@@ -18,9 +19,14 @@
   height: 100%;
   width: 50px;
   overflow-y: scroll;
-  overflow-y: hidden;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
   transition: 0.3s ease;
   transition-delay: 0.1s;
+}
+
+.sidebar::-webkit-scrollbar { 
+  display: none;
 }
 
 .sidebar.close .sts-sidebar-menu-item__link {
