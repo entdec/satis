@@ -1,6 +1,5 @@
 .sts-sidebar-menu-item {
     @apply pt-1;
-  
     & a.focus {
       background: rgba(1, 1, 1, 0.1);
   
@@ -13,11 +12,12 @@
     @apply rotate-90;
   }
 
+
   &__link {
-    @apply text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-gray-900 w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500
+    @apply text-gray-800 dark:text-gray-300 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500
   }
   &__icon {
-    @apply mr-3 flex-shrink-0 h-6 w-6 text-gray-400 group-hover:text-gray-500;
+    @apply mr-3 flex-shrink-0 h-6 w-6 text-gray-400 dark:text-gray-100 group-hover:text-gray-500;
   }
   &__no-icon {
     @apply mr-3 flex-shrink-0 h-6;
@@ -28,4 +28,38 @@
   &__menu-icon {
     @apply text-gray-300 ml-3 flex-shrink-0 h-5 w-5 transform group-hover:text-gray-400 transition-colors ease-in-out duration-150;
   }
+}
+
+
+.page_bg .sidebar.close .sts-sidebar-menu-item__menu-icon {
+  display: none;
+}
+
+.page_bg .sidebar.close .sts-sidebar-menu-item > [data-satis-sidebar-menu-item-target="submenu"] {
+  display: none;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s linear 1s, opacity 1s linear; /* Ensures it stays visible for 1 second after mouse leaves */
+}
+
+.page_bg .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] {
+  @apply rounded-md;
+  display: block;
+  visibility: visible;
+  opacity: 1;
+  position: absolute;
+  margin-left: 35px;
+  overflow-y: scroll;
+  overflow: visible;
+  margin-top: -60px;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background: rgb(250, 250, 250);
+  box-shadow: -1px 0px 5px 0.5px #aaaaaa;
+  transition: visibility 0s linear 0s, opacity 0.5s linear;
+}
+
+.sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"]::-webkit-scrollbar {
+  display: none; 
 }
