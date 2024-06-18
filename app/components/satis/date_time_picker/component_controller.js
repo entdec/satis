@@ -133,10 +133,10 @@ export default class DateTimePickerComponentController extends ApplicationContro
       this.currentSelectNr = 1
 
       let today = new Date()
-       this.displayValue = new Date(today.getFullYear(), today.getMonth(), 1)
+      this.displayValue = new Date(today.getFullYear(), today.getMonth(), 1)
       this.hiddenInputTarget.value = ""
       this.inputTarget.value = ""
-      this.hiddenInputTarget.dispatchEvent(new CustomEvent("change",{ detail: { src: "satis-date-time-picker" } }))
+      this.hiddenInputTarget.dispatchEvent(new CustomEvent("change", { detail: { src: "satis-date-time-picker" } }))
     }
     event.preventDefault()
   }
@@ -208,13 +208,37 @@ export default class DateTimePickerComponentController extends ApplicationContro
   }
 
   changeHours(event) {
-    this.selectedValue[0] = new Date(new Date(this.selectedValue[0]).setHours(+event.target.value))
+    let newHours = 0
+
+    if (event.target.value.length < 2) {
+      return
+    } else {
+      newHours = Number.parseInt(event.target.value)
+
+      if (newHours > 23) {
+        newHours = 0
+      }
+    }
+
+    this.selectedValue[0] = new Date(new Date(this.selectedValue[0]).setHours(newHours))
     this.refreshInputs()
     event.preventDefault()
   }
 
   changeMinutes(event) {
-    this.selectedValue[0] = new Date(new Date(this.selectedValue[0]).setMinutes(+event.target.value))
+    let newMinutes = 0
+
+    if (event.target.value.length < 2) {
+      return
+    } else {
+      newMinutes = Number.parseInt(event.target.value)
+
+      if (newMinutes > 59) {
+        newMinutes = 0
+      }
+    }
+
+    this.selectedValue[0] = new Date(new Date(this.selectedValue[0]).setMinutes(newMinutes))
     this.refreshInputs()
     event.preventDefault()
   }
@@ -236,7 +260,7 @@ export default class DateTimePickerComponentController extends ApplicationContro
   hiddenInputChanged(event) {
     this.prepareSelection()
     this.refreshCalendar(false)
-    if(event?.detail?.src !== "satis-date-time-picker") {
+    if (event?.detail?.src !== "satis-date-time-picker") {
       this.refreshInputs(false)
     }
   }
@@ -482,7 +506,9 @@ export default class DateTimePickerComponentController extends ApplicationContro
 
   // Get name of month for current value
   get monthName() {
-    let result = new Date(this.displayValue).toLocaleString(this.localeValue, { month: "long" })
+    let result = new Date(this.displayValue).toLocaleString(this.localeValue, {
+      month: "long",
+    })
     result = result[0].toUpperCase() + result.substring(1)
     return result
   }
