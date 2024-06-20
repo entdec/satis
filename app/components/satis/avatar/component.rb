@@ -19,7 +19,7 @@ module Satis
 
       def initials
         if name.present? && !name.index('@')
-          name.scan(/[A-Z]/)[0..1].join
+          name.split(' ').map(&:capitalize).join(' ').scan(/[A-Z]/)[0..1].join
         else
           (name || email).split('@').map(&:capitalize).join('@').scan(/[A-Z]/)[0..1].join
         end
