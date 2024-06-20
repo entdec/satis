@@ -2,7 +2,13 @@ li.flex
   .flex.items-center
     svg.flex-shrink-0.w-6.h-full.text-gray-200.dark:text-gray-700  aria-hidden="true" fill="currentColor" preserveaspectratio="none" viewbox=("0 0 24 44") xmlns="http://www.w3.org/2000/svg"
       path d=("M.293 0l22 22-22 22h1.414l22-22-22-22H.293z") /
-    a.sts-breadcrumbs__link href=path
-      - if icon
-        i class=icon
-      = title
+    - if path
+      a.sts-breadcrumbs__link href=path
+        - if icon
+          i class=icon
+        = title
+    - else
+      .sts-breadcrumbs__link
+        - if icon
+          i class=icon
+        = title

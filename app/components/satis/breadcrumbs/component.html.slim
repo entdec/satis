@@ -2,7 +2,7 @@ nav.sts-breadcrumbs aria-label="Breadcrumb"
   ol.sts-breadcrumbs__list
     li.flex
       .flex.items-center
-        a.text-gray-400.hover:text-gray-500 href=root_path
+        a.sts-breadcrumbs__link href=root_path
           i.fas.fa-house
     - crumbs.each do |crumb|
       = crumb
