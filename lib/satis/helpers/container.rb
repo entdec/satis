@@ -12,6 +12,7 @@ module Satis
         add_helper :avatar, Satis::Avatar::Component
         add_helper :breadcrumbs, Satis::Breadcrumbs::Component
         add_helper :card, Satis::Card::Component
+        add_helper :editor, Satis::Editor::Component
         add_helper :flash_messages, Satis::FlashMessages::Component
         add_helper :info, Satis::Info::Component
         add_helper :map, Satis::Map::Component
@@ -21,6 +22,7 @@ module Satis
         add_helper :tabs, Satis::Tabs::Component
         add_helper :input, Satis::Input::Component
         add_helper :progress_bar, Satis::ProgressBar::Component
+        add_helper :dialog, Satis::Dialog::Component
       end
 
       def copyable(name, scrub: "#")

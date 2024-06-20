@@ -18,17 +18,22 @@ Gem::Specification.new do |spec|
   # spec.metadata['source_code_uri'] = "Put your gem's public repo URL here."
   # spec.metadata['changelog_uri'] = "Put your gem's CHANGELOG.md URL here."
 
-  spec.files =
-    Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
+  spec.files = Dir.chdir(File.expand_path("..", __FILE__)) do
+    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  end
 
   spec.add_dependency "browser"
   spec.add_dependency "diffy"
   spec.add_dependency "rails", ">= 6"
   spec.add_dependency "view_component"
-  spec.add_dependency 'jsonb_accessor', '~> 1.4'
+  spec.add_dependency "jsonb_accessor", "~> 1.4"
 
   spec.add_development_dependency "auxilium", "~> 3"
   spec.add_development_dependency "slim-rails", "~> 3"
   spec.add_development_dependency "faker"
 
+  spec.add_dependency "tailwindcss-rails"
+  spec.add_dependency "importmap-rails"
+  spec.add_dependency "turbo-rails"
+  spec.add_dependency "stimulus-rails"
 end

@@ -1,8 +1,8 @@
-import ApplicationController from "../../../../frontend/controllers/application_controller"
+import ApplicationController from "satis/controllers/application_controller"
 import { createPopper } from "@popperjs/core"
-import { debounce } from "../../../../frontend/utils"
+import { debounce } from "satis/utils"
 
-export default class extends ApplicationController {
+export default class DateTimePickerComponentController extends ApplicationController {
   static targets = [
     "input",
     "hiddenInput",
@@ -133,10 +133,10 @@ export default class extends ApplicationController {
       this.currentSelectNr = 1
 
       let today = new Date()
-       this.displayValue = new Date(today.getFullYear(), today.getMonth(), 1)
+      this.displayValue = new Date(today.getFullYear(), today.getMonth(), 1)
       this.hiddenInputTarget.value = ""
       this.inputTarget.value = ""
-      this.hiddenInputTarget.dispatchEvent(new CustomEvent("change",{ detail: { src: "satis-date-time-picker" } }))
+      this.hiddenInputTarget.dispatchEvent(new CustomEvent("change", { detail: { src: "satis-date-time-picker" } }))
     }
     event.preventDefault()
   }
@@ -162,6 +162,16 @@ export default class extends ApplicationController {
   nextMonth(event) {
     this.displayValue = new Date(new Date(this.displayValue).setMonth(this.displayValue.getMonth() + 1))
     this.refreshCalendar(false)
+  }
+
+  previousYear(event) {
+    this.displayValue = new Date(new Date(this.displayValue).setFullYear(this.displayValue.getFullYear() - 1));
+    this.refreshCalendar(false);
+  }
+
+  nextYear(event) {
+    this.displayValue = new Date(new Date(this.displayValue).setFullYear(this.displayValue.getFullYear() + 1));
+    this.refreshCalendar(false);
   }
 
   clickedOutside(event) {
@@ -198,13 +208,37 @@ export default class extends ApplicationController {
   }
 
   changeHours(event) {
-    this.selectedValue[0] = new Date(new Date(this.selectedValue[0]).setHours(+event.target.value))
+    let newHours = 0
+
+    if (event.target.value.length < 2) {
+      return
+    } else {
+      newHours = Number.parseInt(event.target.value)
+
+      if (newHours > 23) {
+        newHours = 0
+      }
+    }
+
+    this.selectedValue[0] = new Date(new Date(this.selectedValue[0]).setHours(newHours))
     this.refreshInputs()
     event.preventDefault()
   }
 
   changeMinutes(event) {
-    this.selectedValue[0] = new Date(new Date(this.selectedValue[0]).setMinutes(+event.target.value))
+    let newMinutes = 0
+
+    if (event.target.value.length < 2) {
+      return
+    } else {
+      newMinutes = Number.parseInt(event.target.value)
+
+      if (newMinutes > 59) {
+        newMinutes = 0
+      }
+    }
+
+    this.selectedValue[0] = new Date(new Date(this.selectedValue[0]).setMinutes(newMinutes))
     this.refreshInputs()
     event.preventDefault()
   }
@@ -226,23 +260,21 @@ export default class extends ApplicationController {
   hiddenInputChanged(event) {
     this.prepareSelection()
     this.refreshCalendar(false)
-    if(event?.detail?.src !== "satis-date-time-picker") {
+    if (event?.detail?.src !== "satis-date-time-picker") {
       this.refreshInputs(false)
     }
   }
 
   dateTimeEntered(event) {
-    return
-
     // FIXME: This doesn't work properly yet
-    let newValue
-    try {
-      newValue = new Date(this.inputTarget.value)
-    } catch (error) {}
-    if (!isNaN(newValue.getTime())) {
-      this.selectedValue = [newValue]
-      this.refreshCalendar()
-    }
+    // let newValue
+    // try {
+    //   newValue = new Date(this.inputTarget.value)
+    // } catch (error) {}
+    // if (!isNaN(newValue.getTime())) {
+    //   this.selectedValue = [newValue]
+    //   this.refreshCalendar()
+    // }
   }
 
   selectDay(event) {
@@ -474,7 +506,9 @@ export default class extends ApplicationController {
 
   // Get name of month for current value
   get monthName() {
-    let result = new Date(this.displayValue).toLocaleString(this.localeValue, { month: "long" })
+    let result = new Date(this.displayValue).toLocaleString(this.localeValue, {
+      month: "long",
+    })
     result = result[0].toUpperCase() + result.substring(1)
     return result
   }

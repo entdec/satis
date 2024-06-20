@@ -1,6 +1,6 @@
-import ApplicationController from "../../../../frontend/controllers/application_controller"
+import ApplicationController from "satis/controllers/application_controller"
 
-export default class extends ApplicationController {
+export default class PageComponentController extends ApplicationController {
   static targets = ["closeButton", "openButton", "offCanvasMenu", "overlay", "dialog"]
   connect() {
     super.connect()

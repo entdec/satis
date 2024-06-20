@@ -1,3 +1,2 @@
 nav.px-2.space-y-1
-  - @menu.items.each do |item|
-    = render(Satis::SidebarMenuItem::Mobile::Component.new(item: item))
+  = render(Satis::SidebarMenuItem::Mobile::Component.with_collection(@menu.items))

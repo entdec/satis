@@ -1,0 +1,72 @@
+.sts-tabs {
+  &__nav {
+    @apply -mb-px flex space-x-4 overflow-x-auto ml-4;
+
+    a:first {
+      @apply text-primary-600;
+    }
+  }
+
+  .tab {
+    @apply border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap px-1 pb-4 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 cursor-pointer;
+
+    a {
+      @apply no-underline text-gray-500 hover:text-gray-700;
+    }
+
+    .badge {
+      @apply bg-gray-100 text-gray-600 hidden ml-3 rounded-full text-xs font-medium md:inline-block py-0.5 px-2.5;
+    }
+
+    &.selected {
+      @apply border-primary-500 text-primary-600;
+
+      .badge {
+        @apply bg-primary-100 text-primary-600;
+      }
+
+      a {
+        @apply text-primary-600;
+      }
+
+      .sts-menu {
+        &__button {
+          span {
+            @apply block;
+          }
+        }
+      }
+    }
+
+    .sts-menu {
+      &__button {
+        @apply h-0 w-0 pl-4;
+
+        span {
+          @apply hidden;
+        }
+      }
+    }
+
+    &.is-invalid {
+      @apply text-red-600;
+
+      a {
+        @apply text-red-600;
+      }
+
+      .fa-square-xmark {
+        @apply text-red-400;
+        display: inline;
+      }
+    }
+  }
+
+  .tab-content {
+    @apply hidden;
+
+    &.selected {
+      @apply block;
+    }
+  }
+}

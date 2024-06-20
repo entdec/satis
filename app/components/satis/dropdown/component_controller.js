@@ -1,10 +1,9 @@
-import ApplicationController from "../../../../frontend/controllers/application_controller"
+import ApplicationController from "satis/controllers/application_controller"
 
-// FIXME: Is this full path really needed?
-import { debounce, popperSameWidth } from "../../../../frontend/utils"
+import { debounce, popperSameWidth } from "satis/utils"
 import { createPopper } from "@popperjs/core"
 
-export default class extends ApplicationController {
+export default class DropdownComponentController extends ApplicationController {
 
   static targets = [
     "results",
@@ -616,6 +615,32 @@ export default class extends ApplicationController {
             this.selectItem(dataDiv)
             this.setSelectedItem(dataDiv.getAttribute("data-satis-dropdown-item-value"))
             this.searchQueryValue = ""
+          } else if(this.searchQueryValue?.length > 0) {
+            // hide all items that don't match the search query
+            const searchValue = this.searchQueryValue
+            let matches = []
+            this.itemTargets.forEach((item) => {
+              const text = item.getAttribute("data-satis-dropdown-item-text")
+              const matched = this.needsExactMatchValue
+                ? searchValue.localeCompare(text, undefined, { sensitivity: "base" }) === 0
+                : new RegExp(searchValue, "i").test(text)
+
+              const isHidden = item.classList.contains("hidden")
+              if (!isHidden) {
+                if (matched) {
+                  matches.push(item)
+                } else {
+                  item.classList.toggle("hidden", true)
+                }
+              }
+            })
+
+            // don't show results
+            if (matches.length > 0) {
+              this.showResultsList(event)
+            } else {
+              if (!this.showSelectedItem()) this.hideResultsList(event)
+            }
           }
 
           if (itemCount > 0) {
