@@ -43,7 +43,7 @@ export default class extends ApplicationController {
      * Make sure that the toggle happens after the event bubble so any listeners are able to
      * process before we overwrite the template nodes that are possibly updated and reinsert new nodes.
      */
-    setTimeout(()=>{
+    setTimeout(() => {
       this.toggle(this.currentValue)
     })
   }
@@ -57,8 +57,10 @@ export default class extends ApplicationController {
 
         this.insertionTarget.childNodes.forEach(iNode => {
           if (iNode.getAttribute("data-toggleable-node-id") == targetNodeId) {
-            child.outerHTML = iNode.outerHTML
-            iNode.remove()
+            if (child.parentElement) {
+              child.outerHTML = iNode.outerHTML
+              iNode.remove()
+            }
           }
         })
       })
@@ -70,7 +72,7 @@ export default class extends ApplicationController {
     // Reinsert elements
     this.toggleableTargets.forEach((element) => {
       if (element.getAttribute("data-toggle-value") == value || (element.getAttribute("data-toggle-not-value") != null && element.getAttribute("data-toggle-not-value") != value)) {
-        element.content.childNodes.forEach(node =>   this.setUniqueId(node))
+        element.content.childNodes.forEach(node => this.setUniqueId(node))
 
         let toggleContent = document.importNode(element.content, true)
         toggleContent.childNodes.forEach((child) => {
@@ -91,8 +93,8 @@ export default class extends ApplicationController {
     }
   }
 
-  setUniqueId(node)  {
-    if(node.getAttribute("data-toggleable-node-id")) return;
+  setUniqueId(node) {
+    if (node.getAttribute("data-toggleable-node-id")) return;
     const dateString = Date.now().toString(36);
     const randomness = Math.random().toString(36).substring(2);
     node.setAttribute("data-toggleable-node-id", dateString + randomness)
