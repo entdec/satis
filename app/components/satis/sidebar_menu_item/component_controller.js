@@ -43,7 +43,8 @@ export default class SidebarMenuItemComponentController extends ApplicationContr
         event.preventDefault()
       }
     }
-    event.stopPropagation();
+    // This breaks turbo, so we need to keep the propagation.
+    // event.stopPropagation();
   }
 
   openListener(event) {
