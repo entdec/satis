@@ -143,6 +143,12 @@ module Satis
         switch_input(method, options, &block)
       end
 
+      def color(method, options = {}, &block)
+        @form_options = options
+
+        color_input(method, options, &block)
+      end
+
       # A hidden input
       def hidden(method, options = {}, &block)
         @form_options = options
@@ -357,6 +363,14 @@ module Satis
       def switch_input(method, options = {}, &block)
         form_group(method, options) do
           render(Satis::Switch::Component.new(form: self, attribute: method, title: options[:label], **options,
+            &block))
+        end
+      end
+
+      # Color
+      def color_input(method, options = {}, &block)
+        form_group(method, options) do
+          render(Satis::ColorPicker::Component.new(form: self, attribute: method, **options,
             &block))
         end
       end

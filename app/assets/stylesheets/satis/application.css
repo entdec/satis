@@ -1,6 +1,7 @@
 @import '../../../components/satis/appearance_switcher/component.css';
 @import '../../../components/satis/breadcrumbs/component.css';
 @import '../../../components/satis/card/component.css';
+@import '../../../components/satis/color_picker/component.css';
 @import '../../../components/satis/date_time_picker/component.css';
 @import '../../../components/satis/dialog/component.css';
 @import '../../../components/satis/dropdown/component.css';
@@ -15,7 +16,6 @@
 @import '../../../components/satis/sidebar_menu/component.css';
 @import '../../../components/satis/sidebar_menu_item/component.css';
 @import '../../../components/satis/tabs/component.css';
-
 
 @import 'components/diffy.css';
 @import 'components/form.css';
