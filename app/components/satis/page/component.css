@@ -44,8 +44,15 @@
   }
   .page_bg .page_body.close {
     margin-left: 60px;
+    z-index: 1;
+    position: relative;
     overflow: visible;
-    z-index: -1;
+  }
+
+  .page_bg .page_body.close .flex-1{
+    z-index: 1;
+    position: relative;
+    overflow: visible;
   }
   
   .dark .page_body {

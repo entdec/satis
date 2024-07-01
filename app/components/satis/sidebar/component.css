@@ -2,24 +2,38 @@
   padding: 10px;
   height: 100%;
   width: 260px;
-  z-index: 50;
-  box-shadow: 1cm;
+  z-index: 1000;
+  position: absolute;
   background: #ffffff;
-  overflow-y: scroll;
-  -ms-overflow-style: none;
+  overflow: visible;
   scrollbar-width: none;
+  overflow-y: scroll;
   transition: 0.3s ease;
   transition-delay: 0.1s;
 }
 
+.h-screen.flex .page_bg .sidebar.close{
+  z-index: 1000;
+  position: absolute;
+  overflow: visible;
+}
+
+.h-screen.flex .page_bg .sidebar.close .sts-sidebar-menu-item{
+  z-index: 1001;
+  position: relative;
+  overflow: visible;
+}
+
+
 .page_bg .sidebar.close {
-  position: fixed;
+  position: absolute;
+  overflow: visible;
   top: 0;
   left: 0;
   height: 100%;
   width: 60px;
+  z-index: 1000;
   overflow-y: scroll;
-  -ms-overflow-style: none;
   scrollbar-width: none;
   transition: 0.3s ease;
   transition-delay: 0.1s;
