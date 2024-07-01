@@ -3,7 +3,6 @@
   height: 100%;
   width: 260px;
   z-index: 50;
-  position: relative;
   box-shadow: 1cm;
   background: #ffffff;
   overflow-y: scroll;
