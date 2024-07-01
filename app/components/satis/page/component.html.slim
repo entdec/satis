@@ -6,10 +6,10 @@ html lang="en"
     = head
   body
     = turbo_frame_tag "dialog"
-    .h-screen.flex.overflow-hidden data-controller="satis-page"
+    .h-screen.flex data-controller="satis-page"
       / TOPBAR
-      .flex.flex-col.w-0.flex-1.overflow-hidden.page_bg
-        .relative.z-10.flex-shrink-0.flex.topbar.h-16.bg-white.shadow.dark:py-4
+      .page_bg
+        .topbar
           .arrow
             .fa-solid.fa-bars
           / NAVBAR
@@ -17,14 +17,15 @@ html lang="en"
             = navbar
 
         / SIDEBAR
-        .flex.flex-row
-          == sidebar
+        == sidebar
+
         / BODY
         .page_body
-          main.flex-1.relative.overflow-y-auto.focus:outline-none
+          main.flex-1.relative.overflow-y-auto.overflow-x-auto.focus:outline-none
             .mt-4
               .max-w.mx-auto.px-4.sm:px-4.md:px-4
                 = body
+
 
 / Minimize Sidebar
 javascript:
