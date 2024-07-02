@@ -5,6 +5,7 @@
     flex-grow: 1;
     z-index: 1;
     position: relative;
+    background-color: #f3f3f3;
   }
 
   .topbar .arrow {

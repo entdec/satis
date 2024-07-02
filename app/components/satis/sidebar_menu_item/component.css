@@ -23,7 +23,7 @@
     @apply mr-3 flex-shrink-0 h-6;
   }
   &__label {
-    @apply flex-1;
+    @apply flex-1 text-gray-700;
   }
   &__menu-icon {
     @apply text-gray-300 ml-3 flex-shrink-0 h-5 w-5 transform group-hover:text-gray-400 transition-colors ease-in-out duration-150;
@@ -35,6 +35,10 @@
   display: none;
 }
 
+.page_bg .sidebar.close .sts-sidebar-menu-item__label {
+  display: none;
+}
+
 .page_bg .sidebar.close .sts-sidebar-menu-item > [data-satis-sidebar-menu-item-target="submenu"] {
   display: none;
   visibility: hidden;
@@ -42,22 +46,43 @@
   transition: visibility 0s linear 1s, opacity 1s linear; /* Ensures it stays visible for 1 second after mouse leaves */
 }
 
+.page_bg .sidebar.close .sts-sidebar-menu-item:hover .sts-sidebar-menu-item__label {
+  display: flex;
+  overflow: visible;
+}
+
 .page_bg .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] {
-  @apply rounded-md bg-white dark:bg-gray-900;
+  @apply bg-white dark:bg-gray-900 py-0 px-0;
   display: block;
   visibility: visible;
   opacity: 1;
   position: absolute;
-  margin-left: 35px;
   overflow-y: scroll;
+  padding-right: 20px;
+  margin-left: 35px;
   margin-top: -60px;
-  padding-right: 10px;
-  padding-top: 10px;
-  padding-bottom: 10px;
   z-index: 1000;
   overflow: visible;
   box-shadow: -0.5px 0px 3px 0.3px #aaaaaa;
   transition: visibility 0s linear 0s, opacity 0.5s linear;
+}
+
+.page_bg .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover .sts-sidebar-menu-item__label {
+  overflow: visible;
+  z-index: 1000;
+}
+
+.page_bg .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] {
+  z-index: 1005;
+  margin-left: 123px;
+  overflow-y: scroll;
+}
+
+.page_bg .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] {
+  position: relative;
+  z-index: 1006;
+  margin-left: 123px;
+  overflow-y: scroll;
 }
 
 .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"]::-webkit-scrollbar {
