@@ -891,9 +891,9 @@ export default class DropdownComponentController extends ApplicationController {
     const elements = this.selectedItemsTemplateTarget.content.querySelectorAll(`[data-satis-dropdown-item-text*="${trimmedValue}"]`);
     const selected = Array.from(elements).find(element => element.getAttribute('data-satis-dropdown-item-text').trim() === trimmedValue);
     if (!selected && this.searchInputTarget.value.length > 0 && !this.freeTextValue) {
-      this.searchInputTarget.closest(".sts-dropdown").classList.toggle("warning", true)
+      this.searchInputTarget.closest(".bg-white").classList.toggle("warning", true)
     } else {
-      this.searchInputTarget.closest(".sts-dropdown").classList.toggle("warning", false)
+      this.searchInputTarget.closest(".bg-white").classList.toggle("warning", false)
     }
   }
 
