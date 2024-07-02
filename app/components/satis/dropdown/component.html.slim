@@ -8,11 +8,11 @@ div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controlle
   .flex.flex-col
     div.hidden.py-1 data-satis-dropdown-target="pills"
     .flex.flex-col.items-center
-      .w-full.topbar-dropdown
+      .w-full.sts-dropdown
         .h-12.p-1.flex.rounded
           .flex.flex-auto.flex-wrap
             / Input where you can search
-            input.p-1.px-2.appearance-none.outline-none.w-full.topbar-dropdown-input.text-gray-800.dark:text-gray-300 data-action="input->satis-dropdown#search" data-satis-dropdown-target="searchInput" placeholder=placeholder autofocus=options[:autofocus]
+            input.p-1.px-2.appearance-none.outline-none.w-full.sts-dropdown-input.text-gray-800.dark:text-gray-300 data-action="input->satis-dropdown#search" data-satis-dropdown-target="searchInput" placeholder=placeholder autofocus=options[:autofocus]
           div
             / Reset button
             - unless @reset_button == false
@@ -28,7 +28,7 @@ div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controlle
     template data-satis-dropdown-target="selectedItemsTemplate"
 
     / Container for results
-    .hidden.container.topbar-dropdown-results.shadow.dark:text-gray-300.z-10.rounded.max-h-select.overflow-y-auto.w-full data-satis-dropdown-target="results" data-action="scroll->satis-dropdown#scroll" tabindex="-1"
+    .hidden.container.sts-dropdown-results.shadow.dark:text-gray-300.z-10.rounded.max-h-select.overflow-y-auto.w-full data-satis-dropdown-target="results" data-action="scroll->satis-dropdown#scroll" tabindex="-1"
       .flex.flex-col.w-full data-satis-dropdown-target="items"
         - options[:collection]&.each do |item|
           - data_attrs = item.try(:third) ? item.third : {}
@@ -36,8 +36,8 @@ div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controlle
             - if custom_item_html?
                 = item_html(item)
             - else
-              .cursor-pointer.w-full.topbar-dropdown-results-items
-                .flex.w-full.items-center.p-2.pl-2.border-transparent.border-l-2
+              .cursor-pointer.w-full.sts-dropdown-results-items
+                .flex.w-full.items-center.p-2.pl-2
                   .w-full.items-center.flex
                     .mx-2.-mt-1
                       span = item.send(text_method)

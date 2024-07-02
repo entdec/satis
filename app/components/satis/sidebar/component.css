@@ -1,54 +1,67 @@
 .sidebar {
-  padding: 10;
+  padding: 10px;
   height: 100%;
   width: 260px;
-  box-shadow: 1cm;
+  z-index: 1000;
+  position: absolute;
   background: #ffffff;
-  overflow-y: scroll;
-  -ms-overflow-style: none; 
+  overflow: visible;
   scrollbar-width: none;
+  overflow-y: scroll;
   transition: 0.3s ease;
   transition-delay: 0.1s;
-  @apply fixed top-0 left-0;
 }
 
-.sidebar.close {
-  position: fixed;
+.h-screen.flex .page_bg .sidebar.close{
+  z-index: 1000;
+  position: absolute;
+  overflow: visible;
+}
+
+.h-screen.flex .page_bg .sidebar.close .sts-sidebar-menu-item{
+  z-index: 1001;
+  position: relative;
+  overflow: visible;
+}
+
+
+.page_bg .sidebar.close {
+  position: absolute;
+  overflow: visible;
   top: 0;
   left: 0;
   height: 100%;
-  width: 50px;
+  width: 60px;
+  z-index: 1000;
   overflow-y: scroll;
-  -ms-overflow-style: none;
   scrollbar-width: none;
   transition: 0.3s ease;
   transition-delay: 0.1s;
 }
 
-.sidebar::-webkit-scrollbar { 
+.sidebar::-webkit-scrollbar {
   display: none;
 }
 
-.sidebar.close .sts-sidebar-menu-item__link {
-  text-indent:-9999px;
-}
 
-.topbar {
+.page_bg .topbar {
+  flex-shrink: 0;
+  display: flex;
+  height: 4rem;
   max-width: 87%;
-  margin-left: 258px;
-  background: #fcf9f9;
+  margin-left: 260px;
   transition: 0.3s ease;
   transition-delay: 0.1s;
+  background: white;
+  z-index: 2;
 }
 
-.topbar.close {
+.page_bg .topbar.close {
   max-width: 97%;
-  margin-left: 50px;
+  margin-left: 60px;
   transition: 0.3s ease;
   transition-delay: 0.1s;
 }
-
-
 
 .page_body.close {
   margin-left: 50px;
@@ -57,8 +70,9 @@
   transition-delay: 0.1s;
 }
 
+
 .account-icon {
-  opacity: 25%;
+  opacity: 0.25;
   border-radius: 25px;
   padding: 20px;
 }
@@ -67,31 +81,22 @@
   opacity: 0;
 }
 
-.sidebar .icon-link {
-  font-size: 30px;
-  color: #fff;
+
+.sidebar.close .boxture-logo {
+  opacity: 0;
 }
 
-.dark .sidebar .sts-sidebar-menu-item__link.active {
-  color: #FFFFFF;
+.sidebar.close .sts-sidebar-menu-item{
+  margin-left: 2px;
 }
 
-.sidebar .sts-sidebar-menu-item__link.active {
-  color: #2c2c2c;
-}
 
-.sidebar .sts-sidebar-menu-item__link {
-  color: #8c8c8c;
-}
 
-.dark .sidebar .sts-sidebar-menu-item__link{
-  color: #acacac;
-}
 
 .sidebar .boxture-logo {
   height: 52px;
   width: 52px;
-  opacity: 50%;
+  opacity: 0.5;
   object-fit: cover;
   border-radius: 16px;
   font-size: 30px;
@@ -100,21 +105,19 @@
   mix-blend-mode: multiply;
 }
 
+.dark .sidebar .boxture-logo {
+  mix-blend-mode: normal;
+}
+
 .sidebar.close .profile-logo {
   display: none;
 }
 
-
-
 .sidebar .logo_name {
   font-size: 10px;
-  opacity: 50%;
+  opacity: 0.5;
   text-align: center;
   display: block;
-}
-
-.sidebar.close .logo_name {
-  display: none;
 }
 
 .dark .sidebar {
