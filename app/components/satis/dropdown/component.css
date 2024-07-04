@@ -24,11 +24,11 @@
 }
 
 .topbar .satis-dropdown .sts-dropdown{
-  @apply bg-gray-50 rounded-lg shadow dark:bg-gray-900;
+  @apply bg-white dark:bg-gray-900 outline dark:outline-none outline-gray-200 outline-1 rounded-md shadow-none shadow-md;
 }
 
 .page_body .satis-dropdown .sts-dropdown{
-  @apply bg-white dark:bg-gray-900 outline dark:outline-none outline-gray-300 outline-1 shadow-none;
+  @apply bg-white dark:bg-gray-900 outline dark:outline-none outline-gray-300 outline-1 rounded-md shadow-none;
 }
 
 .page_body .satis-dropdown .sts-dropdown-results{
@@ -54,11 +54,11 @@
 
 .topbar .satis-dropdown .sts-dropdown-results{
   overflow-y: scroll;
-  @apply bg-gray-50 divide-gray-900 divide-opacity-25 shadow-gray-300 shadow-lg text-gray-900 text-opacity-75 dark:bg-gray-900 dark:shadow-gray-700 dark:shadow-lg dark:bg-opacity-75 dark:divide-gray-50 dark:divide-opacity-25 dark:text-gray-300;
+  @apply bg-white divide-gray-900 divide-opacity-25 shadow-gray-300 shadow-lg text-gray-900 text-opacity-75 dark:bg-gray-900 dark:shadow-gray-700 dark:shadow-lg dark:bg-opacity-75 dark:divide-gray-50 dark:divide-opacity-25 dark:text-gray-300;
 }
 
 .topbar .satis-dropdown .sts-dropdown .sts-dropdown-input{
-  @apply bg-gray-50 dark:bg-gray-900 dark:divide-gray-100;
+  @apply bg-white dark:bg-gray-900 dark:divide-gray-100;
 }
 
 .topbar .satis-dropdown .sts-dropdown-results-items{
