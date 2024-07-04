@@ -1,11 +1,11 @@
-.h-screen.flex {
-  max-width: 100%;
-  max-height: 100%;
-  height: 100vh;
-  overflow: hidden;
-}
+  .h-screen.flex {
+    max-width: 100%;
+    max-height: 100%;
+    height: 100vh;
+    overflow: hidden;
+  }
 
-.page_bg {
+  .page_bg {
     flex-direction: column;
     width: 0;
     flex-grow: 1;
@@ -28,8 +28,18 @@
     margin-left: 15px;
   }
 
-  .topbar .account-icon {
-    display: none;
+  .h-screen.flex .page_bg .topbar .account-icon {
+    display: block;
+    margin-top: -14px;
+    margin-left: -14px;
+    opacity: 100%;
+  }
+
+  .h-screen.flex .page_bg .topbar .account-name {
+    @apply dark:text-white;
+    display: block;
+    margin-top: 20px;
+    opacity: 75%;
   }
 
   .topbar.close .account-icon {
