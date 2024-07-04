@@ -46,17 +46,20 @@
   opacity: 0;
 }
 
-.page_bg .sidebar.close .sts-sidebar-menu-item:hover .sts-sidebar-menu-item__label {
-  display: flex;
-  overflow: visible;
+.page_bg .sidebar.close .sts-sidebar-menu-item:hover:not(:has([data-satis-sidebar-menu-item-target="submenu"])) .sts-sidebar-menu-item__label {
+  @apply dark:bg-gray-900;
+  display: block;
+  background: white;
+  padding: 10px;
+
 }
 
-.page_bg .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] {
+.h-screen.flex .page_bg .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] {
   @apply rounded-md bg-white dark:bg-gray-900 py-0 px-0;
   display: block;
   visibility: visible;
   opacity: 1;
-  position: absolute;
+  position: fixed;
   overflow-y: scroll;
   padding-right: 20px;
   margin-left: 35px;
@@ -65,21 +68,33 @@
 }
 
 .page_bg .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover .sts-sidebar-menu-item__label {
+  background: none;
   overflow: visible;
   z-index: 1000;
+  padding: 0px;
 }
 
-.page_bg .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] {
+.h-screen.flex .page_bg .sidebar.close .sts-sidebar-menu-item:last-child:hover > [data-satis-sidebar-menu-item-target="submenu"] {
+  margin-top: -275px;
+}
+
+.h-screen.flex .page_bg .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] {
   z-index: 1005;
   margin-left: 123px;
   overflow-y: scroll;
 }
 
-.page_bg .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] {
+.h-screen.flex .page_bg .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] {
+  display: block;
+  visibility: visible;
+  opacity: 1;
   position: relative;
-  z-index: 1006;
-  margin-left: 123px;
+  overflow: visible;
   overflow-y: scroll;
+  padding-right: 20px;
+  margin-left: 35px;
+  margin-top: -60px;
+  z-index: 1020;
 }
 
 .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"]::-webkit-scrollbar {

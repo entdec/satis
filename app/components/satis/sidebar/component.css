@@ -1,10 +1,11 @@
-.sidebar {
+.h-screen.flex .sidebar {
   height: 100%;
   width: 260px;
   z-index: 1000;
   position: absolute;
   background: #ffffff;
   overflow: visible;
+  overflow-y: scroll;
   scrollbar-width: none;
 }
 
@@ -12,19 +13,17 @@
   z-index: 1000;
   position: absolute;
   margin-top: 4rem;
-  overflow: visible;
 }
 
 .h-screen.flex .page_bg .sidebar.close .sts-sidebar-menu-item{
   z-index: 1001;
   position: relative;
-  overflow: visible;
+
 }
 
 
 .page_bg .sidebar.close {
   position: absolute;
-  overflow: visible;
   top: 0;
   left: 0;
   height: 100%;
@@ -115,7 +114,7 @@
   display: none;
 }
 
-.dark .sidebar {
+.dark .h-screen.flex .sidebar {
   background: #222836;
 }
 
