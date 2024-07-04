@@ -32,7 +32,7 @@
 }
 
 .page_body .satis-dropdown .sts-dropdown-results{
-  overflow-y: scroll;
+  ;
   @apply bg-white divide-gray-900 divide-opacity-25 shadow-gray-300 shadow-lg text-gray-900 text-opacity-75 dark:bg-gray-900 dark:shadow-gray-700 dark:shadow-lg dark:bg-opacity-75 dark:divide-gray-50 dark:divide-opacity-25 dark:text-gray-300;
 }
 
@@ -53,7 +53,7 @@
 }
 
 .topbar .satis-dropdown .sts-dropdown-results{
-  overflow-y: scroll;
+  ;
   @apply bg-white divide-gray-900 divide-opacity-25 shadow-gray-300 shadow-lg text-gray-900 text-opacity-75 dark:bg-gray-900 dark:shadow-gray-700 dark:shadow-lg dark:bg-opacity-75 dark:divide-gray-50 dark:divide-opacity-25 dark:text-gray-300;
 }
 
