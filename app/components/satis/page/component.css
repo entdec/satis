@@ -8,24 +8,54 @@
     background-color: #f3f3f4;
   }
 
-  .topbar .arrow {
-    opacity: 0.5; 
+  .arrow {
+    opacity: 0.5;
     display: block;
     width: 70px;
     margin-top: 20px;
-    margin-left: 20px;
+    margin-left: 220px;
+    transition: 0.3s ease;
+    transition-delay: 0.1s;
   }
 
-  .topbar .arrow:hover {
+  .sidebar.close .arrow{
+    margin-left: 15px;
+  }
+
+  .sidebar.close .arrow .fa-solid.arrow-left-to-bracket{
+    display: none;
+  }
+
+  .sidebar.close .fa-solid.fa-arrow-right-to-bracket{
+    display: block;
+  }
+
+  .sidebar .fa-solid.fa-arrow-right-to-bracket{
+    display: none;
+  }
+
+  .topbar .account-icon {
+    display: none;
+  }
+
+  .topbar.close .account-icon {
+    display:block;
+  }
+
+  .sidebar .fa-solid.arrow-left-to-bracket{
+    display: block;
+  }
+
+  .arrow:hover {
     color: #555555;
     cursor: pointer;
   }
 
-  .dark .topbar .arrow:hover {
+  .dark .arrow:hover {
     color: #c0c0c0;
   }
   
-  .dark .topbar .arrow {
+  .dark .arrow {
     color: #ffffff;
     opacity: 1;
     margin-top: 20px;
@@ -37,7 +67,6 @@
   
   .page_body {
     margin-left: 260px;
-    overflow-y: scroll;
     max-width: 87%;
     position: relative;
     transition: 0.3s ease;
@@ -47,13 +76,11 @@
     margin-left: 60px;
     z-index: 1;
     position: relative;
-    overflow: visible;
   }
 
   .page_bg .page_body.close .flex-1{
     z-index: 1;
     position: relative;
-    overflow: visible;
   }
   
   .dark .page_body {
