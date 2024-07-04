@@ -6,14 +6,12 @@
   background: #ffffff;
   overflow: visible;
   scrollbar-width: none;
-  overflow-y: scroll;
-  transition: 0.3s ease;
-  transition-delay: 0.1s;
 }
 
 .h-screen.flex .page_bg .sidebar.close{
   z-index: 1000;
   position: absolute;
+  margin-top: 4rem;
   overflow: visible;
 }
 
@@ -32,10 +30,7 @@
   height: 100%;
   width: 60px;
   z-index: 1000;
-  overflow-y: scroll;
   scrollbar-width: none;
-  transition: 0.3s ease;
-  transition-delay: 0.1s;
 }
 
 .sidebar::-webkit-scrollbar {
@@ -49,29 +44,22 @@
   height: 4rem;
   max-width: 87%;
   margin-left: 260px;
-  transition: 0.3s ease;
-  transition-delay: 0.1s;
   background: white;
   z-index: 2;
 }
 
-.page_bg .topbar.close {
-  max-width: 97%;
-  margin-left: 60px;
-  transition: 0.3s ease;
-  transition-delay: 0.1s;
+.h-screen.flex .page_bg .topbar.close {
+  max-width: 100%;
+  margin-left: 0px;
 }
 
 .page_body.close {
   margin-left: 50px;
   max-width: 97%;
-  transition: 0.3s ease;
-  transition-delay: 0.1s;
 }
 
 
 .account-icon {
-  opacity: 0.25;
   border-radius: 25px;
   padding: 20px;
 }
@@ -85,12 +73,16 @@
   opacity: 0;
 }
 
-.sidebar.close .sts-sidebar-menu-item{
-  margin-left: 2px;
+.sidebar.close .icon-link {
+  margin-top: -40px;
+  transition: 0.3s ease;
+  transition-delay: 0.1s;
 }
 
 
-
+.sidebar.close .sts-sidebar-menu-item{
+  margin-left: 2px;
+}
 
 .sidebar .boxture-logo {
   height: 52px;
@@ -125,8 +117,6 @@
 
 .dark .sidebar {
   background: #222836;
-  transition: 0.3s ease;
-  transition-delay: 0.1s;
 }
 
 .dark .sidebar .logo_name {

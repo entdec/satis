@@ -24,6 +24,9 @@ application.register("satis-menu", MenuComponentController);
 import PageComponentController from "satis/components/page/component_controller";
 application.register("satis-page", PageComponentController);
 
+import SidebarComponentController from "satis/components/sidebar/component_controller";
+application.register("satis-sidebar", SidebarComponentController);
+
 import SidebarMenuComponentController from "satis/components/sidebar_menu/component_controller";
 application.register("satis-sidebar-menu", SidebarMenuComponentController);
 

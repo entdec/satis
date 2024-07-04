@@ -10,8 +10,12 @@ html lang="en"
       / TOPBAR
       .page_bg
         .topbar
-          .arrow
-            .fa-solid.fa-bars
+          .account-icon
+            - if Current.account.logo.attached?
+              = image_tag url_for(Current.account.logo.variant(resize_to_limit: [nil, 25]).processed)
+            - else
+              .h-8.w-auto
+              = Current.account.name
           / NAVBAR
           .flex-1.px-4.flex.justify-between
             = navbar
@@ -25,32 +29,3 @@ html lang="en"
             .mt-4
               .max-w.mx-auto.px-4.sm:px-4.md:px-4
                 = body
-
-
-/ Minimize Sidebar
-javascript:
-  document.addEventListener("DOMContentLoaded", () => {
-    let sidebar_collapse = document.querySelector(".sidebar");
-    let topbar = document.querySelector(".topbar");
-    let page_body = document.querySelector(".page_body");
-    let sidebarBtn = document.querySelector(".arrow");
-
-    // Check stored state and apply it
-    const isClosed = sessionStorage.getItem('sidebarClosed') === 'true';
-    if (isClosed) {
-      sidebar_collapse.classList.add("close");
-      topbar.classList.add("close");
-      page_body.classList.add("close");
-    }
-
-    sidebarBtn.addEventListener("click", () => {
-      sidebar_collapse.classList.toggle("close");
-      topbar.classList.toggle("close");
-      page_body.classList.toggle("close");
-
-      // Save the current state to sessionStorage
-      const currentState = sidebar_collapse.classList.contains("close");
-      sessionStorage.setItem('sidebarClosed', currentState);
-    });
-  });
-

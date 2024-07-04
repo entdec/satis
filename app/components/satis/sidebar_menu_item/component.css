@@ -17,13 +17,13 @@
     @apply text-gray-800 dark:text-gray-300 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500
   }
   &__icon {
-    @apply mr-3 flex-shrink-0 h-6 w-6 text-gray-400 dark:text-gray-100 group-hover:text-gray-500;
+    @apply mr-3 flex-shrink-0 h-6 w-6 text-gray-400 dark:text-gray-200 group-hover:text-gray-500;
   }
   &__no-icon {
     @apply mr-3 flex-shrink-0 h-6;
   }
   &__label {
-    @apply flex-1 text-gray-700;
+    @apply flex-1 text-gray-700 dark:text-gray-300;
   }
   &__menu-icon {
     @apply text-gray-300 ml-3 flex-shrink-0 h-5 w-5 transform group-hover:text-gray-400 transition-colors ease-in-out duration-150;
@@ -33,6 +33,7 @@
 
 .page_bg .sidebar.close .sts-sidebar-menu-item__menu-icon {
   display: none;
+  margin-left: 2px;
 }
 
 .page_bg .sidebar.close .sts-sidebar-menu-item__label {
@@ -43,7 +44,6 @@
   display: none;
   visibility: hidden;
   opacity: 0;
-  transition: visibility 0s linear 1s, opacity 1s linear; /* Ensures it stays visible for 1 second after mouse leaves */
 }
 
 .page_bg .sidebar.close .sts-sidebar-menu-item:hover .sts-sidebar-menu-item__label {
@@ -52,7 +52,7 @@
 }
 
 .page_bg .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] {
-  @apply bg-white dark:bg-gray-900 py-0 px-0;
+  @apply rounded-md bg-white dark:bg-gray-900 py-0 px-0;
   display: block;
   visibility: visible;
   opacity: 1;
@@ -62,9 +62,6 @@
   margin-left: 35px;
   margin-top: -60px;
   z-index: 1000;
-  overflow: visible;
-  box-shadow: -0.5px 0px 3px 0.3px #aaaaaa;
-  transition: visibility 0s linear 0s, opacity 0.5s linear;
 }
 
 .page_bg .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover .sts-sidebar-menu-item__label {
