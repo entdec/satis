@@ -91,10 +91,10 @@ export default class FieldsForController extends ApplicationController {
 
     clonedItem
         .querySelector("a[data-action='click->satis-fields-for#removeAssociation']")
-        .parentElement.classList.remove("hidden")
+        ?.parentElement.classList.remove("hidden")
     clonedItem
         .querySelector("a[data-action='click->satis-fields-for#cloneAssociation']")
-        .parentElement.classList.add("hidden")
+        ?.parentElement.classList.add("hidden")
     this.setupNewChild(clonedItem)
   }
 
@@ -117,17 +117,17 @@ export default class FieldsForController extends ApplicationController {
     if (event.altKey) {
       item
           .querySelector("a[data-action='click->satis-fields-for#removeAssociation']")
-          .parentElement.classList.add("hidden")
+          ?.parentElement.classList.add("hidden")
       item
           .querySelector("a[data-action='click->satis-fields-for#cloneAssociation']")
-          .parentElement.classList.remove("hidden")
+          ?.parentElement.classList.remove("hidden")
     } else {
       item
           .querySelector("a[data-action='click->satis-fields-for#removeAssociation']")
-          .parentElement.classList.remove("hidden")
+          ?.parentElement.classList.remove("hidden")
       item
           .querySelector("a[data-action='click->satis-fields-for#cloneAssociation']")
-          .parentElement.classList.add("hidden")
+          ?.parentElement.classList.add("hidden")
     }
   }
 

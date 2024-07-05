@@ -6,7 +6,6 @@
   template data-satis-fields-for-target='template'
     = form.rails_fields_for collection, template_object, child_index: 'TEMPLATE' do |nested_form|
       - items_name_parts = nested_form.object_name.split(']').map{|x| x.gsub('[', '')}
-      .nested-fields.template.py-2
       .nested-fields.template.py-2.field-for-bg
         = nested_form.input :id, as: :hidden
         = nested_form.input :_destroy, as: :hidden
@@ -28,7 +27,7 @@
             a.text-primary-600.nested-fields_action href="#" data-action='click->satis-fields-for#removeAssociation'
               i.fal.fa-trash
 
-= form.rails_fields_for collection do |nested_form|
+= form.fields_for collection do |nested_form|
   - items_name_parts = nested_form.object_name.split(']').map{|x| x.gsub('[', '')}
   .nested-fields.field-for-bg.py-2 data-action='mousemove->satis-fields-for#mouseMove'
     = nested_form.input :id, as: :hidden
