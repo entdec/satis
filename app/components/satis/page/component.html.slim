@@ -10,12 +10,6 @@ html lang="en"
       / TOPBAR
       .page_bg
         .topbar
-          .account-icon
-            - if Current.account.logo.attached?
-              = image_tag url_for(Current.account.logo.variant(resize_to_limit: [nil, 25]).processed)
-            - else
-              .h-8.w-auto
-              = Current.account.name
           / NAVBAR
           .flex-1.px-4.flex.justify-between
             = navbar
