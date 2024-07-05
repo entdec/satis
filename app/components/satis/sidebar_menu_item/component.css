@@ -58,7 +58,7 @@
 }
 
 .h-screen.flex .page_bg .sidebar.close .icon-link .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] {
-  @apply rounded-md bg-white dark:bg-gray-900 py-0 px-0 shadow-lg dark:shadow-sm dark:shadow-gray-300;
+  @apply rounded-md bg-white dark:bg-gray-900 py-0 px-0 shadow-lg;
   display: block;
   visibility: visible;
   opacity: 1;
