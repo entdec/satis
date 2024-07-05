@@ -1,12 +1,15 @@
 .sts-sidebar-menu-item {
-    @apply pt-1;
-    & a.focus {
-      background: rgba(1, 1, 1, 0.1);
-  
-      .dark & {
-        background: rgba(255, 255, 255, 0.3);
-      }
+  @apply pt-1;
+  & a.focus {
+    background: rgba(1, 1, 1, 0.1);
+
+    .dark & {
+      background: rgba(255, 255, 255, 0.3);
     }
+    .close & {
+      width: 40px;
+    }
+  }
 
   &.active > [data-satis-sidebar-menu-item-target="link"] [data-satis-sidebar-menu-item-target="indicator"] {
     @apply rotate-90;
@@ -33,7 +36,6 @@
 
 .page_bg .sidebar.close .sts-sidebar-menu-item__menu-icon {
   display: none;
-  margin-left: 2px;
 }
 
 .page_bg .sidebar.close .sts-sidebar-menu-item__label {
@@ -56,7 +58,7 @@
 }
 
 .h-screen.flex .page_bg .sidebar.close .icon-link .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] {
-  @apply rounded-md bg-white dark:bg-gray-900 py-0 px-0;
+  @apply rounded-md bg-white dark:bg-gray-900 py-0 px-0 shadow-lg dark:shadow-sm dark:shadow-gray-300;
   display: block;
   visibility: visible;
   opacity: 1;
@@ -68,8 +70,9 @@
   z-index: 1000;
 }
 
-.page_bg .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover .sts-sidebar-menu-item__label {
+.page_bg .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item .sts-sidebar-menu-item__label {
   background: none;
+  display:block;
   overflow: visible;
   z-index: 1000;
   padding: 0;
@@ -104,5 +107,5 @@
 }
 
 .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"]::-webkit-scrollbar {
-  display: none; 
+  display: none;
 }
