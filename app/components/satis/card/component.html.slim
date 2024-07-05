@@ -6,7 +6,7 @@
           .ml-4.mt-4.flex-shrink-0.text-primary-600.dark:text-gray-300
             i class=icon
         .ml-4.mt-4.flex-1
-          h3.text-lg.leading-6.font-medium.text-gray-900.dark:text-gray-300
+          h3.text-lg.leading-6.font-medium.text-gray-900.dark:text-white
             == title
           - if description.present?
             p.mt-1.text-sm.text-gray-500.dark:text-gray-500
@@ -25,7 +25,7 @@
             = render(Satis::Menu::Component.new(menu))
 
   - if tabs?
-    = render Satis::Tabs::Component.new.tap {|c| c.original_view_context = view_context } do |t|
+    = render Satis::Tabs::Component.new(custom_link: custom_tabs_link).tap {|c| c.original_view_context = view_context } do |t|
       - tabs.each_with_index do |ta, i|
         - t.with_tab ta.name, id: ta.id, icon: ta.icon, padding: ta.padding, badge: ta.badge, menu: ta.menu, dirty: ta.dirty, title: ta.title, responsive: ta.responsive, selected_tab_index: ta.selected_tab_index do
           = ta

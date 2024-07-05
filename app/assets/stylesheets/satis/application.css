@@ -1,15 +1,74 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
- * files in this directory. Styles in this file should be added after the last require_* statement.
- * It is generally better to create a new file per style scope.
- *
- *= require_tree .
- *= require_self
- */
+@import '../../../components/satis/appearance_switcher/component.css';
+@import '../../../components/satis/breadcrumbs/component.css';
+@import '../../../components/satis/card/component.css';
+@import '../../../components/satis/color_picker/component.css';
+@import '../../../components/satis/date_time_picker/component.css';
+@import '../../../components/satis/dialog/component.css';
+@import '../../../components/satis/dropdown/component.css';
+@import '../../../components/satis/editor/component.css';
+@import '../../../components/satis/flash_messages/component.css';
+@import '../../../components/satis/input/component.css';
+@import '../../../components/satis/input_array/component.css';
+@import '../../../components/satis/map/component.css';
+@import '../../../components/satis/menu/component.css';
+@import '../../../components/satis/page/component.css';
+@import '../../../components/satis/sidebar/component.css';
+@import '../../../components/satis/sidebar_menu/component.css';
+@import '../../../components/satis/sidebar_menu_item/component.css';
+@import '../../../components/satis/tabs/component.css';
+
+@import 'components/diffy.css';
+@import 'components/form.css';
+@import "components/trix.css";
+
+@import 'components/phone-number.css';
+
+@import "components/flag-icons.min.css";
+
+@import "components/tippyjs.css";
+
+/* Every link without a class or empty class should be underlined */
+a:not([class]),
+a[class=""] {
+    @apply text-primary-600 underline;
+}
+
+.sts-grid {
+    @apply grid grid-cols-1 md:grid-cols-12 gap-4;
+}
+
+.mac {
+    .mac-only {
+        display: inline-block;
+    }
+
+    .pc-only {
+        display: none;
+    }
+}
+
+.pc {
+    .pc-only {
+        display: inline-block;
+    }
+
+    .mac-only {
+        display: none;
+    }
+}
+
+/* For the draggable controller */
+.draggable:hover {
+    cursor: pointer;
+}
+
+
+.trix-content {
+    ul {
+        list-style: square !important;
+    }
+
+    ol {
+        list-style: decimal !important;
+    }
+}

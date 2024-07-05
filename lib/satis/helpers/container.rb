@@ -12,6 +12,7 @@ module Satis
         add_helper :avatar, Satis::Avatar::Component
         add_helper :breadcrumbs, Satis::Breadcrumbs::Component
         add_helper :card, Satis::Card::Component
+        add_helper :editor, Satis::Editor::Component
         add_helper :flash_messages, Satis::FlashMessages::Component
         add_helper :info, Satis::Info::Component
         add_helper :map, Satis::Map::Component
@@ -20,6 +21,8 @@ module Satis
         add_helper :sidebar_menu, Satis::SidebarMenu::Component
         add_helper :tabs, Satis::Tabs::Component
         add_helper :input, Satis::Input::Component
+        add_helper :progress_bar, Satis::ProgressBar::Component
+        add_helper :dialog, Satis::Dialog::Component
       end
 
       def copyable(name, scrub: "#")
@@ -33,7 +36,7 @@ module Satis
       end
 
       def form_for(name, *args, &block)
-        options = args.extract_options!.deep_merge!(html: {data: {}})
+        options = args.extract_options!.deep_merge!(html: { data: {} })
         form_options_defaults!(options)
         update_form_data_options!(options[:html][:data], options)
         args << options.merge(builder: Satis::Forms::Builder)
@@ -68,12 +71,11 @@ module Satis
           original_args = args.dup
           options = args.extract_options!
           instance = if options.key? :variant
-            variant_component = component.to_s.sub(/::Component$/, "::#{options[:variant].to_s.camelize}::Component").safe_constantize
-            (variant_component || component).new(*original_args, **kwargs)
-          else
-            component.new(*original_args, **kwargs)
-          end
-
+                       variant_component = component.to_s.sub(/::Component$/, "::#{options[:variant].to_s.camelize}::Component").safe_constantize
+                       (variant_component || component).new(*original_args, **kwargs)
+                     else
+                       component.new(*original_args, **kwargs)
+                     end
           instance.original_view_context = action_view
           action_view.render(instance, &block)
         end

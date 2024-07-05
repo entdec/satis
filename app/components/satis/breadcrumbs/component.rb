@@ -5,7 +5,7 @@ module Satis
     class Crumb < ViewComponent::Base
       attr_reader :path, :title, :icon
 
-      def initialize(path:, title: nil, icon: nil)
+      def initialize(path: nil, title: nil, icon: nil)
         @path = path
         @title = title
         @icon = icon
@@ -13,7 +13,6 @@ module Satis
     end
 
     class Component < Satis::ApplicationComponent
-
       renders_many :crumbs, Crumb
       def initialize
         super

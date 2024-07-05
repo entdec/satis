@@ -1,0 +1,44 @@
+h1 Editors
+
+| Editors can be used with or without a form
+
+p A simple editor (not readonly)
+
+= sts.editor readonly: false do
+  | = sts.editor readonly: false do
+      | function(event) {
+          console.log(event.target)
+        }
+br
+= sts.editor readonly: false do
+  | function(event) {
+      console.log(event.target)
+    }
+
+p A simple readonly editor. You shouldn't be able to type in the editor.
+An editor is always read-only if you pass a block, unless you're using a form.
+
+= sts.editor do
+  | = sts.editor do
+      | function(event) {
+          console.log(event.target)
+        }
+br
+= sts.editor do
+  | function(event) {
+      console.log(event.target)
+    }
+
+
+h2 Form based editors
+
+= sts.editor do
+  | = sts.form_for(@document, url: documentation_index_path) do |f|
+      .grid.grid-cols-12.gap-4
+        .col-span-12
+          = f.editor :code
+
+= sts.form_for(@document, url: documentation_index_path) do |f|
+  .grid.grid-cols-12.gap-4
+    .col-span-12
+      = f.editor :code

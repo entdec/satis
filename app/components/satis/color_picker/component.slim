@@ -1,0 +1,4 @@
+.color-picker data-controller="satis-color-picker" data-color-picker-submit-value="false" data-satis-color-picker-css-variable-value=css_variable data-satis-color-picker-css-scope-value=css_scope
+  = sts.input(form: form, attribute: attribute, input_html: { class: 'sts-input__input white', 'data-satis-color-picker-target': 'input', 'data-action': 'change->satis-color-picker#inputUpdate' }) do |input|
+    - input.with_postfix classes: 'white'
+      .picker data-satis-color-picker-target="picker"

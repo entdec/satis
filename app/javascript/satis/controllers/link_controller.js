@@ -1,4 +1,4 @@
-import ApplicationController from "./application_controller"
+import ApplicationController from "satis/controllers/application_controller"
 
 /*
  * Link controller
@@ -6,13 +6,14 @@ import ApplicationController from "./application_controller"
  *   div data-controller="satis-link" href="" data-turbo="false" target="_blank" data-action='click->satis-link#follow'
  *
  */
-export default class extends ApplicationController {
+export default class LinkController extends ApplicationController {
   connect() {
     super.connect()
   }
 
   follow(event) {
-    if (event.target.closest(this.element.tagName.toLowerCase()) != this.element) {
+    if (event.target.tagName != this.element.tagName && event.target.closest(this.element.tagName.toLowerCase()) != this.element) {
+      // Don't do this anymore when both tagNames are the same (the one you click and the element with the controller
       // This is in to make sure row-links using satis-link controller will not trigger when an A or an SVG in that A is triggered.
       return
     }

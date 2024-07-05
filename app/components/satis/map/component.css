@@ -1,0 +1,9 @@
+@import "../../../assets/stylesheets/satis/components/leaflet.css";
+
+.sts-map {
+  margin-bottom: 1rem;
+
+  .sts-map__map {
+    height: 400px;
+  }
+}

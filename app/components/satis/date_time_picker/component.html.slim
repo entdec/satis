@@ -1,7 +1,7 @@
 div.satis-date-time-picker data-controller="satis-date-time-picker" data-satis-date-time-picker-time-picker-value=time_picker.to_s data-satis-date-time-picker-clearable-value=clearable.to_s data-satis-date-time-picker-locale-value="" data-satis-date-time-picker-range-value=range.to_s data-satis-date-time-picker-multiple-value=multiple.to_s data-satis-date-time-picker-week-start-value=week_start data-satis-date-time-picker-inline-value=inline.to_s data-satis-date-time-picker-format-value=JSON.dump(format)
   .relative.flex.items-center
     = form.text_field attribute, options[:input_html].merge(class: 'hidden')
-    input.form-control data-action="focus->satis-date-time-picker#showCalendar input->satis-date-time-picker#dateTimeEntered" data-satis-date-time-picker-target="input"
+    input.form-control data-action="focus->satis-date-time-picker#showCalendar input->satis-date-time-picker#dateTimeEntered" data-satis-date-time-picker-target="input" type="text"
     .absolute.inset-y-0.right-0.flex.py-1.5.pr-1.5
       button.cursor-pointer.w-6.h-full.flex.items-center.text-gray-400.outline-none.focus:outline-none data-satis-date-time-picker-target="clearButton" data-action="click->satis-date-time-picker#clear"
         i.fas.fa-xmark
@@ -9,13 +9,18 @@ div.satis-date-time-picker data-controller="satis-date-time-picker" data-satis-d
   .container.z-10.shadow.bg-white.border.border-gray-300.dark:bg-gray-800.dark:border-gray-700.rounded.p-4.w-72 class="#{inline ? 'inline-block' : 'hidden'}" data-satis-date-time-picker-target="calendarView"
     .flex.justify-between.items-center.mb-2
       div
+        button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 rounded-full" data-action="satis-date-time-picker#previousYear"
+          i.fal.fa-angle-double-left.text-gray-500.inline-flex.py-1
+        button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 rounded-full" data-action="satis-date-time-picker#previousMonth"
+          i.fal.fa-angle-left.text-gray-500.inline-flex.px-1.py-1
+      div.text-center
         span.text-lg.font-bold.text-gray-800.dark:text-gray-200 data-satis-date-time-picker-target="month"
         span.ml-1.text-lg.text-gray-600.dark:text-gray-200.font-normal data-satis-date-time-picker-target="year"
       div
-        button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-2 rounded-full" data-action="satis-date-time-picker#previousMonth"
-          i.fal.fa-angle-left.text-gray-500.inline-flex.px-2.py-1
-        button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 p-1 rounded-full" data-action="satis-date-time-picker#nextMonth"
-          i.fal.fa-angle-right.text-gray-500.inline-flex.px-2.py-1
+        button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 rounded-full" data-action="satis-date-time-picker#nextMonth"
+          i.fal.fa-angle-right.text-gray-500.inline-flex.px-1.py-1
+        button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 rounded-full" data-action="satis-date-time-picker#nextYear"
+          i.fal.fa-angle-double-right.text-gray-500.inline-flex.py-1
 
 
     .grid.grid-cols-7 data-satis-date-time-picker-target="weekDays"
@@ -30,10 +35,10 @@ div.satis-date-time-picker data-controller="satis-date-time-picker" data-satis-d
         label.flex-grow.text-sm.text-gray-500 Time
         .flex.items-center.space-x-2
           .bg-gray-100.rounded-md.w-full.text-right.flex.items-center.border.border-gray-100.focus:border-primary-500.focus:ring-2.focus:ring-primary-500.focus:outline-none.focus:ring-opacity-50 style=("caret-color: transparent;")
-            input.text-center.w-8.border-transparent.bg-transparent.p-0.h-6.text-sm.transition.duration-100.ease-in-out.border.border-transparent.focus:border-primary-500.focus:ring-2.focus:ring-primary-500.focus:outline-none.focus:ring-opacity-50.rounded inputmode="numeric" type="text" data-satis-date-time-picker-target="hours" data-action="satis-date-time-picker#changeHours keypress->satis-date-time-picker#keyPress"
+            input.text-center.w-8.border-transparent.bg-transparent.p-0.h-6.text-sm.transition.duration-100.ease-in-out.border.border-transparent.focus:border-primary-500.focus:ring-2.focus:ring-primary-500.focus:outline-none.focus:ring-opacity-50.rounded inputmode="numeric" type="text" data-satis-date-time-picker-target="hours" data-action="satis-date-time-picker#changeHours keypress->satis-date-time-picker#keyPress" maxlength="2"
             span contenteditable="false"
               | :
-            input.text-center.w-8.border-transparent.bg-transparent.p-0.h-6.text-sm.transition.duration-100.ease-in-out.border.border-transparent.focus:border-primary-500.focus:ring-2.focus:ring-primary-500.focus:outline-none.focus:ring-opacity-50.rounded inputmode="numeric" type="text" data-satis-date-time-picker-target="minutes" data-action="satis-date-time-picker#changeMinutes keypress->satis-date-time-picker#keyPress"
+            input.text-center.w-8.border-transparent.bg-transparent.p-0.h-6.text-sm.transition.duration-100.ease-in-out.border.border-transparent.focus:border-primary-500.focus:ring-2.focus:ring-primary-500.focus:outline-none.focus:ring-opacity-50.rounded inputmode="numeric" type="text" data-satis-date-time-picker-target="minutes" data-action="satis-date-time-picker#changeMinutes keypress->satis-date-time-picker#keyPress" maxlength="2"
           /span.relative.inline-flex.flex-shrink-0.transition.duration-200.ease-in-out.bg-gray-100.border.border-transparent.rounded.cursor-pointer.focus:border-primary-500.focus:ring-2.focus:ring-primary-500.focus:outline-none.focus:ring-opacity-50 aria-checked="false" role="checkbox" tabindex="0"
             input type="hidden" value="AM" /
             span.flex.items-center.justify-center.w-6.h-6.text-xs.text-gray-500.rounded-sm aria-hidden="true"  AM

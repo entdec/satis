@@ -1,15 +1,19 @@
-import ApplicationController from "../../../../frontend/controllers/application_controller"
-// FIXME: Is this full path really needed?
+import ApplicationController from "satis/controllers/application_controller"
 import {createPopper} from "@popperjs/core"
 
 
-export default class extends ApplicationController {
+export default class MenuComponentController extends ApplicationController {
   static targets = ["submenu", "toggle", "clear"]
 
   connect() {
     super.connect()
 
     if (this.hasSubmenuTarget) {
+      window.process = {
+        env: {
+          NODE_ENV: "production"
+        }
+      }
       this.popperInstance = createPopper(this.element, this.submenuTarget, {
         placement: this.submenuTarget.getAttribute("data-satis-menu-submenu-placement") || "auto",
         strategy: this.submenuTarget.getAttribute("data-satis-menu-submenu-strategy") || "fixed",

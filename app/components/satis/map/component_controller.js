@@ -1,8 +1,8 @@
 // map_controller.js
-import ApplicationController from "../../../../frontend/controllers/application_controller"
+import ApplicationController from "satis/controllers/application_controller"
 import L from "leaflet"
 
-export default class extends ApplicationController {
+export default class MapComponentController extends ApplicationController {
   static targets = ["container"]
   static values = { urls: String, latitude: Number, longitude: Number, zoomLevel: Number, geoJsonUrl: String }
 
@@ -17,16 +17,18 @@ export default class extends ApplicationController {
 
     // this.map.setView() etc... as normal.
 
-    // Load layers and setup event handlers, for example:
-    fetch(this.geoJsonUrlValue)
-      .then((response) => response.json())
-      .then((data) => {
-        L.geoJSON(data, {
-          onEachFeature: (feature, layer) => {
-            layer.on("click", () => this.onClick(layer))
-          },
-        }).addTo(this.map)
-      })
+    if(this.geoJsonUrlValue) {
+      // Load layers and setup event handlers, for example:
+      fetch(this.geoJsonUrlValue)
+        .then((response) => response.json())
+        .then((data) => {
+          L.geoJSON(data, {
+            onEachFeature: (feature, layer) => {
+              layer.on("click", () => this.onClick(layer))
+            },
+          }).addTo(this.map)
+        })
+    }
   }
 
   disconnect() {

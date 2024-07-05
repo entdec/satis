@@ -6,6 +6,7 @@ module Satis
   class ApplicationComponent < ViewComponent::Base
     include ViewComponent::Slotable
     include ActionView::Helpers::TranslationHelper
+    include Turbo::FramesHelper
 
     attr_accessor :original_view_context
 
@@ -38,15 +39,5 @@ module Satis
         original_view_context.render(instance, &block)
       end
     end
-
-    def method_missing(method_name, *args, **kwargs, &block)
-      if respond_to?("with_#{method_name}")
-        ActiveSupport::Deprecation.warn("ViewComponent setters have changed, replace '#{method_name}' with 'with_#{method_name}'")
-        send("with_#{method_name}", *args, **kwargs, &block)
-      else
-        super
-      end
-    end
-
   end
 end

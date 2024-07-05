@@ -1,8 +1,7 @@
-import ApplicationController from "../../../../frontend/controllers/application_controller"
-// FIXME: Is this full path really needed?
-import { debounce } from "../../../../frontend/utils"
+import ApplicationController from "satis/controllers/application_controller"
+import { debounce } from "satis/utils"
 
-export default class extends ApplicationController {
+export default class SidebarMenuComponentController extends ApplicationController {
   connect() {
     super.connect()
   }
