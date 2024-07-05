@@ -38,14 +38,14 @@
   flex-shrink: 0;
   display: flex;
   max-width: 100%;
-  margin-left: 0px;
+  margin-left: 0;
   background: white;
   z-index: 2;
 }
 
 .h-screen.flex .page_bg .topbar.close {
   max-width: 100%;
-  margin-left: 0px;
+  margin-left: 0;
 }
 
 .page_body.close {
@@ -69,7 +69,7 @@
 }
 
 .h-screen.flex .page_bg .sidebar.close .icon-link {
-  margin-top: 0px;
+  margin-top: 0;
   transition: 0.3s ease;
   transition-delay: 0.1s;
 }
