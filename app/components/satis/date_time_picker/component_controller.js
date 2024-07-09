@@ -164,6 +164,16 @@ export default class DateTimePickerComponentController extends ApplicationContro
     this.refreshCalendar(false)
   }
 
+  previousYear(event) {
+    this.displayValue = new Date(new Date(this.displayValue).setFullYear(this.displayValue.getFullYear() - 1));
+    this.refreshCalendar(false);
+  }
+
+  nextYear(event) {
+    this.displayValue = new Date(new Date(this.displayValue).setFullYear(this.displayValue.getFullYear() + 1));
+    this.refreshCalendar(false);
+  }
+
   clickedOutside(event) {
     if (event.target.tagName == "svg" || event.target.tagName == "path") {
       return
