@@ -1,11 +1,9 @@
-.h-screen.flex {
-  max-width: 100%;
-  max-height: 100%;
-  height: 100vh;
-  overflow: hidden;
-}
+  .h-screen.flex {
+    max-width: 100%;
+    max-height: 100%;
+  }
 
-.page_bg {
+  .page_bg {
     flex-direction: column;
     width: 0;
     flex-grow: 1;
@@ -14,30 +12,36 @@
     background-color: #f3f3f4;
   }
 
-  .arrow {
-    opacity: 0.5;
-    display: block;
-    width: 70px;
+  .sidebar .arrow {
     margin-top: 20px;
-    margin-left: 220px;
-    transition: 0.3s ease;
-    transition-delay: 0.1s;
+    font-size: 20px;
+    opacity: 0.5;
+    margin-left: 160px;
+    transform: scaleX(-1);
+    transition: backdrop-filter 0.3s ease-in-out, transform 0.3s ease-in-out;
   }
 
   .sidebar.close .arrow{
-    margin-left: 15px;
+    margin-right: -20px;
+    transform: scaleX(1);
   }
 
-  .topbar .account-icon {
-    display: none;
+  .h-screen.flex .page_bg .topbar .account-icon {
+    display: block;
+    margin-top: -14px;
+    margin-left: -30px;
+    opacity: 100%;
+  }
+
+  .h-screen.flex .page_bg .topbar .account-name {
+    @apply dark:text-white;
+    display: block;
+    margin-top: 20px;
+    opacity: 75%;
   }
 
   .topbar.close .account-icon {
     display:block;
-  }
-
-  .sidebar .fa-solid.arrow-left-to-bracket{
-    display: block;
   }
 
   .arrow:hover {
@@ -59,21 +63,18 @@
     background: rgb(17, 24, 39);
   }
   
-  .page_body {
+  .page_bg .page_body {
     margin-left: 260px;
+    overflow-y: auto;
     max-width: 87%;
-    transition: 0.3s ease;
     transition-delay: 0.1s;
+    position: relative;
+    height: calc(100vh - 4rem);
+    transition: backdrop-filter 0.3s ease-in-out, transform 0.3s ease-in-out;
   }
   .page_bg .page_body.close {
     margin-left: 60px;
     z-index: 1;
-
-  }
-
-  .page_bg .page_body.close .flex-1{
-    z-index: 1;
-    position: relative;
 
   }
   
