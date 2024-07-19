@@ -13,13 +13,10 @@ html lang="en"
           / NAVBAR
           .flex-1.px-4.flex.justify-between
             = navbar
-
-        / SIDEBAR
-        == sidebar
-
-        / BODY
         .page_body
           main.flex-1.relative.focus:outline-none
             .mt-4
               .max-w.mx-auto.px-4.sm:px-4.md:px-4
                 = body
+      .sidebar
+        == sidebar
