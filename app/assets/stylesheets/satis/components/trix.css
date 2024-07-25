@@ -232,6 +232,15 @@ trix-toolbar .trix-button--dialog {
 trix-toolbar .trix-dialog--link {
   max-width: 600px; }
 
+div.trix-dialog.trix-dialog--link{
+  display: none;
+}
+
+div.trix-dialog.trix-dialog--link.trix-active{
+  display: block;
+}
+
+
 trix-toolbar .trix-dialog__link-fields {
   display: flex;
   align-items: baseline; }
