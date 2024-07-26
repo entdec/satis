@@ -31,11 +31,11 @@ module Satis
 
         unless options[:input_html]["data-reflex"]
           actions = [options[:input_html]["data-action"], "change->satis-dropdown#display",
-                     "focus->satis-dropdown#focus"].join(" ")
+            "focus->satis-dropdown#focus"].join(" ")
         end
 
         options[:input_html].merge!("data-satis-dropdown-target" => "hiddenSelect",
-                                    "data-action" => actions)
+          "data-action" => actions)
 
         @block = block
         @page_size = options[:page_size] || 25
@@ -57,7 +57,7 @@ module Satis
         return [[]] unless obj
 
         if obj.is_a?(Array)
-          obj.filter_map {|item| option_value(item) }
+          obj.filter_map { |item| option_value(item) }
         else
           [option_value(obj)]
         end
@@ -69,10 +69,10 @@ module Satis
         if item.respond_to?(:id)
           value = item.send(:id)
           text = if item.respond_to?(:name)
-                    item.send(:name)
-                 else
-                    ""
-                 end
+            item.send(:name)
+          else
+            ""
+          end
         elsif item.is_a?(Array)
           value = item.first
           text = item.second
@@ -108,6 +108,10 @@ module Satis
 
       def item_html(item)
         form.template.capture { @block.call(item) }
+      end
+
+      def input_class
+        [@options.fetch(:input_html, {}).fetch(:class, ""), "sts-input__input", form.has_error?(attribute) ? "is-invalid" : ""].join(" ")
       end
     end
   end
