@@ -21,6 +21,11 @@
     transition: backdrop-filter 0.3s ease-in-out, transform 0.3s ease-in-out;
   }
 
+  .ui-flash-container{
+    @apply dark:bg-emerald-500 dark:bg-opacity-25 dark:text-gray-300 dark:shadow-md dark:border-t-0;
+    margin-top: -7px;
+  }
+
   .sidebar.close .arrow{
     margin-right: -20px;
     transform: scaleX(1);
