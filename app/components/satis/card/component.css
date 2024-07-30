@@ -6,15 +6,11 @@
   }
 
   &__tabs {
-    @apply bg-white px-4 border-b border-gray-200 sm:px-5 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300;
+    @apply bg-white px-4 border-b border-gray-200 sm:px-5 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300;
 
     a:first {
       @apply ml-4;
     }
-  }
-
-  .sts-card__header{
-    @apply dark:bg-gray-900 dark:bg-opacity-50;
   }
 
   a.tab:not(.selected) {
