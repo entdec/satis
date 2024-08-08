@@ -1,10 +1,9 @@
-.sidebar
-  .icon-link
-    - @menu.items.each do |item|
-      = render Satis::SidebarMenuItem::Component.new(item: item, menu_options: menu_options)
-  .arrow
-    .fa-solid.fa-arrow-right-to-bracket
-  = footer
+.icon-link
+  - @menu.items.each do |item|
+    = render Satis::SidebarMenuItem::Component.new(item: item, menu_options: menu_options)
+.arrow
+  .fa-solid.fa-arrow-right-to-bracket
+= footer
 
 
 
