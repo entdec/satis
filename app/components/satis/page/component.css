@@ -66,6 +66,10 @@
   .dark .page_body {
     background: rgb(17, 24, 39);
   }
+
+  .signum-notification-body {
+    @apply dark:bg-gray-700;
+  }
   
 
   
