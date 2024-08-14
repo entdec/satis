@@ -17,7 +17,7 @@
 
 
   &__link {
-    @apply text-gray-800 dark:text-gray-300 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500
+    @apply text-gray-800 dark:text-gray-300 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500
   }
 
   &__icon {
@@ -37,6 +37,10 @@
 
 .sidebar.close .sts-sidebar-menu-item__label {
   display: none;
+}
+
+.sidebar.close > .sts-sidebar-menu-item {
+  max-width: 44px;
 }
 
 .sidebar.close .sts-sidebar-menu-item [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item{
