@@ -9,6 +9,7 @@
     .close & {
       width: 40px;
     }
+
   }
 
   &.active > [data-satis-sidebar-menu-item-target="link"] [data-satis-sidebar-menu-item-target="indicator"] {
@@ -21,7 +22,7 @@
   }
 
   &__icon {
-    @apply mr-3 flex-shrink-0 h-6 w-6 text-gray-400 dark:text-gray-200 group-hover:text-gray-500;
+    @apply mr-3 flex-shrink-0 h-6 text-gray-400 dark:text-gray-200 group-hover:text-gray-500;
   }
   &__no-icon {
     @apply mr-3 flex-shrink-0 h-6;
@@ -39,8 +40,8 @@
   display: none;
 }
 
-.sidebar.close > .sts-sidebar-menu-item {
-  max-width: 44px;
+.sidebar.close .icon-link > .sts-sidebar-menu-item {
+  width: 40px;
 }
 
 .sidebar.close .sts-sidebar-menu-item [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item{
