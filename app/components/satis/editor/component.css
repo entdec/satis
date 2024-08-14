@@ -1,3 +1,14 @@
 .sts-editor {
     @apply bg-white h-full sm:rounded-lg sm:shadow dark:bg-gray-800 overflow-hidden;
 }
+
+.cm-editor{
+    @apply dark:bg-gray-900 dark:border dark:border-opacity-25 dark:border-gray-50 ;
+}
+
+.cm-editor .cm-gutter{
+    @apply dark:bg-gray-700 dark:text-white dark:border-none;
+}
+.cm-activeLineGutter{
+    @apply dark:text-black;
+}
