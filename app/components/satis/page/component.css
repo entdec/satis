@@ -11,6 +11,7 @@
     opacity: 0.99;
     overflow: auto;
     z-index: 2;
+  }
   .ui-flash-container{
     @apply dark:bg-emerald-500 dark:bg-opacity-25 dark:text-gray-300 dark:shadow-md dark:border-t-0;
     margin-top: -7px;
@@ -19,8 +20,6 @@
   .sidebar.close .arrow{
     margin-right: -20px;
     transform: scaleX(1);
-  }
-
   }
 
   .h-screen.flex .page_bg .topbar .account-name {
