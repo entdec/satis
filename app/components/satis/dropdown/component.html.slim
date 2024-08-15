@@ -13,10 +13,10 @@ div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controlle
           .flex.flex-auto.flex-wrap
             / Input where you can search
             input.p-1.px-2.appearance-none.outline-none.w-full.sts-dropdown-input.text-gray-800.dark:text-gray-300 data-action="input->satis-dropdown#search" data-satis-dropdown-target="searchInput" placeholder=placeholder autofocus=options[:autofocus]
-          / Reset button
-                      - reset_button_class=(options[:input_html][:value].present? ? "cursor-pointer w-6 h-full flex items-center text-gray-400 outline-none focus:outline-none" : "cursor-pointer w-6 h-full flex items-center text-gray-400 outline-none focus:outline-nonem hidden")
-                      div class=reset_button_class type="button" data-satis-dropdown-target="resetButton" data-action="click->satis-dropdown#reset focus->satis-dropdown#focus" tabindex="-1"
-                        i.fas.fa-xmark
+            / Reset button
+          - reset_button_class=(options[:input_html][:value].present? ? "cursor-pointer w-6 h-full flex items-center text-gray-400 outline-none focus:outline-none" : "cursor-pointer w-6 h-full flex items-center text-gray-400 outline-none focus:outline-none hidden")
+          div class=reset_button_class type="button" data-satis-dropdown-target="resetButton" data-action="click->satis-dropdown#reset focus->satis-dropdown#focus" tabindex="-1"
+            i.fas.fa-xmark
           - unless @toggle_button == false
             .text-gray-300.w-8.py-1.pl-2.pr-1.flex.items-center.dark:border-gray-700
               / Up/down chevrons
