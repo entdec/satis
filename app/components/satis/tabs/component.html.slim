@@ -1,11 +1,11 @@
-.sts-tabs id=group data-controller="satis-tabs" data-satis-tabs-persist-value=persist data-satis-tabs-key-value=key
+.sts-tabs id=group data-controller="satis-tabs" data-satis-tabs-persist-value=persist data-satis-tabs-key-value=key data-action="keydown.ctrl->satis-tabs#selectFromKeyboard"
   .sm:hidden.pl-4.pr-6
     label.sr-only for="tabs" Select a tab
     select#tabs.block.w-full.py-2.text-base.border-gray-300.focus:outline-none.focus:ring-primary-500.focus:border-primary-500.sm:text-sm.rounded-md name="tabs" data-action="change->satis-tabs#select" data-satis-tabs-target="select"
       - tabs.each do |tab|
         option selected=tab.selected? = ct(".#{tab.name}", scope: :tab)
   .hidden.sm:block
-    .border-b.border-gray-200
+    .border-b.border-gray-200.dark:border-opacity-25.dark:bg-gray-900.dark:bg-opacity-50
       nav.sts-tabs__nav aria-label="Tabs"
         - tabs.each.with_index do |tab, index|
           - id = tab.id.present? ? tab.id : tab.name
@@ -18,7 +18,7 @@
                     span.relative.inline-flex.rounded-full.h-2.w-2.bg-blue-500
               span id="tab_label_#{tab.id}"
                 = ct(".#{tab.name}", scope: :tab)
-              i.fal.fa-triangle-exclamation.ml-2.hidden
+              i.fal.fa-square-xmark.fa-solid.ml-2.hidden
               - if tab.badge
                 span.badge
                   = tab.badge

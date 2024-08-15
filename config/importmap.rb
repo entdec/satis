@@ -47,3 +47,4 @@ pin "@codemirror/lang-markdown", to: "@codemirror--lang-markdown.js" # @6.2.4
 pin "@lezer/markdown", to: "@lezer--markdown.js" # @1.2.0
 pin "intl-tel-input", to: "intl-tel-input.js" # @19.5.6
 pin "intl-tel-input-utils", to: "intl-tel-input-utils.js" # @19.5.6
+pin "pickr", to: "pickr.es5.min.js" # @0.1.4

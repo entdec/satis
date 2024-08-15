@@ -51,7 +51,12 @@
     &.is-invalid {
       @apply text-red-600;
 
-      .fa-triangle-exclamation {
+      a {
+        @apply text-red-600;
+      }
+
+      .fa-square-xmark {
+        @apply text-red-400;
         display: inline;
       }
     }

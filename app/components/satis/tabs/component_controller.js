@@ -7,19 +7,6 @@ export default class TabsComponentController extends ApplicationController {
   static targets = ["tab", "content", "select"]
   static values = { persist: Boolean, key: String }
 
-  static keyBindings = [
-    {
-      keys: ["ctrl+1", "ctrl+2", "ctrl+3", "ctrl+4", "ctrl+5", "ctrl+6", "ctrl+7", "ctrl+8", "ctrl+9", "ctrl+0"],
-      handler: (event, combo, controller) => {
-        let index = -1 + +combo.split("+")[1]
-        if (index === -1) {
-          index = 10
-        }
-        controller.open(index)
-      },
-    },
-  ]
-
   connect() {
     super.connect()
 
@@ -43,6 +30,19 @@ export default class TabsComponentController extends ApplicationController {
     }
   }
 
+  selectFromKeyboard(event) {
+    const isNumber = isFinite(event.key)
+
+    if (isNumber) {
+      let index = Number(event.key) - 1
+      if (index === -1) {
+        index = 9
+      }
+
+      this.open(index, true)
+    }
+  }
+
   select(event) {
     let index = null
     if (event.srcElement.tagName == "SELECT") {
@@ -53,7 +53,13 @@ export default class TabsComponentController extends ApplicationController {
         return el.attributes["id"] === clickedTab.attributes["id"]
       })
     }
-    this.open(index)
+
+    //return if tab is already selected
+    if (this.tabTargets[index].classList.contains("selected")) {
+      return
+    }
+
+    this.open(index, true)
 
     if (this.keyValue) {
       this.setUserData(this.keyValue, { tab_index: index }).then((data) => {
@@ -66,7 +72,7 @@ export default class TabsComponentController extends ApplicationController {
     return false
   }
 
-  open(index) {
+  open(index, focusFirstElement = false) {
     const self = this
     if (index == -1 || this.tabTargets[index] === undefined) {
       return
@@ -91,5 +97,12 @@ export default class TabsComponentController extends ApplicationController {
       }
     }, 100)
     this.selectTarget.selectedIndex = index
+
+    //focus first element in tab content for easy switching to another one tab
+    if (focusFirstElement) {
+      this.contentTargets[index]
+        .querySelector("select:not(.hidden), input:not([type=hidden]), textarea:not(.hidden), button:not([disabled])")
+        ?.focus()
+    }
   }
 }

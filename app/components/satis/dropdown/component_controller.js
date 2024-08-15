@@ -622,6 +622,32 @@ export default class DropdownComponentController extends ApplicationController {
             this.selectItem(dataDiv)
             this.setSelectedItem(dataDiv.getAttribute("data-satis-dropdown-item-value"))
             this.searchQueryValue = ""
+          } else if(this.searchQueryValue?.length > 0) {
+            // hide all items that don't match the search query
+            const searchValue = this.searchQueryValue
+            let matches = []
+            this.itemTargets.forEach((item) => {
+              const text = item.getAttribute("data-satis-dropdown-item-text")
+              const matched = this.needsExactMatchValue
+                ? searchValue.localeCompare(text, undefined, { sensitivity: "base" }) === 0
+                : new RegExp(searchValue, "i").test(text)
+
+              const isHidden = item.classList.contains("hidden")
+              if (!isHidden) {
+                if (matched) {
+                  matches.push(item)
+                } else {
+                  item.classList.toggle("hidden", true)
+                }
+              }
+            })
+
+            // don't show results
+            if (matches.length > 0) {
+              this.showResultsList(event)
+            } else {
+              if (!this.showSelectedItem()) this.hideResultsList(event)
+            }
           }
 
           if (itemCount > 0) {
@@ -872,9 +898,9 @@ export default class DropdownComponentController extends ApplicationController {
     const elements = this.selectedItemsTemplateTarget.content.querySelectorAll(`[data-satis-dropdown-item-text*="${trimmedValue}"]`);
     const selected = Array.from(elements).find(element => element.getAttribute('data-satis-dropdown-item-text').trim() === trimmedValue);
     if (!selected && this.searchInputTarget.value.length > 0 && !this.freeTextValue) {
-      this.searchInputTarget.closest(".bg-white").classList.toggle("warning", true)
+      this.searchInputTarget.closest(".sts-dropdown").classList.toggle("warning", true)
     } else {
-      this.searchInputTarget.closest(".bg-white").classList.toggle("warning", false)
+      this.searchInputTarget.closest(".sts-dropdown").classList.toggle("warning", false)
     }
   }
 

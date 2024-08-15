@@ -12,3 +12,4 @@
 /node_modules/
 .ruby-version
 .npmrc
+Gemfile.lock

@@ -1,0 +1,60 @@
+  .h-screen.flex {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .h-screen.flex .page_bg {
+    @apply bg-gray-50 dark:bg-gray-700;
+    flex-direction: column;
+    width: 0;
+    flex-grow: 1;
+    opacity: 0.99;
+    overflow: auto;
+    z-index: 2;
+  }
+  .ui-flash-container{
+    @apply dark:bg-emerald-500 dark:bg-opacity-25 dark:text-gray-300 dark:shadow-md dark:border-t-0;
+    margin-top: -7px;
+  }
+
+  .sidebar.close .arrow{
+    margin-right: -20px;
+    transform: scaleX(1);
+  }
+
+  .h-screen.flex .page_bg .topbar .account-name {
+    @apply dark:text-white;
+    display: block;
+    margin-top: 20px;
+    opacity: 75%;
+  }
+
+  .h-screen.flex .page_bg .topbar .account-icon {
+    display: block;
+    visibility: visible;
+  }
+
+  
+  .h-screen.flex .page_bg .page_body {
+    @apply bg-gray-50 dark:bg-gray-700;
+
+    margin-left: 260px;
+    max-width: 100%;
+    transition-delay: 0.1s;
+    overflow-y: scroll;
+    height: calc(100vh - 4rem);
+    transition: backdrop-filter 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
+  .h-screen.flex .page_bg .page_body.close {
+    margin-left: 60px;
+
+
+  }
+
+  .dark .page_body {
+    background: rgb(17, 24, 39);
+  }
+
+  
+
+  
