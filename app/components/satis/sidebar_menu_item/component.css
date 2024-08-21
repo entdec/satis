@@ -39,6 +39,7 @@
   display: none;
 }
 
+
 .sidebar.close .sts-sidebar-menu-item [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item{
   display: none;
   visibility: hidden;
@@ -56,6 +57,16 @@
   display: none;
   visibility: hidden;
   opacity: 0;
+}
+
+.sidebar.close .icon-link > .sts-sidebar-menu-item:hover:not(:has([data-satis-sidebar-menu-item-target="submenu"])) .sts-sidebar-menu-item__label {
+  @apply rounded-md bg-gray-50 dark:bg-gray-800 shadow-md py-2;
+  text-decoration-thickness: 2px;
+  display: block;
+  position: absolute;
+  padding-right: 20px;
+  padding-left: 20px;
+  margin-left: 40px;
 }
 
 .sidebar.close .icon-link > .sts-sidebar-menu-item:has([data-satis-sidebar-menu-item-target="submenu"]):hover > .sts-sidebar-menu-item__link > .sts-sidebar-menu-item__label {
