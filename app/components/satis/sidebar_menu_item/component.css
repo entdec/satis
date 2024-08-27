@@ -39,6 +39,10 @@
   display: none;
 }
 
+.sidebar.close .sts-sidebar-menu-item:hover > .sts-sidebar-menu-item__link {
+  width: 40px;
+}
+
 
 .sidebar.close .sts-sidebar-menu-item [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item{
   display: none;
