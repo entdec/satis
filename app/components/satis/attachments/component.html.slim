@@ -1,0 +1,27 @@
+span.attachment-upload data-controller="attachment-upload" data-attachment-upload-url="#{upload_url}" data-attachment-upload-param-name="attachments[]" data-attachment-upload-extra-data='{}'
+  span.icon.upload
+    i.fas.fa-upload
+  span.icon.uploading
+    i.fal.fa-circle-notch.fa-spin
+  | Drag or click to attach files
+br
+
+.attachments__group
+  - model.attachments.each do |attachment|
+    - if attachment.previewable? || attachment.image?
+      div.attachments__attachment(style="background-image: url(#{attachment.image? ? url_for(attachment.variant(resize_to_limit: [400, 400])) : attachment.blob.preview(resize_to_limit: [200, 200]).processed.url});")
+        = link_to attachment_path(attachment), data: { controller: 'attachment-delete', 'action': 'attachment-delete#delete' }, class: 'attachments__button' do
+          i.fas.fa-xmark
+        = link_to attachment_path(attachment), data: { turbo: false, turbolinks: false }, class: 'attachments__button', download: attachment.filename do
+          i.fas.fa-download
+        span.attachments__filename
+          = attachment.filename
+    - else
+      div.attachments__attachment
+        i.fas.fa-file-alt.justify-center.items-center.text-gray-600.text-4xl
+        = link_to attachment_path(attachment), data: { controller: 'attachment-delete', 'action': 'attachment-delete#delete' }, class: 'attachments__button' do
+          i.fas.fa-xmark
+        = link_to attachment_path(attachment), data: { turbo: false, turbolinks: false }, class: 'attachments__button', download: attachment.filename do
+          i.fas.fa-download
+        span.attachments__filename
+          = attachment.filename

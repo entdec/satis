@@ -1,0 +1,40 @@
+.attachments__group{
+  @apply grid grid-cols-7 gap-x-0 gap-y-6 sm:grid-cols-7 sm:gap-x-0 lg:grid-cols-7 xl:gap-x-0;
+  margin-top: 40px;
+}
+
+.attachments__attachment {
+  @apply relative gap-2 shadow hover:opacity-50 bg-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  max-height: 13rem;
+  max-width: 13rem;
+  aspect-ratio: 1 / 1;
+}
+
+.attachments__attachment .attachments__button {
+  display: none;
+}
+
+.attachments__attachment:hover .attachments__button {
+  @apply relative text-black bg-white;
+  margin-right: -100px;
+  display: inline;
+}
+
+.attachments__attachment:hover .attachments__button {
+  @apply relative text-black;
+  margin-left: 110px;
+  display: inline;
+}
+
+.attachments__attachment .attachments__filename {
+  display: none;
+}
+
+.attachments__attachment:hover .attachments__filename {
+  @apply relative text-white bg-black;
+  display: block;
+  margin-top: 100px;
+}

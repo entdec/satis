@@ -5,6 +5,7 @@ module Satis
     end
 
     def method_missing(method, *args, **kwargs, &block)
+      binding.pry
       if method.to_s.ends_with?('_url') || method.to_s.ends_with?('_path') && main_app.respond_to?(method)
         main_app.send(method, *args, **kwargs, &block)
       else
