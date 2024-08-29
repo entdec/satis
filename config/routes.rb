@@ -7,6 +7,17 @@ Satis::Engine.routes.draw do
       resources :avatars
       resources :cards
       resources :editors
+      resources :products do
+        resources :attachments, only: [:index, :create, :destroy, :show]
+      end
+
+      resources :templates do
+        resources :attachments, only: [:index, :create, :destroy, :show]
+      end
+
+      resources :layouts do
+        resources :attachments, only: [:index, :create, :destroy, :show]
+      end
       resources :forms do
         get "select", on: :collection
       end
