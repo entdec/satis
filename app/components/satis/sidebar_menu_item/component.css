@@ -70,19 +70,22 @@
 }
 
 .sidebar.close .icon-link > .sts-sidebar-menu-item:has([data-satis-sidebar-menu-item-target="submenu"]):hover > .sts-sidebar-menu-item__link > .sts-sidebar-menu-item__label {
-  @apply rounded-md bg-gray-50 dark:bg-gray-800 shadow-md py-2;
-  text-decoration-thickness: 2px;
+  @apply text-white dark:bg-gray-600;
   display: block;
   position: absolute;
-  padding-right: 20px;
-  padding-left: 20px;
-  margin-left: 40px;
-  margin-top: -75px;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 5px 10px;
+  border-radius: 4px;
+  z-index: 10;
+  width: 200px;
+  margin-left: 22px;
+  margin-bottom: 80px;
 }
 
+
 .sidebar.close .icon-link > .sts-sidebar-menu-item:has([data-satis-sidebar-menu-item-target="submenu"]):last-child:hover > .sts-sidebar-menu-item__link > .sts-sidebar-menu-item__label {
-  margin-top: -840px;
-  margin-left: 70px;
+  margin-top: -760px;
+  margin-left: 20px;
 }
 
 .fontawesome-i2svg-active .h-screen.flex .sidebar.close .icon-link .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] {
@@ -107,7 +110,13 @@
   position: fixed;
   padding-right: 20px;
   margin-top: 0;
+  width: 200px;
+  margin-left: 0px;
 
+}
+
+.h-screen.flex .sidebar.close .icon-link .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item a.focus{
+  @apply bg-white dark:bg-gray-900;
 }
 
 .h-screen.flex .sidebar.close .icon-link .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item.pl-4 {
@@ -149,4 +158,42 @@
 
 .sidebar.close .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"]::-webkit-scrollbar {
   display: none;
+}
+
+.h-screen.flex .sidebar .icon-link .sts-sidebar-menu-item .submenu-label {
+  display: none;
+}
+
+.h-screen.flex .sidebar.close .icon-link .sts-sidebar-menu-item .submenu-label {
+  display: none;
+}
+
+.h-screen.flex .sidebar.close .icon-link .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover .submenu-label {
+  @apply text-white dark:bg-gray-600;
+  display: block;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px 10px;
+  border-radius: 4px;
+  z-index: 10;
+  width: 200px;
+  margin-left: 118px;
+  margin-bottom: 150px;
+}
+
+.h-screen.flex .sidebar.close .icon-link .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item .submenu-label {
+  display: none; /* Hide the duplicated label by default */
+}
+
+.h-screen.flex .sidebar.close .icon-link .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover .submenu-label {
+  @apply text-white dark:bg-gray-600;
+  display: block;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px 10px;
+  border-radius: 4px;
+  z-index: 10;
+  width: 200px;
+  margin-left: 75px;
+  margin-bottom: 150px;
 }
