@@ -7,4 +7,21 @@ span.attachment-upload data-controller="attachment-upload" data-attachment-uploa
 br
 
 div.attachments
-  = render partial: 'satis/attachments/index', locals: { attachments: model.attachments, upload_url: polymorphic_path([model, :attachments]) }
+  - model.attachments.each do |attachment|
+    - if attachment.previewable? || attachment.image?
+      div.attachments__attachment(style="background-image: url(#{attachment_image_url(attachment)})")
+        = link_to rails_blob_path(attachment, disposition: "attachment"), data: { controller: 'attachment-delete', 'action': 'attachment-delete#delete' }, class: 'attachments__button' do
+          i.fas.fa-xmark
+        = link_to rails_blob_url(attachment, disposition: "attachment"), data: { turbo: false, turbolinks: false }, class: 'attachments__button', download: attachment.filename do
+          i.fas.fa-download
+        span.attachments__filename
+          = attachment.filename
+    - else
+      div.attachments__attachment
+        i.fas.fa-file-alt.justify-center.items-center.text-gray-600.text-4xl
+        = link_to rails_blob_path(attachment, disposition: "attachment"), data: { controller: 'attachment-delete', 'action': 'attachment-delete#delete' }, class: 'attachments__button' do
+          i.fas.fa-xmark
+        = link_to rails_blob_url(attachment, disposition: "attachment"), data: { turbo: false, turbolinks: false }, class: 'attachments__button', download: attachment.filename do
+          i.fas.fa-download
+        span.attachments__filename
+          = attachment.filename

@@ -3,7 +3,7 @@
 module Satis
   module Attachments
     class Component < Satis::ApplicationComponent
-      attr_reader :model, :attachments_options
+      attr_reader :model, :attachments_options, :upload_url
 
       def initialize(model, **options)
         super()
