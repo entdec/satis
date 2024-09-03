@@ -4,7 +4,7 @@
 }
 
 .attachments__attachment {
-  @apply relative gap-2 shadow hover:opacity-50 bg-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100;
+  @apply relative gap-2 shadow hover:opacity-50 bg-gray-500 dark:bg-gray-900 dark:text-white rounded-lg focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 focus-within:ring-offset-gray-100;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -18,7 +18,7 @@
 }
 
 .attachments__attachment:hover .attachments__button {
-  @apply relative text-black bg-white;
+  @apply relative text-black;
   margin-right: -100px;
   display: inline;
 }

@@ -13,14 +13,16 @@ module Satis
       end
 
       def before_render
-        # Ensure the upload URL is properly set, using helpers.main_app if necessary
-        @upload_url ||= polymorphic_path([@model, :attachments])
+        @upload_url
+      end
+
+      def model_has_images
+        model.respond_to?(:images)
       end
 
       private
-
-      def polymorphic_path(args)
-        helpers.polymorphic_path(args)
+      def main_app
+        helpers.main_app
       end
 
       def url_for(args)

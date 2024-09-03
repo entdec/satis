@@ -13,10 +13,10 @@ module Satis
     end
 
     def destroy
-      attachment = @model.images.find_by(id: params[:id])
+      attachment = @model.images.find( params[:id])
       attachment&.purge
 
-      head :no_content
+      render :create
     end
 
     def show
@@ -25,6 +25,7 @@ module Satis
     end
 
     private
+
 
     def set_objects
       if params[:sgid]

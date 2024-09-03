@@ -2,22 +2,12 @@ Satis::Engine.routes.draw do
   resources :user_data, only: %i[show update]
   resources :dialogs, only: %[show], constraints: { id: /[A-Za-z0-9\_\-\/]+/ }
 
+
   unless Rails.env.production?
     namespace :documentation do
       resources :avatars
       resources :cards
       resources :editors
-      resources :products do
-        resources :attachments, only: [:index, :create, :destroy, :show]
-      end
-
-      resources :templates do
-        resources :attachments, only: [:index, :create, :destroy, :show]
-      end
-
-      resources :layouts do
-        resources :attachments, only: [:index, :create, :destroy, :show]
-      end
       resources :forms do
         get "select", on: :collection
       end
@@ -26,3 +16,4 @@ Satis::Engine.routes.draw do
     resources :documentation
   end
 end
+
