@@ -13,6 +13,9 @@
     - if item.menu
       i.sts-sidebar-menu-item__menu-icon.fa-solid.fa-angle-right style="width: 20px;" data-satis-sidebar-menu-item-target="indicator"
 
+    - if item.menu
+      span.sts-sidebar-menu-item__label.submenu-label= item.label
+
   - if item.menu
     div.hidden data-satis-sidebar-menu-item-target="submenu"
       = render(Satis::SidebarMenuItem::Component.with_collection(item.menu.items))
