@@ -109,9 +109,8 @@
   opacity: 1;
   position: fixed;
   padding-right: 20px;
-  margin-top: 0;
   width: 200px;
-  margin-left: 0px;
+  margin-left: 0;
 
 }
 
@@ -182,7 +181,7 @@
 }
 
 .h-screen.flex .sidebar.close .icon-link .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item .submenu-label {
-  display: none; /* Hide the duplicated label by default */
+  display: none;
 }
 
 .h-screen.flex .sidebar.close .icon-link .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover > [data-satis-sidebar-menu-item-target="submenu"] .sts-sidebar-menu-item:hover .submenu-label {
