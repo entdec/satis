@@ -21,11 +21,12 @@ export default class FieldsForController extends ApplicationController {
 
     let tmpNode = event.target.closest(".nested-fields")
     tmpNode.classList.remove("template")
-    tmpNode.querySelectorAll(".association").forEach((item) => {
+
+    tmpNode.querySelectorAll(":scope > .head > .association").forEach((item) => {
       if (item.classList.contains("hidden")) {
         item.classList.remove("hidden")
       } else {
-        item.remove()
+        item.classList.add("hidden")
       }
     })
 
