@@ -19,6 +19,7 @@ module Satis
         add_helper :menu, Satis::Menu::Component
         add_helper :page, Satis::Page::Component
         add_helper :sidebar_menu, Satis::SidebarMenu::Component
+        add_helper :attachments, Satis::Attachments::Component
         add_helper :tabs, Satis::Tabs::Component
         add_helper :input, Satis::Input::Component
         add_helper :progress_bar, Satis::ProgressBar::Component
