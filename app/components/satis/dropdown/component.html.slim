@@ -13,11 +13,10 @@ div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controlle
           .flex.flex-auto.flex-wrap
             / Input where you can search
             input.p-1.px-2.appearance-none.outline-none.w-full.sts-dropdown-input.text-gray-800.dark:text-gray-300 data-action="input->satis-dropdown#search" data-satis-dropdown-target="searchInput" placeholder=placeholder autofocus=options[:autofocus]
-          div
             / Reset button
-            - unless @reset_button == false
-              button.cursor-pointer.w-6.h-full.flex.items-center.text-gray-400.outline-none.focus:outline-none type="button" data-satis-dropdown-target="resetButton" data-action="click->satis-dropdown#reset focus->satis-dropdown#focus" tabindex="-1"
-                i.fas.fa-xmark
+          - reset_button_class=(options[:input_html][:value].present? ? "cursor-pointer w-6 h-full flex items-center text-gray-400 outline-none focus:outline-none" : "cursor-pointer w-6 h-full flex items-center text-gray-400 outline-none focus:outline-none hidden")
+          div class=reset_button_class type="button" data-satis-dropdown-target="resetButton" data-action="click->satis-dropdown#reset focus->satis-dropdown#focus" tabindex="-1"
+            i.fas.fa-xmark
           - unless @toggle_button == false
             .text-gray-300.w-8.py-1.pl-2.pr-1.flex.items-center.dark:border-gray-700
               / Up/down chevrons
@@ -28,7 +27,7 @@ div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controlle
     template data-satis-dropdown-target="selectedItemsTemplate"
 
     / Container for results
-    .hidden.container.sts-dropdown-results.shadow.dark:text-gray-300.z-10.rounded.max-h-select.overflow-y-auto.w-full data-satis-dropdown-target="results" data-action="scroll->satis-dropdown#scroll" tabindex="-1"
+    .hidden.container.sts-dropdown-results.shadow.dark:text-gray-300.z-10.rounded.max-h-select.overflow-y-auto.w-full data-satis-dropdown-target="results" data-action="scroll->satis-dropdown#scroll mouseover->satis-dropdown#removehighlight" tabindex="-1"
       .flex.flex-col.w-full data-satis-dropdown-target="items"
         - options[:collection]&.each do |item|
           - data_attrs = item.try(:third) ? item.third : {}

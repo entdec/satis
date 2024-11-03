@@ -202,6 +202,8 @@ export default class DropdownComponentController extends ApplicationController {
         if (this.hasResults) {
           if (!this.resultsShown)
             this.showResultsList(event)
+          this.itemsTargets[0].getElementsByClassName('highlighted')[0]?.classList.remove("highlighted")
+
           this.moveDown()
         }
         // prevent the cursor from jumping to the beginning of the input and scrolling in some cases
@@ -301,6 +303,7 @@ export default class DropdownComponentController extends ApplicationController {
     }
 
     this.hiddenSelectTarget.dispatchEvent(new Event("change"))
+    this.resetButtonTarget.classList.add("hidden")
     return false
   }
 
@@ -319,6 +322,7 @@ export default class DropdownComponentController extends ApplicationController {
 
   selectItem(dataDiv, force = false) {
     const selectedValue = dataDiv.getAttribute("data-satis-dropdown-item-value") || ""
+    dataDiv.parentElement.parentElement.parentElement.querySelector('[data-satis-dropdown-target="resetButton"]').classList.remove("hidden")
     const selectedValueText = dataDiv.getAttribute("data-satis-dropdown-item-text") || ""
     this.copyItemAttributes(dataDiv, this.hiddenSelectTarget) // FIXME: we are now supporting multiple values; is this needed? We copy the attributes to options
 
@@ -440,6 +444,9 @@ export default class DropdownComponentController extends ApplicationController {
     if (this.hasToggleButtonTarget) {
       this.toggleButtonTarget.querySelector(".fa-chevron-up").classList.remove("hidden")
       this.toggleButtonTarget.querySelector(".fa-chevron-down").classList.add("hidden")
+    }
+    if (this.searchInputTarget.value.length === 0 ){
+      this.itemsTarget.firstChild.getElementsByClassName('cursor-pointer')[0].classList.add('highlighted')
     }
   }
 
@@ -998,5 +1005,9 @@ export default class DropdownComponentController extends ApplicationController {
     }
 
     return item != null;
+  }
+
+  removehighlight(){
+    this.itemsTargets[0].getElementsByClassName('highlighted')[0]?.classList.remove("highlighted")
   }
 }
