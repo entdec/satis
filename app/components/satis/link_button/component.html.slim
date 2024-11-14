@@ -1,0 +1,11 @@
+- if type == :primary
+  a.sts-link-button.button.primary href=url
+    = title
+- if type == :button
+  a.sts-link-button.button href=url
+    = title
+- if type == :link
+  a.sts-link-button.link href=url
+    = title
+    - if icon
+      i.ml-2 aria-hidden="true" class=icon

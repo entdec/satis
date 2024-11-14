@@ -5,9 +5,12 @@
 - if template_object
   template data-satis-fields-for-target='template'
     = form.rails_fields_for collection, template_object, child_index: 'TEMPLATE' do |nested_form|
+      - items_name_parts = nested_form.object_name.split(']').map{|x| x.gsub('[', '')}
       .nested-fields.template.py-2.field-for-bg
         = nested_form.input :id, as: :hidden
         = nested_form.input :_destroy, as: :hidden
+        span.hidden.temp-id temp_id=items_name_parts[-1]
+        span.hidden.temp-name temp_name=items_name_parts[-2]
         .grid.grid-cols-12.gap-4
           .col-span-11.fields
             = yield(nested_form)
@@ -16,17 +19,28 @@
             a.text-primary-600.nested-fields_action href="#" data-action='click->satis-fields-for#addAssociation'
               i.fal.fa-plus
           .hidden.col-span-1.flex.justify-center.items-center.association
+            .h-full.w-1.border-r.border-dashed
+            a.text-primary-600.nested-fields_action href="#" data-action='click->satis-fields-for#cloneAssociation'
+              i.fa-light.fa-copy
+          .hidden.col-span-1.flex.justify-center.items-center.association
             .h-full.w-1.border-r.border-dashed.dark:border-gray-700
             a.text-primary-600.nested-fields_action href="#" data-action='click->satis-fields-for#removeAssociation'
               i.fal.fa-trash
 
-= form.rails_fields_for collection do |nested_form|
-  .nested-fields.field-for-bg.py-2
+= form.fields_for collection do |nested_form|
+  - items_name_parts = nested_form.object_name.split(']').map{|x| x.gsub('[', '')}
+  .nested-fields.field-for-bg.py-2 data-action='mousemove->satis-fields-for#mouseMove'
     = nested_form.input :id, as: :hidden
     = nested_form.input :_destroy, as: :hidden
+    span.hidden.temp-id temp_id=items_name_parts[-1]
+    span.hidden.temp-name temp_name=items_name_parts[-2]
     .grid.grid-cols-12.gap-4
       .col-span-11
         = yield(nested_form)
+      .hidden.col-span-1.flex.justify-center.items-center.association
+        .h-full.w-1.border-r.border-dashed
+        a.text-primary-600.nested-fields_action href="#" data-action='click->satis-fields-for#cloneAssociation'
+          i.fa-light.fa-copy
       .col-span-1.flex.justify-center.items-center
         .h-full.w-1.border-r.border-dashed.dark:border-gray-700
         a.text-primary-600.nested-fields_action href="#" data-action='click->satis-fields-for#removeAssociation'
