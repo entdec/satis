@@ -23,6 +23,13 @@
   }
 }
 
+.satis-dropdown:focus-within {
+  outline: none;
+  box-shadow: 0 0 0 3px #3b82f6;
+  border-radius: 0.5rem;
+  transition: box-shadow 0.1s ease-in-out;
+}
+
 .topbar .satis-dropdown .sts-dropdown{
   @apply bg-white dark:bg-gray-900 outline dark:outline-none outline-gray-200 outline-1 rounded-md shadow-none shadow-md;
 }
