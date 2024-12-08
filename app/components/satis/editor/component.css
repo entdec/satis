@@ -3,7 +3,7 @@
 }
 
 .cm-editor{
-    @apply dark:bg-gray-900 dark:border dark:border-opacity-25 dark:border-gray-50 ;
+    @apply dark:bg-gray-900 dark:border dark:border-opacity-25 dark:text-white dark:border-gray-50 ;
 }
 
 .cm-editor .cm-gutter{

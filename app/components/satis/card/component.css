@@ -2,11 +2,11 @@
   @apply bg-white h-full sm:rounded-lg sm:shadow dark:bg-gray-800 overflow-hidden;
 
   &__header {
-    @apply px-4 py-5 sm:px-6 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300;
+    @apply px-4 py-5 sm:px-6 dark:bg-gray-900 bg-white dark:border-gray-700 dark:text-gray-300;
   }
 
   &__tabs {
-    @apply bg-white px-4 border-b border-gray-200 sm:px-5 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300;
+    @apply bg-white px-4 border-b border-gray-200 sm:px-5 bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300;
 
     a:first {
       @apply ml-4;
