@@ -12,7 +12,7 @@ export default class TabsComponentController extends ApplicationController {
 
     let firstErrorIndex
     this.tabTargets.forEach((tab, index) => {
-      let hasErrors = this.contentTargets[index].querySelectorAll(".is-invalid")
+      let hasErrors = this.contentTargets[index].querySelectorAll(".is-invalid,.invalid-feedback")
       if (hasErrors.length > 0) {
         if (!firstErrorIndex) {
           firstErrorIndex = index
