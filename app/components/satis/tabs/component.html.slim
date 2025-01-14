@@ -5,7 +5,7 @@
       - tabs.each do |tab|
         option selected=tab.selected? = ct(".#{tab.name}", scope: :tab)
   .hidden.sm:block
-    .border-b.border-gray-200.dark:border-opacity-25.dark:bg-gray-900.dark:bg-opacity-50
+    .border-b.border-gray-200.bg-white.dark:border-opacity-25.dark:bg-gray-900
       nav.sts-tabs__nav aria-label="Tabs"
         - tabs.each.with_index do |tab, index|
           - id = tab.id.present? ? tab.id : tab.name
