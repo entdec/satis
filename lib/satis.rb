@@ -1,15 +1,16 @@
-require 'satis/version'
-require 'satis/engine'
-require 'satis/configuration'
-require 'satis/active_record_helpers'
+require "satis/version"
+require "satis/engine"
+require "satis/configuration"
+require "satis/active_record_helpers"
 
 Browser::Base.include(Browser::Aliases)
 
 module Satis
   extend Configurable
 
-  class << self
+  Deprecation = ActiveSupport::Deprecation.new("2.2", "Satis")
 
+  class << self
     def confirm_before_leave?
       return false if config.nil?
 
