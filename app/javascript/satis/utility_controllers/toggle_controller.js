@@ -30,12 +30,16 @@ export default class extends ApplicationController {
 
   connect() {
     this.boundUpdate = this.update.bind(this)
-    this.inputTarget.addEventListener("change", this.boundUpdate)
+    this.inputTargets.forEach((input) => {
+      input.addEventListener("change", this.boundUpdate)
+    })
     this.update()
   }
 
   disconnect() {
-    this.inputTarget.removeEventListener("change", this.boundUpdate)
+    this.inputTargets.forEach((input) => {
+      input.removeEventListener("change", this.boundUpdate)
+    })
   }
 
   update(event) {
@@ -83,7 +87,9 @@ export default class extends ApplicationController {
   }
 
   get currentValue() {
-    if (this.inputTarget.type == "checkbox") {
+    if (this.inputTargets.length >= 1 && this.inputTargets[0].type == "radio") {
+      return this.inputTargets.find((input) => input.checked)?.value
+    } else if (this.inputTarget.type == "checkbox") {
       return this.inputTarget.checked ? "true" : "false"
     } else if (this.inputTarget.tagName == "SELECT" && this.data.get("attr")) {
       let option = this.inputTarget.options[this.inputTarget.selectedIndex]

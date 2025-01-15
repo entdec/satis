@@ -1,0 +1,11 @@
+.sts-call-to-action {
+  @apply rounded-md border-gray-100 border-solid border dark:border-gray-700 mb-2 
+}
+
+.sts-call-to-action.regular {
+  @apply bg-white dark:bg-gray-900;
+}
+
+.sts-call-to-action.primary {
+  @apply bg-primary-600;
+}

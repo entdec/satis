@@ -12,6 +12,7 @@ module Satis
         add_helper :avatar, Satis::Avatar::Component
         add_helper :breadcrumbs, Satis::Breadcrumbs::Component
         add_helper :card, Satis::Card::Component
+        add_helper :call_to_action, Satis::CallToAction::Component
         add_helper :editor, Satis::Editor::Component
         add_helper :flash_messages, Satis::FlashMessages::Component
         add_helper :info, Satis::Info::Component
@@ -19,6 +20,7 @@ module Satis
         add_helper :menu, Satis::Menu::Component
         add_helper :page, Satis::Page::Component
         add_helper :sidebar_menu, Satis::SidebarMenu::Component
+        add_helper :attachments, Satis::Attachments::Component
         add_helper :tabs, Satis::Tabs::Component
         add_helper :input, Satis::Input::Component
         add_helper :progress_bar, Satis::ProgressBar::Component
@@ -35,19 +37,19 @@ module Satis
         @browser ||= Browser.new(action_view.request.user_agent)
       end
 
-      def form_for(name, *args, &block)
-        options = args.extract_options!.deep_merge!(html: { data: {} })
+      def form_for(name, *args, &)
+        options = args.extract_options!.deep_merge!(html: {data: {}})
         form_options_defaults!(options)
         update_form_data_options!(options[:html][:data], options)
         args << options.merge(builder: Satis::Forms::Builder)
-        action_view.form_for(name, *args, &block)
+        action_view.form_for(name, *args, &)
       end
 
-      def form_with(model: nil, scope: nil, url: nil, format: nil, **options, &block)
+      def form_with(model: nil, scope: nil, url: nil, format: nil, **options, &)
         options = options.reverse_merge(builder: Satis::Forms::Builder, class: "").deep_merge!(data: {})
         form_options_defaults!(options)
         update_form_data_options!(options[:data], options)
-        action_view.form_with(model: model, scope: scope, url: url, format: format, **options, &block)
+        action_view.form_with(model: model, scope: scope, url: url, format: format, **options, &)
       end
 
       def form_options_defaults!(options)
@@ -71,11 +73,11 @@ module Satis
           original_args = args.dup
           options = args.extract_options!
           instance = if options.key? :variant
-                       variant_component = component.to_s.sub(/::Component$/, "::#{options[:variant].to_s.camelize}::Component").safe_constantize
-                       (variant_component || component).new(*original_args, **kwargs)
-                     else
-                       component.new(*original_args, **kwargs)
-                     end
+            variant_component = component.to_s.sub(/::Component$/, "::#{options[:variant].to_s.camelize}::Component").safe_constantize
+            (variant_component || component).new(*original_args, **kwargs)
+          else
+            component.new(*original_args, **kwargs)
+          end
           instance.original_view_context = action_view
           action_view.render(instance, &block)
         end

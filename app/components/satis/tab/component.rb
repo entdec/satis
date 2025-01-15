@@ -36,12 +36,12 @@ module Satis
         # FIXME: Obsolete these
         if tab_menu.present?
           @menu ||= tab_menu
-          ActiveSupport::Deprecation.warn('Calling tab with the tab_menu parameter, use menu instead')
+          Satis::Deprecation.warn('Calling tab with the tab_menu parameter, use menu instead')
         end
 
         if selected_tab_index.present?
           @selected_tab_index = selected_tab_index # use selected
-          ActiveSupport::Deprecation.warn('Calling tab with the selected_tab_index parameter, use selected instead')
+          Satis::Deprecation.warn('Calling tab with the selected_tab_index parameter, use selected instead')
         end
 
         @block = block
