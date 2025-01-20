@@ -1,32 +1,33 @@
-# frozen_string_literal: true
-
 module Satis
   module Attachments
     class Component < Satis::ApplicationComponent
-      attr_reader :model, :attachments_options, :upload_url
+      include Rails.application.routes.url_helpers
 
-      def initialize(model, upload_url: nil, **options)
+      attr_reader :model, :attribute, :attachments_options
+
+      def initialize(model, attribute, **options)
         super()
         @model = model
-        @upload_url = upload_url
+        @attribute = attribute
         @attachments_options = options
-      end
-
-      def before_render
-        @upload_url
       end
 
       def model_has_images
         model.respond_to?(:images)
       end
 
-      private
-      def main_app
-        helpers.main_app
+      def attachment_style(attachment)
+        if attachment.representable?
+          url = attachment.representation(resize_to_limit: [200, 200]).processed.url
+          "background-image: url(#{url})"
+        else
+          "background-color: f0f0f0"
+        end
       end
 
-      def url_for(args)
-        helpers.url_for(args)
+
+      def model_sgid
+        @model.to_sgid(expires_in: nil, for: 'satis_attachments')
       end
     end
   end

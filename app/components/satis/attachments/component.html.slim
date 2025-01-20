@@ -1,39 +1,26 @@
-span.attachment-upload data-controller="attachment-upload" data-attachment-upload-url="#{upload_url}" data-attachment-upload-param-name="attachments[]" data-attachment-upload-extra-data='{}'
+div.attachment-upload.upload-btn data-controller="attachment-upload" data-attachment-upload-url="#{Satis::Engine.routes.url_helpers.attachments_path(sgid: model_sgid, attribute: attribute)}" data-attachment-upload-param-name="attachments[]"data-attachment-upload-extra-data='{}' data-turbo="true" turbo-method="post"
   span.icon.upload
     i.fas.fa-upload
   span.icon.uploading
     i.fal.fa-circle-notch.fa-spin
-  | Drag or click to attach files
-br
+  span.button-text Drag or click to attach files
+
+
 
 div.attachments__group
   - attachments = model_has_images ? model.images : model.attachments
   - attachments.each do |attachment|
+    div.attachments__attachment(style= attachment_style(attachment))
+      - unless attachment.representable?
+        div.preview-text
+          i.fas.fa-file(aria-hidden="true")
 
-    - if attachment.image?
-      - url = "/rails/active_storage/blobs/#{attachment.signed_id}/#{attachment.filename}"
+      = link_to Satis::Engine.routes.url_helpers.attachment_path(attachment, sgid: model_sgid, attribute: attribute), data: {turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this attachment?"}, class: 'attachments__button' do
+        i.fas.fa-xmark
 
-      div.attachments__attachment(style="background-image: url(#{url})")
-        = link_to url, data: { controller: 'attachment-delete', 'action': 'attachment-delete#delete' }, class: 'attachments__button' do
-          i.fas.fa-xmark
 
-        = link_to url, data: { turbo: false, turbolinks: false }, class: 'attachments__button', download: attachment.filename do
-          i.fas.fa-download
+      = link_to Rails.application.routes.url_helpers.rails_blob_url(attachment, host: request.host + ":#{request.port}"), data: { turbo: true, turbolinks: false }, class: 'attachments__button', download: true do
+        i.fas.fa-download
 
-        span.attachments__filename
-          = attachment.filename
-
-    - else
-      - url = "/rails/active_storage/blobs/#{attachment.signed_id}/#{attachment.filename}"
-
-      div.attachments__attachment.bg-gray-300.bg-opacity-50
-        i.fas.fa-file-alt.text-gray-600.dark:text-white
-        = link_to url, data: { controller: 'attachment-delete', 'action': 'attachment-delete#delete' }, class: 'attachments__button' do
-          i.fas.fa-xmark
-
-        = link_to url, data: { turbo: false, turbolinks: false }, class: 'attachments__button', download: attachment.filename do
-          i.fas.fa-download
-
-        span.attachments__filename
-          = attachment.filename
-
+      span.attachments__filename
+        = attachment.filename

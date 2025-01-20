@@ -4,38 +4,32 @@ module Satis
   class AttachmentsController < ApplicationController
     before_action :set_objects
 
-    def index; end
+
+    def index
+      @attachments = @model.public_send(@attachment_type)
+      render json: @attachments
+    end
 
     def create
       params[:attachments].each do |file|
-        @model.images.attach(file)
+        @model.public_send(@attachment_type).attach(file)
       end
+      redirect_to request.referer || root_path, notice: "Attachment created successfully."
+
     end
 
     def destroy
-      attachment = @model.images.find_by(id: params[:id])
+      attachment = @model.public_send(@attachment_type).find_by(id: params[:id])
       attachment&.purge
 
-      head :no_content
-    end
-
-    def show
-      attachment = @model.images.find(params[:id])
-      send_file attachment.blob.service.path_for(attachment.key), type: attachment.content_type, disposition: 'attachment'
+      redirect_to request.referer || root_path, notice: "Attachment deleted successfully."
     end
 
     private
 
     def set_objects
-      if params[:sgid]
-        @model = GlobalID::Locator.locate_signed(params[:sgid], for: 'satis_attachments')
-        raise ActiveRecord::RecordNotFound, 'Model not found' unless @model
-      else
-        model_class = [Template, Product, Layout].detect { |klass| params["#{klass.name.underscore}_id"].present? }
-        raise ActiveRecord::RecordNotFound, 'Model not found' unless model_class
-
-        @model = policy_scope(model_class).find(params["#{model_class.name.underscore}_id"])
-      end
+      @attachment_type = params[:attribute] || 'attachments'
+      @model = GlobalID::Locator.locate_signed(params[:sgid], for: 'satis_attachments')
     end
   end
 end
