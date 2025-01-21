@@ -1,5 +1,4 @@
 import { Controller } from "@hotwired/stimulus"
-import AttachmentUploadController from "./attachment_upload_controller";
 import { get } from '@rails/request.js'
 
 /***
