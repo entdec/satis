@@ -26,7 +26,7 @@
 }
 
 .attachments__attachment:hover .attachments__button {
-  @apply block;
+  @apply block w-8 h-8 text-center;
 }
 
 .attachments__attachment .attachments__filename {
