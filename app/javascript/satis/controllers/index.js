@@ -57,11 +57,10 @@ import FieldsForController from "satis/controllers/fields_for_controller";
 application.register("satis-fields-for", FieldsForController);
 
 import AttachmentUploadController from "satis/controllers/attachment_upload_controller";
-application.register("satis-fields-for", AttachmentUploadController);
+application.register("satis-attachment-upload", AttachmentUploadController);
 
 import AttachmentDeleteController from "satis/controllers/attachment_delete_controller";
-application.register("satis-fields-for", AttachmentDeleteController);
-
+application.register("satis-attachment-delete", AttachmentDeleteController);
 
 import FormController from "satis/controllers/form_controller";
 application.register("satis-form", FormController);
