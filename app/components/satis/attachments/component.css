@@ -74,21 +74,18 @@
 }
 
 .upload-btn {
-  @apply dark:bg-gray-900 dark:text-white;
+  @apply dark:bg-gray-900 dark:text-white bg-white;
   align-items: center;
   padding: 10px 15px;
-  background-color: #f0f0f0;
   border: 2px dashed #ccc;
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s ease;
-  font-family: Arial, sans-serif;
   color: #333;
 }
 
 .upload-btn:hover {
-  @apply dark:bg-gray-900 dark:text-white dark:border-gray-700;
-  background-color: #e0e0e0;
+  @apply dark:bg-gray-900 dark:text-white dark:border-gray-700 bg-white;
   border-color: #999;
 }
 
@@ -103,12 +100,12 @@
 }
 
 .upload-btn .icon.upload {
-  color: #4a90e2;
+  @apply text-primary-600;
 }
 
 .upload-btn .icon.uploading {
   display: none;
-  color: #f39c12;
+  @apply text-primary-600;
 }
 
 .uploading .upload-btn .icon.upload {
