@@ -1,8 +1,6 @@
 module Satis
   module Attachments
     class Component < Satis::ApplicationComponent
-      include Rails.application.routes.url_helpers
-
       attr_reader :model, :attribute, :attachments_options
 
       def initialize(model, attribute, **options)
@@ -10,10 +8,6 @@ module Satis
         @model = model
         @attribute = attribute
         @attachments_options = options
-      end
-
-      def model_has_images
-        model.respond_to?(:images)
       end
 
       def attachment_style(attachment)
@@ -25,9 +19,8 @@ module Satis
         end
       end
 
-
       def model_sgid
-        @model.to_sgid(expires_in: nil, for: 'satis_attachments')
+        @model.to_sgid(expires_in: nil, for: "satis_attachments")
       end
     end
   end
