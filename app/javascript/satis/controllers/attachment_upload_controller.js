@@ -1,8 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
+import { post } from "@rails/request.js"
 
 export default class AttachmentUploadController extends Controller {
-  static targets = ["input"]
-
   connect() {
     this.createFileInput()
     this.addEventListeners()
@@ -80,14 +79,10 @@ export default class AttachmentUploadController extends Controller {
 
     this.element.classList.add("uploading")
 
-    fetch(this.data.get("url"), {
-      method: 'POST',
+    post(this.data.get("url"), {
       body: formData,
-      headers: {
-        'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').content,
-        'Accept': 'text/html, application/json'
-      },
-      redirect: 'follow'  // Important: follow redirects
+      redirect: 'follow', // Important: follow redirects
+      returnKind: 'turbo-stream'
     }).then((response) => {
       // Check if the response is a redirect
       if (response.type === 'opaqueredirect' || response.redirected) {
