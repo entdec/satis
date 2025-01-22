@@ -23,12 +23,22 @@ export default class AttachmentUploadController extends Controller {
   }
 
   createFileInput() {
+    // Mimic rails - this hiddenInput should prevent "old" files from being deleted
+    const hiddenInput = document.createElement("input")
+    hiddenInput.setAttribute("name", `${this.parameterNameValue}[]`)
+    hiddenInput.setAttribute("type", "hidden")
+    hiddenInput.setAttribute("autocomplete", "off")
+
+    this.element.closest('form').appendChild(hiddenInput)
+
     const input = document.createElement("input")
+
     input.setAttribute("name", `${this.parameterNameValue}[]`)
     input.setAttribute("type", "file")
     input.setAttribute("multiple", "multiple")
     input.style.display = "none"
-    this.element.appendChild(input)
+
+    this.element.closest('form').appendChild(input)
     this.fileInput = input
   }
 

@@ -157,6 +157,7 @@ module Satis
       end
 
       def attachments(method, options = {}, &block)
+        self.multipart = true
         safe_join [
           @template.render(Satis::Attachments::Component.new(object, method, form: self, **value_text_method_options(options),
             &block))
