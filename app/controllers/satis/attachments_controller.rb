@@ -4,16 +4,14 @@ module Satis
   class AttachmentsController < ApplicationController
     before_action :set_objects
 
-    def index
-      @attachments = @model.public_send(@attachment_type)
-      render json: @attachments
-    end
-
     def create
-      params[:attachments].each do |file|
+      @attachments = params[:attachments].map do |file|
         @model.public_send(@attachment_type).attach(file)
       end
-      redirect_to request.referer || root_path, notice: "Attachment created successfully."
+      respond_to do |format|
+        format.html { redirect_to request.referer || root_path, notice: "Attachment created successfully." }
+        format.turbo_stream
+      end
     end
 
     def destroy

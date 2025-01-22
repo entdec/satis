@@ -1,18 +1,6 @@
 turbo-frame id="#{model.id}_#{attribute}_attachments" target="_top" class="attachments__group"
-  - model.send(attribute).each do |attachment|
-    div.attachments__attachment style= attachment_style(attachment) id="attachment_#{attachment.id}"
-      - unless attachment.representable?
-        div.preview-text
-          i.fas.fa-file(aria-hidden="true")
-
-      = link_to Satis::Engine.routes.url_helpers.attachment_path(attachment, sgid: model_sgid, attribute: attribute), data: {turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this attachment?"}, class: 'attachments__button' do
-        i.fas.fa-trash
-
-      = link_to Rails.application.routes.url_helpers.rails_blob_url(attachment, host: request.host + ":#{request.port}"), data: { turbo: false, turbolinks: false }, class: 'attachments__button', download: attachment.filename do
-        i.fas.fa-download
-
-      span.attachments__filename
-        = attachment.filename
-
-  div.attachments__attachment data-controller="attachment-upload" data-attachment-upload-url="#{Satis::Engine.routes.url_helpers.attachments_path(sgid: model_sgid, attribute: attribute)}" data-attachment-upload-param-name="attachments[]" data-attachment-upload-extra-data='{}' data-turbo="true" turbo-method="post"
+  div.attachments__attachment data-controller="satis-attachment-upload" data-attachment-upload-url="#{Satis::Engine.routes.url_helpers.attachments_path(sgid: model_sgid, attribute: attribute)}" data-action="satis-attachment-upload#upload"  
     span.button-text Drag or click to attach files
+
+  - model.send(attribute).each do |attachment|
+    = render "satis/attachments/attachment", model: model, attachment: attachment, model_sgid: model_sgid, attribute: attribute, attachment_style: attachment_style(attachment)
