@@ -81,7 +81,7 @@ module Satis
         # FIXME: Yuk - is it possible to detect when this should not be allowed?
         # Like checking for whether destroy is allowed on assocations?
         allow_actions = options.key?(:allow_actions) ? options[:allow_actions] : true
-        show_actions = @object.respond_to?("#{name}_attributes=") && @object.send(name).respond_to?(:each) && template_object && allow_actions == true
+        show_actions = @object.respond_to?(:"#{name}_attributes=") && @object.send(name).respond_to?(:each) && template_object && allow_actions == true
 
         html_options = options[:html] || {}
 
@@ -156,6 +156,13 @@ module Satis
         hidden_input(method, options, &block)
       end
 
+      def attachments(method, options = {}, &block)
+        safe_join [
+          @template.render(Satis::Attachments::Component.new(object, method, form: self, **value_text_method_options(options),
+            &block))
+        ]
+      end
+
       # Non public
 
       def input_type_for(method, options)
@@ -181,7 +188,7 @@ module Satis
       def form_group(method, options = {}, &block)
         tag.div(class: "form-group form-group-#{method}", data: options.delete(:data)) do
           safe_join [
-            block.call,
+            yield,
             hint_text(options[:hint]),
             error_text(method)
           ].compact

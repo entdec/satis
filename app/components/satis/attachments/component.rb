@@ -1,11 +1,12 @@
 module Satis
   module Attachments
     class Component < Satis::ApplicationComponent
-      attr_reader :model, :attribute, :attachments_options
+      attr_reader :model, :attribute, :attachments_options, :form
 
       def initialize(model, attribute, **options)
         super()
-        @model = model
+        @form = options[:form]
+        @model = model || form.object
         @attribute = attribute
         @attachments_options = options
       end
