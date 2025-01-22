@@ -5,9 +5,9 @@ module Satis
     before_action :set_objects
 
     def create
-      @attachments = params[:attachments].map do |file|
-        @model.public_send(@attachment_type).attach(file)
-      end
+      @model.public_send(@attribute).attach(params[:attachments])
+      @attachments = @model.public_send(@attribute).last(params[:attachments].size)
+
       respond_to do |format|
         format.html { redirect_to request.referer || root_path, notice: "Attachment created successfully." }
         format.turbo_stream
@@ -15,7 +15,7 @@ module Satis
     end
 
     def destroy
-      @attachment = @model.public_send(@attachment_type).find_by(id: params[:id])
+      @attachment = @model.public_send(@attribute).find_by(id: params[:id])
       @attachment&.purge
 
       respond_to do |format|
@@ -27,7 +27,7 @@ module Satis
     private
 
     def set_objects
-      @attachment_type = params[:attribute] || "attachments"
+      @attribute = params[:attribute] || "attachments"
       @model = GlobalID::Locator.locate_signed(params[:sgid], for: "satis_attachments")
     end
   end

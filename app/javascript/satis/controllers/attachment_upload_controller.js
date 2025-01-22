@@ -2,6 +2,11 @@ import { Controller } from "@hotwired/stimulus"
 import { post } from "@rails/request.js"
 
 export default class AttachmentUploadController extends Controller {
+  static values = {
+    uploadUrl: String,
+    parameterName: String
+  }
+
   connect() {
     console.log("AttachmentUploadController#connect")
     this.createFileInput()
@@ -10,7 +15,7 @@ export default class AttachmentUploadController extends Controller {
 
   createFileInput() {
     const input = document.createElement("input")
-    input.setAttribute("name", "attachments[]")
+    input.setAttribute("name", `${this.parameterNameValue}[]`)
     input.setAttribute("type", "file")
     input.setAttribute("multiple", "multiple")
     input.style.display = "none"
@@ -65,20 +70,15 @@ export default class AttachmentUploadController extends Controller {
     let formData = new FormData()
 
     for (let i = 0; i < files.length; i++) {
-      formData.append("attachments[]", files[i])
+      formData.append(`${this.parameterNameValue}[]`, files[i])
     }
 
     this.element.classList.add("uploading")
 
-    post(this.data.get("url"), {
+    post(this.uploadUrlValue, {
       body: formData,
-      redirect: 'follow', // Important: follow redirects
-      returnKind: 'turbo-stream'
-    }).then((html) => {
-      Turbo.renderStreamMessage(html)
-      this.element.classList.remove("uploading")
-    }).catch((error) => {
-      console.log(error)
+      responseKind: 'turbo-stream'
+    }).then(html => {
       this.element.classList.remove("uploading")
     })
   }

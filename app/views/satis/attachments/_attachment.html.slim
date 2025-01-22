@@ -1,9 +1,9 @@
-div.attachments__attachment style=attachment_style id="attachment_#{attachment.id}"
+div.attachments__attachment style=(attachment.representable? ? "background-image: url(#{attachment.representation(resize_to_limit: [200, 200]).processed.url})" : "background-color: f0f0f0") id="attachment_#{attachment.id}"
   - unless attachment.representable?
     div.preview-text
       i.fas.fa-file(aria-hidden="true")
 
-  = link_to Satis::Engine.routes.url_helpers.attachment_path(attachment, sgid: model.to_sgid(expires_in: nil, for: "satis_attachments"), attribute: attribute), data: {turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this attachment?"}, class: 'attachments__button' do
+  = link_to Satis::Engine.routes.url_helpers.attachment_path(attachment, sgid: attachment.record.to_sgid(expires_in: nil, for: "satis_attachments"), attribute: attachment.name), data: {turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this attachment?"}, class: 'attachments__button' do
     i.fas.fa-trash
 
   = link_to Rails.application.routes.url_helpers.rails_blob_url(attachment, host: request.host + ":#{request.port}"), data: { turbo: false, turbolinks: false }, class: 'attachments__button', download: attachment.filename do

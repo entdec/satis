@@ -1,2 +1,1 @@
-- @attachments.each do |attachment|
-  = turbo_stream.prepend "#{model.id}_#{attribute}_attachments", partial: "satis/attachments/attachment", locals: { model: model, attachment: attachment, model_sgid: model_sgid, attribute: attribute, attachment_style: attachment_style(attachment) }
+= turbo_stream.append "#{@attachments.first.record.id}_#{@attachments.first.name}_attachments", partial: "satis/attachments/attachment", collection: @attachments
