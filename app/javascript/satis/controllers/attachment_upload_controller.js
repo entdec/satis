@@ -14,6 +14,14 @@ export default class AttachmentUploadController extends Controller {
     this.addEventListeners()
   }
 
+  disconnect() {
+    this.fileInput.removeEventListener("change", this.handleChange.bind(this))
+    this.element.removeEventListener("dragover", this.handleDragOver.bind(this))
+    this.element.removeEventListener("dragleave", this.handleDragLeave.bind(this))
+    this.element.removeEventListener("dragenter", this.handleDragEnter.bind(this))
+    this.element.removeEventListener("drop", this.handleDrop.bind(this))
+  }
+
   createFileInput() {
     const input = document.createElement("input")
     input.setAttribute("name", `${this.parameterNameValue}[]`)
