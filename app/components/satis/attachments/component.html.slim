@@ -1,5 +1,5 @@
 turbo-frame id="#{model.id}_#{attribute}_attachments" target="_top" class="attachments__group"
-  div.attachments__attachment data-controller="satis-attachment-upload" data-attachment-upload-url="#{Satis::Engine.routes.url_helpers.attachments_path(sgid: model_sgid, attribute: attribute)}" data-action="satis-attachment-upload#upload"  
+  div.attachments__attachment data-controller="satis-attachment-upload" data-attachment-upload-url="#{Satis::Engine.routes.url_helpers.attachments_path(sgid: model_sgid, attribute: attribute)}" data-action="click->satis-attachment-upload#handleClick"  
     span.button-text Drag or click to attach files
 
   - model.send(attribute).each do |attachment|
