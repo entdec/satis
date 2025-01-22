@@ -96,7 +96,7 @@ export default class AttachmentUploadController extends Controller {
     let formData = new FormData()
 
     for (let i = 0; i < files.length; i++) {
-      formData.append("attachments", files[i])
+      formData.append("attachments[]", files[i])
     }
 
     this.element.classList.add("uploading")
