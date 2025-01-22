@@ -3,7 +3,7 @@ import { post } from "@rails/request.js"
 
 export default class AttachmentUploadController extends Controller {
   static values = {
-    uploadUrl: String,
+    url: String,
     parameterName: String
   }
 
@@ -75,7 +75,7 @@ export default class AttachmentUploadController extends Controller {
 
     this.element.classList.add("uploading")
 
-    post(this.uploadUrlValue, {
+    post(this.urlValue, {
       body: formData,
       responseKind: 'turbo-stream'
     }).then(html => {
