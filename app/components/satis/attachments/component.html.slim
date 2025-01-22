@@ -5,7 +5,7 @@ div.attachment-upload.upload-btn data-controller="attachment-upload" data-attach
     i.fal.fa-circle-notch.fa-spin
   span.button-text Drag or click to attach files
 
-turbo-frame id="#{model.id}_#{attribute}_attachments" target="_top" class="attachments_group"
+turbo-frame id="#{model.id}_#{attribute}_attachments" target="_top" class="attachments__group"
   - model.send(attribute).each do |attachment|
     div.attachments__attachment style= attachment_style(attachment) id="attachment_#{attachment.id}"
       - unless attachment.representable?
@@ -16,7 +16,7 @@ turbo-frame id="#{model.id}_#{attribute}_attachments" target="_top" class="attac
         i.fas.fa-trash
 
 
-      = link_to Rails.application.routes.url_helpers.rails_blob_url(attachment, host: request.host + ":#{request.port}"), data: { turbo: true, turbolinks: false }, class: 'attachments__button', download: attachment.filename do
+      = link_to Rails.application.routes.url_helpers.rails_blob_url(attachment, host: request.host + ":#{request.port}"), data: { turbo: false, turbolinks: false }, class: 'attachments__button', download: attachment.filename do
         i.fas.fa-download
 
       span.attachments__filename
