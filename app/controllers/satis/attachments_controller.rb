@@ -5,8 +5,8 @@ module Satis
     before_action :set_objects
 
     def create
-      @model.public_send(@attribute).attach(params[@attribute])
-      @attachments = @model.public_send(@attribute).last(params[@attribute].size)
+      @model.public_send(@attribute).attach(params[:attachments])
+      @attachments = @model.public_send(@attribute).last(params[:attachments].size)
 
       respond_to do |format|
         format.html { redirect_to request.referer || root_path, notice: "Attachment created successfully." }
