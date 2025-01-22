@@ -28,7 +28,6 @@ export default class AttachmentUploadController extends Controller {
 
   handleClick(event) {
     console.log("AttachmentUploadController#handleClick")
-    event.preventDefault()
     this.fileInput.click()
   }
 
