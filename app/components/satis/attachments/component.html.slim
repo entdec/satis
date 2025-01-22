@@ -16,7 +16,7 @@ turbo-frame id="#{model.id}_#{attribute}_attachments" target="_top" class="attac
         i.fas.fa-trash
 
 
-      = link_to Rails.application.routes.url_helpers.rails_blob_url(attachment, host: request.host + ":#{request.port}"), data: { turbo: true, turbolinks: false }, class: 'attachments__button', download: true do
+      = link_to Rails.application.routes.url_helpers.rails_blob_url(attachment, host: request.host + ":#{request.port}"), data: { turbo: true, turbolinks: false }, class: 'attachments__button', download: attachment.filename do
         i.fas.fa-download
 
       span.attachments__filename
