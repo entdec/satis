@@ -8,8 +8,7 @@ div.attachment-upload.upload-btn data-controller="attachment-upload" data-attach
 
 
 div.attachments__group
-  - attachments = model_has_images ? model.images : model.attachments
-  - attachments.each do |attachment|
+  - model.send(attribute).each do |attachment|
     div.attachments__attachment(style= attachment_style(attachment))
       - unless attachment.representable?
         div.preview-text
