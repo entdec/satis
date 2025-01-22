@@ -5,17 +5,15 @@ div.attachment-upload.upload-btn data-controller="attachment-upload" data-attach
     i.fal.fa-circle-notch.fa-spin
   span.button-text Drag or click to attach files
 
-
-
-div.attachments__group
+turbo-frame id="#{model.id}_#{attribute}_attachments" target="_top" class="attachments_group"
   - model.send(attribute).each do |attachment|
-    div.attachments__attachment(style= attachment_style(attachment))
+    div.attachments__attachment style= attachment_style(attachment) id="attachment_#{attachment.id}"
       - unless attachment.representable?
         div.preview-text
           i.fas.fa-file(aria-hidden="true")
 
       = link_to Satis::Engine.routes.url_helpers.attachment_path(attachment, sgid: model_sgid, attribute: attribute), data: {turbo_method: :delete, turbo_confirm: "Are you sure you want to delete this attachment?"}, class: 'attachments__button' do
-        i.fas.fa-xmark
+        i.fas.fa-trash
 
 
       = link_to Rails.application.routes.url_helpers.rails_blob_url(attachment, host: request.host + ":#{request.port}"), data: { turbo: true, turbolinks: false }, class: 'attachments__button', download: true do
@@ -23,3 +21,5 @@ div.attachments__group
 
       span.attachments__filename
         = attachment.filename
+  div.attachments__attachment
+    span.button-text Drag or click to attach files
