@@ -10,17 +10,17 @@ div.satis-date-time-picker data-controller="satis-date-time-picker" data-satis-d
     .flex.justify-between.items-center.mb-2
       div
         button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 rounded-full" data-action="satis-date-time-picker#previousYear"
-          i.fal.fa-angle-double-left.text-gray-500.inline-flex.py-1
+          i.text-gray-500.inline-flex.py-1 class=Satis.config.icons[:previous_year]
         button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 rounded-full" data-action="satis-date-time-picker#previousMonth"
-          i.fal.fa-angle-left.text-gray-500.inline-flex.px-1.py-1
+          i.text-gray-500.inline-flex.px-1.py-1 class=Satis.config.icons[:previous_month]
       div.text-center
         span.text-lg.font-bold.text-gray-800.dark:text-gray-200 data-satis-date-time-picker-target="month"
         span.ml-1.text-lg.text-gray-600.dark:text-gray-200.font-normal data-satis-date-time-picker-target="year"
       div
         button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 rounded-full" data-action="satis-date-time-picker#nextMonth"
-          i.fal.fa-angle-right.text-gray-500.inline-flex.px-1.py-1
+          i.text-gray-500.inline-flex.px-1.py-1 class=Satis.config.icons[:next_month]
         button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 rounded-full" data-action="satis-date-time-picker#nextYear"
-          i.fal.fa-angle-double-right.text-gray-500.inline-flex.py-1
+          i.text-gray-500.inline-flex.py-1 class=Satis.config.icons[:next_year]
 
 
     .grid.grid-cols-7 data-satis-date-time-picker-target="weekDays"
