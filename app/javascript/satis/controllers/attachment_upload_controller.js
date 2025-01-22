@@ -2,13 +2,14 @@ import { Controller } from "@hotwired/stimulus"
 import { post } from "@rails/request.js"
 
 export default class AttachmentUploadController extends Controller {
+  static targets = ["button"]
+
   static values = {
     url: String,
     parameterName: String
   }
 
   connect() {
-    console.log("AttachmentUploadController#connect")
     this.createFileInput()
     this.addEventListeners()
   }
@@ -32,12 +33,15 @@ export default class AttachmentUploadController extends Controller {
   }
 
   handleClick(event) {
-    console.log("AttachmentUploadController#handleClick")
     this.fileInput.click()
   }
 
   handleChange(event) {
-    this.upload(event.target.files)
+    if (this.hasUrlValue) {
+      this.upload(event.target.files)
+    } else {
+      this.buttonTarget.innerHTML = `${event.target.files.length} files selected`
+    }
   }
 
   handleDragOver(event) {
@@ -59,7 +63,11 @@ export default class AttachmentUploadController extends Controller {
     event.preventDefault()
     this.element.classList.remove("dragging")
     if (event.dataTransfer.files.length > 0) {
-      this.upload(event.dataTransfer.files)
+      if (this.hasUrlValue) {
+        this.upload(event.dataTransfer.files)
+      } else {
+        this.buttonTarget.innerHTML = `${event.dataTransfer.files.length} files selected`
+      }
     }
   }
 
