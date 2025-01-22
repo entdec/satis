@@ -1,10 +1,3 @@
-div.attachment-upload.upload-btn data-controller="attachment-upload" data-attachment-upload-url="#{Satis::Engine.routes.url_helpers.attachments_path(sgid: model_sgid, attribute: attribute)}" data-attachment-upload-param-name="attachments[]"data-attachment-upload-extra-data='{}' data-turbo="true" turbo-method="post"
-  span.icon.upload
-    i.fas.fa-upload
-  span.icon.uploading
-    i.fal.fa-circle-notch.fa-spin
-  span.button-text Drag or click to attach files
-
 turbo-frame id="#{model.id}_#{attribute}_attachments" target="_top" class="attachments__group"
   - model.send(attribute).each do |attachment|
     div.attachments__attachment style= attachment_style(attachment) id="attachment_#{attachment.id}"
