@@ -135,3 +135,6 @@
 .attachments__group .attachment-upload.upload-btn.attachments__attachment.dark {
   @apply hover:border-white;
 }
+.attachments__group .attachment-upload.upload-btn.attachments__attachment.dragging {
+  @apply dark:bg-white dark:bg-opacity-75 bg-black bg-opacity-50 dark:text-black text-white;
+}
