@@ -335,7 +335,7 @@ export default class DateTimePickerComponentController extends ApplicationContro
       selectedDate.setMonth(this.displayValue.getMonth() + 1)
     }
 
-    selectedDate.setDate(+event.target.innerText);
+    selectedDate.setDate(+event.target.innerText)
 
     if (!this.rangeValue && !this.multipleValue) {
       this.selectedValue[0] = selectedDate
@@ -549,14 +549,14 @@ export default class DateTimePickerComponentController extends ApplicationContro
   addDayClickListener(div, day) {
     if (day.type === "prev" || day.type === "next") {
       div.addEventListener("click", () => {
-        this.displayValue = new Date(day.date.getFullYear(), day.date.getMonth(), 1);
-        this.selectedValue[0] = new Date(day.date);
-        this.refreshCalendar(true);
+        this.displayValue = new Date(day.date.getFullYear(), day.date.getMonth(), 1)
+        this.selectedValue[0] = new Date(day.date)
+        this.refreshCalendar(true)
 
         if (!this.inlineValue) {
-          this.hideCalendar();
+          this.hideCalendar()
         }
-      });
+      })
     }
   }
 
