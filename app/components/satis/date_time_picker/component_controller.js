@@ -1,6 +1,14 @@
 import ApplicationController from "satis/controllers/application_controller"
 import { createPopper } from "@popperjs/core"
+import dayjs from "dayjs"
+import customParseFormat from "dayjs/plugin/customParseFormat"
+import localizedFormat from "dayjs/plugin/localizedFormat"
+import utc from "dayjs/plugin/utc"
 import { debounce } from "satis/utils"
+
+dayjs.extend(customParseFormat)
+dayjs.extend(localizedFormat)
+dayjs.extend(utc)
 
 export default class DateTimePickerComponentController extends ApplicationController {
   static targets = [
@@ -165,13 +173,13 @@ export default class DateTimePickerComponentController extends ApplicationContro
   }
 
   previousYear(event) {
-    this.displayValue = new Date(new Date(this.displayValue).setFullYear(this.displayValue.getFullYear() - 1));
-    this.refreshCalendar(false);
+    this.displayValue = new Date(new Date(this.displayValue).setFullYear(this.displayValue.getFullYear() - 1))
+    this.refreshCalendar(false)
   }
 
   nextYear(event) {
-    this.displayValue = new Date(new Date(this.displayValue).setFullYear(this.displayValue.getFullYear() + 1));
-    this.refreshCalendar(false);
+    this.displayValue = new Date(new Date(this.displayValue).setFullYear(this.displayValue.getFullYear() + 1))
+    this.refreshCalendar(false)
   }
 
   clickedOutside(event) {
@@ -266,16 +274,49 @@ export default class DateTimePickerComponentController extends ApplicationContro
   }
 
   dateTimeEntered(event) {
-    // FIXME: This doesn't work properly yet
-    // let newValue
-    // try {
-    //   newValue = new Date(this.inputTarget.value)
-    // } catch (error) {}
-    // if (!isNaN(newValue.getTime())) {
-    //   this.selectedValue = [newValue]
-    //   this.refreshCalendar()
-    // }
+    const inputValue = this.inputTarget.value;
+
+    if (inputValue.length < 10) return;
+
+    const locale = this.localeValue || navigator.language;
+    const defaultFormat = this.formatValue || "YYYY-MM-DD HH:mm:ss";
+    dayjs.locale(locale);
+
+    const formats = [
+      defaultFormat,
+      'YYYY-MM-DD',
+      'YYYY/MM/DD',
+      'DD/MM/YYYY',
+      'DD.MM.YYYY',
+      "DD-MM-YYYY",
+      "DD-MM-YYYY HH:mm",
+      "dddd, MMMM DD, YYYY h:mma",
+      "dddd, MMMM DD, YYYY h:mm A"
+    ];
+
+    let parsedDate = null;
+
+    for (const format of formats) {
+      parsedDate = dayjs(inputValue, format, locale, true);
+      if (parsedDate.isValid()) {
+        break;
+      }
+    }
+
+    if (parsedDate && parsedDate.isValid()) {
+      this.selectedValue = [parsedDate.toDate()];
+      this.refreshCalendar(true);
+      this.refreshInputs();
+    } else {
+      console.warn("Invalid date/time entered");
+      const currentDate = dayjs().toDate();
+      this.selectedValue = [currentDate];
+      this.refreshCalendar(true);
+      this.refreshInputs();
+    }
+
   }
+
 
   selectDay(event) {
     let oldCurrentValue = this.selectedValue[0]
@@ -294,7 +335,7 @@ export default class DateTimePickerComponentController extends ApplicationContro
       selectedDate.setMonth(this.displayValue.getMonth() + 1)
     }
 
-    selectedDate.setDate(+event.target.innerText);
+    selectedDate.setDate(+event.target.innerText)
 
     if (!this.rangeValue && !this.multipleValue) {
       this.selectedValue[0] = selectedDate
@@ -508,14 +549,14 @@ export default class DateTimePickerComponentController extends ApplicationContro
   addDayClickListener(div, day) {
     if (day.type === "prev" || day.type === "next") {
       div.addEventListener("click", () => {
-        this.displayValue = new Date(day.date.getFullYear(), day.date.getMonth(), 1);
-        this.selectedValue[0] = new Date(day.date);
-        this.refreshCalendar(true);
+        this.displayValue = new Date(day.date.getFullYear(), day.date.getMonth(), 1)
+        this.selectedValue[0] = new Date(day.date)
+        this.refreshCalendar(true)
 
         if (!this.inlineValue) {
-          this.hideCalendar();
+          this.hideCalendar()
         }
-      });
+      })
     }
   }
 
