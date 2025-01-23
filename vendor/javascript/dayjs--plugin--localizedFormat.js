@@ -1,0 +1,4 @@
+// dayjs/plugin/localizedFormat@1.11.13 downloaded from https://ga.jspm.io/npm:dayjs@1.11.13/plugin/localizedFormat.js
+
+var r=typeof globalThis!=="undefined"?globalThis:typeof self!=="undefined"?self:global;var e={};!function(r,t){e=t()}(0,(function(){var e={LTS:"h:mm:ss A",LT:"h:mm A",L:"MM/DD/YYYY",LL:"MMMM D, YYYY",LLL:"MMMM D, YYYY h:mm A",LLLL:"dddd, MMMM D, YYYY h:mm A"};return function(t,n,o){var M=n.prototype,a=M.format;o.en.formats=e,M.format=function(t){void 0===t&&(t="YYYY-MM-DDTHH:mm:ssZ");var n=this.$locale().formats,o=function(r,t){return r.replace(/(\[[^\]]+])|(LTS?|l{1,4}|L{1,4})/g,(function(r,n,o){var M=o&&o.toUpperCase();return n||t[o]||e[o]||t[M].replace(/(\[[^\]]+])|(MMMM|MM|DD|dddd)/g,(function(r,e,t){return e||t.slice(1)}))}))}(t,void 0===n?{}:n);return a.call(this||r,o)}}}));var t=e;export{t as default};
+
