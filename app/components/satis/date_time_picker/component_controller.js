@@ -279,8 +279,25 @@ export default class DateTimePickerComponentController extends ApplicationContro
 
   selectDay(event) {
     let oldCurrentValue = this.selectedValue[0]
+    let dayType = event.target.dataset.type
+    let selectedDate = new Date(this.displayValue)
+
+    if (dayType === "prev") {
+      if (this.rangeValue) {
+        return false
+      }
+      selectedDate.setMonth(this.displayValue.getMonth() - 1)
+    } else if (dayType === "next") {
+      if (this.rangeValue) {
+        return false
+      }
+      selectedDate.setMonth(this.displayValue.getMonth() + 1)
+    }
+
+    selectedDate.setDate(+event.target.innerText);
+
     if (!this.rangeValue && !this.multipleValue) {
-      this.selectedValue[0] = new Date(new Date(this.displayValue).setDate(+event.target.innerText))
+      this.selectedValue[0] = selectedDate
       if (this.timePickerValue && oldCurrentValue) {
         this.selectedValue[0].setHours(oldCurrentValue.getHours())
         this.selectedValue[0].setMinutes(oldCurrentValue.getMinutes())
@@ -304,6 +321,7 @@ export default class DateTimePickerComponentController extends ApplicationContro
       this.currentSelectNr += 1
     }
 
+    this.refreshInputs()
     this.refreshCalendar()
 
     if (!this.rangeValue || this.selectedValue.length == 2) {
@@ -392,46 +410,19 @@ export default class DateTimePickerComponentController extends ApplicationContro
         this.minutesTarget.value = "00" // FIXME: Should be 0:00 in locale
       }
     }
+
+    let days = this.generateDays()
+
     this.daysTarget.innerHTML = ""
+    days.forEach((day) => {
+      let tmpDiv = document.createElement("div")
+      tmpDiv.innerHTML = this.dayTemplateTarget.innerHTML.replace(/\${day}/g, day.date.getDate())
+      let div = tmpDiv.querySelector(".text-center")
 
-    this.monthDays.forEach((day) => {
-      if (day == " ") {
-        this.daysTarget.insertAdjacentHTML("beforeend", this.emtpyTemplateTarget.innerHTML)
-      } else {
-        let date = new Date(new Date(this.displayValue).setDate(day))
+      this.applyDayStyles(div, day)
 
-        let tmpDiv = document.createElement("div")
-        tmpDiv.innerHTML = this.dayTemplateTarget.innerHTML.replace(/\${day}/g, day)
-
-        if (this.isToday(date)) {
-          let div = tmpDiv.querySelector(".text-center")
-          div.classList.add("border-red-500", "border")
-        }
-        let div = tmpDiv.querySelector(".text-center")
-
-        if (this.isSelected(date)) {
-          if (this.rangeValue && this.selectedValue.length == 2) {
-            if (this.isDate(this.selectedValue[0], date)) {
-              div.classList.add("bg-primary-500", "text-white", "dark:text-gray-200")
-              div.classList.remove("rounded-r-full")
-            } else if (this.isDate(this.selectedValue[1], date)) {
-              div.classList.add("bg-primary-500", "text-white", "dark:text-gray-200")
-              div.classList.remove("rounded-l-full")
-            } else if (this.isSelected(date)) {
-              div.classList.remove("rounded-r-full")
-              div.classList.remove("rounded-l-full")
-              div.classList.add("bg-primary-200", "text-white", "dark:text-gray-200")
-            }
-          } else {
-            div.classList.add("bg-primary-500", "text-white", "dark:text-gray-200")
-          }
-        } else {
-          div.classList.add("text-gray-700", "dark:text-gray-300")
-        }
-
-        this.daysTarget.insertAdjacentHTML("beforeend", tmpDiv.innerHTML)
-        tmpDiv.remove()
-      }
+      this.daysTarget.insertAdjacentHTML("beforeend", tmpDiv.innerHTML)
+      tmpDiv.remove()
     })
 
     if (refreshInputs != false) {
@@ -440,6 +431,91 @@ export default class DateTimePickerComponentController extends ApplicationContro
       } else {
         this.refreshInputs(false)
       }
+    }
+  }
+
+  generateDays() {
+    let days = []
+    const firstDayOfMonth = new Date(this.displayValue.getFullYear(), this.displayValue.getMonth(), 1)
+    const lastDayOfMonth = new Date(this.displayValue.getFullYear(), this.displayValue.getMonth() + 1, 0)
+    const startDayOfWeek = (firstDayOfMonth.getDay() - this.weekStartValue + 7) % 7
+    const endDayOfWeek = (6 - lastDayOfMonth.getDay() + this.weekStartValue + 7) % 7
+    const previousMonthLastDate = new Date(this.displayValue.getFullYear(), this.displayValue.getMonth(), 0).getDate()
+
+    // Previous month's days
+    for (let i = startDayOfWeek; i > 0; i--) {
+      const day = previousMonthLastDate - i + 1
+      days.push({
+        date: new Date(this.displayValue.getFullYear(), this.displayValue.getMonth() - 1, day),
+        type: "prev",
+      })
+    }
+
+    // Current month's days
+    for (let i = 1; i <= lastDayOfMonth.getDate(); i++) {
+      days.push({
+        date: new Date(this.displayValue.getFullYear(), this.displayValue.getMonth(), i),
+        type: "current",
+      })
+    }
+
+    // Next month's days
+    for (let i = 1; i <= endDayOfWeek; i++) {
+      days.push({
+        date: new Date(this.displayValue.getFullYear(), this.displayValue.getMonth() + 1, i),
+        type: "next",
+      })
+    }
+
+    return days
+  }
+
+  applyDayStyles(div, day) {
+    if (day.type === "prev" || day.type === "next") {
+      div.classList.add("text-gray-400", "hover:bg-gray-200", "cursor-pointer")
+      div.dataset.type = day.type
+
+      this.addDayClickListener(div, day)
+    } else {
+      div.classList.add("text-gray-700", "dark:text-gray-300")
+
+      if (this.isToday(day.date)) {
+        div.classList.add("border-red-500", "border")
+      }
+
+      if (this.isSelected(day.date)) {
+        if (this.rangeValue && this.selectedValue.length == 2) {
+          if (this.isDate(this.selectedValue[0], day.date)) {
+            div.classList.add("bg-primary-500", "text-white", "dark:text-gray-200")
+            div.classList.remove("rounded-r-full")
+          } else if (this.isDate(this.selectedValue[1], day.date)) {
+            div.classList.add("bg-primary-500", "text-white", "dark:text-gray-200")
+            div.classList.remove("rounded-l-full")
+          } else if (this.isSelected(day.date)) {
+            div.classList.remove("rounded-r-full")
+            div.classList.remove("rounded-l-full")
+            div.classList.add("bg-primary-200", "text-white", "dark:text-gray-200")
+          }
+        } else {
+          div.classList.add("bg-primary-500", "text-white", "dark:text-gray-200")
+        }
+      } else {
+        div.classList.add("text-gray-700", "dark:text-gray-300")
+      }
+    }
+  }
+
+  addDayClickListener(div, day) {
+    if (day.type === "prev" || day.type === "next") {
+      div.addEventListener("click", () => {
+        this.displayValue = new Date(day.date.getFullYear(), day.date.getMonth(), 1);
+        this.selectedValue[0] = new Date(day.date);
+        this.refreshCalendar(true);
+
+        if (!this.inlineValue) {
+          this.hideCalendar();
+        }
+      });
     }
   }
 
