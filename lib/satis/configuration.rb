@@ -15,7 +15,7 @@ module Satis
 
     def set_defaults!
       self.class.schema.each do |name, default|
-        instance_variable_set("@#{name}", default)
+        instance_variable_set(:"@#{name}", default)
       end
     end
 
@@ -32,6 +32,13 @@ module Satis
     option :submit_on_enter, default: true
     option :confirm_before_leave, default: false
     option :current_user, default: lambda {}
+
+    option :icons, default: {
+      previous_year: "fa-solid fa-angle-double-left",
+      previous_month: "fa-solid fa-angle-left",
+      next_month: "fa-solid fa-angle-right",
+      next_year: "fa-solid fa-angle-double-right"
+    }
 
     option(:default_help_text, default: lambda do |template, object, key, additional_scope|
       scope = help_scope(template, object, additional_scope)
@@ -80,7 +87,7 @@ module Satis
     def configure
       yield(config)
     end
-    alias setup configure
+    alias_method :setup, :configure
 
     def reset_config!
       @config = Configuration.new
