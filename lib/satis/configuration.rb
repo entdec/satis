@@ -34,10 +34,8 @@ module Satis
     option :current_user, default: lambda {}
 
     option :icons, default: {
-      previous_year: "fa-solid fa-angle-double-left",
       previous_month: "fa-solid fa-angle-left",
-      next_month: "fa-solid fa-angle-right",
-      next_year: "fa-solid fa-angle-double-right"
+      next_month: "fa-solid fa-angle-right"
     }
 
     option(:default_help_text, default: lambda do |template, object, key, additional_scope|

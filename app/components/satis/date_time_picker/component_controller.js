@@ -164,21 +164,17 @@ export default class DateTimePickerComponentController extends ApplicationContro
 
   previousMonth(event) {
     this.displayValue = new Date(new Date(this.displayValue).setMonth(this.displayValue.getMonth() - 1))
+
+    this.updateYear()
+
     this.refreshCalendar(false)
   }
 
   nextMonth(event) {
     this.displayValue = new Date(new Date(this.displayValue).setMonth(this.displayValue.getMonth() + 1))
-    this.refreshCalendar(false)
-  }
 
-  previousYear(event) {
-    this.displayValue = new Date(new Date(this.displayValue).setFullYear(this.displayValue.getFullYear() - 1))
-    this.refreshCalendar(false)
-  }
+    this.updateYear()
 
-  nextYear(event) {
-    this.displayValue = new Date(new Date(this.displayValue).setFullYear(this.displayValue.getFullYear() + 1))
     this.refreshCalendar(false)
   }
 
@@ -328,12 +324,16 @@ export default class DateTimePickerComponentController extends ApplicationContro
         return false
       }
       selectedDate.setMonth(this.displayValue.getMonth() - 1)
+      this.displayValue = selectedDate
     } else if (dayType === "next") {
       if (this.rangeValue) {
         return false
       }
       selectedDate.setMonth(this.displayValue.getMonth() + 1)
+      this.displayValue = selectedDate
     }
+
+    this.updateYear()
 
     selectedDate.setDate(+event.target.innerText)
 
@@ -559,7 +559,6 @@ export default class DateTimePickerComponentController extends ApplicationContro
       })
     }
   }
-
   // Format the given Date into an ISO8601 string whilst preserving the given timezone
   iso8601(date) {
     let tzo = -date.getTimezoneOffset(),
@@ -666,5 +665,26 @@ export default class DateTimePickerComponentController extends ApplicationContro
     }
 
     return results
+  }
+
+  selectYear(event) {
+    let selectedYear = Number(event.target.value)
+    this.displayValue.setFullYear(selectedYear)
+    this.refreshCalendar(false)
+
+    if (!this.rangeValue && !this.multipleValue) {
+      this.selectedValue[0] = new Date(this.displayValue)
+    } else if(this.rangeValue && this.selectedValue.length == 2){
+      return false
+    }
+
+    this.refreshInputs()
+    event.cancelBubble = true
+  }
+
+  updateYear() {
+    const yearSelect = document.querySelector('[data-satis-date-time-picker-target="select"]')
+    const newYear = this.displayValue.getFullYear()
+    yearSelect.value = newYear
   }
 }
