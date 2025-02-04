@@ -48,6 +48,9 @@ application.register("satis-dialog", DialogComponentController);
 import ColorPickerComponentController from "satis/components/color_picker/component_controller";
 application.register("satis-color-picker", ColorPickerComponentController);
 
+import SignatureComponentController from "satis/components/signature/component_controller";
+application.register("satis-signature", SignatureComponentController);
+
 // Controllers
 
 import LinkController from "satis/controllers/link_controller";
