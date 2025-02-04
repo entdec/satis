@@ -1,0 +1,8 @@
+div data-controller="satis-signature" data-satis-signature-url-value=(form.object.send(attribute).attached? ? helpers.main_app.url_for(form.object.send(attribute)) : nil)
+  canvas.border-solid.border.rounded-md data-satis-signature-target="canvas" data-satis-signature-action="change->satis-signature#update" width="600" height="200"
+  .button 
+    i.fal.fa-trash data-action='click->satis-signature#clear' class='cursor-pointer'
+  |<
+  .button
+    i.fal.fa-undo data-action='click->satis-signature#undo' class='cursor-pointer'
+  = form.file_field :signature, data: { "satis-signature-target" => 'file' }, class: 'hidden'

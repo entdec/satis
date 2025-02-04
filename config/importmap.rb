@@ -52,3 +52,4 @@ pin "dayjs" # @1.11.13
 pin "dayjs/plugin/customParseFormat", to: "dayjs--plugin--customParseFormat.js" # @1.11.13
 pin "dayjs/plugin/localizedFormat", to: "dayjs--plugin--localizedFormat.js" # @1.11.13
 pin "dayjs/plugin/utc", to: "dayjs--plugin--utc.js" # @1.11.13
+pin "signature_pad" # @5.0.4
