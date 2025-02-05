@@ -12,7 +12,6 @@ export default class SignatureComponentController extends ApplicationController 
       let blob = await fetch(this.urlValue)
         .then(r => r.blob())
 
-
       let dataUrl = await new Promise(resolve => {
         let reader = new FileReader()
         reader.onload = () => resolve(reader.result)
