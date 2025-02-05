@@ -9,7 +9,7 @@ export default class SignatureComponentController extends ApplicationController 
   async connect() {
     this.signaturePad = new SignaturePad(this.canvasTarget)
     if (this.hasUrlValue) {
-      let blob = await fetch(this.urlValue)
+      let blob = await fetch(this.urlValue, { cache: "no-store" })
         .then(r => r.blob())
 
       let dataUrl = await new Promise(resolve => {
