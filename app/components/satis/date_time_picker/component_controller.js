@@ -65,7 +65,8 @@ export default class DateTimePickerComponentController extends ApplicationContro
             name: "flip",
             enabled: true,
             options: {
-              boundary: this.element.closest(".sts-card"),
+              fallbackPlacements: ["top", "bottom"],
+              boundary: "clippingParents",
             },
           },
           {

@@ -62,8 +62,8 @@ export default class DropdownComponentController extends ApplicationController {
         {
           name: "flip",
           options: {
-            fallbackPlacements: ["bottom"],
-            boundary: this.element.closest(".sts-card"),
+            fallbackPlacements: ["top", "bottom"],
+            boundary: "clippingParents",
           },
         },
         {
