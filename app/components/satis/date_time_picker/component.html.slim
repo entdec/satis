@@ -17,7 +17,8 @@ div.satis-date-time-picker data-controller="satis-date-time-picker" data-satis-d
           select.appearance-none.border-none.bg-transparent.text-lg.font-normal.text-gray-600.dark:text-gray-200.focus:outline-none.focus:ring-0.overflow-y-auto.max-h-12 data-satis-date-time-picker-target="select" data-action="change->satis-date-time-picker#selectYear"
             - current_year = Time.current.year
             - (current_year - 100..current_year + 100).each do |year|
-              option value=year data-satis-date-time-picker-target="year" = year
+              - selected = true if year == current_year
+              option value=year selected=selected data-satis-date-time-picker-target="year" = year
 
       button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 rounded-full" data-action="satis-date-time-picker#nextMonth"
         i.text-gray-500.inline-flex.px-1.py-1 class=Satis.config.icons[:next_month]

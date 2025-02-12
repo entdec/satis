@@ -424,7 +424,20 @@ export default class DateTimePickerComponentController extends ApplicationContro
   // Refreshes the calendar
   refreshCalendar(refreshInputs) {
     this.monthTarget.innerHTML = this.monthName
-    this.yearTarget.innerHTML = this.displayValue.getFullYear()
+
+    if(this.hiddenInputTarget.value != "") {
+      const year = this.displayValue.getFullYear()
+      const selectElement = document.querySelector('[data-satis-date-time-picker-target="select"]')
+      const options = selectElement.querySelectorAll('option')
+
+      options.forEach(option => {
+        if (parseInt(option.value) === year) {
+          option.selected = true
+        } else {
+          option.selected = false
+        }
+      })
+    }
 
     this.weekDaysTarget.innerHTML = ""
     this.getWeekDays(this.localeValue).forEach((dayName) => {
