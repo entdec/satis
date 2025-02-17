@@ -12,7 +12,7 @@ div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controlle
         .h-12.p-1.flex.rounded
           .flex.flex-auto.flex-wrap.sts-dropdown-input
             / Input where you can search
-            input.focus:ring-0.border-none.p-1.px-2.appearance-none.w-full.sts-dropdown-input.text-gray-800.dark:text-gray-300 data-action="input->satis-dropdown#search" data-satis-dropdown-target="searchInput" placeholder=placeholder autofocus=options[:autofocus]
+            input.focus:ring-0.border-none.p-1.px-2.appearance-none.w-full.sts-dropdown-input.text-gray-800.dark:text-gray-300 class=input_class data-action="input->satis-dropdown#search" data-satis-dropdown-target="searchInput" placeholder=placeholder autofocus=options[:autofocus]
           div
             / Reset button
             - unless @reset_button == false
