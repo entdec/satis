@@ -1,19 +1,15 @@
 .h-screen.flex .sidebar {
   @apply dark:bg-gray-700 bg-white;
   width: 260px;
-  height: 90%;
+  height: calc(100% - 4rem);
   top: 0;
   left: 0;
-  margin-top: 5rem;
+  margin-top: 4rem;
   position: absolute;
   overflow: visible;
   overflow-y: scroll;
   scrollbar-width: none;
-  border-top-right-radius: 8px;
-  border-top-left-radius: 8px;
-  border-bottom-right-radius: 8px;
   z-index: 999;
-  box-shadow: 5px 0 5px -5px rgba(31, 38, 135, 0.37);
   transition: backdrop-filter 0.3s ease-in-out, transform 0.3s ease-in-out;
 
 }
@@ -32,8 +28,8 @@
   overflow: visible;
   top: 0;
   left: 0;
-  height: 90%;
-  margin-top: 5rem;
+  height: calc(100% - 4rem);
+  margin-top: 4rem;
   width: 60px;
   z-index: 999;
   scrollbar-width: none;
@@ -45,7 +41,7 @@
 
 
 .h-screen.flex .topbar {
-  @apply bg-white dark:bg-gray-800 drop-shadow-md;
+  @apply bg-white dark:bg-gray-800;
   height: 4rem;
   display: flex;
   max-width: 100%;
@@ -53,8 +49,6 @@
   margin-left: 0;
   position: relative;
   z-index: 10000;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
   transition: backdrop-filter 0.3s ease-in-out, transform 0.3s ease-in-out;
 }
 
