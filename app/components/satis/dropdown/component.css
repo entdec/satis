@@ -31,7 +31,7 @@
 }
 
 .topbar .satis-dropdown .sts-dropdown{
-  @apply bg-white dark:bg-gray-900 outline dark:outline-none outline-gray-200 outline-1 rounded-md shadow-none shadow-md;
+  @apply bg-white dark:bg-gray-900 outline dark:outline-none outline-gray-200 outline-1 rounded-md shadow-none;
 }
 
 .page_body .satis-dropdown .sts-dropdown{
