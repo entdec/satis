@@ -115,10 +115,10 @@ module Satis
           #        ))
         else
           invalid_feedback = nil
-          if @object.errors.messages[name].present?
-            invalid_feedback = tag.div(@object.errors.messages[name].join(", "),
-              class: "invalid-feedback")
-          end
+          # if @object.errors.messages[name].present?
+          #   invalid_feedback = tag.div(@object.errors.messages[name].join(", "),
+          #     class: "invalid-feedback")
+          # end
           safe_join [
             invalid_feedback,
             rails_fields_for(*args, options, &block)
