@@ -20,14 +20,14 @@ export default class DropdownComponentController extends ApplicationController {
   ]
 
   static values = {
-    chainTo: { type: String },
-    freeText: { type: Boolean },
-    needsExactMatch: { type: Boolean },
-    pageSize: { type: Number },
-    url: { type: String },
-    urlParams: { type: Object },
-    isMultiple: { type: Boolean },
-    minSearchQueryLength: { type: Number, default: 2 },
+      chainTo: String,
+      freeText: Boolean,
+      needsExactMatch: Boolean,
+      pageSize: Number,
+      url: String,
+      urlParams: Object,
+      isMultiple: Boolean,
+      minSearchQueryLength: Number
   }
 
   connect() {
@@ -49,7 +49,6 @@ export default class DropdownComponentController extends ApplicationController {
     // To remember what the last search was we did
     this.searchQueryValue = null
     this.lastSearch = null
-
     // To remember what the last options were we got from the server to prevent unnecessary refreshes
     // and unexpected events
     this.lastServerRefreshOptions = new Set()
