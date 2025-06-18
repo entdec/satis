@@ -620,7 +620,7 @@ export default class DropdownComponentController extends ApplicationController {
             this.itemTargets.forEach((item) => {
               const text = item.getAttribute("data-satis-dropdown-item-text")
               const matched = this.needsExactMatchValue
-                ? searchValue.localeCompare(text, undefined, { sensitivity: "base" }) === 0 : text.toLowerCase().includes(searchValue.toLowerCase())
+                ? searchValue.localeCompare(text, undefined, { sensitivity: "base" }) === 0 : text?.toLowerCase().includes(searchValue.toLowerCase())
 
               const isHidden = item.classList.contains("hidden")
               if (!isHidden) {
