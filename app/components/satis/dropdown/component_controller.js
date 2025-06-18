@@ -20,13 +20,14 @@ export default class DropdownComponentController extends ApplicationController {
   ]
 
   static values = {
-    chainTo: String,
-    freeText: Boolean,
-    needsExactMatch: Boolean,
-    pageSize: Number,
-    url: String,
-    urlParams: Object,
-    isMultiple: Boolean
+    chainTo: { type: String },
+    freeText: { type: Boolean },
+    needsExactMatch: { type: Boolean },
+    pageSize: { type: Number },
+    url: { type: String },
+    urlParams: { type: Object },
+    isMultiple: { type: Boolean },
+    minSearchQueryLength: { type: Number, default: 2 },
   }
 
   connect() {
@@ -48,7 +49,6 @@ export default class DropdownComponentController extends ApplicationController {
     // To remember what the last search was we did
     this.searchQueryValue = null
     this.lastSearch = null
-    this.minSearchQueryLength = 2
 
     // To remember what the last options were we got from the server to prevent unnecessary refreshes
     // and unexpected events
@@ -241,8 +241,8 @@ export default class DropdownComponentController extends ApplicationController {
   search(event) {
     this.searchQueryValue = this.searchInputTarget.value
 
-    if(this.searchInputTarget.value.length === 0 && !this.isMultipleValue){
-      if(this.nrOfItems === 1) this.lowLightSelected();
+    if (this.searchInputTarget.value.length === 0 && !this.isMultipleValue) {
+      if (this.nrOfItems === 1) this.lowLightSelected()
       this.hiddenSelectTarget.innerHTML = ""
       this.hiddenSelectTarget.add(this.createOption())
     }
@@ -279,7 +279,7 @@ export default class DropdownComponentController extends ApplicationController {
     this.lastPage = null
     this.endPage = null
 
-    this.lowLightSelected();
+    this.lowLightSelected()
     this.selectedIndex = -1
 
     if (this.hasUrlValue) {
@@ -421,9 +421,9 @@ export default class DropdownComponentController extends ApplicationController {
     } else {
       this.filterResultsChainTo()
 
-      if(this.hasResults && !this.searchQueryChanged){
+      if (this.hasResults && !this.searchQueryChanged) {
         this.showResultsList(event)
-      }else {
+      } else {
         if (this.hasUrlValue)
           this.fetchResults(event)
         else
@@ -492,7 +492,7 @@ export default class DropdownComponentController extends ApplicationController {
 
   localResults(event) {
     if (!this.searchQueryChanged) {
-      if(!this.resultsShown) {
+      if (!this.resultsShown) {
         if (this.hasResults)
           this.showResultsList(event)
         else this.showSelectedItem()
@@ -511,7 +511,7 @@ export default class DropdownComponentController extends ApplicationController {
       } else {
         previouslyVisibleItemsCount++
       }
-    });
+    })
 
     this.filterResultsChainTo()
 
@@ -520,7 +520,7 @@ export default class DropdownComponentController extends ApplicationController {
     let matches = []
     this.itemTargets.forEach((item) => {
       const text = item.getAttribute("data-satis-dropdown-item-text")
-      const matched = this.needsExactMatchValue ? searchValue.localeCompare(text, undefined, {sensitivity: 'base'}) === 0 : text.toLowerCase().includes(searchValue.toLowerCase())
+      const matched = this.needsExactMatchValue ? searchValue.localeCompare(text, undefined, { sensitivity: 'base' }) === 0 : text.toLowerCase().includes(searchValue.toLowerCase())
 
       const isHidden = item.classList.contains("hidden")
       if (!isHidden) {
@@ -541,9 +541,9 @@ export default class DropdownComponentController extends ApplicationController {
     }
 
     // auto select if there is only one match and we are not in freetext mode
-    if(!this.freeTextValue) {
+    if (!this.freeTextValue) {
       if (matches.length === 1) {
-        if (this.filteredSearchQuery.length >= this.minSearchQueryLength &&
+        if (this.filteredSearchQuery.length >= this.minSearchQueryLengthValue &&
           matches[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.lastSearch.toLowerCase()) >= 0) {
           const dataDiv = matches[0].closest('[data-satis-dropdown-target="item"]')
           this.selectItem(dataDiv)
@@ -553,7 +553,7 @@ export default class DropdownComponentController extends ApplicationController {
           this.showSelectedItem()
         }
         // the selected item if there was only 1 item visible before
-      } else if(previouslyVisibleItemsCount === 1 && matches.length > 1) {
+      } else if (previouslyVisibleItemsCount === 1 && matches.length > 1) {
         this.setSelectedItem()
       }
     }
@@ -569,7 +569,7 @@ export default class DropdownComponentController extends ApplicationController {
           (this.currentPage == this.lastPage || this.currentPage == this.endPage)) ||
         !this.hasUrlValue
       ) {
-        if(!this.resultsShown) {
+        if (!this.resultsShown) {
           if (this.hasResults)
             this.showResultsList(event)
           else this.showSelectedItem()
@@ -608,19 +608,19 @@ export default class DropdownComponentController extends ApplicationController {
           }
 
           // auto select when there is only 1 value
-          if (this.filteredSearchQuery.length >= this.minSearchQueryLength && this.nrOfItems === 1 && !this.freeTextValue) {
+          if (this.filteredSearchQuery.length >= this.minSearchQueryLengthValue && this.nrOfItems === 1 && !this.freeTextValue) {
             const dataDiv = this.itemTargets[0].closest('[data-satis-dropdown-target="item"]')
             this.selectItem(dataDiv)
             this.setSelectedItem(dataDiv.getAttribute("data-satis-dropdown-item-value"))
             this.searchQueryValue = ""
-          } else if(this.searchQueryValue?.length > 0) {
+          } else if (this.searchQueryValue?.length > 0) {
             // hide all items that don't match the search query
             const searchValue = this.searchQueryValue
             let matches = []
             this.itemTargets.forEach((item) => {
               const text = item.getAttribute("data-satis-dropdown-item-text")
               const matched = this.needsExactMatchValue
-                ? searchValue.localeCompare(text, undefined, { sensitivity: "base" }) === 0 : text.toLowerCase().includes(searchValue.toLowerCase())
+                ? searchValue.localeCompare(text, undefined, { sensitivity: "base" }) === 0 : text?.toLowerCase().includes(searchValue.toLowerCase())
 
               const isHidden = item.classList.contains("hidden")
               if (!isHidden) {
@@ -688,8 +688,8 @@ export default class DropdownComponentController extends ApplicationController {
     return promise
   }
 
-  get filteredSearchQuery(){
-    if(this.searchQueryValue < this.minSearchQueryLength) return ""
+  get filteredSearchQuery() {
+    if (this.searchQueryValue < this.minSearchQueryLengthValue) return ""
     return this.searchQueryValue
   }
 
@@ -866,9 +866,9 @@ export default class DropdownComponentController extends ApplicationController {
       this.selectedIndex = -1
       return
     }
-    const itemTargets = this.itemTargets;
-    const visibleItems = itemTargets.filter(item => !item.classList.contains("hidden"));
-    this.selectedIndex = visibleItems.findIndex(item => item.getAttribute("data-satis-dropdown-item-value") === value);
+    const itemTargets = this.itemTargets
+    const visibleItems = itemTargets.filter(item => !item.classList.contains("hidden"))
+    this.selectedIndex = visibleItems.findIndex(item => item.getAttribute("data-satis-dropdown-item-value") === value)
     this.highLightSelected()
   }
 
@@ -884,9 +884,9 @@ export default class DropdownComponentController extends ApplicationController {
     this.highLightSelected()
   }
   validateSearchQuery() {
-    const trimmedValue = this.searchInputTarget.value.trim();
-    const elements = this.selectedItemsTemplateTarget.content.querySelectorAll(`[data-satis-dropdown-item-text*="${trimmedValue}"]`);
-    const selected = Array.from(elements).find(element => element.getAttribute('data-satis-dropdown-item-text').trim() === trimmedValue);
+    const trimmedValue = this.searchInputTarget.value.trim()
+    const elements = this.selectedItemsTemplateTarget.content.querySelectorAll(`[data-satis-dropdown-item-text*="${trimmedValue}"]`)
+    const selected = Array.from(elements).find(element => element.getAttribute('data-satis-dropdown-item-text').trim() === trimmedValue)
     if (!selected && this.searchInputTarget.value.length > 0 && !this.freeTextValue) {
       this.searchInputTarget.closest(".sts-dropdown").classList.toggle("warning", true)
     } else {
@@ -955,13 +955,13 @@ export default class DropdownComponentController extends ApplicationController {
   }
 
   get hasFocus() {
-    const activeElement = document.activeElement;
+    const activeElement = document.activeElement
     if (activeElement === this.element ||
       this.element.contains(activeElement) ||
       this.element.querySelector(':focus') !== null) {
-      return true;
+      return true
     }
-    return false;
+    return false
   }
 
   // Selected items are being cached in selectItemsTemplate. Sometimes we want to show the selected item in the results list
@@ -971,7 +971,7 @@ export default class DropdownComponentController extends ApplicationController {
       || this.freeTextValue
       || this.hiddenSelectTarget.options.length === 0
       || !this.hasFocus
-    ) return false;
+    ) return false
 
     const option = this.hiddenSelectTarget.options[0]
     let item = this.itemsTarget.querySelector(`[data-satis-dropdown-item-value="${option.value}"]`)
@@ -988,12 +988,12 @@ export default class DropdownComponentController extends ApplicationController {
       }
     }
 
-    if(item) {
+    if (item) {
       if (!this.resultsShown)
         this.showResultsList()
       this.setSelectedItem(option.value)
     }
 
-    return item != null;
+    return item != null
   }
 }
