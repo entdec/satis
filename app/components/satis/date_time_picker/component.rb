@@ -43,6 +43,9 @@ module Satis
       def week_start
         Date::DAYS_INTO_WEEK[Date.beginning_of_week] || 1
       end
+      def input_class
+        [@options.fetch(:input_html, {}).fetch(:class, ""), form.has_error?(attribute) ? "is-invalid" : ""].join(" ")
+      end
     end
   end
 end
