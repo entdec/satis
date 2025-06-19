@@ -16,22 +16,23 @@ export default class SidebarComponentController extends ApplicationController {
         // Check stored state and apply it
         const isClosed = sessionStorage.getItem('sidebarClosed') === 'true';
         if (isClosed) {
-            sidebar_collapse.classList.add("close");
-            topbar.classList.add("close");
-            page_body.classList.add("close");
+            sidebar_collapse?.classList.add("close");
+            topbar?.classList.add("close");
+            page_body?.classList.add("close");
         }
 
+        if (sidebarBtn) {
+            sidebarBtn.addEventListener("click", () => {
+                const isClosed = sidebar_collapse.classList.toggle("close");
+                topbar.classList.toggle("close");
+                page_body.classList.toggle("close");
 
-        sidebarBtn.addEventListener("click", () => {
-            const isClosed = sidebar_collapse.classList.toggle("close");
-            topbar.classList.toggle("close");
-            page_body.classList.toggle("close");
-
-            // Save the current state to sessionStorage
-            sessionStorage.setItem('sidebarClosed', isClosed);
-        });
+                // Save the current state to sessionStorage
+                sessionStorage.setItem('sidebarClosed', isClosed);
+            });
         }
     }
+}
 
 // Ensure the function runs on every Turbo page load
 document.addEventListener("turbo:load", () => {

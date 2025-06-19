@@ -1,34 +1,34 @@
 div.satis-date-time-picker data-controller="satis-date-time-picker" data-satis-date-time-picker-time-picker-value=time_picker.to_s data-satis-date-time-picker-clearable-value=clearable.to_s data-satis-date-time-picker-locale-value="" data-satis-date-time-picker-range-value=range.to_s data-satis-date-time-picker-multiple-value=multiple.to_s data-satis-date-time-picker-week-start-value=week_start data-satis-date-time-picker-inline-value=inline.to_s data-satis-date-time-picker-format-value=JSON.dump(format)
   .relative.flex.items-center
     = form.text_field attribute, options[:input_html].merge(class: 'hidden')
-    input.form-control data-action="focus->satis-date-time-picker#showCalendar input->satis-date-time-picker#dateTimeEntered" data-satis-date-time-picker-target="input" type="text"
+    input.form-control class=input_class data-action="focus->satis-date-time-picker#showCalendar input->satis-date-time-picker#dateTimeEntered" data-satis-date-time-picker-target="input" type="text"
     .absolute.inset-y-0.right-0.flex.py-1.5.pr-1.5
       button.cursor-pointer.w-6.h-full.flex.items-center.text-gray-400.outline-none.focus:outline-none data-satis-date-time-picker-target="clearButton" data-action="click->satis-date-time-picker#clear"
         i.fas.fa-xmark
 
-  .container.z-10.shadow.bg-white.border.border-gray-300.dark:bg-gray-800.dark:border-gray-700.rounded.p-4.w-72 class="#{inline ? 'inline-block' : 'hidden'}" data-satis-date-time-picker-target="calendarView"
+  .container.z-10.shadow.bg-white.border.border-gray-300.dark:bg-gray-800.dark:border-gray-700.rounded.p-4.w-96 class="#{inline ? 'inline-block' : 'hidden'}" data-satis-date-time-picker-target="calendarView"
     .flex.justify-between.items-center.mb-2
-      div
-        button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 rounded-full" data-action="satis-date-time-picker#previousYear"
-          i.fal.fa-angle-double-left.text-gray-500.inline-flex.py-1
-        button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 rounded-full" data-action="satis-date-time-picker#previousMonth"
-          i.fal.fa-angle-left.text-gray-500.inline-flex.px-1.py-1
-      div.text-center
-        span.text-lg.font-bold.text-gray-800.dark:text-gray-200 data-satis-date-time-picker-target="month"
-        span.ml-1.text-lg.text-gray-600.dark:text-gray-200.font-normal data-satis-date-time-picker-target="year"
-      div
-        button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 rounded-full" data-action="satis-date-time-picker#nextMonth"
-          i.fal.fa-angle-right.text-gray-500.inline-flex.px-1.py-1
-        button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 rounded-full" data-action="satis-date-time-picker#nextYear"
-          i.fal.fa-angle-double-right.text-gray-500.inline-flex.py-1
+      button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 rounded-full"  data-action="satis-date-time-picker#previousMonth"
+        i.text-gray-500.inline-flex.px-1.py-1 class=Satis.config.icons[:previous_month]
 
+      .flex.items-center.justify-center.gap-1.text-center.flex-grow
+        span.text-lg.font-bold.text-gray-800.dark:text-gray-200 data-satis-date-time-picker-target="month"
+        div.relative.flex.items-center
+          select.appearance-none.border-none.bg-transparent.text-lg.font-normal.text-gray-600.dark:text-gray-200.focus:outline-none.focus:ring-0.overflow-y-auto.max-h-12 data-satis-date-time-picker-target="select" data-action="change->satis-date-time-picker#selectYear"
+            - current_year = Time.current.year
+            - (current_year - 100..current_year + 100).each do |year|
+              - selected = true if year == current_year
+              option value=year selected=selected data-satis-date-time-picker-target="year" = year
+
+      button type="button" class="transition ease-in-out duration-100 inline-flex cursor-pointer hover:bg-gray-200 rounded-full" data-action="satis-date-time-picker#nextMonth"
+        i.text-gray-500.inline-flex.px-1.py-1 class=Satis.config.icons[:next_month]
 
     .grid.grid-cols-7 data-satis-date-time-picker-target="weekDays"
     template data-satis-date-time-picker-target="weekDayTemplate"
       div.px-2.w-8
         div.text-gray-800.dark:text-gray-200.font-medium.text-center.text-xs ${name}
 
-    .grid.grid-cols-7 data-satis-date-time-picker-target="days"
+    .grid.grid-cols-7.grid-rows-6 data-satis-date-time-picker-target="days"
 
     - if time_picker
       .flex.items-center.py-2.space-x-2
@@ -50,4 +50,4 @@ div.satis-date-time-picker data-controller="satis-date-time-picker" data-satis-d
       .text-center.border.p-1.border-transparent.text-sm
     template data-satis-date-time-picker-target="dayTemplate"
       div
-        a.block.w-full.h-9.cursor-pointer.text-center.pt-2px.text-sm.rounded-l-full.rounded-r-full.leading-loose.transition.ease-in-out.duration-100.hover:bg-primary-200 data-action="satis-date-time-picker#selectDay" ${day}
+        a.block.w-10.h-10.cursor-pointer.text-center.text-sm.rounded-full.flex.items-center.justify-center.transition.ease-in-out.duration-100.hover:bg-primary-200 data-action="satis-date-time-picker#selectDay" ${day}

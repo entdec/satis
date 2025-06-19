@@ -62,8 +62,8 @@ export default class DropdownComponentController extends ApplicationController {
         {
           name: "flip",
           options: {
-            fallbackPlacements: ["bottom"],
-            boundary: this.element.closest(".sts-card"),
+            fallbackPlacements: ["top", "bottom"],
+            boundary: "clippingParents",
           },
         },
         {
@@ -520,9 +520,7 @@ export default class DropdownComponentController extends ApplicationController {
     let matches = []
     this.itemTargets.forEach((item) => {
       const text = item.getAttribute("data-satis-dropdown-item-text")
-      const matched = this.needsExactMatchValue ?
-        searchValue.localeCompare(text, undefined, {sensitivity: 'base'}) === 0:
-        new RegExp(searchValue, "i").test(text)
+      const matched = this.needsExactMatchValue ? searchValue.localeCompare(text, undefined, {sensitivity: 'base'}) === 0 : text.toLowerCase().includes(searchValue.toLowerCase())
 
       const isHidden = item.classList.contains("hidden")
       if (!isHidden) {
@@ -622,8 +620,7 @@ export default class DropdownComponentController extends ApplicationController {
             this.itemTargets.forEach((item) => {
               const text = item.getAttribute("data-satis-dropdown-item-text")
               const matched = this.needsExactMatchValue
-                ? searchValue.localeCompare(text, undefined, { sensitivity: "base" }) === 0
-                : new RegExp(searchValue, "i").test(text)
+                ? searchValue.localeCompare(text, undefined, { sensitivity: "base" }) === 0 : text?.toLowerCase().includes(searchValue.toLowerCase())
 
               const isHidden = item.classList.contains("hidden")
               if (!isHidden) {

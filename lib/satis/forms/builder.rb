@@ -81,7 +81,7 @@ module Satis
         # FIXME: Yuk - is it possible to detect when this should not be allowed?
         # Like checking for whether destroy is allowed on assocations?
         allow_actions = options.key?(:allow_actions) ? options[:allow_actions] : true
-        show_actions = @object.respond_to?("#{name}_attributes=") && @object.send(name).respond_to?(:each) && template_object && allow_actions == true
+        show_actions = @object.respond_to?(:"#{name}_attributes=") && @object.send(name).respond_to?(:each) && template_object && allow_actions == true
 
         html_options = options[:html] || {}
 
@@ -115,10 +115,10 @@ module Satis
           #        ))
         else
           invalid_feedback = nil
-          if @object.errors.messages[name].present?
-            invalid_feedback = tag.div(@object.errors.messages[name].join(", "),
-              class: "invalid-feedback")
-          end
+          # if @object.errors.messages[name].present?
+          #   invalid_feedback = tag.div(@object.errors.messages[name].join(", "),
+          #     class: "invalid-feedback")
+          # end
           safe_join [
             invalid_feedback,
             rails_fields_for(*args, options, &block)
@@ -156,6 +156,14 @@ module Satis
         hidden_input(method, options, &block)
       end
 
+      def attachments(method, options = {}, &block)
+        self.multipart = true
+        safe_join [
+          @template.render(Satis::Attachments::Component.new(object, method, form: self, **value_text_method_options(options),
+            &block))
+        ]
+      end
+
       # Non public
 
       def input_type_for(method, options)
@@ -181,7 +189,7 @@ module Satis
       def form_group(method, options = {}, &block)
         tag.div(class: "form-group form-group-#{method}", data: options.delete(:data)) do
           safe_join [
-            block.call,
+            yield,
             hint_text(options[:hint]),
             error_text(method)
           ].compact
@@ -320,31 +328,15 @@ module Satis
             @template.render(Satis::Editor::Component.new(form: self, attribute: method, **options, &block))
           ]
         end
-        # form_group(method, options) do
-        #   safe_join [
-        #               (custom_label(method, options[:label], options) unless options[:label] == false),
-        #               tag.div(text_area(method,
-        #                                 merge_input_options({
-        #                                                       class: 'form-control hidden',
-        #                                                       data: {
-        #                                                         # controller: 'satis-editor',
-        #                                                         'satis-editor-target' => 'textarea',
-        #                                                         'satis-editor-read-only-value' => options.delete(:read_only) || false,
-        #                                                         'satis-editor-mode-value' => options.delete(:mode) || 'text/html',
-        #                                                         'satis-editor-height-value' => options.delete(:height) || '200px',
-        #                                                         'satis-editor-color-scheme-value' => options.delete(:color_scheme),
-        #                                                         'satis-editor-color-scheme-dark-value' => options.delete(:color_scheme_dark) || 'lucario'
-        #                                                       }
-        #
-        #                                                     }, options[:input_html])), class: "editor #{
-        #                 if has_error?(method)
-        #                   'is-invalid'
-        #                 end}", data: {
-        #                 controller: 'satis-editor'
-        #               }),
-        #               hint_text(options[:hint] || '⌘-F/⌃-f: search; ⌥-g: goto line, ⌃-space: autocomplete')
-        #             ]
-        # end
+      end
+
+      def signature(method, options = {}, &block)
+        form_group(method, options) do
+          safe_join [
+            (custom_label(method, options[:label], options) unless options[:label] == false),
+            @template.render(Satis::Signature::Component.new(form: self, attribute: method, **options, &block))
+          ]
+        end
       end
 
       def boolean_input(method, options = {})

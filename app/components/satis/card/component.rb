@@ -27,7 +27,7 @@ module Satis
         super
 
         if identifier.blank?
-          ActiveSupport::Deprecation.warn('Calling sts.card with the id parameter will become mandatory')
+          Satis::Deprecation.warn('Calling sts.card with the id parameter will become mandatory')
         end
 
         @identifier = identifier

@@ -13,7 +13,7 @@ pin_all_from Satis::Engine.root.join("app/javascript/satis/elements"), under: "s
 pin_all_from Satis::Engine.root.join("app/components/satis"), under: "satis/components", to: "satis"
 
 pin "tippy.js", preload: false # @6.3.7
-pin "@popperjs/core", to: 'popper.js.js', preload: false
+pin "@popperjs/core", to: "popper.js.js", preload: false
 pin "leaflet", to: "leaflet.js", preload: false
 pin "sortablejs", to: "sortablejs.js", preload: false # @1.15.2
 pin "@rails/actiontext", to: "@rails--actiontext.js" # @7.1.3
@@ -48,3 +48,8 @@ pin "@lezer/markdown", to: "@lezer--markdown.js" # @1.2.0
 pin "intl-tel-input", to: "intl-tel-input.js" # @19.5.6
 pin "intl-tel-input-utils", to: "intl-tel-input-utils.js" # @19.5.6
 pin "pickr", to: "pickr.es5.min.js" # @0.1.4
+pin "dayjs" # @1.11.13
+pin "dayjs/plugin/customParseFormat", to: "dayjs--plugin--customParseFormat.js" # @1.11.13
+pin "dayjs/plugin/localizedFormat", to: "dayjs--plugin--localizedFormat.js" # @1.11.13
+pin "dayjs/plugin/utc", to: "dayjs--plugin--utc.js" # @1.11.13
+pin "signature_pad" # @5.0.4

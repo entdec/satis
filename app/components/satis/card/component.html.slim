@@ -1,16 +1,16 @@
 .sts-card data-controller="satis-tabs" data-satis-tabs-persist-value=persist data-satis-tabs-key-value=key id=identifier
   - if header?
-    .sts-card__header class="#{tabs? ? '' : 'border-b border-gray-200'} #{header_background_color[:light]} dark:#{header_background_color[:dark]}"
+    .sts-card__header class="#{tabs? ? '' : 'border-b border-gray-200'}"
       .-ml-4.-mt-4.flex.justify-between.items-center.flex-wrap.sm:flex-nowrap
         - if icon
           .ml-4.mt-4.flex-shrink-0.text-primary-600.dark:text-gray-300
             i class=icon
         .ml-4.mt-4.flex-1
           h3.text-lg.leading-6.font-medium.text-gray-900.dark:text-white
-            == title
+            = title
           - if description.present?
             p.mt-1.text-sm.text-gray-500.dark:text-gray-500
-              == description
+              = description
 
         - if actions.present? || initial_actions.present?
           .ml-4.mt-4.flex-shrink-0

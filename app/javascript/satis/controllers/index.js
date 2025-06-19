@@ -48,6 +48,9 @@ application.register("satis-dialog", DialogComponentController);
 import ColorPickerComponentController from "satis/components/color_picker/component_controller";
 application.register("satis-color-picker", ColorPickerComponentController);
 
+import SignatureComponentController from "satis/components/signature/component_controller";
+application.register("satis-signature", SignatureComponentController);
+
 // Controllers
 
 import LinkController from "satis/controllers/link_controller";
@@ -55,6 +58,9 @@ application.register("satis-link", LinkController);
 
 import FieldsForController from "satis/controllers/fields_for_controller";
 application.register("satis-fields-for", FieldsForController);
+
+import AttachmentUploadController from "satis/controllers/attachment_upload_controller";
+application.register("satis-attachment-upload", AttachmentUploadController);
 
 import FormController from "satis/controllers/form_controller";
 application.register("satis-form", FormController);

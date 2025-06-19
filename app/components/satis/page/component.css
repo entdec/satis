@@ -17,11 +17,6 @@
     margin-top: -7px;
   }
 
-  .sidebar.close .arrow{
-    margin-right: -20px;
-    transform: scaleX(1);
-  }
-
   .h-screen.flex .page_bg .topbar .account-name {
     @apply dark:text-white;
     display: block;

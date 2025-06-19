@@ -1,0 +1,141 @@
+.attachments__group {
+  @apply grid gap-6 mt-0 justify-start;
+  grid-template-columns: repeat(auto-fill, 200px);
+}
+
+.attachments__attachment {
+  @apply relative w-[200px] h-[200px] bg-cover bg-center bg-no-repeat rounded-lg shadow-md overflow-hidden;
+  @apply dark:bg-gray-900;
+}
+
+.attachments__attachment:hover {
+  @apply opacity-90;
+}
+
+.attachments__attachment .attachments__button {
+  @apply hidden;
+}
+
+.attachments__attachment .attachments__button:first-of-type {
+  @apply left-2.5;
+}
+
+.attachments__attachment .attachments__button:last-of-type {
+  @apply right-2.5;
+}
+
+.attachments__attachment:hover .attachments__button {
+  @apply block w-7 h-7 justify-center items-center text-center bg-gray-100 dark:bg-gray-800 dark:text-white;
+}
+
+.attachments__attachment .attachments__filename {
+  @apply hidden absolute bottom-0 left-0 right-0 bg-black bg-opacity-70 text-white p-1.5 text-center text-xs;
+  @apply dark:bg-gray-900 dark:bg-opacity-90;
+}
+
+.attachments__attachment:hover .attachments__filename {
+  @apply block;
+}
+
+.preview-text {
+  @apply absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white bg-opacity-70 p-2.5 rounded text-sm text-gray-800;
+  @apply dark:bg-gray-800 dark:bg-opacity-70 dark:text-gray-200;
+}
+
+@media (max-width: 640px) {
+  .attachments__group {
+    grid-template-columns: repeat(auto-fill, 150px);
+  }
+
+  .attachments__attachment {
+    @apply w-[150px] h-[150px];
+  }
+}
+
+.icon.uploading {
+  display: none; /* Ensure this is hidden by default */
+}
+
+.uploading .icon.uploading {
+  display: inline-block; /* Show only when uploading */
+}
+
+.icon.upload {
+  display: inline-block; /* Ensure the upload icon is visible */
+}
+
+.uploading .icon.upload {
+  display: none; /* Hide the upload icon during upload */
+}
+
+.attachment-upload-button {
+  display: inline-block;
+}
+
+.upload-btn {
+  @apply dark:bg-gray-900 dark:text-white bg-white;
+  align-items: center;
+  padding: 10px 15px;
+  border: 2px dashed #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #333;
+}
+
+.upload-btn:hover {
+  @apply dark:bg-gray-900 dark:text-white dark:border-gray-700 border-gray-500 bg-white;
+}
+
+.upload-btn:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5);
+}
+
+.upload-btn .icon {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+.upload-btn .icon.upload {
+  @apply text-primary-600;
+}
+
+.upload-btn .icon.uploading {
+  display: none;
+  @apply text-primary-600;
+}
+
+.uploading .upload-btn .icon.upload {
+  display: none;
+}
+
+.uploading .upload-btn .icon.uploading {
+  display: inline-block;
+}
+
+.upload-btn .button-text {
+  font-size: 14px;
+}
+
+.dragging .upload-btn {
+  background-color: #e8f0fe;
+  border-color: #4285f4;
+}
+
+.uploading .upload-btn {
+  @apply dark:bg-gray-800 dark:border-gray-600 dark:text-white bg-white;
+  border-color: #f39c12;
+  cursor: not-allowed;
+}
+
+.attachments__group .attachment-upload.upload-btn.attachments__attachment {
+  @apply bg-white dark:bg-gray-800 border-2 border-dashed hover:border-gray-500 border-gray-300 p-4 flex flex-col justify-center items-center text-center w-full min-h-[150px] box-border;
+}
+.attachments__group .attachment-upload.upload-btn.attachments__attachment.dark {
+  @apply hover:border-white;
+}
+.attachments__group .attachment-upload.upload-btn.attachments__attachment.dragging {
+  @apply dark:bg-gray-700 dark:bg-opacity-75 bg-gray-200 bg-opacity-50 dark:text-black text-white;
+  transition: all 0.3s ease;
+}

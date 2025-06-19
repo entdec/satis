@@ -1,0 +1,8 @@
+turbo-frame id="#{model.id}_#{attribute}_attachments" target="_top" class="attachments__group"
+  div.attachment-upload.upload-btn.attachments__attachment data-controller="satis-attachment-upload" data-satis-attachment-upload-url-value=(model.persisted? ? Satis::Engine.routes.url_helpers.attachments_path(sgid: model_sgid, attribute: attribute) : false) data-satis-attachment-upload-parameter-name-value=(form&.field_name(attribute)||attribute) data-action="click->satis-attachment-upload#handleClick"
+    span.icon.upload
+      i.fas.fa-upload
+    span.icon.uploading
+      i.fal.fa-circle-notch.fa-spin
+    span.button-text data-satis-attachment-upload-target="button" Drag or click to attach files
+  = render partial: "satis/attachments/attachment", collection: model.send(attribute)
