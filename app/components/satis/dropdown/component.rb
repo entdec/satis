@@ -111,7 +111,7 @@ module Satis
       end
 
       def input_class
-        [@options.fetch(:input_html, {}).fetch(:class, ""), "sts-input__input", form.has_error?(attribute) ? "is-invalid" : ""].join(" ")
+        [@options.fetch(:input_html, {}).fetch(:class, ""), form.has_error?(attribute) ? "is-invalid" : ""].join(" ")
       end
     end
   end
