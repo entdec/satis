@@ -20,14 +20,14 @@ export default class DropdownComponentController extends ApplicationController {
   ]
 
   static values = {
-      chainTo: String,
-      freeText: Boolean,
-      needsExactMatch: Boolean,
-      pageSize: Number,
-      url: String,
-      urlParams: Object,
-      isMultiple: Boolean,
-      minSearchQueryLength: Number
+    chainTo: String,
+    freeText: Boolean,
+    needsExactMatch: Boolean,
+    pageSize: Number,
+    url: String,
+    urlParams: Object,
+    isMultiple: Boolean,
+    minSearchQueryLength: Number
   }
 
   connect() {
@@ -618,8 +618,12 @@ export default class DropdownComponentController extends ApplicationController {
             let matches = []
             this.itemTargets.forEach((item) => {
               const text = item.getAttribute("data-satis-dropdown-item-text")
-              const matched = this.needsExactMatchValue
-                ? searchValue.localeCompare(text, undefined, { sensitivity: "base" }) === 0 : text?.toLowerCase().includes(searchValue.toLowerCase())
+              let matched
+              if (this.needsExactMatchValue) {
+                matched = searchValue.localeCompare(text, undefined, { sensitivity: "base" }) === 0
+              } else {
+                matched = searchValue.split(" ").every((term) => { return text?.toLowerCase().includes(term.toLowerCase()) })
+              }
 
               const isHidden = item.classList.contains("hidden")
               if (!isHidden) {
