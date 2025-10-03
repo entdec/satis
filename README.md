@@ -12,7 +12,7 @@ We use:
 
 ## Upgrade
 
-* From 2.2.0 onwards, we will no longer ship Fontawesome free. It conflicts with Fontawesome Pro. You can add easily add the javascript files, you can download them from here: https://fontawesome.com/download. Use the files from the `js` folder.
+* From 2.3.0 onwards, we will no longer ship Fontawesome free. It conflicts with Fontawesome Pro. You can add easily add the javascript files, you can download them from here: https://fontawesome.com/download. Use the files from the `js` folder. 
 
 ## Installation
 
