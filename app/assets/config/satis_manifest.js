@@ -1,5 +1,4 @@
 //= link_tree ../images
-//= link_directory ../fontawesome
 //= link_directory ../../javascript/satis .js
 //= link_directory ../../javascript/satis/controllers .js
 //= link_directory ../../javascript/satis/elements .js
