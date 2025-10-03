@@ -5,10 +5,14 @@ We use:
 
 - [TailwindCSS](https://tailwindcss.com)
 - [TailwindUI](https://tailwindui.com)
-- [FontAwesome 6](https://fontawesome.com/v6.0/)
+- [FontAwesome 7](https://fontawesome.com/v7.0/)
 - [ViewComponent](https://viewcomponent.org)
 - [HotWired](https://hotwired.dev)
 - [BEM](https://cssguidelin.es/#bem-like-naming)
+
+## Upgrade
+
+* From 2.2.0 onwards, we will no longer ship Fontawesome free. It conflicts with Fontawesome Pro. You can add easily add the javascript files, you can download them from here: https://fontawesome.com/download. Use the files from the `js` folder.
 
 ## Installation
 
