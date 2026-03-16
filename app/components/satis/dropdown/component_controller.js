@@ -607,7 +607,7 @@ export default class DropdownComponentController extends ApplicationController {
           }
 
           // auto select when there is only 1 value
-          if (this.filteredSearchQuery.length >= this.minSearchQueryLengthValue && this.nrOfItems === 1 && !this.freeTextValue) {
+          if (this.filteredSearchQuery?.length >= this.minSearchQueryLengthValue && this.nrOfItems === 1 && !this.freeTextValue) {
             const dataDiv = this.itemTargets[0].closest('[data-satis-dropdown-target="item"]')
             this.selectItem(dataDiv)
             this.setSelectedItem(dataDiv.getAttribute("data-satis-dropdown-item-value"))
