@@ -1,3 +1,4 @@
+/* ── Sidebar container ── */
 .h-screen.flex .sidebar {
   @apply dark:bg-gray-700 bg-white;
   width: 260px;
@@ -6,77 +7,44 @@
   left: 0;
   margin-top: 4rem;
   position: absolute;
-  overflow: visible;
-  overflow-y: scroll;
+  overflow-x: hidden;
+  overflow-y: auto;
   scrollbar-width: none;
   z-index: 999;
-  transition: backdrop-filter 0.3s ease-in-out, transform 0.3s ease-in-out;
-
+  transition: width 0.3s ease-in-out;
 }
-
-.h-screen.flex .sidebar.close .icon-link .sts-sidebar-menu-item{
-  z-index: 1100;
-  position: relative;
-  opacity: 0.99;
-  margin-left: 10px;
-  transition: backdrop-filter 0.3s ease-in-out, transform 0.3s ease-in-out;
-}
-
 
 .h-screen.flex .sidebar.close {
-  position: absolute;
-  overflow: visible;
-  top: 0;
-  left: 0;
-  height: calc(100% - 4rem);
-  margin-top: 4rem;
   width: 60px;
-  z-index: 999;
-  scrollbar-width: none;
+  overflow: visible;
 }
 
 .sidebar::-webkit-scrollbar {
   display: none;
 }
 
+.dark .h-screen.flex .sidebar {
+  @apply bg-gray-800;
+}
 
+/* ── Topbar ── */
 .h-screen.flex .topbar {
   @apply bg-white dark:bg-gray-800;
   height: 4rem;
   display: flex;
   max-width: 100%;
-  left:0;
-  margin-left: 0;
   position: relative;
-  z-index: 10000;
-  transition: backdrop-filter 0.3s ease-in-out, transform 0.3s ease-in-out;
+  z-index: 1000;
 }
 
+/* ── Page body ── */
 .page_body.close {
-  margin-left: 50px;
-  max-width: 97%;
+  margin-left: 60px;
+  max-width: calc(100% - 60px);
 }
 
-.h-screen.flex .sidebar .boxture-logo{
-  margin-top: 30px;
-}
-
-.sidebar.close .boxture-logo {
-  opacity: 0;
-}
-
-.h-screen.flex .sidebar.close .icon-link {
-  margin-top: 0;
-  transition: 0.3s ease;
-  transition-delay: 0.1s;
-}
-
-
-.sidebar.close .sts-sidebar-menu-item{
-  margin-left: 2px;
-}
-
-.sidebar .boxture-logo {
+/* ── Logo ── */
+.h-screen.flex .sidebar .boxture-logo {
   height: 52px;
   width: 52px;
   opacity: 0.5;
@@ -84,48 +52,18 @@
   border-radius: 16px;
   font-size: 30px;
   color: #fff;
-  margin-top: 80px;
+  margin-top: 30px;
   mix-blend-mode: multiply;
+  transition: opacity 0.3s ease-in-out;
 }
 
 .dark .sidebar .boxture-logo {
   mix-blend-mode: normal;
 }
 
-.sidebar.close .profile-logo {
-  display: none;
-}
-
-.sidebar .arrow:hover {
-  color: #555555;
-  cursor: pointer;
-}
-
-.dark .sidebar .arrow:hover {
-  color: #c0c0c0;
-}
-
-.dark .sidebar .arrow {
-  color: #ffffff;
-  opacity: 1;
-  margin-top: 20px;
-}
-
-.h-screen.flex .sidebar .arrow {
-  margin-top: 20px;
-  font-size: 20px;
-  opacity: 0.5;
-  left: 0;
-  margin-left: 10px;
-  margin-right: 10px;
-  transform: scaleX(-1);
-  transition: backdrop-filter 0.3s ease-in-out, transform 0.3s ease-in-out;
-}
-
-.h-screen.flex .sidebar.close .arrow{
-  margin-left: 15px;
-  left: 0;
-  transform: scaleX(1);
+.sidebar.close .boxture-logo {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .sidebar .logo_name {
@@ -139,11 +77,51 @@
   display: none;
 }
 
-.dark .h-screen.flex .sidebar {
-  @apply bg-gray-800;
-}
-
 .dark .sidebar .logo_name {
   color: #edecec;
 }
 
+.sidebar.close .profile-logo {
+  display: none;
+}
+
+/* ── Collapse arrow ── */
+.h-screen.flex .sidebar .arrow {
+  margin-top: 20px;
+  font-size: 20px;
+  opacity: 0.5;
+  margin-left: 10px;
+  margin-right: 10px;
+  transform: scaleX(-1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.h-screen.flex .sidebar.close .arrow {
+  margin-left: 15px;
+  transform: scaleX(1);
+}
+
+.sidebar .arrow:hover {
+  color: #555555;
+  cursor: pointer;
+}
+
+.dark .sidebar .arrow {
+  color: #ffffff;
+  opacity: 1;
+  margin-top: 20px;
+}
+
+.dark .sidebar .arrow:hover {
+  color: #c0c0c0;
+}
+
+.h-screen.flex .sidebar.close .icon-link {
+  margin-top: 0;
+  transition: 0.3s ease;
+  transition-delay: 0.1s;
+}
+
+.sidebar.close .sts-sidebar-menu-item {
+  margin-left: 2px;
+}
