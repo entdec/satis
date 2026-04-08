@@ -1,38 +1,45 @@
-.sts-card data-controller="satis-tabs" data-satis-tabs-persist-value=persist data-satis-tabs-key-value=key id=identifier
+.sts-card data-controller="satis-card satis-tabs" data-satis-tabs-persist-value=persist data-satis-tabs-key-value=key data-satis-card-collapsible-value=collapsible data-satis-card-collapsed-value=collapsed data-satis-card-identifier-value=identifier id=identifier
   - if header?
-    .sts-card__header class="#{tabs? ? '' : 'border-b border-gray-200'}"
+    .sts-card__header class=header_classes data-action="#{collapsible ? 'click->satis-card#toggle' : ''}"
       .-ml-4.-mt-4.flex.justify-between.items-center.flex-wrap.sm:flex-nowrap
         - if icon
           .ml-4.mt-4.flex-shrink-0.text-primary-600.dark:text-gray-300
             i class=icon
         .ml-4.mt-4.flex-1
-          h3.text-lg.leading-6.font-medium.text-gray-900.dark:text-white
+          h3 class=title_classes
             = title
           - if description.present?
             p.mt-1.text-sm.text-gray-500.dark:text-gray-500
               = description
 
         - if actions.present? || initial_actions.present?
-          .ml-4.mt-4.flex-shrink-0
+          .ml-4.mt-4.flex-shrink-0 data-satis-card-target="actions"
             .grid.grid-flow-row.gap-1.sm:grid-flow-col
               - initial_actions.each do |action|
                 = action
               - actions.each do |action|
                 = action
 
+        - if collapsible
+          .ml-4.mt-4.flex-shrink-0
+            button.text-gray-400.hover:text-gray-600.dark:hover:text-gray-200.transition-transform.duration-200 type="button" data-satis-card-target="collapseIcon"
+              i.fas.fa-chevron-down
+
         - if menu
           .ml-4.mt-2.flex-shrink-0
             = render(Satis::Menu::Component.new(menu))
 
-  - if tabs?
-    = render Satis::Tabs::Component.new(custom_link: custom_tabs_link).tap {|c| c.original_view_context = view_context } do |t|
-      - tabs.each_with_index do |ta, i|
-        - t.with_tab ta.name, id: ta.id, icon: ta.icon, padding: ta.padding, badge: ta.badge, menu: ta.menu, dirty: ta.dirty, title: ta.title, responsive: ta.responsive, selected_tab_index: ta.selected_tab_index do
-          = ta
+  div data-satis-card-target="body"
+    - if tabs?
+      = render Satis::Tabs::Component.new(custom_link: custom_tabs_link).tap {|c| c.original_view_context = view_context } do |t|
+        - tabs.each_with_index do |ta, i|
+          - t.with_tab ta.name, id: ta.id, icon: ta.icon, padding: ta.padding, badge: ta.badge, menu: ta.menu, dirty: ta.dirty, title: ta.title, responsive: ta.responsive, selected_tab_index: ta.selected_tab_index do
+            = ta
 
-  - else
-    div class="#{content_padding ? 'px-6 py-6' : ''}"
-      = content
+    - else
+      div class=content_classes style=content_style
+        = content
 
   - if footer
-    = footer
+    div data-satis-card-target="footer"
+      = footer

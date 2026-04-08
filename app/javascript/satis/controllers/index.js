@@ -6,6 +6,9 @@ application.register("satis-appearance-switcher", AppearanceSwitcherComponentCon
 import DateTimePickerComponentController from "satis/components/date_time_picker/component_controller";
 application.register("satis-date-time-picker", DateTimePickerComponentController);
 
+import CardComponentController from "satis/components/card/component_controller";
+application.register("satis-card", CardComponentController);
+
 import DropdownComponentController from "satis/components/dropdown/component_controller";
 application.register("satis-dropdown", DropdownComponentController);
 

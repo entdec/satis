@@ -3,7 +3,7 @@
 module Satis
   module Dropdown
     class Component < ViewComponent::Base
-      attr_reader :url, :form, :attribute, :title, :options
+      attr_reader :url, :form, :attribute, :title, :options, :dropdown_max_height, :dropdown_min_height, :dropdown_width, :dropdown_height, :compact
 
       def initialize(form:, attribute:, **options, &block)
         super
@@ -18,6 +18,11 @@ module Satis
         @needs_exact_match = options[:needs_exact_match]
         @reset_button = options[:reset_button] || options[:include_blank]
         @toggle_button = options[:toggle_button] != false
+        @dropdown_max_height = options[:max_height]
+        @dropdown_min_height = options[:min_height]
+        @dropdown_width = options[:width]
+        @dropdown_height = options[:height]
+        @compact = options[:compact] || false
 
         options[:input_html] ||= {}
 
@@ -112,6 +117,31 @@ module Satis
 
       def input_class
         [@options.fetch(:input_html, {}).fetch(:class, ""), form.has_error?(attribute) ? "is-invalid" : ""].join(" ")
+      end
+
+      def results_style
+        styles = []
+        styles << "max-height: #{dropdown_max_height}" if dropdown_max_height
+        styles << "min-height: #{dropdown_min_height}" if dropdown_min_height
+        styles << "width: #{dropdown_width}" if dropdown_width
+        styles << "height: #{dropdown_height}" if dropdown_height
+        styles.join('; ')
+      end
+
+      def results_classes
+        classes = "hidden container sts-dropdown-results shadow dark:text-gray-300 z-10 rounded overflow-y-auto w-full"
+        classes += " max-h-select" unless dropdown_max_height
+        classes
+      end
+
+      def input_wrapper_classes
+        compact ? 'h-9 p-1 flex rounded' : 'h-12 p-1 flex rounded'
+      end
+
+      def search_input_classes
+        base = 'focus:ring-0 border-none p-1 px-2 appearance-none w-full sts-dropdown-input text-gray-800 dark:text-gray-300'
+        base += ' text-sm' if compact
+        base
       end
     end
   end

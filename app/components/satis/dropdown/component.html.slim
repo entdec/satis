@@ -9,10 +9,10 @@ div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controlle
     div.hidden.py-1 data-satis-dropdown-target="pills"
     .flex.flex-col.items-center
       .w-full.sts-dropdown class=input_class
-        .h-12.p-1.flex.rounded
+        div class=input_wrapper_classes
           .flex.flex-auto.flex-wrap.sts-dropdown-input
             / Input where you can search
-            input.focus:ring-0.border-none.p-1.px-2.appearance-none.w-full.sts-dropdown-input.text-gray-800.dark:text-gray-300 data-action="input->satis-dropdown#search" data-satis-dropdown-target="searchInput" placeholder=placeholder autofocus=options[:autofocus]
+            input class=search_input_classes data-action="input->satis-dropdown#search" data-satis-dropdown-target="searchInput" placeholder=placeholder autofocus=options[:autofocus]
           div
             / Reset button
             - unless @reset_button == false
@@ -28,7 +28,7 @@ div.satis-dropdown data-action="keydown->satis-dropdown#dispatch" data-controlle
     template data-satis-dropdown-target="selectedItemsTemplate"
 
     / Container for results
-    .hidden.container.sts-dropdown-results.shadow.dark:text-gray-300.z-10.rounded.max-h-select.overflow-y-auto.w-full data-satis-dropdown-target="results" data-action="scroll->satis-dropdown#scroll" tabindex="-1"
+    div class=results_classes style=results_style data-satis-dropdown-target="results" data-action="scroll->satis-dropdown#scroll" tabindex="-1"
       .flex.flex-col.w-full data-satis-dropdown-target="items"
         - options[:collection]&.each do |item|
           - data_attrs = item.try(:third) ? item.third : {}
