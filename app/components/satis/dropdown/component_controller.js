@@ -542,7 +542,7 @@ export default class DropdownComponentController extends ApplicationController {
     // auto select if there is only one match and we are not in freetext mode
     if (!this.freeTextValue) {
       if (matches.length === 1) {
-        if (this.filteredSearchQuery.length >= this.minSearchQueryLengthValue &&
+        if (this.filteredSearchQuery?.length >= this.minSearchQueryLengthValue &&
           matches[0].getAttribute("data-satis-dropdown-item-text").toLowerCase().indexOf(this.lastSearch.toLowerCase()) >= 0) {
           const dataDiv = matches[0].closest('[data-satis-dropdown-target="item"]')
           this.selectItem(dataDiv)
@@ -601,15 +601,14 @@ export default class DropdownComponentController extends ApplicationController {
       this.fetchResultsWith(ourUrl).then((itemCount) => {
         if (this.hasResults) {
           this.filterResultsChainTo()
-
-          if (!this.resultsShown && !this.chainToValue) {
+          if (!this.resultsShown) {
             this.showResultsList()
           }
 
           // auto select when there is only 1 value
           if (this.filteredSearchQuery?.length >= this.minSearchQueryLengthValue && this.nrOfItems === 1 && !this.freeTextValue) {
             const dataDiv = this.itemTargets[0].closest('[data-satis-dropdown-target="item"]')
-            this.selectItem(dataDiv)
+            this.selectItem(dataDiv, true)
             this.setSelectedItem(dataDiv.getAttribute("data-satis-dropdown-item-value"))
             this.searchQueryValue = ""
           } else if (this.searchQueryValue?.length > 0) {
