@@ -7,7 +7,8 @@ module Satis
       renders_many :tabs, Tab::Component
       renders_one :footer
 
-      attr_reader :identifier, :icon, :description, :menu, :content_padding, :header_background_color, :initial_actions, :persist, :key
+      attr_reader :identifier, :icon, :description, :menu, :content_padding, :header_background_color, :initial_actions, :persist, :key,
+                  :collapsible, :collapsed, :height, :min_height, :max_height, :padding, :compact
       attr_writer :scope
 
       def initialize(identifier = nil,
@@ -23,7 +24,14 @@ module Satis
                      scope: [],
                      actions: [],
                      key: nil,
-                     persist: true)
+                     persist: true,
+                     collapsible: false,
+                     collapsed: false,
+                     height: nil,
+                     min_height: nil,
+                     max_height: nil,
+                     padding: nil,
+                     compact: false)
         super
 
         if identifier.blank?
@@ -43,6 +51,13 @@ module Satis
         @key = key
         @custom_tabs_link = custom_tabs_link
         @scope = scope.present? ? scope : identifier
+        @collapsible = collapsible
+        @collapsed = collapsed
+        @height = height
+        @min_height = min_height
+        @max_height = max_height
+        @padding = padding
+        @compact = compact
       end
 
       # def key
@@ -69,6 +84,38 @@ module Satis
 
       def header?
         icon.present? || title.present? || description.present? || menu
+      end
+
+      def content_style
+        styles = []
+        styles << "height: #{height}" if height
+        styles << "min-height: #{min_height}" if min_height
+        styles << "max-height: #{max_height}; overflow-y: auto" if max_height
+        styles.join('; ')
+      end
+
+      def content_classes
+        classes = []
+        if padding
+          classes << padding
+        elsif content_padding
+          classes << (compact ? 'px-4 py-3' : 'px-6 py-6')
+        end
+        classes.join(' ')
+      end
+
+      def header_classes
+        base = tabs? ? '' : 'border-b border-gray-200'
+        base += ' sts-card__header--compact' if compact
+        base
+      end
+
+      def title_classes
+        if compact
+          'text-sm leading-5 font-medium text-gray-900 dark:text-white'
+        else
+          'text-lg leading-6 font-medium text-gray-900 dark:text-white'
+        end
       end
     end
   end
