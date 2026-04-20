@@ -132,7 +132,7 @@ export default class FieldsForController extends ApplicationController {
   }
 
   monitorChanges(event) {
-    if (event?.detail?.src == "satis-dropdown") {
+    if (event?.detail?.src == "satis-dropdown" || event?.detail?.src == "prepopulate" ) {
       // Skip events caused by the initial load of a satis-dropdown
       return
     }

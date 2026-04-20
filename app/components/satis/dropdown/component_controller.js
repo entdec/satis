@@ -355,6 +355,9 @@ export default class DropdownComponentController extends ApplicationController {
   }
 
   setHiddenSelect() {
+    if (this.element.querySelector('select[name*="[TEMPLATE]"]')) {
+        return
+    } 
     if (this.hiddenSelectTarget.options.length === 0) {
       this.searchInputTarget.value = ""
       this.pillsTarget.innerHTML = ""
