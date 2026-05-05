@@ -129,6 +129,13 @@ export default class FieldsForController extends ApplicationController {
           .querySelector("a[data-action='click->satis-fields-for#cloneAssociation']")
           ?.parentElement.classList.add("hidden")
     }
+    let hasInvalidInputs = item.querySelectorAll(".is-invalid").length > 0;
+    if (hasInvalidInputs) {
+      console.log("There are invalid input fields.");
+      item
+          .querySelector("a[data-action='click->satis-fields-for#removeAssociation']")
+          ?.parentElement.classList.add("hidden")
+    }
   }
 
   monitorChanges(event) {
