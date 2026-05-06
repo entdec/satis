@@ -20,7 +20,7 @@ export default class extends ApplicationController {
     this.boundUpdate = this.update.bind(this)
 
     this.watchOn = "input"
-    if (this.inputTarget.type == "hidden") {
+    if (this.inputTarget.type == "hidden" || this.inputTarget.type ==  "select-one") {
       this.watchOn = "change"
     }
 
