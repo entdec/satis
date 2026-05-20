@@ -15,5 +15,9 @@ Satis::Engine.routes.draw do
     end
     resources :documentation
   end
+
+  namespace :satis do
+    get 'navigation/search', to: 'navigation#search'
+  end
 end
 

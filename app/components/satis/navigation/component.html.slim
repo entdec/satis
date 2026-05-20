@@ -1,0 +1,6 @@
+.navigation-form
+  = form_with url: '#', method: :get, remote: true, id: 'search-form' do
+    .navigation-input
+      input type="search" data-action="input->satis-navigation#search" id="search-input" placeholder="Search..."
+    ul#results-container
+    p.noResults.hidden No results found
