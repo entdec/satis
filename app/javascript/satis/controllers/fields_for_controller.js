@@ -30,17 +30,14 @@ export default class FieldsForController extends ApplicationController {
 
   setupNewChild(tmpNode) {
     tmpNode.classList.remove("template")
-    tmpNode.querySelectorAll(".association").forEach((item) => {
+
+    tmpNode.querySelectorAll(":scope > .head > .association").forEach((item) => {
       if (item.classList.contains("hidden")) {
         if (!item.querySelector("a[data-action='click->satis-fields-for#cloneAssociation']")) {
           item.classList.remove("hidden")
         }
       } else {
-        if (!item.querySelector("a[data-action='click->satis-fields-for#cloneAssociation']")) {
-          item.remove()
-        } else {
-          item.classList.add("hidden")
-        }
+        item.classList.add("hidden")
       }
     })
 
