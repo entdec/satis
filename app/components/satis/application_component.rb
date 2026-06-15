@@ -16,6 +16,10 @@ module Satis
     # def original_view_context
     #   @template
     # end
+    #
+    def initialize(*, **)
+      super()
+    end
 
     def component_name
       self.class.name.sub(/::Component$/, "").sub(/^Satis::/, "").underscore

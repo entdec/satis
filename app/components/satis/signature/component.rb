@@ -4,7 +4,7 @@
 # ActiveStorage::Engine.config.active_storage.content_types_to_serve_as_binary.delete("image/svg+xml")
 module Satis
   module Signature
-    class Component < ViewComponent::Base
+    class Component < ApplicationComponent
       attr_reader :url, :form, :attribute, :options
 
       def initialize(form:, attribute:, **options, &block)

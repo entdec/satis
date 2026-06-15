@@ -2,7 +2,7 @@
 
 module Satis
   module Breadcrumbs
-    class Crumb < ViewComponent::Base
+    class Crumb < ApplicationComponent
       attr_reader :path, :title, :icon
 
       def initialize(path: nil, title: nil, icon: nil)
