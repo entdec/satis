@@ -24,7 +24,6 @@ module Satis
         #
         def ct(key = nil, **options)
           key = "#{full_i18n_scope(options).join('.')}#{key}" if key.start_with?('.')
-
           original_view_context.t(key, **options)
         end
 
@@ -41,12 +40,8 @@ module Satis
           @full_i18n_scope
         end
 
-        def original_virtual_path
-          original_view_context.instance_variable_get(:@virtual_path)
-        end
-
         def original_i18n_scope
-          original_virtual_path.sub(%r{^/}, '').gsub(%r{/_?}, '.').split('.')
+          [original_view_context.controller_path.tr("/", "."), original_view_context.action_name]
         end
 
         def i18n_scope
