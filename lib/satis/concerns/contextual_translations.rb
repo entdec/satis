@@ -8,6 +8,8 @@ module Satis
       extend ActiveSupport::Concern
 
       included do
+        attr_accessor :original_virtual_path
+
         #
         # This provides us with a translation helper which scopes into the original view
         # and thereby conveniently scopes the translations.
@@ -41,7 +43,23 @@ module Satis
         end
 
         def original_i18n_scope
+          virtual_path = original_virtual_path.presence || original_view_context_virtual_path
+
+          return virtual_path.gsub(%r{/_?}, ".").split(".") if virtual_path.present? && !satis_component_virtual_path?(virtual_path)
+
           [original_view_context.controller_path.tr("/", "."), original_view_context.action_name]
+        end
+
+        def satis_component_virtual_path?(virtual_path)
+          virtual_path.start_with?("satis/")
+        end
+
+        def original_view_context_virtual_path
+          if original_view_context.respond_to?(:virtual_path)
+            original_view_context.virtual_path
+          elsif original_view_context.instance_variable_defined?(:@virtual_path)
+            original_view_context.instance_variable_get(:@virtual_path)
+          end
         end
 
         def i18n_scope

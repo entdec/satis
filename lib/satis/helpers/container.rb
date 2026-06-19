@@ -78,7 +78,6 @@ module Satis
           else
             component.new(*original_args, **kwargs)
           end
-          instance.original_view_context = action_view
           action_view.render(instance, &block)
         end
       end
