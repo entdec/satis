@@ -26,7 +26,7 @@ module Satis
         #
         def ct(key = nil, **options)
           key = "#{full_i18n_scope(options).join('.')}#{key}" if key.start_with?('.')
-          original_view_context.controller.t(key, **options)
+          original_view_context.controller.t(key, **options, default: options[:default] || key.to_s.split(".").last.humanize)
         end
 
         def full_i18n_scope(options = {})
