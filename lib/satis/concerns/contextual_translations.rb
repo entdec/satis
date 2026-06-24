@@ -8,6 +8,8 @@ module Satis
       extend ActiveSupport::Concern
 
       included do
+        attr_accessor :original_virtual_path
+
         #
         # This provides us with a translation helper which scopes into the original view
         # and thereby conveniently scopes the translations.
@@ -24,8 +26,7 @@ module Satis
         #
         def ct(key = nil, **options)
           key = "#{full_i18n_scope(options).join('.')}#{key}" if key.start_with?('.')
-
-          original_view_context.t(key, **options)
+          original_view_context.controller.t(key, **options)
         end
 
         def full_i18n_scope(options = {})
@@ -41,12 +42,24 @@ module Satis
           @full_i18n_scope
         end
 
-        def original_virtual_path
-          original_view_context.instance_variable_get(:@virtual_path)
+        def original_i18n_scope
+          virtual_path = original_virtual_path.presence || original_view_context_virtual_path
+
+          return virtual_path.gsub(%r{/_?}, ".").split(".") if virtual_path.present? && !satis_component_virtual_path?(virtual_path)
+
+          [original_view_context.controller_path.tr("/", "."), original_view_context.action_name]
         end
 
-        def original_i18n_scope
-          original_virtual_path.sub(%r{^/}, '').gsub(%r{/_?}, '.').split('.')
+        def satis_component_virtual_path?(virtual_path)
+          virtual_path.start_with?("satis/")
+        end
+
+        def original_view_context_virtual_path
+          if original_view_context.respond_to?(:virtual_path)
+            original_view_context.virtual_path
+          elsif original_view_context.instance_variable_defined?(:@virtual_path)
+            original_view_context.instance_variable_get(:@virtual_path)
+          end
         end
 
         def i18n_scope

@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-# FIXME:
-# translation scope seems wrong:
-#   old/okay) title="translation missing: en.users.edit.card.profile.tab.about"
-# new/broken) title="translation missing: en.users.edit.tabs.main.tab.about"
-
 module Satis
   module Tabs
     class Component < Satis::ApplicationComponent

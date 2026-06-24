@@ -2,7 +2,7 @@
 
 module Satis
   module Dropdown
-    class Component < ViewComponent::Base
+    class Component < ApplicationComponent
       attr_reader :url, :form, :attribute, :title, :options, :dropdown_max_height, :dropdown_min_height, :dropdown_width, :dropdown_height, :compact
 
       def initialize(form:, attribute:, **options, &block)

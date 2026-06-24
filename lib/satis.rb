@@ -27,6 +27,21 @@ module Satis
       Satis::Helpers::Container.add_helper(name, component)
     end
 
+    def current_original_virtual_path
+      original_virtual_path_stack.last
+    end
+
+    def with_original_virtual_path(virtual_path)
+      original_virtual_path_stack.push(virtual_path)
+      yield
+    ensure
+      original_virtual_path_stack.pop
+    end
+
+    def original_virtual_path_stack
+      Thread.current[:satis_original_virtual_path_stack] ||= []
+    end
+
     def add_component_helper(component_name, name, component)
       klass = "Satis::#{component_name.to_s.classify}::Component".safe_constantize
       return if klass.blank?

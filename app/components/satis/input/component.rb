@@ -2,7 +2,7 @@
 
 module Satis
   module Input
-    class Element < ViewComponent::Base
+    class Element < ApplicationComponent
       attr_reader :classes
 
       def initialize(classes: nil, colored: true)

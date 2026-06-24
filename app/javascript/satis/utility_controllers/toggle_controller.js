@@ -1,4 +1,4 @@
-import ApplicationController from "satis/controllers/application_controller"
+import ApplicationController from "satis/controllers/application_controller";
 
 /*
   Usage:
@@ -26,20 +26,20 @@ import ApplicationController from "satis/controllers/application_controller"
       = address_form.input :company_name
  */
 export default class extends ApplicationController {
-  static targets = ["toggleable", "insertion", "input"]
+  static targets = ["toggleable", "insertion", "input"];
 
   connect() {
-    this.boundUpdate = this.update.bind(this)
+    this.boundUpdate = this.update.bind(this);
     this.inputTargets.forEach((input) => {
-      input.addEventListener("change", this.boundUpdate)
-    })
-    this.update()
+      input.addEventListener("change", this.boundUpdate);
+    });
+    this.update();
   }
 
   disconnect() {
     this.inputTargets.forEach((input) => {
-      input.removeEventListener("change", this.boundUpdate)
-    })
+      input.removeEventListener("change", this.boundUpdate);
+    });
   }
 
   update(event) {
@@ -48,61 +48,72 @@ export default class extends ApplicationController {
      * process before we overwrite the template nodes that are possibly updated and reinsert new nodes.
      */
     setTimeout(() => {
-      this.toggle(this.currentValue)
-    })
+      this.toggle(this.currentValue);
+    });
   }
 
   toggle(value) {
     // Update template nodes before we swap
     this.toggleableTargets.forEach((target) => {
-      target.content.childNodes.forEach(child => {
-        let targetNodeId = child.getAttribute("data-toggleable-node-id")
+      target.content.childNodes.forEach((child) => {
+        if (typeof child.getAttribute != "function") return;
+        let targetNodeId = child.getAttribute("data-toggleable-node-id");
         if (!targetNodeId) return true;
 
-        this.insertionTarget.childNodes.forEach(iNode => {
+        this.insertionTarget.childNodes.forEach((iNode) => {
           if (iNode.getAttribute("data-toggleable-node-id") == targetNodeId) {
             if (child.parentElement) {
-              child.outerHTML = iNode.outerHTML
-              iNode.remove()
+              child.outerHTML = iNode.outerHTML;
+              iNode.remove();
             }
           }
-        })
-      })
-    })
+        });
+      });
+    });
 
     // Clear the insertion target
-    this.insertionTarget.innerHTML = ""
+    this.insertionTarget.innerHTML = "";
 
     // Reinsert elements
     this.toggleableTargets.forEach((element) => {
-      if (element.getAttribute("data-toggle-value") == value || (element.getAttribute("data-toggle-not-value") != null && element.getAttribute("data-toggle-not-value") != value)) {
-        element.content.childNodes.forEach(node => this.setUniqueId(node))
+      if (
+        element.getAttribute("data-toggle-value") == value ||
+        (element.getAttribute("data-toggle-not-value") != null &&
+          element.getAttribute("data-toggle-not-value") != value)
+      ) {
+        element.content.childNodes.forEach((node) => this.setUniqueId(node));
 
-        let toggleContent = document.importNode(element.content, true)
+        let toggleContent = document.importNode(element.content, true);
         toggleContent.childNodes.forEach((child) => {
-          this.insertionTarget.insertAdjacentHTML("beforeend", child.outerHTML)
-        })
+          if (typeof child.outerHTML != "undefined") {
+            this.insertionTarget.insertAdjacentHTML(
+              "beforeend",
+              child.outerHTML,
+            );
+          }
+        });
       }
-    })
+    });
   }
 
   get currentValue() {
     if (this.inputTargets.length >= 1 && this.inputTargets[0].type == "radio") {
-      return this.inputTargets.find((input) => input.checked)?.value
+      return this.inputTargets.find((input) => input.checked)?.value;
     } else if (this.inputTarget.type == "checkbox") {
-      return this.inputTarget.checked ? "true" : "false"
+      return this.inputTarget.checked ? "true" : "false";
     } else if (this.inputTarget.tagName == "SELECT" && this.data.get("attr")) {
-      let option = this.inputTarget.options[this.inputTarget.selectedIndex]
-      return option?.getAttribute(this.data.get("attr"))
+      let option = this.inputTarget.options[this.inputTarget.selectedIndex];
+      return option?.getAttribute(this.data.get("attr"));
     } else {
-      return this.inputTarget.value
+      return this.inputTarget.value;
     }
   }
 
   setUniqueId(node) {
+    if (typeof node.getAttribute != "function") return;
     if (node.getAttribute("data-toggleable-node-id")) return;
     const dateString = Date.now().toString(36);
     const randomness = Math.random().toString(36).substring(2);
-    node.setAttribute("data-toggleable-node-id", dateString + randomness)
+    node.setAttribute("data-toggleable-node-id", dateString + randomness);
   }
 }

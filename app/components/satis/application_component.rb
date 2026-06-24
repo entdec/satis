@@ -16,6 +16,19 @@ module Satis
     # def original_view_context
     #   @template
     # end
+    #
+    def initialize(*, **)
+      super()
+    end
+
+    def render_in(view_context, &)
+      self.original_view_context ||= view_context
+      self.original_virtual_path ||= Satis.current_original_virtual_path.presence || view_context.instance_variable_get(:@virtual_path)
+
+      Satis.with_original_virtual_path(original_virtual_path) do
+        super
+      end
+    end
 
     def component_name
       self.class.name.sub(/::Component$/, "").sub(/^Satis::/, "").underscore
