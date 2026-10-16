@@ -25,3 +25,7 @@ group :development, :test do
   gem "rubocop-rails", require: false
   gem "strong_migrations"
 end
+
+source "https://rubygems.pkg.github.com/entdec" do
+  gem "shipkit"
+end
