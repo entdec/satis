@@ -20,15 +20,15 @@
 @import '../../../components/satis/sidebar_menu_item/component.css';
 @import '../../../components/satis/tabs/component.css';
 
-@import 'components/diffy.css';
-@import 'components/form.css';
-@import "components/trix.css";
+@import './components/diffy.css';
+@import './components/form.css';
+@import "./components/trix.css";
 
-@import 'components/phone-number.css';
+@import './components/phone-number.css';
 
-@import "components/flag-icons.min.css";
+@import "./components/flag-icons.min.css";
 
-@import "components/tippyjs.css";
+@import "./components/tippyjs.css";
 
 /* Every link without a class or empty class should be underlined */
 a:not([class]),

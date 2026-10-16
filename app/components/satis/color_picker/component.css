@@ -1,6 +1,6 @@
-@import 'pickr/classic.min.css';
-@import 'pickr/monolith.min.css';
-@import 'pickr/nano.min.css';
+@import './pickr/classic.min.css';
+@import './pickr/monolith.min.css';
+@import './pickr/nano.min.css';
 
 /*Custom form field style*/
 form .field .pickr {

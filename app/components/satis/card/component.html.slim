@@ -3,7 +3,7 @@
     .sts-card__header class=header_classes data-action="#{collapsible ? 'click->satis-card#toggle' : ''}"
       .-ml-4.-mt-4.flex.justify-between.items-center.flex-wrap.sm:flex-nowrap
         - if icon
-          .ml-4.mt-4.flex-shrink-0.text-primary-600.dark:text-gray-300
+          .ml-4.mt-4.shrink-0.text-primary-600.dark:text-gray-300
             i class=icon
         .ml-4.mt-4.flex-1
           h3 class=title_classes
@@ -13,7 +13,7 @@
               = description
 
         - if actions.present? || initial_actions.present?
-          .ml-4.mt-4.flex-shrink-0 data-satis-card-target="actions"
+          .ml-4.mt-4.shrink-0 data-satis-card-target="actions"
             .grid.grid-flow-row.gap-1.sm:grid-flow-col
               - initial_actions.each do |action|
                 = action
@@ -21,12 +21,12 @@
                 = action
 
         - if collapsible
-          .ml-4.mt-4.flex-shrink-0
+          .ml-4.mt-4.shrink-0
             button.text-gray-400.hover:text-gray-600.dark:hover:text-gray-200.transition-transform.duration-200 type="button" data-satis-card-target="collapseIcon"
               i.fas.fa-chevron-down
 
         - if menu
-          .ml-4.mt-2.flex-shrink-0
+          .ml-4.mt-2.shrink-0
             = render(Satis::Menu::Component.new(menu))
 
   div data-satis-card-target="body"

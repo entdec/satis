@@ -17,23 +17,26 @@
   &.active > [data-satis-sidebar-menu-item-target="link"] [data-satis-sidebar-menu-item-target="indicator"] {
     @apply rotate-90;
   }
+}
 
-  &__link {
-    @apply text-gray-800 dark:text-gray-300 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500;
-  }
+.sts-sidebar-menu-item__link {
+  @apply text-gray-800 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 w-full flex items-center pl-2 pr-1 py-2 text-left text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500;
+}
 
-  &__icon {
-    @apply mr-3 flex-shrink-0 h-6 w-6 text-gray-400 dark:text-gray-200 group-hover:text-gray-500;
-  }
-  &__no-icon {
-    @apply mr-3 flex-shrink-0 h-6;
-  }
-  &__label {
-    @apply flex-1 text-gray-700 dark:text-gray-300;
-  }
-  &__menu-icon {
-    @apply text-gray-300 ml-3 flex-shrink-0 h-5 w-5 transform group-hover:text-gray-400 transition-colors ease-in-out duration-150;
-  }
+.sts-sidebar-menu-item__icon {
+  @apply mr-3 shrink-0 h-6 w-6 text-gray-400 dark:text-gray-200 group-hover:text-gray-500;
+}
+
+.sts-sidebar-menu-item__no-icon {
+  @apply mr-3 shrink-0 h-6;
+}
+
+.sts-sidebar-menu-item__label {
+  @apply flex-1 text-gray-700 dark:text-gray-300;
+}
+
+.sts-sidebar-menu-item__menu-icon {
+  @apply text-gray-300 ml-3 shrink-0 h-5 w-5 transform group-hover:text-gray-400 transition-colors ease-in-out duration-150;
 }
 
 /* submenu-label always hidden in expanded sidebar */

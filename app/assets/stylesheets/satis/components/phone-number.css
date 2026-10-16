@@ -1,6 +1,6 @@
 /* Int tel phonenumber lib */
 
-@import "intlTelInput.min.css";
+@import "./intlTelInput.min.css";
 
 .iti input,
 .iti input[type="text"],
